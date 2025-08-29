@@ -1,0 +1,10 @@
+Como combinado envio-te o ficheiro excel com as três tabelas da base de dados:
+Tabela 1 - miRNA_expression_studies - Lista de miRNAs (ID hairpin e ID maduro) com a informação se foi visto "upregulated ou downregulated" em cada estudo
+Tabela 2 - miRNA_other_studies - Lista de miRNAs (ID hairpin e ID maduro, faltam alguns maduros) com a informação se foi encontrado em CNVs ou SNVs (ou outros) e em que estudo (existem estudos que não são diretamente expressão nem genética, e coloquei aqui)
+Tabela 3 - miRNA_study_details - Lista dos estudos com informação relevante e o link com o doi
+
+O objectivo é criar um acesso a esta base de dados na internet, com a opção de pesquisar pelas colunas todas, ou pelo menos por: miRNA hairpin, miRNA mature, Alteration, Study e Reported. No caso dos estudos genéticos/outros, deve dar para filtrar pelas colunas todas, 
+Segundo o que falamos na semana passada, depois criarás uma ligação da tabela principal à tabela que tem informação para cada um dos estudos (com link doi). 
+
+Não esquecer que é preciso dividir as linhas que referem mais do que um estudo (tabela da expressão), para ficar em cada linha apenas um estudo por miRNA.
+NOTA: dividi o tipo de tecido por: brain, blood (whole blood, serum or plasma), saliva, umbilical cord and others (Lymphoblastoid cell lines, olfactory mucosal stem cells, neural stem cells); 
