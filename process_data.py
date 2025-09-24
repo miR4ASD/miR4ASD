@@ -73,6 +73,23 @@ def get_study_details_for_expression(row):
 df_expression['StudyDetails'] = df_expression.apply(get_study_details_for_expression, axis=1)
 df_expression = df_expression.drop(columns=['Study'])
 
+# Function to parse 'Number of studies down or upregulated'
+def parse_up_down_studies(text):
+    up = 0
+    down = 0
+    if isinstance(text, str):
+        parts = text.lower().replace(',', '').split(' ')
+        for i, part in enumerate(parts):
+            if part == 'up' and i > 0 and parts[i-1].isdigit():
+                up = int(parts[i-1])
+            elif part == 'down' and i > 0 and parts[i-1].isdigit():
+                down = int(parts[i-1])
+    return up, down
+
+df_expression[['# studies upregulation', '# studies downregulation']] = df_expression['Number of studies down or upregulated'].apply(lambda x: pd.Series(parse_up_down_studies(x)))
+
+df_expression = df_expression.drop(columns=['Number of studies down or upregulated', 'Observations'])
+
 # --- Processing for miRNA_other_studies ---
 def get_study_details_for_other(row):
     study_name = row['Study']
