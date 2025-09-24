@@ -144,16 +144,18 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>miRNA Hairpin</th>
-                                <th>miRNA Mature</th>
-                                <th>Reported</th>
+                                <th>miRNA ID</th>
+                                <th>miRNA mature ID</th>
                                 <th>Alteration</th>
+                                <th>Study</th>
                                 <th>Tissue</th>
                                 <th>Number of studies down or upregulated</th>
                                 <th>Total studies</th>
+                                <th>Reported</th>
                                 <th>Observations</th>
                             </tr>
                             <tr class="filters">
+                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -172,12 +174,16 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>miRNA Hairpin</th>
-                                <th>miRNA Mature</th>
-                                <th>Reported</th>
+                                <th>miRNA ID</th>
+                                <th>miRNA mature ID</th>
+                                <th>Study</th>
+                                <th>Study Type</th>
                                 <th>Alteration</th>
+                                <th>Study description</th>
                             </tr>
                             <tr class="filters">
+                                <th></th>
+                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -218,9 +224,9 @@
                 '<td>' + (d["Study Type"] || '') + '</td>' +
                 '<td>' + (d["Tissue type"] || '') + '</td>' +
                 '<td>' + (d["Tissue - subtype"] || '') + '</td>' +
-                '<td>' + (d["number ASD samples"] || '') + '</td>' +
-                '<td>' + (d["number Control samples"] || '') + '</td>' +
-                '<td>' + (d.others || '') + '</td>' +
+                '<td>' + (d["# ASD samples"] || '') + '</td>' +
+                '<td>' + (d["# Control samples"] || '') + '</td>' +
+                '<td>' + (d["# Others"] || '') + '</td>' +
             '</tr>';
         });
         table += '</tbody></table></div>';
@@ -268,13 +274,14 @@
                     "data":           null,
                     "defaultContent": '<i class="fa-solid fa-plus-circle"></i>'
                 },
-                { "data": "miRNA_hairpin", "render": function(data, type, row) { return data; } },
-                { "data": "miRNA_mature", "render": function(data, type, row) { return data; } },
-                { "data": "Reported" },
+                { "data": "miRNA ID", "render": function(data, type, row) { return data; } },
+                { "data": "miRNA mature ID", "render": function(data, type, row) { return data; } },
                 { "data": "Alteration" },
+                { "data": "Study" },
                 { "data": "Tissue" },
                 { "data": "Number of studies down or upregulated" },
                 { "data": "Total studies" },
+                { "data": "Reported" },
                 { "data": "Observations" }
             ]
         );
@@ -290,10 +297,12 @@
                     "data":           null,
                     "defaultContent": '<i class="fa-solid fa-plus-circle"></i>'
                 },
-                { "data": "miRNA_hairpin", "render": function(data, type, row) { return data; } },
-                { "data": "miRNA_mature", "render": function(data, type, row) { return data; } },
-                { "data": "Reported" },
-                { "data": "Alteration" }
+                { "data": "miRNA ID", "render": function(data, type, row) { return data; } },
+                { "data": "miRNA mature ID", "render": function(data, type, row) { return data; } },
+                { "data": "Study" },
+                { "data": "Study Type" },
+                { "data": "Alteration" },
+                { "data": "Study description" }
             ]
         );
 

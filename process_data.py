@@ -49,22 +49,7 @@ df_expression = clean_col_names(df_expression)
 df_other = clean_col_names(df_other)
 df_details = clean_col_names(df_details)
 
-# Harmonize column names
-expression_rename_map = {
-    'miRNA hairpin': 'miRNA_hairpin',
-    'miRNA mature': 'miRNA_mature',
-}
-df_expression = df_expression.rename(columns=expression_rename_map)
-
-other_rename_map = {
-    'hairpin miRNA': 'miRNA_hairpin',
-    'mature miRNA': 'miRNA_mature',
-    'Variant Type': 'Alteration',
-    'Reference': 'Study',
-    'Type of study': 'Reported'
-}
-df_other = df_other.rename(columns=other_rename_map)
-
+# Harmonize column names for df_details (still needed)
 details_rename_map = {
     'Paper': 'Study',
     'Reference (DOI)': 'DOI',
@@ -114,11 +99,11 @@ def create_mirbase_mature_link(mature_name):
     return mature_name
 
 # Apply the link creation to the dataframes
-df_expression['miRNA_hairpin'] = df_expression['miRNA_hairpin'].apply(create_mirbase_hairpin_link)
-df_other['miRNA_hairpin'] = df_other['miRNA_hairpin'].apply(create_mirbase_hairpin_link)
+df_expression['miRNA ID'] = df_expression['miRNA ID'].apply(create_mirbase_hairpin_link)
+df_other['miRNA ID'] = df_other['miRNA ID'].apply(create_mirbase_hairpin_link)
 
-df_expression['miRNA_mature'] = df_expression['miRNA_mature'].apply(create_mirbase_mature_link)
-df_other['miRNA_mature'] = df_other['miRNA_mature'].apply(create_mirbase_mature_link)
+df_expression['miRNA mature ID'] = df_expression['miRNA mature ID'].apply(create_mirbase_mature_link)
+df_other['miRNA mature ID'] = df_other['miRNA mature ID'].apply(create_mirbase_mature_link)
 
 # Convert to JSON
 df_expression.to_json('expression_studies.json', orient='records', default_handler=str)
