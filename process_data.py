@@ -1,6 +1,7 @@
 import pandas as pd
 import json
 import csv
+import re
 
 # Function to parse the GFF3 file and create a name to ID map
 def create_gff_maps(gff_file):
