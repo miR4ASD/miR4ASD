@@ -88,7 +88,7 @@ def parse_up_down_studies(text):
 
 df_expression[['# studies upregulation', '# studies downregulation']] = df_expression['Number of studies down or upregulated'].apply(lambda x: pd.Series(parse_up_down_studies(x)))
 
-df_expression = df_expression.drop(columns=['Number of studies down or upregulated', 'Observations'])
+df_expression = df_expression.drop(columns=['Number of studies down or upregulated', 'Observations', 'Unnamed: 9'])
 
 # --- Processing for miRNA_other_studies ---
 def get_study_details_for_other(row):
@@ -130,6 +130,8 @@ df_details.to_json('study_details.json', orient='records', default_handler=str)
 print("Data processing complete. JSON files created.")
 print("Expression Studies Head:")
 print(df_expression.head())
+print("\nFirst Expression Study Record (JSON):")
+print(json.dumps(df_expression.iloc[0].to_dict(), indent=4))
 print("\nOther Studies Head:")
 print(df_other.head())
 print("\nStudy Details Head:")

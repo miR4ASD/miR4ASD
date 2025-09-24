@@ -274,8 +274,8 @@
                     "data":           null,
                     "defaultContent": '<i class="fa-solid fa-plus-circle"></i>'
                 },
-                { "data": "miRNA ID", "render": function(data, type, row) { return data; } },
-                { "data": "miRNA mature ID", "render": function(data, type, row) { return data; } },
+                { "data": "miRNA ID", "render": function(data, type, row) { return row['miRNA ID']; } },
+                { "data": "miRNA mature ID", "render": function(data, type, row) { return row['miRNA mature ID']; } },
                 { "data": "Alteration" },
                 { "data": "Study" },
                 { "data": "Tissue" },
