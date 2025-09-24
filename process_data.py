@@ -98,7 +98,7 @@ def get_study_details_for_other(row):
     return []
 
 df_other['StudyDetails'] = df_other.apply(get_study_details_for_other, axis=1)
-df_other = df_other.drop(columns=['Study'])
+df_other = df_other.drop(columns=['Study', 'Study Type'])
 
 # Function to create mirbase links
 def create_mirbase_hairpin_link(hairpin_name):
