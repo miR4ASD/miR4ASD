@@ -79,15 +79,16 @@ def parse_up_down_studies(text):
     up = 0
     down = 0
     if isinstance(text, str):
-        parts = text.lower().replace(',', '').split(' ')
-        for i, part in enumerate(parts):
-            if part == 'up' and i > 0 and parts[i-1].isdigit():
-                up = int(parts[i-1])
-            elif part == 'down' and i > 0 and parts[i-1].isdigit():
-                down = int(parts[i-1])
+        text = text.lower()
+        up_matches = re.findall(r'(\d+)\s*upregulated', text)
+        if up_matches:
+            up = sum(int(m) for m in up_matches)
+        down_matches = re.findall(r'(\d+)\s*downregulated', text)
+        if down_matches:
+            down = sum(int(m) for m in down_matches)
     return up, down
 
-df_expression[['# studies upregulation', '# studies downregulation']] = df_expression['Number of studies down or upregulated'].apply(lambda x: pd.Series(parse_up_down_studies(x)))
+df_expression[['# studies upregulation', '# studies downregulation']] = df_expression['Observations'].apply(lambda x: pd.Series(parse_up_down_studies(x)))
 
 df_expression = df_expression.drop(columns=['Number of studies down or upregulated', 'Observations', 'Unnamed: 9'])
 
