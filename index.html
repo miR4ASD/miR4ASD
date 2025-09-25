@@ -222,12 +222,16 @@
             return '<div class="child-table"><p>No study details available.</p></div>';
         }
 
-        let table = '<div class="child-table"><table class="table table-bordered"><thead><tr><th>Study</th><th>Title</th><th>DOI</th><th>Study Type</th><th>Tissue type</th><th>Tissue - subtype</th><th># ASD Samples</th><th># Control Samples</th><th>Others</th></tr></thead><tbody>';
+        let table = '<div class="child-table"><table class="table table-bordered"><thead><tr><th>Paper</th><th>Description</th><th>Study Type</th><th>Tissue type</th><th>Tissue - subtype</th><th># ASD Samples</th><th># Control Samples</th><th>Others</th></tr></thead><tbody>';
         details.forEach(function(d) {
+            let studyLink = d.Study || '';
+            if (d.DOI) {
+                studyLink = `<a href="${d.DOI}" target="_blank">${d.Study}</a>`;
+            }
+
             table += '<tr>' +
-                '<td>' + (d.Study || '') + '</td>' +
-                '<td>' + (d.Title || '') + '</td>' +
-                '<td><a href="' + (d.DOI || '') + '" target="_blank">' + (d.DOI || '') + '</a></td>' +
+                '<td>' + studyLink + '</td>' +
+                '<td>' + (d["Description"] || '') + '</td>' +
                 '<td>' + (d["Study Type"] || '') + '</td>' +
                 '<td>' + (d["Tissue type"] || '') + '</td>' +
                 '<td>' + (d["Tissue - subtype"] || '') + '</td>' +
