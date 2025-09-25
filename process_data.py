@@ -124,10 +124,40 @@ df_other['miRNA ID'] = df_other['miRNA ID'].apply(create_mirbase_hairpin_link)
 df_expression['miRNA mature ID'] = df_expression['miRNA mature ID'].apply(create_mirbase_mature_link)
 df_other['miRNA mature ID'] = df_other['miRNA mature ID'].apply(create_mirbase_mature_link)
 
-# Convert to JSON
+# --- Calculate and Save Statistics ---
+def calculate_and_save_statistics(df_expression, df_other):
+    total_expression_studies = len(df_expression)
+    total_other_studies = len(df_other)
+    
+    unique_mirnas_expression = df_expression['miRNA ID'].nunique()
+    unique_mirnas_other = df_other['miRNA ID'].nunique()
+    
+    # Combine the unique miRNAs from both dataframes
+    all_mirnas = pd.concat([df_expression['miRNA ID'], df_other['miRNA ID']]).nunique()
+    
+    alteration_counts = df_expression['Alteration'].value_counts().to_dict()
+    
+    # Get tissue counts from expression studies
+    tissue_counts = df_expression['Tissue'].value_counts().to_dict()
+
+    stats = {
+        'total_expression_studies': total_expression_studies,
+        'total_other_studies': total_other_studies,
+        'unique_mirnas': all_mirnas,
+        'alteration_counts': alteration_counts,
+        'tissue_counts': tissue_counts
+    }
+    
+    with open('statistics.json', 'w') as f:
+        json.dump(stats, f, indent=4)
+
+# --- Convert to JSON and Finalize ---
 df_expression.to_json('expression_studies.json', orient='records', default_handler=str)
 df_other.to_json('other_studies.json', orient='records', default_handler=str)
 df_details.to_json('study_details.json', orient='records', default_handler=str)
+
+# Calculate and save statistics
+calculate_and_save_statistics(df_expression, df_other)
 
 print("Data processing complete. JSON files created.")
 print("Expression Studies Head:")

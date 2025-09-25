@@ -136,6 +136,9 @@
     </div>
 
     <div class="container-fluid">
+        <div id="statistics-container" class="row mb-4">
+            <!-- Statistics will be loaded here -->
+        </div>
         <div class="card">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -238,6 +241,44 @@
     }
 
     $(document).ready(function() {
+        // Fetch and display statistics
+        fetch('statistics.json')
+            .then(response => response.json())
+            .then(data => {
+                const statsContainer = document.getElementById('statistics-container');
+                statsContainer.innerHTML = `
+                    <div class="col-md-3">
+                        <div class="card">
+                            <h5>Total Expression Studies</h5>
+                            <p class="fs-4">${data.total_expression_studies}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <h5>Total Other Studies</h5>
+                            <p class="fs-4">${data.total_other_studies}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <h5>Unique miRNAs</h5>
+                            <p class="fs-4">${data.unique_mirnas}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <h5>Alterations</h5>
+                            <p class="fs-4">
+                                Up: ${data.alteration_counts.upregulated || 0} | 
+                                Down: ${data.alteration_counts.downregulated || 0}
+                            </p>
+                        </div>
+                    </div>
+                `;
+            })
+            .catch(error => console.error('Error fetching statistics:', error));
+
+
         function initializeDataTable(tableId, ajaxUrl, columnsConfig) {
             var table = $(tableId).DataTable({
                 "ajax": {

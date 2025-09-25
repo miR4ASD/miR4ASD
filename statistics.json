@@ -1,0 +1,32 @@
+{
+    "total_expression_studies": 524,
+    "total_other_studies": 93,
+    "unique_mirnas": 407,
+    "alteration_counts": {
+        "upregulated": 276,
+        "downregulated": 248
+    },
+    "tissue_counts": {
+        "Blood": 231,
+        "LCLs": 83,
+        "Brain": 53,
+        "Saliva": 44,
+        "Blood; LCLs": 32,
+        "Blood; Brain": 20,
+        "Blood; Saliva": 14,
+        "Brain; LCLs": 8,
+        "Blood; Brain; LCLs": 8,
+        "Brain; Saliva": 6,
+        "Blood; Brain; LCLs; Saliva": 4,
+        "Blood; LCLs; Saliva": 4,
+        "LCLs; Saliva": 4,
+        "Blood; Brain; Saliva": 4,
+        "OMSCs": 2,
+        "umbilical cord": 2,
+        "Blood; Brain; Saliva; LCLs; OMSCs": 1,
+        "Blood; Brain, LCLs": 1,
+        "Blood; OMSCs": 1,
+        "LCLs; Saliva; Blood": 1,
+        "NSCs": 1
+    }
+}
