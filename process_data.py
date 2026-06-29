@@ -149,27 +149,26 @@ def get_tissue_for_study(study_name, original_tissue_str):
 df_expression['Study'] = df_expression['Study'].astype(str).str.replace(r'\s*,\s*', '; ', regex=True)
 df_expression['Tissue'] = df_expression['Tissue'].astype(str).str.replace(r'\s*,\s*', '; ', regex=True)
 
-# Split multiple-study strings and explode into separate rows
-df_expression['Study'] = df_expression['Study'].apply(lambda x: [s.strip() for s in str(x).split(';')] if pd.notna(x) else [])
-df_expression = df_expression.explode('Study')
-df_expression['Study'] = df_expression['Study'].apply(normalize_study_name)
-
-# Map details for each single study
+# Map details for multiple studies separated by semicolon
 def get_study_details_for_expression(row):
-    """Retrieve details list for the expression row's single study."""
-    study_name = row['Study']
-    if study_name in study_details_map:
-        return [study_details_map[study_name]]
-    return []
+    """Retrieve details list for all studies in the expression row."""
+    study_names = [s.strip() for s in str(row['Study']).split(';')]
+    details_list = []
+    for study_name in study_names:
+        study_name_norm = normalize_study_name(study_name)
+        if study_name_norm in study_details_map:
+            details_list.append(study_details_map[study_name_norm])
+    return details_list
 
 df_expression['StudyDetails'] = df_expression.apply(get_study_details_for_expression, axis=1)
 
-# Refine the Tissue column to represent the specific study's tissue
-df_expression['Tissue'] = df_expression.apply(lambda row: get_tissue_for_study(row['Study'], row['Tissue']), axis=1)
-
-# Set studies count to 1 for the specific alteration direction of each single-study row
-df_expression['# studies upregulation'] = df_expression['Alteration'].apply(lambda x: 1 if x == 'upregulated' else 0)
-df_expression['# studies downregulation'] = df_expression['Alteration'].apply(lambda x: 1 if x == 'downregulated' else 0)
+# Set studies count for upregulation/downregulation based on the row's Alteration
+df_expression['# studies upregulation'] = df_expression.apply(
+    lambda r: int(r['Number of studies down or upregulated']) if r['Alteration'] == 'upregulated' else 0, axis=1
+)
+df_expression['# studies downregulation'] = df_expression.apply(
+    lambda r: int(r['Number of studies down or upregulated']) if r['Alteration'] == 'downregulated' else 0, axis=1
+)
 
 # Drop redundant or temporary columns
 df_expression = df_expression.drop(columns=['Study', 'Number of studies down or upregulated', 'Observations', 'Unnamed: 9'])
@@ -181,21 +180,16 @@ df_expression = df_expression.drop(columns=['Study', 'Number of studies down or 
 df_other['Study'] = df_other['Study'].astype(str).str.replace(r'\s*,\s*', '; ', regex=True)
 df_other['Study description'] = df_other['Study description'].astype(str).str.replace(r'\s*,\s*', '; ', regex=True)
 
-# Split multiple study and description strings
-df_other['Study'] = df_other['Study'].apply(lambda x: [s.strip() for s in str(x).split(';')] if pd.notna(x) else [])
-df_other['Study description'] = df_other['Study description'].apply(lambda x: [d.strip() for d in str(x).split(';')] if pd.notna(x) else [])
-
-# Explode both Study and Study description in parallel
-df_other = df_other.explode(['Study', 'Study description'])
-df_other['Study'] = df_other['Study'].apply(normalize_study_name)
-
-# Map details for each single study
+# Map details for multiple studies separated by semicolon
 def get_study_details_for_other(row):
-    """Retrieve details list for the other row's single study."""
-    study_name = row['Study']
-    if study_name in study_details_map:
-        return [study_details_map[study_name]]
-    return []
+    """Retrieve details list for all studies in the other row."""
+    study_names = [s.strip() for s in str(row['Study']).split(';')]
+    details_list = []
+    for study_name in study_names:
+        study_name_norm = normalize_study_name(study_name)
+        if study_name_norm in study_details_map:
+            details_list.append(study_details_map[study_name_norm])
+    return details_list
 
 df_other['StudyDetails'] = df_other.apply(get_study_details_for_other, axis=1)
 
@@ -251,8 +245,11 @@ def calculate_and_save_statistics(df_expression, df_other, total_studies, total_
     total_mirna_genes (int): Total unique miRNA IDs.
     total_mirna_mature (int): Total unique miRNA mature IDs.
     """
-    # Expression alteration counts
-    alteration_counts = df_expression['Alteration'].value_counts().to_dict()
+    # Expression alteration counts (sum of upregulated/downregulated counts)
+    alteration_counts = {
+        'upregulated': int(df_expression['# studies upregulation'].sum()),
+        'downregulated': int(df_expression['# studies downregulation'].sum())
+    }
     
     # Standardize, split, and count individual tissues from expression studies
     tissue_counts = {}

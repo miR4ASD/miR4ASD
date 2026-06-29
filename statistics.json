@@ -3,14 +3,14 @@
     "total_mirna_genes": 407,
     "total_mirna_mature": 385,
     "alteration_counts": {
-        "upregulated": 412,
-        "downregulated": 339
+        "upregulated": 410,
+        "downregulated": 344
     },
     "tissue_counts": {
-        "LCLs": 157,
-        "Brain": 110,
-        "Blood": 387,
-        "Saliva": 91,
+        "LCLs": 146,
+        "Blood": 321,
+        "Brain": 105,
+        "Saliva": 82,
         "NSCs": 1,
         "umbilical cord": 2,
         "OMSCs": 4
