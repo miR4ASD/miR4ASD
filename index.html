@@ -162,6 +162,45 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.12) !important;
         }
 
+        /* Custom length changer select dropdown styling */
+        .dataTables_length {
+            float: left;
+            margin-right: 15px;
+            margin-bottom: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            height: 38px;
+        }
+
+        .dataTables_length select {
+            border: 1px solid #ced4da !important;
+            border-radius: 6px !important;
+            padding: 6px 28px 6px 12px !important;
+            margin: 0 8px !important;
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+            outline: none;
+            background-color: white !important;
+            cursor: pointer;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230B2D48' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 10px center !important;
+            background-size: 14px !important;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .dataTables_length select:focus {
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 3px rgba(11, 45, 72, 0.15) !important;
+        }
+
         /* Nested study details wrapper card */
         .details-wrapper {
             padding: 1.5rem;
@@ -728,7 +767,9 @@
                 "columns": columnsConfig,
                 "orderCellsTop": true,
                 "fixedHeader": true,
-                "dom": 'Bfrtip',
+                "dom": 'Blfrtip',
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "pageLength": 10,
                 "buttons": [
                     {
                         extend: 'csv',
