@@ -1,7 +1,7 @@
 {
-    "total_expression_studies": 751,
-    "total_other_studies": 101,
-    "unique_mirnas": 407,
+    "total_studies": 59,
+    "total_mirna_genes": 407,
+    "total_mirna_mature": 385,
     "alteration_counts": {
         "upregulated": 412,
         "downregulated": 339

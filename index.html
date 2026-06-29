@@ -129,6 +129,54 @@
         .footer a:hover {
             text-decoration: underline;
         }
+
+        /* Custom styles for About tab figures */
+        .figure-card {
+            border: 1px solid #E5E7EB;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .figure-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+        }
+        .figure-img-container {
+            background-color: #ffffff;
+            text-align: center;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+        .figure-img {
+            max-height: 250px;
+            max-width: 100%;
+            object-fit: contain;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            border-radius: 4px;
+        }
+        .figure-img:hover {
+            opacity: 0.85;
+        }
+        .figure-caption {
+            padding: 1.25rem;
+            border-top: 1px solid #F0F4F8;
+            background-color: #FCFDFE;
+        }
+        /* Style fixes for badge */
+        .bg-success-subtle {
+            background-color: #d1fae5 !important;
+            color: #065f46 !important;
+        }
+        .bg-danger-subtle {
+            background-color: #fee2e2 !important;
+            color: #b91c1c !important;
+        }
     </style>
 </head>
 <body>
@@ -143,14 +191,185 @@
         <div class="card">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="expression-tab" data-bs-toggle="tab" data-bs-target="#expression" type="button" role="tab" aria-controls="expression" aria-selected="true">Expression Studies</button>
+                    <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="true">About miR4ASD</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="expression-tab" data-bs-toggle="tab" data-bs-target="#expression" type="button" role="tab" aria-controls="expression" aria-selected="false">Expression Studies</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="genetic-tab" data-bs-toggle="tab" data-bs-target="#genetic" type="button" role="tab" aria-controls="genetic" aria-selected="false">Genetic & Other Studies</button>
                 </li>
             </ul>
             <div class="tab-content p-3" id="myTabContent">
-                <div class="tab-pane fade show active" id="expression" role="tabpanel" aria-labelledby="expression-tab">
+                <!-- About Tab Pane (Active by Default) -->
+                <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
+                    <div class="row g-4">
+                        <!-- Left column: Database Introduction -->
+                        <div class="col-lg-5">
+                            <div class="card h-100 p-4 border shadow-sm" style="background: #ffffff; border-radius: 12px; border-color: #E5E7EB !important; box-shadow: none !important;">
+                                <h3 class="mb-3" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color);">
+                                    <i class="fa-solid fa-circle-info me-2 text-primary"></i>Database Overview
+                                </h3>
+                                <p style="line-height: 1.6; text-align: justify; color: #4A5568;">
+                                    <strong>miR4ASD</strong> is an open-access, literature-based database that compiles human microRNAs (miRNAs) that were experimentally associated with Autism Spectrum Disorder (ASD). It includes manually curated data from peer-reviewed case-control studies, covering gene expression and genetic variant analysis. All miRNA names from different studies are standardized to miRBase version 22.1.
+                                </p>
+                                
+                                <h4 class="mt-4 mb-3" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color);">Key Features of miR4ASD:</h4>
+                                <div class="d-flex flex-column gap-3">
+                                    <div class="d-flex align-items-start">
+                                        <span class="badge p-2 rounded-circle me-3" style="background-color: #EBF8FF; color: #2B6CB0; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px;">
+                                            <i class="fa-solid fa-code-fork"></i>
+                                        </span>
+                                        <div>
+                                            <h6 class="mb-1" style="font-weight: 700; color: #2D3748;">Integrated Data</h6>
+                                            <span style="font-size: 0.9rem; color: #718096;">Integrates gene expression and miRNA profiling data from ASD-control studies.</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-start">
+                                        <span class="badge p-2 rounded-circle me-3" style="background-color: #EBF8FF; color: #2B6CB0; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px;">
+                                            <i class="fa-solid fa-brain"></i>
+                                        </span>
+                                        <div>
+                                            <h6 class="mb-1" style="font-weight: 700; color: #2D3748;">Tissue-Specific Patterns</h6>
+                                            <span style="font-size: 0.9rem; color: #718096;">Highlights tissue-specific expression patterns across brain and peripheral samples.</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-start">
+                                        <span class="badge p-2 rounded-circle me-3" style="background-color: #EBF8FF; color: #2B6CB0; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px;">
+                                            <i class="fa-solid fa-dna"></i>
+                                        </span>
+                                        <div>
+                                            <h6 class="mb-1" style="font-weight: 700; color: #2D3748;">Genetic Variants</h6>
+                                            <span style="font-size: 0.9rem; color: #718096;">Includes miRNAs with reported genetic variants — an underexplored area in ASD research.</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-start">
+                                        <span class="badge p-2 rounded-circle me-3" style="background-color: #EBF8FF; color: #2B6CB0; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px;">
+                                            <i class="fa-solid fa-microscope"></i>
+                                        </span>
+                                        <div>
+                                            <h6 class="mb-1" style="font-weight: 700; color: #2D3748;">Research Enabler</h6>
+                                            <span style="font-size: 0.9rem; color: #718096;">Supports biomarker discovery, functional studies, and genetic research in ASD.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right column: Database Workflow Figure -->
+                        <div class="col-lg-7">
+                            <div class="figure-card card h-100 p-4 border shadow-sm" style="background: #ffffff; border-radius: 12px; border-color: #E5E7EB !important; box-shadow: none !important;">
+                                <h3 class="mb-3 figure-title" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color);">
+                                    <i class="fa-solid fa-diagram-project me-2 text-primary"></i>Curation & Processing Workflow
+                                </h3>
+                                <div class="text-center figure-img-container p-2 mb-2 bg-white border-0" style="min-height: auto;">
+                                    <img class="img-fluid figure-img" src="images/Workflow.png" alt="Curation & Processing Workflow" style="max-height: 380px; border-radius: 8px;">
+                                </div>
+                                <p class="text-muted mt-2 mb-0" style="font-size: 0.85rem; line-height: 1.4;">
+                                    <strong>Figure 1:</strong> Overview of the curation, standardization, and processing workflow implemented in the miR4ASD database.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grid of other Figures -->
+                    <div class="row g-4 mt-3">
+                        <div class="col-12">
+                            <h3 class="mb-1" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color);">
+                                <i class="fa-solid fa-chart-pie me-2 text-primary"></i>Database Statistics & Visualizations
+                            </h3>
+                            <p class="text-muted mb-2">Click on any chart to open it in high resolution.</p>
+                        </div>
+                    </div>
+
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-3">
+                        <div class="col">
+                            <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
+                                <div class="figure-img-container bg-white border-0 text-center">
+                                    <img class="img-fluid figure-img" src="images/Eligible_studies.jpg" alt="Eligible Studies Flowchart">
+                                </div>
+                                <div class="figure-caption">
+                                    <h6 class="figure-title fw-bold mb-1" style="color: var(--primary-color);">Eligible Studies Flowchart</h6>
+                                    <span class="text-muted" style="font-size: 0.85rem;">Flow diagram summarizing literature search, filtering, and selection of eligible studies for inclusion.</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col">
+                            <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
+                                <div class="figure-img-container bg-white border-0 text-center">
+                                    <img class="img-fluid figure-img" src="images/Expression_Studies_by_tissue_type.jpg" alt="Expression Studies by Tissue">
+                                </div>
+                                <div class="figure-caption">
+                                    <h6 class="figure-title fw-bold mb-1" style="color: var(--primary-color);">Expression Studies by Tissue</h6>
+                                    <span class="text-muted" style="font-size: 0.85rem;">Breakdown of expression studies grouped by the type of tissue analyzed (e.g., Blood, Brain, LCLs).</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col">
+                            <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
+                                <div class="figure-img-container bg-white border-0 text-center">
+                                    <img class="img-fluid figure-img" src="images/Genetic_Studies_by_variant_type.jpg" alt="Genetic Studies by Variant">
+                                </div>
+                                <div class="figure-caption">
+                                    <h6 class="figure-title fw-bold mb-1" style="color: var(--primary-color);">Genetic Studies by Variant</h6>
+                                    <span class="text-muted" style="font-size: 0.85rem;">Distribution of genetic and other studies classified by the underlying variant types analyzed.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
+                                <div class="figure-img-container bg-white border-0 text-center">
+                                    <img class="img-fluid figure-img" src="images/Top_10_miRNAs.jpg" alt="Top 10 Associated miRNAs">
+                                </div>
+                                <div class="figure-caption">
+                                    <h6 class="figure-title fw-bold mb-1" style="color: var(--primary-color);">Top 10 Associated miRNAs</h6>
+                                    <span class="text-muted" style="font-size: 0.85rem;">The top 10 human microRNAs ranked by the total number of independent studies reporting an association with ASD.</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col">
+                            <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
+                                <div class="figure-img-container bg-white border-0 text-center">
+                                    <img class="img-fluid figure-img" src="images/12_miRNAs_in_common.jpg" alt="miRNAs in Common">
+                                </div>
+                                <div class="figure-caption">
+                                    <h6 class="figure-title fw-bold mb-1" style="color: var(--primary-color);">miRNAs in Common</h6>
+                                    <span class="text-muted" style="font-size: 0.85rem;">Analysis of microRNAs common across different patient datasets or tissue groups.</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col">
+                            <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
+                                <div class="figure-img-container bg-white border-0 text-center">
+                                    <img class="img-fluid figure-img" src="images/miRNAs_expression_studies.png" alt="Expression Studies Summary">
+                                </div>
+                                <div class="figure-caption">
+                                    <h6 class="figure-title fw-bold mb-1" style="color: var(--primary-color);">Expression Studies Summary</h6>
+                                    <span class="text-muted" style="font-size: 0.85rem;">Overview of specific miRNAs and their reported alterations in gene expression studies.</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 col-md-6 col-12 mx-auto">
+                            <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
+                                <div class="figure-img-container bg-white border-0 text-center">
+                                    <img class="img-fluid figure-img" src="images/miRNAs_genetic_and_other_studies.png" alt="Genetic Studies Summary">
+                                </div>
+                                <div class="figure-caption">
+                                    <h6 class="figure-title fw-bold mb-1" style="color: var(--primary-color);">Genetic Studies Summary</h6>
+                                    <span class="text-muted" style="font-size: 0.85rem;">Overview of specific miRNAs and their association with genetic variants in ASD datasets.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="expression" role="tabpanel" aria-labelledby="expression-tab">
                     <table id="expression-table" class="display" style="width:100%">
                         <thead>
                             <tr>
@@ -255,30 +474,34 @@
                 const statsContainer = document.getElementById('statistics-container');
                 statsContainer.innerHTML = `
                     <div class="col-md-3">
-                        <div class="card">
-                            <h5>Total Expression Studies</h5>
-                            <p class="fs-4">${data.total_expression_studies}</p>
+                        <div class="card shadow-sm border-0 p-3 h-100 text-center" style="border-radius: 12px; background-color: var(--card-bg);">
+                            <h5 class="text-muted mb-2" style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Total studies</h5>
+                            <p class="fs-3 fw-bold mb-0" style="color: var(--primary-color);">${data.total_studies}</p>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card">
-                            <h5>Total Other Studies</h5>
-                            <p class="fs-4">${data.total_other_studies}</p>
+                        <div class="card shadow-sm border-0 p-3 h-100 text-center" style="border-radius: 12px; background-color: var(--card-bg);">
+                            <h5 class="text-muted mb-2" style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Total miRNA genes</h5>
+                            <p class="fs-3 fw-bold mb-0" style="color: var(--primary-color);">${data.total_mirna_genes}</p>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card">
-                            <h5>Unique miRNAs</h5>
-                            <p class="fs-4">${data.unique_mirnas}</p>
+                        <div class="card shadow-sm border-0 p-3 h-100 text-center" style="border-radius: 12px; background-color: var(--card-bg);">
+                            <h5 class="text-muted mb-2" style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Total miRNA mature</h5>
+                            <p class="fs-3 fw-bold mb-0" style="color: var(--primary-color);">${data.total_mirna_mature}</p>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card">
-                            <h5>Alterations</h5>
-                            <p class="fs-4">
-                                Up: ${data.alteration_counts.upregulated || 0} | 
-                                Down: ${data.alteration_counts.downregulated || 0}
-                            </p>
+                        <div class="card shadow-sm border-0 p-3 h-100 text-center" style="border-radius: 12px; background-color: var(--card-bg);">
+                            <h5 class="text-muted mb-2" style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Alterations</h5>
+                            <div class="d-flex justify-content-center align-items-center gap-2 mt-1">
+                                <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill" style="font-size: 0.85rem; font-weight: 700;">
+                                    <i class="fa-solid fa-arrow-up me-1"></i>Up: ${data.alteration_counts.upregulated || 0}
+                                </span>
+                                <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill" style="font-size: 0.85rem; font-weight: 700;">
+                                    <i class="fa-solid fa-arrow-down me-1"></i>Down: ${data.alteration_counts.downregulated || 0}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -388,7 +611,37 @@
                 icon.removeClass('fa-plus-circle').addClass('fa-minus-circle');
             }
         } );
+
+        // Recalculate DataTable column layouts when switching tabs to prevent header misalignment
+        $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+            $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        });
+
+        // Image Lightbox/Preview Modal Handler
+        $('body').on('click', '.figure-img', function() {
+            const src = $(this).attr('src');
+            const title = $(this).closest('.figure-card').find('.figure-title').text() || $(this).closest('.card').find('h3').text().trim() || 'Figure Preview';
+            $('#modalImage').attr('src', src);
+            $('#imageModalLabel').text(title);
+            const myModal = new bootstrap.Modal(document.getElementById('imageModal'));
+            myModal.show();
+        });
     });
     </script>
+
+    <!-- Image Modal for Lightbox Effect -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content shadow border-0" style="border-radius: 12px; overflow: hidden;">
+          <div class="modal-header border-0 bg-light py-3 px-4">
+            <h5 class="modal-title fw-bold" id="imageModalLabel" style="font-family: 'Montserrat', sans-serif; color: var(--primary-color);">Figure Preview</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center p-4 bg-white">
+            <img id="modalImage" src="" alt="Full size figure" class="img-fluid rounded shadow-sm" style="max-height: 80vh;">
+          </div>
+        </div>
+      </div>
+    </div>
 </body>
 </html>

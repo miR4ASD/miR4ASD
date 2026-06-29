@@ -221,6 +221,15 @@ def create_mirbase_mature_link(mature_name):
         return f'<a href="https://www.mirbase.org/mature/{mirbase_id}" target="_blank">{mature_name}</a>'
     return mature_name
 
+# Calculate unique counts on raw data before wrapping in HTML links
+raw_mirna_ids = pd.concat([df_expression['miRNA ID'], df_other['miRNA ID']]).dropna().astype(str).str.strip()
+total_mirna_genes = int(raw_mirna_ids.nunique())
+
+raw_mature_ids = pd.concat([df_expression['miRNA mature ID'], df_other['miRNA mature ID']]).dropna().astype(str).str.strip()
+total_mirna_mature = int(raw_mature_ids.nunique())
+
+total_studies = int(df_details['Study'].nunique())
+
 # Apply link generation to the hairpins and mature IDs
 df_expression['miRNA ID'] = df_expression['miRNA ID'].apply(create_mirbase_hairpin_link)
 df_other['miRNA ID'] = df_other['miRNA ID'].apply(create_mirbase_hairpin_link)
@@ -231,20 +240,17 @@ df_other['miRNA mature ID'] = df_other['miRNA mature ID'].apply(create_mirbase_m
 
 # --- Calculate and Save Statistics ---
 
-def calculate_and_save_statistics(df_expression, df_other):
+def calculate_and_save_statistics(df_expression, df_other, total_studies, total_mirna_genes, total_mirna_mature):
     """
     Calculate summary statistics (unique counts, tissue, and alteration counts) and save as JSON.
 
     Parameters:
     df_expression (pandas.DataFrame): The processed expression studies.
     df_other (pandas.DataFrame): The processed genetic and other studies.
+    total_studies (int): Total unique studies.
+    total_mirna_genes (int): Total unique miRNA IDs.
+    total_mirna_mature (int): Total unique miRNA mature IDs.
     """
-    total_expression_studies = len(df_expression)
-    total_other_studies = len(df_other)
-    
-    # Calculate unique miRNAs count across both tables
-    all_mirnas = pd.concat([df_expression['miRNA ID'], df_other['miRNA ID']]).nunique()
-    
     # Expression alteration counts
     alteration_counts = df_expression['Alteration'].value_counts().to_dict()
     
@@ -265,9 +271,9 @@ def calculate_and_save_statistics(df_expression, df_other):
             tissue_counts[part_clean] = tissue_counts.get(part_clean, 0) + 1
 
     stats = {
-        'total_expression_studies': total_expression_studies,
-        'total_other_studies': total_other_studies,
-        'unique_mirnas': all_mirnas,
+        'total_studies': total_studies,
+        'total_mirna_genes': total_mirna_genes,
+        'total_mirna_mature': total_mirna_mature,
         'alteration_counts': alteration_counts,
         'tissue_counts': tissue_counts
     }
@@ -283,7 +289,7 @@ df_other.to_json('other_studies.json', orient='records', default_handler=str)
 df_details.to_json('study_details.json', orient='records', default_handler=str)
 
 # Save the statistics file
-calculate_and_save_statistics(df_expression, df_other)
+calculate_and_save_statistics(df_expression, df_other, total_studies, total_mirna_genes, total_mirna_mature)
 
 print("Data processing complete. JSON files created.")
 print("Expression Studies count:", len(df_expression))
