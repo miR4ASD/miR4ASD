@@ -177,6 +177,123 @@
             background-color: #fee2e2 !important;
             color: #b91c1c !important;
         }
+
+        /* Advanced Filters Drawer Styles */
+        .filter-drawer {
+            position: fixed;
+            top: 0;
+            right: -360px;
+            width: 360px;
+            height: 100%;
+            background-color: var(--card-bg);
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+            z-index: 1060;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .filter-drawer.open {
+            right: 0;
+        }
+
+        .filter-drawer-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #F9FAFB;
+        }
+
+        .filter-drawer-header h5 {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.15rem;
+        }
+
+        .filter-drawer-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .filter-drawer-footer {
+            padding: 1.25rem 1.5rem;
+            border-top: 1px solid #E5E7EB;
+            background-color: #F9FAFB;
+        }
+
+        .drawer-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1050;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .drawer-backdrop.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Checklist container styling */
+        .tissue-checklist {
+            max-height: 180px;
+            overflow-y: auto;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            padding: 8px 12px;
+            background-color: #fff;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 4px 0;
+            font-size: 0.9rem;
+        }
+
+        .checklist-item label {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            cursor: pointer;
+            color: #4A5568;
+            user-select: none;
+        }
+
+        .checklist-item input {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        /* Filter toggle button styling */
+        .btn-filter {
+            background-color: var(--card-bg);
+            border: 1px solid #ced4da;
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            border-radius: 6px;
+            padding: 6px 14px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .btn-filter:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
@@ -189,17 +306,24 @@
             <!-- Statistics will be loaded here -->
         </div>
         <div class="card">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="true">About miR4ASD</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="expression-tab" data-bs-toggle="tab" data-bs-target="#expression" type="button" role="tab" aria-controls="expression" aria-selected="false">Expression Studies</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="genetic-tab" data-bs-toggle="tab" data-bs-target="#genetic" type="button" role="tab" aria-controls="genetic" aria-selected="false">Genetic & Other Studies</button>
-                </li>
-            </ul>
+            <div class="d-flex justify-content-between align-items-center flex-wrap border-bottom pe-3">
+                <ul class="nav nav-tabs border-0" id="myTab" role="tablist" style="margin-bottom: -1px;">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="true">About miR4ASD</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="expression-tab" data-bs-toggle="tab" data-bs-target="#expression" type="button" role="tab" aria-controls="expression" aria-selected="false">Expression Studies</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="genetic-tab" data-bs-toggle="tab" data-bs-target="#genetic" type="button" role="tab" aria-controls="genetic" aria-selected="false">Genetic & Other Studies</button>
+                    </li>
+                </ul>
+                <div class="py-2" id="filter-btn-wrapper" style="display: none;">
+                    <button class="btn btn-filter" id="toggleFilterDrawer">
+                        <i class="fa-solid fa-filter me-1"></i> Filters <span class="badge bg-primary ms-1" id="filter-count" style="display: none;">0</span>
+                    </button>
+                </div>
+            </div>
             <div class="tab-content p-3" id="myTabContent">
                 <!-- About Tab Pane (Active by Default) -->
                 <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
@@ -383,18 +507,6 @@
                                 <th># studies downregulation</th>
                                 <th>Total studies</th>
                             </tr>
-                            <tr class="filters">
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-
                         </thead>
                     </table>
                 </div>
@@ -408,15 +520,6 @@
                                 <th>Alteration</th>
                                 <th>Study description</th>
                             </tr>
-                            <tr class="filters">
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-
-
                         </thead>
                     </table>
                 </div>
@@ -505,6 +608,22 @@
                         </div>
                     </div>
                 `;
+
+                // Populate tissue filter checkboxes dynamically
+                const tissueCheckboxes = document.getElementById('tissue-checkboxes');
+                if (tissueCheckboxes && data.tissue_counts) {
+                    const sortedTissues = Object.keys(data.tissue_counts).sort();
+                    tissueCheckboxes.innerHTML = sortedTissues.map(tissue => {
+                        return `
+                            <div class="checklist-item">
+                                <label>
+                                    <input type="checkbox" value="${tissue}" class="form-check-input">
+                                    <span>${tissue} <small class="text-muted">(${data.tissue_counts[tissue]})</small></span>
+                                </label>
+                            </div>
+                        `;
+                    }).join('');
+                }
             })
             .catch(error => console.error('Error fetching statistics:', error));
 
@@ -534,20 +653,7 @@
                     }
                 ],
                 "initComplete": function () {
-                    var api = this.api();
-                    api.columns().every(function (colIdx) {
-                        var column = this;
-                        var header = $(api.column(colIdx).header());
-                        if (header.text().trim() !== '') {
-                            var input = $('<input type="text" placeholder="Search ' + header.text() + '" />')
-                                .appendTo($('tr.filters th', api.table().header()).eq(colIdx))
-                                .on('keyup change clear', function () {
-                                    if (column.search() !== this.value) {
-                                        column.search(this.value).draw();
-                                    }
-                                });
-                        }
-                    });
+                    // Cleaned up inline filters
                 }
             });
             return table;
@@ -612,8 +718,14 @@
             }
         } );
 
-        // Recalculate DataTable column layouts when switching tabs to prevent header misalignment
+        // Recalculate DataTable column layouts when switching tabs to prevent header misalignment and toggle filter button
         $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+            const activeTabId = $(e.target).attr('id');
+            if (activeTabId === 'about-tab') {
+                $('#filter-btn-wrapper').fadeOut(200);
+            } else {
+                $('#filter-btn-wrapper').fadeIn(200);
+            }
             $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
         });
 
@@ -626,8 +738,137 @@
             const myModal = new bootstrap.Modal(document.getElementById('imageModal'));
             myModal.show();
         });
+
+        // Advanced Filtering Logic
+        function applyAdvancedFilters() {
+            const mirnaId = $('#filter-mirna-id').val().trim();
+            const matureId = $('#filter-mature-id').val().trim();
+            const alteration = $('#filter-alteration').val();
+            
+            // Get selected tissues
+            const selectedTissues = [];
+            $('#tissue-checkboxes input:checked').each(function() {
+                selectedTissues.push($(this).val());
+            });
+
+            let activeFilterCount = 0;
+            if (mirnaId) activeFilterCount++;
+            if (matureId) activeFilterCount++;
+            if (alteration) activeFilterCount++;
+            if (selectedTissues.length > 0) activeFilterCount++;
+
+            // Update badge count
+            if (activeFilterCount > 0) {
+                $('#filter-count').text(activeFilterCount).show();
+            } else {
+                $('#filter-count').hide();
+            }
+
+            // Apply miRNA ID filter (column 1)
+            expressionTable.column(1).search(mirnaId);
+            otherTable.column(1).search(mirnaId);
+
+            // Apply mature ID filter (column 2)
+            expressionTable.column(2).search(matureId);
+            otherTable.column(2).search(matureId);
+
+            // Apply Alteration filter (column 3)
+            expressionTable.column(3).search(alteration);
+            otherTable.column(3).search(alteration);
+
+            // Apply Tissue filter (column 4 - only for Expression Studies)
+            if (selectedTissues.length > 0) {
+                // Build a regex matching pattern: e.g. (Blood|Brain)
+                const escapedTissues = selectedTissues.map(t => t.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'));
+                const pattern = escapedTissues.join('|');
+                expressionTable.column(4).search(pattern, true, false);
+            } else {
+                expressionTable.column(4).search('');
+            }
+
+            // Draw tables
+            expressionTable.draw();
+            otherTable.draw();
+        }
+
+        // Event listeners for real-time filtering
+        $('#filter-mirna-id, #filter-mature-id').on('keyup input change', applyAdvancedFilters);
+        $('#filter-alteration').on('change', applyAdvancedFilters);
+        $('body').on('change', '#tissue-checkboxes input', applyAdvancedFilters);
+
+        // Reset button action
+        $('#resetFilters').on('click', function() {
+            $('#filter-mirna-id').val('');
+            $('#filter-mature-id').val('');
+            $('#filter-alteration').val('');
+            $('#tissue-checkboxes input:checked').prop('checked', false);
+            applyAdvancedFilters();
+        });
+
+        // Drawer slide-in and slide-out toggle actions
+        $('#toggleFilterDrawer').on('click', function() {
+            $('#filterDrawer').addClass('open');
+            $('#drawerBackdrop').addClass('show');
+        });
+
+        $('#closeFilterDrawer, #drawerBackdrop, #closeFilterDrawerBtn').on('click', function() {
+            $('#filterDrawer').removeClass('open');
+            $('#drawerBackdrop').removeClass('show');
+        });
     });
     </script>
+
+    <!-- Advanced Filters Drawer -->
+    <div id="filterDrawer" class="filter-drawer">
+        <div class="filter-drawer-header">
+            <h5><i class="fa-solid fa-sliders me-2 text-primary"></i>Advanced Filters</h5>
+            <button type="button" class="btn-close" id="closeFilterDrawer" aria-label="Close"></button>
+        </div>
+        <div class="filter-drawer-body">
+            <!-- Search miRNA Hairpin ID -->
+            <div class="mb-4">
+                <label class="form-label fw-bold text-secondary" style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">miRNA Hairpin ID</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" id="filter-mirna-id" class="form-control border-start-0 ps-0" placeholder="e.g. hsa-let-7a">
+                </div>
+            </div>
+            
+            <!-- Search miRNA Mature ID -->
+            <div class="mb-4">
+                <label class="form-label fw-bold text-secondary" style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">miRNA Mature ID</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" id="filter-mature-id" class="form-control border-start-0 ps-0" placeholder="e.g. hsa-let-7a-5p">
+                </div>
+            </div>
+
+            <!-- Alteration Type -->
+            <div class="mb-4">
+                <label class="form-label fw-bold text-secondary" style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Alteration</label>
+                <select id="filter-alteration" class="form-select">
+                    <option value="">All Alterations</option>
+                    <option value="upregulated">Upregulated</option>
+                    <option value="downregulated">Downregulated</option>
+                </select>
+            </div>
+
+            <!-- Tissue Group (Only for Expression Studies) -->
+            <div class="mb-4">
+                <label class="form-label fw-bold text-secondary" style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Tissue Type</label>
+                <div class="tissue-checklist" id="tissue-checkboxes">
+                    <!-- Tissue checkboxes will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+        <div class="filter-drawer-footer d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary flex-grow-1" id="resetFilters">Reset</button>
+            <button type="button" class="btn btn-primary flex-grow-1" id="closeFilterDrawerBtn">Apply</button>
+        </div>
+    </div>
+
+    <!-- Drawer Backdrop -->
+    <div id="drawerBackdrop" class="drawer-backdrop"></div>
 
     <!-- Image Modal for Lightbox Effect -->
     <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
