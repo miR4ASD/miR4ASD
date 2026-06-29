@@ -201,6 +201,44 @@
             box-shadow: 0 0 0 3px rgba(11, 45, 72, 0.15) !important;
         }
 
+        /* Align CSV button, page length, and search box on the same line */
+        .dt-layout-row:first-child, .dataTables_wrapper > div:first-child {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            gap: 15px !important;
+            margin-bottom: 1.5rem !important;
+        }
+
+        .dt-layout-cell.dt-start, .dt-layout-cell.dt-layout-start, .dt-start {
+            display: flex !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            gap: 15px !important;
+            float: none !important;
+        }
+
+        .dt-layout-cell.dt-end, .dt-layout-cell.dt-layout-end, .dt-end {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-end !important;
+            float: none !important;
+        }
+
+        .dt-buttons, .dataTables_length, .dataTables_filter {
+            margin: 0 !important;
+            float: none !important;
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+
+        .dataTables_filter label {
+            display: flex !important;
+            align-items: center !important;
+            margin-bottom: 0 !important;
+        }
+
         /* Nested study details wrapper card */
         .details-wrapper {
             padding: 1.5rem;
@@ -720,7 +758,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="card shadow-sm border-0 p-3 h-100 text-center" style="border-radius: 12px; background-color: var(--card-bg);">
-                            <h5 class="text-muted mb-2" style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Total miRNA mature</h5>
+                            <h5 class="text-muted mb-2" style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Total mature miRNA</h5>
                             <p class="fs-3 fw-bold mb-0" style="color: var(--primary-color);">${data.total_mirna_mature}</p>
                         </div>
                     </div>
@@ -773,6 +811,7 @@
                 "buttons": [
                     {
                         extend: 'csv',
+                        text: '<i class="fa-solid fa-download me-1"></i> Download CSV',
                         exportOptions: {
                             rows: ':visible',
                             format: {
