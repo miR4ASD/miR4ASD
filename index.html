@@ -139,6 +139,23 @@
             justify-content: flex-end !important;
         }
 
+        /* Bottom controls wrapper styling */
+        .bottom-controls {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            margin-top: 1.5rem !important;
+            gap: 15px !important;
+        }
+
+        .bottom-right {
+            display: flex !important;
+            align-items: center !important;
+            gap: 15px !important;
+            flex-wrap: wrap !important;
+        }
+
         .dt-buttons, 
         .dataTables_length, .dt-length, 
         .dataTables_filter, .dt-search {
@@ -834,7 +851,7 @@
                 "columns": columnsConfig,
                 "orderCellsTop": true,
                 "fixedHeader": true,
-                "dom": 'Blfrtip',
+                "dom": 'Bfrt<"bottom-controls"i<"bottom-right"lp>>',
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "pageLength": 10,
                 "buttons": [
