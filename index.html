@@ -671,13 +671,13 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>miRNA ID</th>
-                                <th>miRNA mature ID</th>
-                                <th>Alteration</th>
+                                <th>Precursor miRNA (hairpin)</th>
+                                <th>Mature miRNA</th>
+                                <th>Expression change (ASD vs. controls)</th>
                                 <th>Tissue</th>
-                                <th>Reported</th>
-                                <th># studies upregulation</th>
-                                <th># studies downregulation</th>
+                                <th>Overall evidence</th>
+                                <th>Number of studies (Upregulated)</th>
+                                <th>Number of studies (Downregulated)</th>
                                 <th>Total studies</th>
                             </tr>
                         </thead>
@@ -688,8 +688,8 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>miRNA ID</th>
-                                <th>miRNA mature ID</th>
+                                <th>Precursor miRNA (hairpin)</th>
+                                <th>Mature miRNA</th>
                                 <th>Alteration</th>
                                 <th>Study description</th>
                             </tr>
@@ -720,7 +720,22 @@
             return '<div class="details-wrapper"><p class="text-muted mb-0">No study details available.</p></div>';
         }
 
-        let table = '<div class="details-wrapper"><table class="table details-table"><thead><tr><th>Paper</th><th>Description</th><th>Study Type</th><th>Tissue type</th><th>Tissue - subtype</th><th>ASD Samples</th><th>Control Samples</th><th>Others</th></tr></thead><tbody>';
+        // Check if any study in the details has a tissue type (i.e. is not Genetics)
+        const showTissue = details.some(d => d["Study Type"] !== "Genetics");
+
+        let table = '<div class="details-wrapper"><table class="table details-table"><thead><tr>';
+        table += '<th>Paper</th>';
+        table += '<th>Description</th>';
+        table += '<th>Study Type</th>';
+        if (showTissue) {
+            table += '<th>Tissue type</th>';
+            table += '<th>Tissue - subtype</th>';
+        }
+        table += '<th>ASD Samples</th>';
+        table += '<th>Control Samples</th>';
+        table += '<th>Country</th>';
+        table += '</tr></thead><tbody>';
+
         details.forEach(function(d) {
             let studyLink = d.Study || '';
             if (d.DOI) {
@@ -728,18 +743,22 @@
             }
 
             // Render sample counts in small badge-like pills if not empty
-            let asdSamples = d["# ASD samples"] ? `<span class="badge bg-light text-dark border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: normal; border-color: #E2E8F0 !important;">${d["# ASD samples"]}</span>` : '';
-            let controlSamples = d["# Control samples"] ? `<span class="badge bg-light text-dark border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: normal; border-color: #E2E8F0 !important;">${d["# Control samples"]}</span>` : '';
+            let asdSamples = d["ASD samples"] ? `<span class="badge bg-light text-dark border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: normal; border-color: #E2E8F0 !important;">${d["ASD samples"]}</span>` : '';
+            let controlSamples = d["Control samples"] ? `<span class="badge bg-light text-dark border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: normal; border-color: #E2E8F0 !important;">${d["Control samples"]}</span>` : '';
 
             table += '<tr>' +
                 '<td class="align-middle">' + studyLink + '</td>' +
                 '<td class="align-middle text-secondary" style="max-width: 320px; font-size: 0.8rem; line-height: 1.4;">' + (d["Description"] || '') + '</td>' +
-                '<td class="align-middle"><span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded" style="font-size: 0.75rem; font-weight: normal; background-color: #F1F5F9 !important; color: #475569 !important; border-color: #E2E8F0 !important;">' + (d["Study Type"] || '') + '</span></td>' +
-                '<td class="align-middle">' + (d["Tissue type"] || '') + '</td>' +
-                '<td class="align-middle text-muted" style="font-size: 0.8rem;">' + (d["Tissue - subtype"] || '') + '</td>' +
-                '<td class="align-middle">' + asdSamples + '</td>' +
+                '<td class="align-middle"><span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded" style="font-size: 0.75rem; font-weight: normal; background-color: #F1F5F9 !important; color: #475569 !important; border-color: #E2E8F0 !important;">' + (d["Study Type"] || '') + '</span></td>';
+            
+            if (showTissue) {
+                table += '<td class="align-middle">' + (d["Tissue type"] || '') + '</td>' +
+                         '<td class="align-middle text-muted" style="font-size: 0.8rem;">' + (d["Tissue - subtype"] || '') + '</td>';
+            }
+            
+            table += '<td class="align-middle">' + asdSamples + '</td>' +
                 '<td class="align-middle">' + controlSamples + '</td>' +
-                '<td class="align-middle text-muted" style="font-size: 0.8rem;">' + (d["# Others"] || '') + '</td>' +
+                '<td class="align-middle text-muted" style="font-size: 0.8rem;">' + (d["Country"] || '') + '</td>' +
             '</tr>';
         });
         table += '</tbody></table></div>';
@@ -850,13 +869,13 @@
                     "data":           null,
                     "defaultContent": '<i class="fa-solid fa-plus-circle"></i>'
                 },
-                { "data": "miRNA ID" },
-                { "data": "miRNA mature ID" },
-                { "data": "Alteration" },
+                { "data": "Precursor miRNA (hairpin)" },
+                { "data": "Mature miRNA" },
+                { "data": "Expression change (ASD vs. controls)" },
                 { "data": "Tissue" },
-                { "data": "Reported" },
-                { "data": "# studies upregulation" },
-                { "data": "# studies downregulation" },
+                { "data": "Overall evidence" },
+                { "data": "Number of studies (Upregulated)" },
+                { "data": "Number of studies (Downregulated)" },
                 { "data": "Total studies" }
             ]
         );
@@ -872,8 +891,8 @@
                     "data":           null,
                     "defaultContent": '<i class="fa-solid fa-plus-circle"></i>'
                 },
-                { "data": "miRNA ID" },
-                { "data": "miRNA mature ID" },
+                { "data": "Precursor miRNA (hairpin)" },
+                { "data": "Mature miRNA" },
                 { "data": "Alteration" },
                 { "data": "Study description" }
             ]
