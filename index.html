@@ -829,12 +829,7 @@
             var table = $(tableId).DataTable({
                 "ajax": {
                     "url": ajaxUrl,
-                    "dataSrc": function(json) {
-                        console.log("DataTables loaded data for:", tableId, "from URL:", ajaxUrl);
-                        console.log("First item keys:", json && json.length > 0 ? Object.keys(json[0]) : "empty");
-                        console.log("First item content:", json && json.length > 0 ? json[0] : "empty");
-                        return json;
-                    }
+                    "dataSrc": ""
                 },
                 "columns": columnsConfig,
                 "orderCellsTop": true,
