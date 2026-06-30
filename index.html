@@ -767,7 +767,8 @@
 
     $(document).ready(function() {
         // Fetch and display statistics
-        fetch('statistics.json?v=2.1')
+        // Fetch and display statistics
+        fetch('statistics.json?v=3.2')
             .then(response => response.json())
             .then(data => {
                 const statsContainer = document.getElementById('statistics-container');
@@ -861,7 +862,7 @@
         // Expression Studies Table
         var expressionTable = initializeDataTable(
             '#expression-table',
-            'expression_studies.json?v=2.1',
+            'expression_studies.json?v=3.2',
             [
                 {
                     "className":      'details-control',
@@ -883,7 +884,7 @@
         // Other Studies Table
         var otherTable = initializeDataTable(
             '#other-table',
-            'other_studies.json?v=2.1',
+            'other_studies.json?v=3.2',
             [
                 {
                     "className":      'details-control',
