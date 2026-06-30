@@ -74,7 +74,7 @@ def normalize_study_name(name):
 hairpin_to_id_map, mature_to_id_map = create_gff_maps('hsa.gff3')
 
 # Read the Excel file
-xls = pd.ExcelFile('Tabelas_resumo_para_Hugo.xlsx')
+xls = pd.ExcelFile('Tabelas_miR4ASD.xlsx')
 
 # Read the sheets into dataframes
 df_expression = pd.read_excel(xls, 'miRNA_expression_studies')
@@ -162,16 +162,9 @@ def get_study_details_for_expression(row):
 
 df_expression['StudyDetails'] = df_expression.apply(get_study_details_for_expression, axis=1)
 
-# Set studies count for upregulation/downregulation based on the row's Alteration
-df_expression['# studies upregulation'] = df_expression.apply(
-    lambda r: int(r['Number of studies down or upregulated']) if r['Alteration'] == 'upregulated' else 0, axis=1
-)
-df_expression['# studies downregulation'] = df_expression.apply(
-    lambda r: int(r['Number of studies down or upregulated']) if r['Alteration'] == 'downregulated' else 0, axis=1
-)
-
 # Drop redundant or temporary columns
-df_expression = df_expression.drop(columns=['Study', 'Number of studies down or upregulated', 'Observations', 'Unnamed: 9'])
+cols_to_drop = [c for c in ['Study', 'Observations', 'Unnamed: 10'] if c in df_expression.columns]
+df_expression = df_expression.drop(columns=cols_to_drop)
 
 
 # --- Processing for miRNA_other_studies ---
@@ -196,6 +189,12 @@ df_other['StudyDetails'] = df_other.apply(get_study_details_for_other, axis=1)
 # Drop redundant columns
 df_other = df_other.drop(columns=['Study', 'Study Type'])
 
+# Rename columns for consistency
+df_other = df_other.rename(columns={
+    'miRNA ID': 'Precursor miRNA (hairpin)',
+    'miRNA mature ID': 'Mature miRNA'
+})
+
 
 # --- MIRBASE ID Link Generation ---
 
@@ -216,20 +215,20 @@ def create_mirbase_mature_link(mature_name):
     return mature_name
 
 # Calculate unique counts on raw data before wrapping in HTML links
-raw_mirna_ids = pd.concat([df_expression['miRNA ID'], df_other['miRNA ID']]).dropna().astype(str).str.strip()
+raw_mirna_ids = pd.concat([df_expression['Precursor miRNA (hairpin)'], df_other['Precursor miRNA (hairpin)']]).dropna().astype(str).str.strip()
 total_mirna_genes = int(raw_mirna_ids.nunique())
 
-raw_mature_ids = pd.concat([df_expression['miRNA mature ID'], df_other['miRNA mature ID']]).dropna().astype(str).str.strip()
+raw_mature_ids = pd.concat([df_expression['Mature miRNA'], df_other['Mature miRNA']]).dropna().astype(str).str.strip()
 total_mirna_mature = int(raw_mature_ids.nunique())
 
 total_studies = int(df_details['Study'].nunique())
 
 # Apply link generation to the hairpins and mature IDs
-df_expression['miRNA ID'] = df_expression['miRNA ID'].apply(create_mirbase_hairpin_link)
-df_other['miRNA ID'] = df_other['miRNA ID'].apply(create_mirbase_hairpin_link)
+df_expression['Precursor miRNA (hairpin)'] = df_expression['Precursor miRNA (hairpin)'].apply(create_mirbase_hairpin_link)
+df_other['Precursor miRNA (hairpin)'] = df_other['Precursor miRNA (hairpin)'].apply(create_mirbase_hairpin_link)
 
-df_expression['miRNA mature ID'] = df_expression['miRNA mature ID'].apply(create_mirbase_mature_link)
-df_other['miRNA mature ID'] = df_other['miRNA mature ID'].apply(create_mirbase_mature_link)
+df_expression['Mature miRNA'] = df_expression['Mature miRNA'].apply(create_mirbase_mature_link)
+df_other['Mature miRNA'] = df_other['Mature miRNA'].apply(create_mirbase_mature_link)
 
 
 # --- Calculate and Save Statistics ---
@@ -247,8 +246,8 @@ def calculate_and_save_statistics(df_expression, df_other, total_studies, total_
     """
     # Expression alteration counts (sum of upregulated/downregulated counts)
     alteration_counts = {
-        'upregulated': int(df_expression['# studies upregulation'].sum()),
-        'downregulated': int(df_expression['# studies downregulation'].sum())
+        'upregulated': int(df_expression['Number of studies (Upregulated)'].sum()),
+        'downregulated': int(df_expression['Number of studies (Downregulated)'].sum())
     }
     
     # Standardize, split, and count individual tissues from expression studies
