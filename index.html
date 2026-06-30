@@ -768,7 +768,7 @@
     $(document).ready(function() {
         // Fetch and display statistics
         // Fetch and display statistics
-        fetch('statistics.json?v=3.2')
+        fetch('statistics.json?v=3.5')
             .then(response => response.json())
             .then(data => {
                 const statsContainer = document.getElementById('statistics-container');
@@ -867,7 +867,7 @@
         // Expression Studies Table
         var expressionTable = initializeDataTable(
             '#expression-table',
-            'expression_studies.json?v=3.2',
+            'expression_studies.json?v=3.5',
             [
                 {
                     "className":      'details-control',
@@ -875,21 +875,21 @@
                     "data":           null,
                     "defaultContent": '<i class="fa-solid fa-plus-circle"></i>'
                 },
-                { "data": "Precursor miRNA (hairpin)" },
-                { "data": "Mature miRNA" },
-                { "data": "Expression change (ASD vs. controls)" },
-                { "data": "Tissue" },
-                { "data": "Overall evidence" },
-                { "data": "Number of studies (Upregulated)" },
-                { "data": "Number of studies (Downregulated)" },
-                { "data": "Total studies" }
+                { "data": "precursor_mirna" },
+                { "data": "mature_mirna" },
+                { "data": "expression_change" },
+                { "data": "tissue" },
+                { "data": "overall_evidence" },
+                { "data": "upregulation_studies" },
+                { "data": "downregulation_studies" },
+                { "data": "total_studies" }
             ]
         );
 
         // Other Studies Table
         var otherTable = initializeDataTable(
             '#other-table',
-            'other_studies.json?v=3.2',
+            'other_studies.json?v=3.5',
             [
                 {
                     "className":      'details-control',
@@ -897,10 +897,10 @@
                     "data":           null,
                     "defaultContent": '<i class="fa-solid fa-plus-circle"></i>'
                 },
-                { "data": "Precursor miRNA (hairpin)" },
-                { "data": "Mature miRNA" },
-                { "data": "Alteration" },
-                { "data": "Study description" }
+                { "data": "precursor_mirna" },
+                { "data": "mature_mirna" },
+                { "data": "alteration" },
+                { "data": "study_description" }
             ]
         );
 

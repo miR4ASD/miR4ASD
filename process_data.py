@@ -166,6 +166,18 @@ df_expression['StudyDetails'] = df_expression.apply(get_study_details_for_expres
 cols_to_drop = [c for c in ['Study', 'Observations', 'Unnamed: 10'] if c in df_expression.columns]
 df_expression = df_expression.drop(columns=cols_to_drop)
 
+# Rename expression studies columns for clean JSON keys (avoid parenthesis parsing bugs in DataTables)
+df_expression = df_expression.rename(columns={
+    'Precursor miRNA (hairpin)': 'precursor_mirna',
+    'Mature miRNA': 'mature_mirna',
+    'Expression change (ASD vs. controls)': 'expression_change',
+    'Tissue': 'tissue',
+    'Overall evidence': 'overall_evidence',
+    'Number of studies (Upregulated)': 'upregulation_studies',
+    'Number of studies (Downregulated)': 'downregulation_studies',
+    'Total studies': 'total_studies'
+})
+
 
 # --- Processing for miRNA_other_studies ---
 
@@ -189,10 +201,12 @@ df_other['StudyDetails'] = df_other.apply(get_study_details_for_other, axis=1)
 # Drop redundant columns
 df_other = df_other.drop(columns=['Study', 'Study Type'])
 
-# Rename columns for consistency
+# Rename other studies columns for clean JSON keys (avoid parenthesis parsing bugs in DataTables)
 df_other = df_other.rename(columns={
-    'miRNA ID': 'Precursor miRNA (hairpin)',
-    'miRNA mature ID': 'Mature miRNA'
+    'miRNA ID': 'precursor_mirna',
+    'miRNA mature ID': 'mature_mirna',
+    'Alteration': 'alteration',
+    'Study description': 'study_description'
 })
 
 
@@ -215,20 +229,20 @@ def create_mirbase_mature_link(mature_name):
     return mature_name
 
 # Calculate unique counts on raw data before wrapping in HTML links
-raw_mirna_ids = pd.concat([df_expression['Precursor miRNA (hairpin)'], df_other['Precursor miRNA (hairpin)']]).dropna().astype(str).str.strip()
+raw_mirna_ids = pd.concat([df_expression['precursor_mirna'], df_other['precursor_mirna']]).dropna().astype(str).str.strip()
 total_mirna_genes = int(raw_mirna_ids.nunique())
 
-raw_mature_ids = pd.concat([df_expression['Mature miRNA'], df_other['Mature miRNA']]).dropna().astype(str).str.strip()
+raw_mature_ids = pd.concat([df_expression['mature_mirna'], df_other['mature_mirna']]).dropna().astype(str).str.strip()
 total_mirna_mature = int(raw_mature_ids.nunique())
 
 total_studies = int(df_details['Study'].nunique())
 
 # Apply link generation to the hairpins and mature IDs
-df_expression['Precursor miRNA (hairpin)'] = df_expression['Precursor miRNA (hairpin)'].apply(create_mirbase_hairpin_link)
-df_other['Precursor miRNA (hairpin)'] = df_other['Precursor miRNA (hairpin)'].apply(create_mirbase_hairpin_link)
+df_expression['precursor_mirna'] = df_expression['precursor_mirna'].apply(create_mirbase_hairpin_link)
+df_other['precursor_mirna'] = df_other['precursor_mirna'].apply(create_mirbase_hairpin_link)
 
-df_expression['Mature miRNA'] = df_expression['Mature miRNA'].apply(create_mirbase_mature_link)
-df_other['Mature miRNA'] = df_other['Mature miRNA'].apply(create_mirbase_mature_link)
+df_expression['mature_mirna'] = df_expression['mature_mirna'].apply(create_mirbase_mature_link)
+df_other['mature_mirna'] = df_other['mature_mirna'].apply(create_mirbase_mature_link)
 
 
 # --- Calculate and Save Statistics ---
@@ -246,13 +260,13 @@ def calculate_and_save_statistics(df_expression, df_other, total_studies, total_
     """
     # Expression alteration counts (sum of upregulated/downregulated counts)
     alteration_counts = {
-        'upregulated': int(df_expression['Number of studies (Upregulated)'].sum()),
-        'downregulated': int(df_expression['Number of studies (Downregulated)'].sum())
+        'upregulated': int(df_expression['upregulation_studies'].sum()),
+        'downregulated': int(df_expression['downregulation_studies'].sum())
     }
     
     # Standardize, split, and count individual tissues from expression studies
     tissue_counts = {}
-    for tissue_str in df_expression['Tissue'].dropna():
+    for tissue_str in df_expression['tissue'].dropna():
         for part in str(tissue_str).split(';'):
             part_clean = part.strip()
             if not part_clean:
