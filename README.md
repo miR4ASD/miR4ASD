@@ -12,7 +12,7 @@ This project is a simple frontend to display information about microRNAs (miRNAs
 
 ## Data Source
 
-*   **Excel File:** `Tabelas_resumo_para_Hugo.xlsx`
+*   **Excel File:** `Tabelas_miR4ASD.xlsx`
 *   **Sheets:**
     *   `miRNA_expression_studies`: Lists miRNAs with "upregulated or downregulated" information per study.
     *   `miRNA_other_studies`: Lists miRNAs found in CNVs or SNVs, and the corresponding study.

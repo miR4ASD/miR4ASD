@@ -1,6 +1,6 @@
 import pandas as pd
 
-xls = pd.ExcelFile('Tabelas_resumo_para_Hugo.xlsx')
+xls = pd.ExcelFile('Tabelas_miR4ASD.xlsx')
 df_details = pd.read_excel(xls, 'miRNA_study_details')
 
 # Clean column names (as in process_data.py)

@@ -8,7 +8,7 @@ def clean_col_names(df):
     return df
 
 # Read the Excel file
-xls = pd.ExcelFile('Tabelas_resumo_para_Hugo.xlsx')
+xls = pd.ExcelFile('Tabelas_miR4ASD.xlsx')
 
 # Read the sheets into dataframes
 df_expression = pd.read_excel(xls, 'miRNA_expression_studies')
