@@ -1,4 +1,4 @@
-# miR4ASD: A Database of microRNAs associated in Autism Spectrum Disorder
+# *miR4ASD*: A Database of microRNAs associated in Autism Spectrum Disorder
 
 This project is a simple frontend to display information about microRNAs (miRNAs) associated with Autism Spectrum Disorder (ASD). The data is provided in an Excel file and is displayed in two interactive JavaScript tables on a static HTML page.
 
