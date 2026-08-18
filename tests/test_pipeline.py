@@ -1,0 +1,178 @@
+"""Unit and integration tests for the miR4ASD data processing pipeline."""
+
+import json
+import os
+
+import pandas as pd
+
+from process_data import (
+    clean_col_names,
+    create_gff_maps,
+    create_mirbase_hairpin_link,
+    create_mirbase_mature_link,
+    normalize_study_name,
+)
+
+
+def test_gff_maps_loading():
+    """Test that GFF3 file parses into non-empty hairpin and mature maps."""
+    gff_path = "hsa.gff3"
+    assert os.path.exists(gff_path), f"GFF3 file {gff_path} not found."
+    hairpin_map, mature_map = create_gff_maps(gff_path)
+    assert len(hairpin_map) > 1000
+    assert len(mature_map) > 1000
+    assert "hsa-let-7a-1" in hairpin_map
+    assert "hsa-let-7a-5p" in mature_map
+
+
+def test_clean_col_names():
+    """Test that column names are stripped of whitespace and mirbase annotations."""
+    df = pd.DataFrame(columns=["miRNA hairpin\n(MIRBASE v22.1)", "  Study  "])
+    cleaned = clean_col_names(df)
+    assert list(cleaned.columns) == ["miRNA hairpin", "Study"]
+
+
+def test_normalize_study_name():
+    """Test study name stripping without corrupting valid keys."""
+    assert normalize_study_name(" Seno (2011) ") == "Seno (2011)"
+    assert normalize_study_name("Vasu (2014)") == "Vasu (2014)"
+
+
+def test_mirbase_link_generation():
+    """Test exact, case-insensitive, and prefix-tolerant miRBase link resolution."""
+    link_exact = create_mirbase_hairpin_link("hsa-let-7a-1")
+    assert 'href="https://www.mirbase.org/hairpin/MI0000060"' in link_exact
+    assert ">hsa-let-7a-1</a>" in link_exact
+
+    # Case-insensitive
+    link_case = create_mirbase_hairpin_link("hsa-miR-125b-1")
+    assert 'href="https://www.mirbase.org/hairpin/MI0000446"' in link_case
+
+    # Missing hsa- prefix for mature
+    link_prefixed = create_mirbase_mature_link("miR-106b-5p")
+    assert 'href="https://www.mirbase.org/mature/MIMAT0000680"' in link_prefixed
+
+
+def test_generated_json_files_exist_and_valid():
+    """Test that all generated JSON feeds exist, parse as JSON, and are non-empty."""
+    files = [
+        "expression_studies.json",
+        "other_studies.json",
+        "study_details.json",
+        "statistics.json",
+        "target_genes.json",
+    ]
+    for filename in files:
+        assert os.path.exists(filename), f"Expected JSON feed {filename} not found."
+        with open(filename, "r") as f:
+            data = json.load(f)
+            assert len(data) > 0, f"JSON feed {filename} is empty."
+
+
+def test_target_genes_structure_and_sfari_matching():
+    """Test target_genes.json schema, SFARI risk annotations, and evidence tiers."""
+    assert os.path.exists("target_genes.json"), "target_genes.json not found."
+    with open("target_genes.json", "r") as f:
+        targets = json.load(f)
+
+    assert len(targets) > 50000, (
+        f"Expected >50000 target interactions, found {len(targets)}"
+    )
+
+    required_keys = [
+        "precursor_mirna",
+        "mature_mirna",
+        "gene_symbol",
+        "gene_name",
+        "is_sfari",
+        "sfari_score",
+        "evidence_level",
+        "experimental_methods",
+        "regulation",
+        "tissue",
+        "pmids",
+    ]
+
+    sfari_count = 0
+    strong_count = 0
+    for record in targets:
+        for key in required_keys:
+            assert key in record, f"Missing key {key} in target record"
+
+        if record["is_sfari"]:
+            sfari_count += 1
+            assert (
+                "Category" in record["sfari_score"]
+                or "Syndromic" in record["sfari_score"]
+            )
+
+        if "Strong" in record["evidence_level"]:
+            strong_count += 1
+
+    assert sfari_count > 10000, (
+        f"Expected >10000 SFARI interactions, found {sfari_count}"
+    )
+    assert strong_count > 1000, (
+        f"Expected >1000 Strong Evidence interactions, found {strong_count}"
+    )
+
+    # Verify specific known ASD genes are tagged
+    target_gene_symbols = {r["gene_symbol"].upper() for r in targets}
+    assert "AGO1" in target_gene_symbols
+    assert "AGO4" in target_gene_symbols
+    assert "PTEN" in target_gene_symbols
+    assert "SHANK3" in target_gene_symbols
+    assert "MECP2" in target_gene_symbols
+
+
+def test_study_details_matching_integrity():
+    """Verify that records with studies have non-empty StudyDetails."""
+    with open("expression_studies.json", "r") as f:
+        expr_data = json.load(f)
+
+    with open("other_studies.json", "r") as f:
+        other_data = json.load(f)
+    assert len(other_data) > 0
+
+    # Check that Seno and Vasu records have populated StudyDetails
+    seno_records = [
+        r
+        for r in expr_data
+        if any(d.get("Study") == "Seno (2011)" for d in r.get("StudyDetails", []))
+    ]
+    assert len(seno_records) == 28
+
+    vasu_records = [
+        r
+        for r in expr_data
+        if any(d.get("Study") == "Vasu (2014)" for d in r.get("StudyDetails", []))
+    ]
+    assert len(vasu_records) == 17
+
+    # All expression entries must have at least one study in StudyDetails
+    for idx, record in enumerate(expr_data):
+        assert len(record.get("StudyDetails", [])) > 0, (
+            f"Record {idx} has empty StudyDetails"
+        )
+
+
+def test_statistics_consistency():
+    """Verify summary statistics schema and value ranges."""
+    with open("statistics.json", "r") as f:
+        stats = json.load(f)
+
+    assert "total_studies" in stats and stats["total_studies"] > 0
+    assert "total_mirna_genes" in stats and stats["total_mirna_genes"] > 0
+    assert "total_mirna_mature" in stats and stats["total_mirna_mature"] > 0
+    assert "alteration_counts" in stats
+    assert stats["alteration_counts"]["upregulated"] > 0
+    assert stats["alteration_counts"]["downregulated"] > 0
+    assert "tissue_counts" in stats
+    assert "Blood" in stats["tissue_counts"]
+    assert "Brain" in stats["tissue_counts"]
+    assert "Umbilical cord" in stats["tissue_counts"]
+    assert "target_stats" in stats
+    assert stats["target_stats"]["total_target_genes"] > 0
+    assert stats["target_stats"]["total_sfari_target_genes"] > 0
+    assert stats["target_stats"]["total_target_interactions"] > 0
+

@@ -12,7 +12,12 @@
         "LCLs": 146,
         "Saliva": 82,
         "NSCs": 1,
-        "umbilical cord": 2,
+        "Umbilical cord": 2,
         "OMSCs": 4
+    },
+    "target_stats": {
+        "total_target_genes": 1877,
+        "total_sfari_target_genes": 893,
+        "total_target_interactions": 66498
     }
 }

@@ -1,29 +1,157 @@
-# *miR4ASD*: A Database of microRNAs associated in Autism Spectrum Disorder
+# *miR4ASD*: A Database of microRNAs Associated with Autism Spectrum Disorder
 
-This project is a simple frontend to display information about microRNAs (miRNAs) associated with Autism Spectrum Disorder (ASD). The data is provided in an Excel file and is displayed in two interactive JavaScript tables on a static HTML page.
+[![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Package Manager: uv](https://img.shields.io/badge/Package%20Manager-uv-blueviolet.svg)](https://docs.astral.sh/uv/)
+[![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 
-## Features
+**miR4ASD** is an open-access, literature-curated database and web interface that catalogs human microRNAs (miRNAs) experimentally associated with Autism Spectrum Disorder (ASD). It compiles findings from case-control expression studies, genetic variant analyses (CNVs, SNVs), and standardized miRBase annotations.
 
-*   **Interactive Tables:** Uses the DataTables.js library to create two interactive tables with search and filter functionality.
-*   **Data Processing:** A Python script (`process_data.py`) reads an Excel file, processes the data, and converts it into JSON format.
-*   **Dynamic Data Loading:** The frontend loads the JSON data to populate the tables.
-*   **Expandable Rows:** Each row has a button to expand and show more detailed information about the studies.
-*   **Mirbase Links:** The miRNA hairpin and mature names are automatically linked to their respective pages on the Mirbase database.
+🌐 **Live Application:** [https://miR4ASD.github.io/miR4ASD](https://miR4ASD.github.io/miR4ASD)  
+📁 **Repository:** [https://github.com/miR4ASD/miR4ASD](https://github.com/miR4ASD/miR4ASD)
 
-## Data Source
+---
 
-*   **Excel File:** `Tabelas_miR4ASD.xlsx`
-*   **Sheets:**
-    *   `miRNA_expression_studies`: Lists miRNAs with "upregulated or downregulated" information per study.
-    *   `miRNA_other_studies`: Lists miRNAs found in CNVs or SNVs, and the corresponding study.
-    *   `miRNA_study_details`: Lists study details with DOI links.
+## Key Features
 
-## Usage
+* **Interactive Triple Tables:** Fast, client-side exploration using DataTables 2.0 with pagination, column sorting, and CSV export.
+  * **Expression Studies Tab:** Precursor/mature miRNA, observed expression change, tissue localization, and study consistency evidence.
+  * **Genetic & Other Studies Tab:** Precursor/mature miRNA, variant alteration types (CNVs, SNVs), and descriptive methodology.
+  * **Validated Target Genes Tab:** Comprehensive catalog of **66,498 experimental target interactions** across **1,877 target genes** (including **893 SFARI ASD-risk genes**) sourced from **DIANA-TarBase v9.0** and cross-referenced with **SFARI Gene**.
+* **Multi-Tiered Experimental Evidence & SFARI Integration:**
+  * **Evidence Tiers:** Classified into **Strong Evidence** (Luciferase Reporter Assays, Western Blot, qPCR, Northern Blot, ELISA), **Direct Physical Binding** (HITS-CLIP, PAR-CLIP, CLASH, qCLASH, RIP-Seq, AGO-IP), and **High-Throughput Expression** (RNA-Seq, Microarrays).
+  * **SFARI ASD Susceptibility Categories:** Visual badges for Category 1 (High Confidence), Category 2 (Strong Candidate), Category 3 (Suggestive), and Syndromic genes.
+  * **Direct Resource Links:** Clickable links to [GeneCards](https://www.genecards.org/) for target genes and [PubMed](https://pubmed.ncbi.nlm.nih.gov/) for primary literature references.
+* **Unified Advanced Filter Drawer:**
+  * **Shared Filters:** Filter all tables simultaneously by Hairpin ID or Mature ID.
+  * **Target Genes Filters:** Filter by Target Gene Symbol, SFARI Category, Evidence Level, Experimental Technique, Regulation (Down/Up), and Tissue/Cell Source.
+  * **Expression Filters:** Targeted filtering by expression change direction (Up/Down), overall evidence type, and tissue type checklists.
+  * **Genetic Filters:** Filter by variant alteration type and search study descriptions.
+  * **Cross-Tab Filter Memory:** Filters remain active when navigating between tabs.
+  * **Single-Click Reset:** Quickly reset all filters across all tables.
+* **Master-Detail Expandable Rows:** Click the `+` icon on any entry to reveal nested study metadata including DOI hyperlinks, sample sizes (ASD vs. control), tissue subtypes, and origin countries.
+* **Automatic miRBase Hyperlinking:** Precursor hairpins and mature miRNAs automatically resolve to their respective [miRBase](https://www.mirbase.org/) entry pages.
+* **High-Resolution Visualizations:** Interactive About section containing curation workflows, distribution charts, and image lightbox zoom.
 
-1.  **Run the data processing script:**
+---
 
-    ```bash
-    python process_data.py
-    ```
+## Project Architecture
 
-2.  **Open `index.html` in your browser.**
+```
+mir4ASD/
+├── process_data.py            # Python ETL pipeline (Excel + GFF3 + TarBase + SFARI -> JSON feeds)
+├── index.html                 # Single-page frontend application
+├── Tabelas_miR4ASD.xlsx       # Curated primary dataset
+├── hsa.gff3                   # miRBase v22.1 human miRNA annotations
+├── raw_data/                  # Raw reference datasets (TarBase v9, SFARI Gene)
+├── expression_studies.json    # Processed JSON feed: Expression studies
+├── other_studies.json         # Processed JSON feed: Genetic & other studies
+├── target_genes.json          # Processed JSON feed: Experimental target interactions
+├── study_details.json         # Processed JSON feed: Study metadata & DOIs
+├── statistics.json            # Processed JSON feed: Summary statistics
+├── pyproject.toml             # Project configuration (uv, ruff, pytest)
+├── Makefile                   # Automation workflows (build, test, lint, serve)
+├── images/                    # Charts, figures, and workflow diagrams
+├── tests/                     # Automated unit and integration tests
+├── docs/                      # Manuscript text drafts and database documentation
+│   └── data_dictionary.md     # Complete data dictionary & column reference
+```
+
+📖 **Detailed Data Dictionary:** See [`docs/data_dictionary.md`](docs/data_dictionary.md) for full descriptions of all table headers, data types, and categorical enumerations.
+
+---
+
+## Quick Start & Usage
+
+### Prerequisites
+* Python 3.10+
+* [`uv`](https://docs.astral.sh/uv/) (recommended) or standard `pip`
+
+### 1. Environment Setup
+
+Using `uv` (recommended):
+```bash
+# Sync dependencies from pyproject.toml
+uv sync
+```
+
+Alternatively with standard `pip`:
+```bash
+pip install pandas openpyxl pytest ruff
+```
+
+---
+
+### 2. Processing Data (ETL Pipeline)
+
+To re-process the raw Excel dataset ([`Tabelas_miR4ASD.xlsx`](file:///home/hugo/Work/Devel/mir4ASD/Tabelas_miR4ASD.xlsx)) and regenerate all JSON feeds:
+
+```bash
+# Using Makefile
+make data
+
+# Or directly with Python
+python3 process_data.py
+# Or with uv
+uv run python process_data.py
+```
+
+This updates:
+* `expression_studies.json`
+* `other_studies.json`
+* `study_details.json`
+* `statistics.json`
+
+---
+
+### 3. Running the Local Web Server
+
+Browsers block local asynchronous `fetch()` requests when opening `index.html` via `file:///`. Use a local web server to preview:
+
+```bash
+# Using Makefile
+make serve
+
+# Or directly with Python
+python3 -m http.server 8000
+```
+
+Then navigate to: **[http://localhost:8000](http://localhost:8000)** in your browser.
+
+---
+
+### 4. Running Tests, Linting & Formatting
+
+```bash
+# Run pytest test suite
+make test
+# (or: uv run pytest)
+
+# Run ruff linter
+make lint
+# (or: uv run ruff check .)
+
+# Format code with ruff
+make format
+# (or: uv run ruff format .)
+```
+
+---
+
+## Makefile Reference
+
+| Target | Description |
+| :--- | :--- |
+| `make data` | Executes `process_data.py` to regenerate JSON feeds. |
+| `make serve` | Launches a local HTTP development server at `http://localhost:8000`. |
+| `make test` | Runs the automated `pytest` suite in `tests/`. |
+| `make lint` | Runs `ruff` checks across all Python files. |
+| `make format` | Formats all Python code using `ruff`. |
+| `make clean` | Cleans temporary cache and build artifacts. |
+| `make help` | Displays help information for all targets. |
+
+---
+
+## License & Citation
+
+* **Data & Application License:** [Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/).
+* **Citation:** If you use miR4ASD in your research, please cite the database repository and the associated publication.
