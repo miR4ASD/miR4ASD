@@ -9,3 +9,12 @@ target_genes_compact.json
 raw_data/*.tsv.gz
 raw_data/*.gz
 raw_data/*.html
+
+# Spreadsheets, word docs, text files, and internal markdown
+*.xlsx
+*.docx
+*.txt
+*.pdf
+*.md
+!README.md
+!docs/data_dictionary.md
