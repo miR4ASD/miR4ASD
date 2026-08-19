@@ -70,3 +70,21 @@ Metadata describing the primary research publications linked to rows in the Expr
 | **ASD Samples** | `ASD samples` | Integer / String | Number of ASD subjects in the experimental cohort. | `28`, `55`, `120` |
 | **Control Samples** | `Control samples` | Integer / String | Number of neurotypical control subjects in the comparison cohort. | `28`, `50`, `115` |
 | **Country** | `Country` | String | Country of origin of the study cohort. | `USA`, `Brazil`, `China`, `Italy`, `Japan` |
+
+---
+
+## 5. Functional Enrichment Analysis & g:Profiler Fields
+
+Specification of fields, statistical metrics, and parameters used in the **Functional Enrichment Analysis** dashboard powered by the **g:Profiler** REST API.
+
+| Field / Metric | Source / Engine | Data Type | Description | Interpretation / Values |
+| :--- | :--- | :--- | :--- | :--- |
+| **Source** | g:Profiler | String (Badge) | Ontology or biological pathway database origin of the enriched term. | <ul><li>`GO:BP`: Gene Ontology Biological Process</li><li>`GO:MF`: Gene Ontology Molecular Function</li><li>`GO:CC`: Gene Ontology Cellular Component</li><li>`KEGG`: KEGG Pathway Database</li><li>`REAC`: Reactome Pathway Database</li><li>`HP`: Human Phenotype Ontology</li><li>`WP`: WikiPathways</li></ul> |
+| **Term ID** | g:Profiler | String (Link) | Native identifier of the enriched functional term or pathway (links to official source). | Standard ontology ID (e.g. `GO:0007268`, `KEGG:04724`, `REAC:R-HSA-112316`, `HP:0000729`). |
+| **Term Name** | g:Profiler | String | Human-readable name/description of the biological process, pathway, or phenotype. | Descriptive pathway name (e.g. *chemical synaptic transmission*, *glutamatergic synapse*, *Autistic behavior*). |
+| **Adjusted P-Value ($p_{\text{adj}}$)** | g:Profiler | Float (Scientific) | Corrected hypergeometric overrepresentation significance value. | Default significance threshold $p_{\text{adj}} < 0.05$. Corrected via `g:SCS` (recommended for GO DAGs), Benjamini-Hochberg FDR, or Bonferroni. |
+| **Overlap Ratio ($k / N$)** | g:Profiler | String / Ratio | Ratio of submitted target genes present in the term ($k$) relative to total input query size ($N$). | E.g. `25 / 120` target genes present in the specified pathway. |
+| **Term Size ($|T|$)** | g:Profiler | Integer | Total number of annotated human protein-coding genes belonging to the ontology term. | Domain-wide gene count (e.g. `540` annotated genes). |
+| **Intersecting Target Genes** | miR4ASD + g:Profiler | Array of Badges | List of user's query target genes that overlap with the term, annotated with SFARI risk badges. | Direct links to GeneCards with color-coded SFARI ASD-risk tags (Category 1, 2, 3, Syndromic). |
+| **Significance Score** | miR4ASD Chart | Float | Scaled ranking metric computed as $-\log_{10}(p_{\text{adj}})$. | Higher scores denote greater statistical overrepresentation. |
+

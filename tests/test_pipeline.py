@@ -176,3 +176,30 @@ def test_statistics_consistency():
     assert stats["target_stats"]["total_sfari_target_genes"] > 0
     assert stats["target_stats"]["total_target_interactions"] > 0
 
+
+def test_target_resolution_for_enrichment():
+    """Verify target gene resolution logic from miRNAs for enrichment payloads."""
+    with open("target_genes.json", "r") as f:
+        targets = json.load(f)
+
+    # Build mature map
+    mature_to_genes = {}
+    for item in targets:
+        mature = item.get("mature_mirna")
+        gene = item.get("gene_symbol")
+        if mature and gene:
+            if mature not in mature_to_genes:
+                mature_to_genes[mature] = set()
+            mature_to_genes[mature].add(gene)
+
+    # Test resolution for known brain miRNAs
+    assert "hsa-miR-132-3p" in mature_to_genes
+    genes_132 = mature_to_genes["hsa-miR-132-3p"]
+    assert len(genes_132) > 10, (
+        f"Expected >10 targets for hsa-miR-132-3p, got {len(genes_132)}"
+    )
+
+    # Ensure format is valid for g:Profiler payload
+    query_payload = sorted(list(genes_132))
+    assert all(isinstance(g, str) and len(g) > 0 for g in query_payload)
+

@@ -17,6 +17,12 @@
   * **Expression Studies Tab:** Precursor/mature miRNA, observed expression change, tissue localization, and study consistency evidence.
   * **Genetic & Other Studies Tab:** Precursor/mature miRNA, variant alteration types (CNVs, SNVs), and descriptive methodology.
   * **Validated Target Genes Tab:** Comprehensive catalog of **66,498 experimental target interactions** across **1,877 target genes** (including **893 SFARI ASD-risk genes**) sourced from **DIANA-TarBase v9.0** and cross-referenced with **SFARI Gene**.
+* **Functional Enrichment Analysis (g:Profiler):** Seamless downstream systems biology workflow connecting filtered miRNAs to pathway overrepresentation analysis.
+  * **Filter-to-Enrichment Pipeline:** Filter miRNAs across any table and launch enrichment analysis with 1-click.
+  * **Evidence Scope Control:** Filter resolved target genes across *All Targets*, *Strong Evidence Only*, or *SFARI ASD Risk Genes Only*.
+  * **Multi-Ontology Analysis:** Query Gene Ontology (Biological Process, Molecular Function, Cellular Component), KEGG Pathways, Reactome, WikiPathways, and Human Phenotype Ontology (`HP`).
+  * **Interactive Visualizations:** Chart.js horizontal bar charts ranked by $-\log_{10}(P_{\text{adj}})$, metric summary ribbons, and dedicated interactive DataTables with intersecting gene badges and direct GeneCards links.
+  * **Export & Web Portal:** One-click CSV export and direct submission to the official [g:Profiler web portal](https://biit.cs.ut.ee/gprofiler/gost).
 * **Multi-Tiered Experimental Evidence & SFARI Integration:**
   * **Evidence Tiers:** Classified into **Strong Evidence** (Luciferase Reporter Assays, Western Blot, qPCR, Northern Blot, ELISA), **Direct Physical Binding** (HITS-CLIP, PAR-CLIP, CLASH, qCLASH, RIP-Seq, AGO-IP), and **High-Throughput Expression** (RNA-Seq, Microarrays).
   * **SFARI ASD Susceptibility Categories:** Visual badges for Category 1 (High Confidence), Category 2 (Strong Candidate), Category 3 (Suggestive), and Syndromic genes.
