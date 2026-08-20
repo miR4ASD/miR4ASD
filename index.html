@@ -2696,20 +2696,34 @@
                     if (geneMetaMap[g] && geneMetaMap[g].is_sfari) sfariCovered++;
                 });
 
+                // Helper to format Term tag: e.g. "GO:0007268", "HP:0000729", "KEGG:04724", "REAC:R-HSA-112316"
+                function formatTermTag(source, nativeId) {
+                    if (!nativeId) return source || '';
+                    if (nativeId.toUpperCase().startsWith((source || '').toUpperCase() + ':') || nativeId.includes(':')) {
+                        return nativeId;
+                    }
+                    return `${source}:${nativeId}`;
+                }
+
                 const topSource = Object.keys(sourceCounts).sort((a, b) => sourceCounts[b] - sourceCounts[a])[0];
+                const topTermTag = formatTermTag(topTerm.source, topTerm.native);
 
                 $('#res-total-terms').text(totalTerms);
                 $('#res-p-threshold').text(`${thresholdMethod} < ${thresholdVal}`);
                 $('#res-top-source').html(getSourceBadge(topSource));
                 $('#res-source-breakdown').text(`${Object.keys(sourceCounts).length} Sources active`);
-                $('#res-top-term-name').text(topTerm.name).attr('title', topTerm.name);
+                $('#res-top-term-name').text(`[${topTermTag}] ${topTerm.name}`).attr('title', `[${topTermTag}] ${topTerm.name}`);
                 $('#res-top-p').html(`p_adj = ${topTerm.p_value < 1e-4 ? topTerm.p_value.toExponential(2) : topTerm.p_value.toFixed(4)}`);
                 $('#res-sfari-covered').text(sfariCovered);
                 $('#res-sfari-ratio').text(`${sfariCovered} / ${queryGenes.length} Query Genes`);
 
-                // 2. Render Chart.js Horizontal Bar Chart (Top 15 Enriched Terms)
+                // 2. Render Chart.js Horizontal Bar Chart (Top 15 Enriched Terms with Source & ID)
                 const top15 = results.slice(0, 15);
-                const chartLabels = top15.map(r => r.name.length > 45 ? r.name.substring(0, 42) + '...' : r.name);
+                const chartLabels = top15.map(r => {
+                    const tag = formatTermTag(r.source, r.native);
+                    const fullText = `[${tag}] ${r.name}`;
+                    return fullText.length > 55 ? fullText.substring(0, 52) + '...' : fullText;
+                });
                 const chartScores = top15.map(r => {
                     const p = r.p_value > 0 ? r.p_value : 1e-300;
                     return -Math.log10(p);
@@ -2753,7 +2767,9 @@
                                 callbacks: {
                                     title: function(items) {
                                         const idx = items[0].dataIndex;
-                                        return top15[idx].name;
+                                        const r = top15[idx];
+                                        const tag = formatTermTag(r.source, r.native);
+                                        return `[${tag}] ${r.name}`;
                                     },
                                     label: function(item) {
                                         const r = top15[item.dataIndex];
