@@ -312,5 +312,90 @@ def test_non_destructive_gene_scope_filtering():
     assert set(all_restored) == set(base_genes)
 
 
+def test_precursor_and_genetic_study_target_resolution():
+    """Verify target resolution works via precursor hairpins when mature is absent."""
+    with open("other_studies.json", "r") as f:
+        other = json.load(f)
+    with open("target_genes.json", "r") as f:
+        targets = json.load(f)
+
+    # Hairpin index
+    hairpin_to_targets = {}
+    for t in targets:
+        hps = t.get("precursor_mirna")
+        if hps:
+            for hp in hps.split("; "):
+                clean_hp = hp.strip().lower()
+                hairpin_to_targets.setdefault(clean_hp, set()).add(t["gene_symbol"])
+
+    # Find genetic studies without mature_mirna
+    no_mature_studies = [
+        r for r in other if not r.get("mature_mirna") and r.get("precursor_mirna")
+    ]
+    assert len(no_mature_studies) > 50
+
+    # Ensure precursors in genetic studies can resolve targets
+    resolvable_count = 0
+    sample_genes = set()
+    for s in no_mature_studies:
+        hp_raw = s["precursor_mirna"]
+        clean_hp = (
+            hp_raw.split(">")[-2].split("<")[0].strip().lower()
+            if "<" in hp_raw
+            else hp_raw.strip().lower()
+        )
+        if clean_hp in hairpin_to_targets:
+            resolvable_count += 1
+            sample_genes.update(hairpin_to_targets[clean_hp])
+
+    assert resolvable_count > 0, "No precursors resolved from genetic studies!"
+    assert len(sample_genes) > 50, (
+        f"Expected >50 targets from genetic precursors, got {len(sample_genes)}"
+    )
+
+
+def test_regulation_target_gene_filtering():
+    """Verify regulation target filtering resolves distinct sets of targets."""
+    with open("expression_studies.json", "r") as f:
+        expr = json.load(f)
+    with open("target_genes.json", "r") as f:
+        targets = json.load(f)
+
+    def clean(s):
+        if not s:
+            return ""
+        if "<" in s:
+            s = s.split(">")[-2].split("<")[0]
+        return s.strip().lower()
+
+    up_matures = {
+        clean(r["mature_mirna"])
+        for r in expr
+        if r.get("expression_change") == "Upregulated" and r.get("mature_mirna")
+    }
+    down_matures = {
+        clean(r["mature_mirna"])
+        for r in expr
+        if r.get("expression_change") == "Downregulated" and r.get("mature_mirna")
+    }
+
+    up_targets = {
+        t["gene_symbol"]
+        for t in targets
+        if clean(t.get("mature_mirna")) in up_matures and t.get("gene_symbol")
+    }
+    down_targets = {
+        t["gene_symbol"]
+        for t in targets
+        if clean(t.get("mature_mirna")) in down_matures and t.get("gene_symbol")
+    }
+
+    assert len(up_targets) > 500
+    assert len(down_targets) > 500
+    # Both sets are large but non-identical
+    assert up_targets != down_targets
+
+
+
 
 
