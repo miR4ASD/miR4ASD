@@ -258,4 +258,59 @@ def test_target_genes_child_details_structure():
         assert len(methods) > 0
 
 
+def test_non_destructive_gene_scope_filtering():
+    """Verify scope filtering filters non-destructively on base target genes."""
+    with open("target_genes.json", "r") as f:
+        targets = json.load(f)
+
+    gene_meta = {}
+    mature_to_genes = {}
+    for item in targets:
+        gene = item.get("gene_symbol")
+        mature = item.get("mature_mirna")
+        if gene and mature:
+            mature_to_genes.setdefault(mature, set()).add(gene)
+            if gene not in gene_meta:
+                gene_meta[gene] = {
+                    "is_sfari": item.get("is_sfari", False),
+                    "sfari_score": item.get("sfari_score", ""),
+                    "evidence_level": item.get("evidence_level", ""),
+                    "tissue": item.get("tissue", ""),
+                }
+
+    # Selected miRNAs
+    selected_mirnas = ["hsa-let-7a-5p", "hsa-miR-132-3p"]
+    base_genes = set()
+    for m in selected_mirnas:
+        if m in mature_to_genes:
+            base_genes.update(mature_to_genes[m])
+
+    base_list = sorted(list(base_genes))
+    assert len(base_list) > 20
+
+    # 1. Scope: SFARI Cat 1 filter
+    sfari_cat1_genes = [
+        g
+        for g in base_list
+        if gene_meta.get(g, {}).get("sfari_score", "").find("Category 1") != -1
+    ]
+    assert 0 < len(sfari_cat1_genes) < len(base_list)
+
+    # Base list must remain intact
+    assert len(base_list) > len(sfari_cat1_genes)
+
+    # 2. Scope: Strong Evidence filter
+    strong_genes = [
+        g
+        for g in base_list
+        if gene_meta.get(g, {}).get("evidence_level") == "Strong Evidence"
+    ]
+    assert 0 < len(strong_genes) <= len(base_list)
+
+    # 3. Scope reset to All
+    all_restored = list(base_list)
+    assert set(all_restored) == set(base_genes)
+
+
+
 

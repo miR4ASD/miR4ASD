@@ -26,6 +26,20 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.min.css"/>
     <!-- Chart.js for Functional Enrichment Visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <!-- MathJax for LaTeX mathematical formula rendering -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         :root {
             --primary-color: #0B2D48; /* Deep Blue */
@@ -685,6 +699,15 @@
             border-radius: 10px;
             padding: 10px 16px;
         }
+        .btn-close-xs {
+            width: 0.45rem !important;
+            height: 0.45rem !important;
+            padding: 0.2rem !important;
+            background-size: 0.45rem !important;
+        }
+        .shadow-xs {
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+        }
 
         /* Enhanced DataTables Search Input */
         .dataTables_filter input {
@@ -748,9 +771,6 @@
     </div>
 
     <div class="container-fluid">
-        <div id="statistics-container" class="row mb-4">
-            <!-- Statistics will be loaded here -->
-        </div>
         <div class="card">
             <div class="d-flex justify-content-between align-items-center flex-wrap border-bottom pe-3">
                 <ul class="nav nav-tabs border-0" id="myTab" role="tablist" style="margin-bottom: -1px;">
@@ -774,6 +794,11 @@
             <div class="tab-content p-3" id="myTabContent">
                 <!-- About Tab Pane (Active by Default) -->
                 <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
+                    <!-- Key Statistics Cards (Positioned at top of About tab to reduce clutter) -->
+                    <div id="statistics-container" class="row g-3 mb-4">
+                        <!-- Statistics will be loaded here -->
+                    </div>
+
                     <div class="row g-4">
                         <!-- Left column: Database Introduction -->
                         <div class="col-lg-5">
@@ -1275,7 +1300,7 @@
                                                             <tr>
                                                                 <td><strong>Adjusted P-Value ($p_{\text{adj}}$)</strong></td>
                                                                 <td>Statistical overrepresentation corrected for multiple hypothesis testing.</td>
-                                                                <td>Calculated via <code>g:SCS</code> (default), <code>Benjamini-Hochberg FDR</code>, or <code>Bonferroni</code>. Default threshold $p_{\text{adj}} &lt; 0.05$.</td>
+                                                                <td>Calculated via <code>g:SCS</code> (default), <code>Benjamini-Hochberg FDR</code>, or <code>Bonferroni</code>. Default threshold $p_{\text{adj}} < 0.05$.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Overlap Ratio ($k / N$)</strong></td>
@@ -1445,15 +1470,41 @@
                             </span>
                         </div>
 
-                        <!-- Dynamic Source Origin Banner -->
-                        <div id="enrichment-origin-banner" class="alert alert-info py-2 px-3 mb-3 d-none rounded-3 border" style="font-size: 0.85rem;"></div>
+                        <!-- Interactive Active Context & Filter Ribbon -->
+                        <div id="enrichment-active-ribbon" class="card border shadow-sm p-3 mb-3" style="border-radius: 10px; background: #f8fafc; border-color: #e2e8f0 !important;">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2 pb-2 border-bottom">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-primary-subtle text-primary border rounded-pill px-2 py-1"><i class="fa-solid fa-sliders me-1"></i>Active Pipeline Context</span>
+                                    <span class="small text-secondary fw-semibold">Independent Selections, Filters & Target Scopes</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-danger fw-semibold btn-reset-all-pipeline" style="font-size: 0.78rem;" title="Reset all filters, selections, and scopes to default">
+                                        <i class="fa-solid fa-rotate-left me-1"></i>Reset All
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-wrap gap-2 align-items-center" id="enrichment-context-tags">
+                                <span class="badge bg-light text-secondary border py-2 px-3 rounded-pill d-inline-flex align-items-center gap-1" style="font-size: 0.8rem;">
+                                    <i class="fa-regular fa-square text-muted"></i>
+                                    <span>Using Filtered Table miRNAs</span>
+                                </span>
+                                <span class="badge bg-light text-secondary border py-2 px-3 rounded-pill d-inline-flex align-items-center gap-1" style="font-size: 0.8rem;">
+                                    <i class="fa-solid fa-layer-group text-secondary"></i>
+                                    <span>Scope: All Validated Targets</span>
+                                </span>
+                                <span class="badge bg-primary text-white py-2 px-3 rounded-pill font-monospace ms-auto" style="font-size: 0.82rem;">
+                                    <i class="fa-solid fa-dna me-1"></i>
+                                    <span id="ribbon-gene-count">0 / 0 Genes Active</span>
+                                </span>
+                            </div>
+                        </div>
 
                         <!-- Step 1: Target Gene Selection & Scope -->
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
                                 <span class="fw-bold text-dark" style="font-size: 0.9rem;">
                                     <span class="badge bg-primary text-white rounded-circle me-1" style="width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem;">1</span>
-                                    Target Gene Selection & Scope:
+                                    Target Gene Selection & Non-Destructive Scope Filter:
                                 </span>
                                 <div class="d-flex align-items-center gap-2">
                                     <span id="gene-set-stats" class="badge bg-light text-dark border rounded-pill px-3 py-1 font-monospace" style="font-size: 0.8rem;">
@@ -1467,30 +1518,36 @@
 
                             <!-- Scope Switcher & Presets Row -->
                             <div class="row g-2 align-items-center mb-3">
-                                <div class="col-lg-6 col-12">
-                                    <div class="btn-group w-100" role="group" aria-label="Target Evidence Scope">
+                                <div class="col-lg-8 col-12">
+                                    <div class="btn-group w-100 flex-wrap" role="group" aria-label="Target Evidence Scope">
                                         <input type="radio" class="btn-check" name="target-scope" id="scope-all" value="all" checked>
-                                        <label class="btn btn-outline-primary btn-sm py-2" for="scope-all">All Validated Targets</label>
+                                        <label class="btn btn-outline-primary btn-sm py-2" for="scope-all">All Targets</label>
 
                                         <input type="radio" class="btn-check" name="target-scope" id="scope-strong" value="strong">
-                                        <label class="btn btn-outline-primary btn-sm py-2" for="scope-strong"><i class="fa-solid fa-check-double me-1"></i>Strong Evidence Only</label>
+                                        <label class="btn btn-outline-primary btn-sm py-2" for="scope-strong"><i class="fa-solid fa-check-double me-1"></i>Strong Evidence</label>
 
                                         <input type="radio" class="btn-check" name="target-scope" id="scope-sfari" value="sfari">
-                                        <label class="btn btn-outline-primary btn-sm py-2" for="scope-sfari"><i class="fa-solid fa-star me-1 text-warning"></i>SFARI ASD Only</label>
+                                        <label class="btn btn-outline-primary btn-sm py-2" for="scope-sfari"><i class="fa-solid fa-star me-1 text-warning"></i>SFARI (All)</label>
+
+                                        <input type="radio" class="btn-check" name="target-scope" id="scope-sfari-cat1" value="sfari_cat1">
+                                        <label class="btn btn-outline-primary btn-sm py-2" for="scope-sfari-cat1"><i class="fa-solid fa-star text-danger me-1"></i>SFARI Cat 1</label>
+
+                                        <input type="radio" class="btn-check" name="target-scope" id="scope-brain" value="brain">
+                                        <label class="btn btn-outline-primary btn-sm py-2" for="scope-brain"><i class="fa-solid fa-brain text-info me-1"></i>Brain</label>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 col-12">
+                                <div class="col-lg-4 col-12">
                                     <div class="dropdown w-100">
                                         <button class="btn btn-outline-secondary btn-sm dropdown-toggle w-100 py-2 text-start d-flex justify-content-between align-items-center" type="button" id="presetDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <span><i class="fa-solid fa-wand-magic-sparkles text-primary me-2"></i>Quick Presets (Brain, Upregulated, SFARI)...</span>
+                                            <span><i class="fa-solid fa-wand-magic-sparkles text-primary me-2"></i>Target Presets...</span>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end shadow-sm w-100" aria-labelledby="presetDropdown" style="border-radius: 8px;">
-                                            <li><button class="dropdown-item py-2" type="button" id="preset-active-filter"><i class="fa-solid fa-filter text-primary me-2"></i>Use Target Genes from Current Table Filter</button></li>
+                                            <li><button class="dropdown-item py-2" type="button" id="preset-active-filter"><i class="fa-solid fa-filter text-primary me-2"></i>Reload Targets from Current Table Filter</button></li>
                                             <li><hr class="dropdown-divider my-1"></li>
-                                            <li><button class="dropdown-item py-2" type="button" id="preset-brain-targets"><i class="fa-solid fa-brain text-info me-2"></i>Brain-Associated Targets</button></li>
-                                            <li><button class="dropdown-item py-2" type="button" id="preset-upregulated-targets"><i class="fa-solid fa-arrow-up text-success me-2"></i>Targets of Upregulated miRNAs</button></li>
-                                            <li><button class="dropdown-item py-2" type="button" id="preset-downregulated-targets"><i class="fa-solid fa-arrow-down text-danger me-2"></i>Targets of Downregulated miRNAs</button></li>
-                                            <li><button class="dropdown-item py-2" type="button" id="preset-sfari-targets"><i class="fa-solid fa-star text-warning me-2"></i>SFARI High-Confidence (Cat 1) Targets</button></li>
+                                            <li><button class="dropdown-item py-2" type="button" id="preset-brain-targets"><i class="fa-solid fa-brain text-info me-2"></i>Load All Brain-Associated Targets</button></li>
+                                            <li><button class="dropdown-item py-2" type="button" id="preset-upregulated-targets"><i class="fa-solid fa-arrow-up text-success me-2"></i>Load Targets of Upregulated miRNAs</button></li>
+                                            <li><button class="dropdown-item py-2" type="button" id="preset-downregulated-targets"><i class="fa-solid fa-arrow-down text-danger me-2"></i>Load Targets of Downregulated miRNAs</button></li>
+                                            <li><button class="dropdown-item py-2" type="button" id="preset-sfari-targets"><i class="fa-solid fa-star text-danger me-2"></i>Load All SFARI Cat 1 Targets</button></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -1898,27 +1955,27 @@
                 const targetInteractions = data.target_stats ? data.target_stats.total_target_interactions : 66498;
 
                 statsContainer.innerHTML = `
-                    <div class="col-xl col-md-4 col-sm-6 mb-3 mb-xl-0">
-                        <div class="card shadow-sm border-0 p-3 h-100 text-center" style="border-radius: 12px; background-color: var(--card-bg);">
-                            <h5 class="text-muted mb-2" style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Total studies</h5>
+                    <div class="col-xl col-md-4 col-sm-6">
+                        <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
+                            <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Total studies</h5>
                             <p class="fs-3 fw-bold mb-0" style="color: var(--primary-color);">${data.total_studies}</p>
                         </div>
                     </div>
-                    <div class="col-xl col-md-4 col-sm-6 mb-3 mb-xl-0">
-                        <div class="card shadow-sm border-0 p-3 h-100 text-center" style="border-radius: 12px; background-color: var(--card-bg);">
-                            <h5 class="text-muted mb-2" style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">miRNA genes</h5>
+                    <div class="col-xl col-md-4 col-sm-6">
+                        <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
+                            <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">miRNA genes</h5>
                             <p class="fs-3 fw-bold mb-0" style="color: var(--primary-color);">${data.total_mirna_genes}</p>
                         </div>
                     </div>
-                    <div class="col-xl col-md-4 col-sm-6 mb-3 mb-xl-0">
-                        <div class="card shadow-sm border-0 p-3 h-100 text-center" style="border-radius: 12px; background-color: var(--card-bg);">
-                            <h5 class="text-muted mb-2" style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Mature miRNA</h5>
+                    <div class="col-xl col-md-4 col-sm-6">
+                        <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
+                            <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Mature miRNA</h5>
                             <p class="fs-3 fw-bold mb-0" style="color: var(--primary-color);">${data.total_mirna_mature}</p>
                         </div>
                     </div>
-                    <div class="col-xl col-md-6 col-sm-6 mb-3 mb-xl-0">
-                        <div class="card shadow-sm border-0 p-3 h-100 text-center" style="border-radius: 12px; background-color: var(--card-bg);">
-                            <h5 class="text-muted mb-2" style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Alterations</h5>
+                    <div class="col-xl col-md-6 col-sm-6">
+                        <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
+                            <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Alterations</h5>
                             <div class="d-flex justify-content-center align-items-center gap-2 mt-1">
                                 <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill" style="font-size: 0.8rem; font-weight: 700;">
                                     <i class="fa-solid fa-arrow-up me-1"></i>Up: ${data.alteration_counts.upregulated || 0}
@@ -1929,9 +1986,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl col-md-6 col-sm-12 mb-3 mb-xl-0">
-                        <div class="card shadow-sm border-0 p-3 h-100 text-center" style="border-radius: 12px; background-color: var(--card-bg);">
-                            <h5 class="text-muted mb-2" style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Validated Targets</h5>
+                    <div class="col-xl col-md-6 col-sm-12">
+                        <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
+                            <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Validated Targets</h5>
                             <div class="d-flex justify-content-center align-items-center gap-2 mt-1">
                                 <span class="fs-4 fw-bold" style="color: var(--primary-color);">${targetGenes}</span>
                                 <span class="badge bg-danger-subtle text-danger border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: 700;">
@@ -1941,6 +1998,18 @@
                         </div>
                     </div>
                 `;
+
+                // Re-typeset MathJax formulas on accordion and tab expansion
+                $('#dictionaryAccordion').on('shown.bs.collapse', function () {
+                    if (window.MathJax && window.MathJax.typesetPromise) {
+                        window.MathJax.typesetPromise();
+                    }
+                });
+                $('#myTab button[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+                    if (window.MathJax && window.MathJax.typesetPromise) {
+                        window.MathJax.typesetPromise();
+                    }
+                });
 
                 // Populate tissue filter checkboxes dynamically
                 const tissueCheckboxes = document.getElementById('tissue-checkboxes');
@@ -2493,16 +2562,20 @@
             } else {
                 selectedExprMature.delete(val);
             }
+            const totalVis = $('#expression-table tbody .expr-row-check').length;
+            const checkedVis = $('#expression-table tbody .expr-row-check:checked').length;
+            $('.select-all-expr').prop('checked', totalVis > 0 && totalVis === checkedVis);
             updateSelectionUI();
         });
 
         $('.select-all-expr').on('change', function() {
             const isChecked = $(this).is(':checked');
-            $('#expression-table tbody .expr-row-check').each(function() {
-                $(this).prop('checked', isChecked);
+            $('#expression-table tbody .expr-row-check').prop('checked', isChecked).each(function() {
                 const val = $(this).val();
-                if (isChecked) selectedExprMature.add(val);
-                else selectedExprMature.delete(val);
+                if (val) {
+                    if (isChecked) selectedExprMature.add(val);
+                    else selectedExprMature.delete(val);
+                }
             });
             updateSelectionUI();
         });
@@ -2514,16 +2587,20 @@
             } else {
                 selectedGenMature.delete(val);
             }
+            const totalVis = $('#other-table tbody .gen-row-check').length;
+            const checkedVis = $('#other-table tbody .gen-row-check:checked').length;
+            $('.select-all-other').prop('checked', totalVis > 0 && totalVis === checkedVis);
             updateSelectionUI();
         });
 
         $('.select-all-other').on('change', function() {
             const isChecked = $(this).is(':checked');
-            $('#other-table tbody .gen-row-check').each(function() {
-                $(this).prop('checked', isChecked);
+            $('#other-table tbody .gen-row-check').prop('checked', isChecked).each(function() {
                 const val = $(this).val();
-                if (isChecked) selectedGenMature.add(val);
-                else selectedGenMature.delete(val);
+                if (val) {
+                    if (isChecked) selectedGenMature.add(val);
+                    else selectedGenMature.delete(val);
+                }
             });
             updateSelectionUI();
         });
@@ -2531,19 +2608,17 @@
         $('.btn-select-all-visible').on('click', function() {
             const tbl = $(this).data('table');
             if (tbl === 'expression') {
-                const rows = expressionTable.rows({ search: 'applied', page: 'current' }).data().toArray();
-                rows.forEach(r => {
-                    const m = (r.mature_mirna || '').replace(/<[^>]*>/g, '').trim();
-                    if (m) selectedExprMature.add(m);
+                $('#expression-table tbody .expr-row-check').prop('checked', true).each(function() {
+                    const val = $(this).val();
+                    if (val) selectedExprMature.add(val);
                 });
-                expressionTable.draw(false);
+                $('.select-all-expr').prop('checked', true);
             } else if (tbl === 'genetic') {
-                const rows = otherTable.rows({ search: 'applied', page: 'current' }).data().toArray();
-                rows.forEach(r => {
-                    const m = (r.mature_mirna || '').replace(/<[^>]*>/g, '').trim();
-                    if (m) selectedGenMature.add(m);
+                $('#other-table tbody .gen-row-check').prop('checked', true).each(function() {
+                    const val = $(this).val();
+                    if (val) selectedGenMature.add(val);
                 });
-                otherTable.draw(false);
+                $('.select-all-other').prop('checked', true);
             }
             updateSelectionUI();
         });
@@ -2552,14 +2627,35 @@
             const tbl = $(this).data('table');
             if (tbl === 'expression') {
                 selectedExprMature.clear();
+                $('#expression-table tbody .expr-row-check').prop('checked', false);
                 $('.select-all-expr').prop('checked', false);
-                expressionTable.draw(false);
             } else if (tbl === 'genetic') {
                 selectedGenMature.clear();
+                $('#other-table tbody .gen-row-check').prop('checked', false);
                 $('.select-all-other').prop('checked', false);
-                otherTable.draw(false);
             }
             updateSelectionUI();
+        });
+
+        // Synchronize row checkboxes state with selected sets on draw (paging, sorting, filtering)
+        expressionTable.on('draw', function() {
+            $('#expression-table tbody .expr-row-check').each(function() {
+                const val = $(this).val();
+                $(this).prop('checked', selectedExprMature.has(val));
+            });
+            const totalVis = $('#expression-table tbody .expr-row-check').length;
+            const checkedVis = $('#expression-table tbody .expr-row-check:checked').length;
+            $('.select-all-expr').prop('checked', totalVis > 0 && totalVis === checkedVis);
+        });
+
+        otherTable.on('draw', function() {
+            $('#other-table tbody .gen-row-check').each(function() {
+                const val = $(this).val();
+                $(this).prop('checked', selectedGenMature.has(val));
+            });
+            const totalVis = $('#other-table tbody .gen-row-check').length;
+            const checkedVis = $('#other-table tbody .gen-row-check:checked').length;
+            $('.select-all-other').prop('checked', totalVis > 0 && totalVis === checkedVis);
         });
 
         function updateSelectionUI() {
@@ -2598,8 +2694,10 @@
         let hairpinToTargets = {};
         let geneToMature = {};
         let geneToHairpins = {};
-        let geneMetaMap = {}; // geneSymbol -> { geneName, isSfari, sfariScore, maxEvidence }
-        let currentEnrichmentGenes = [];
+        let geneMetaMap = {}; // geneSymbol -> { geneName, isSfari, sfariScore, isBrain, evidences: Set }
+        let baseEnrichmentGenes = []; // Complete pool of target genes (preserved across scope filtering)
+        let currentEnrichmentGenes = []; // Active filtered subset sent to g:Profiler
+        let enrichmentOrigin = { type: 'table', desc: 'All Filtered miRNAs' };
         let enrichmentChartInstance = null;
         let enrichmentResultsDataTable = null;
         let lastGProfilerResults = [];
@@ -2629,11 +2727,15 @@
                             gene_name: item.gene_name || '',
                             sfari_score: item.sfari_score || 'Non-SFARI',
                             is_sfari: item.sfari_score && item.sfari_score !== 'Non-SFARI',
+                            is_brain: false,
                             evidences: new Set()
                         };
                     }
                     if (gene && item.evidence_level) {
                         geneMetaMap[gene].evidences.add(item.evidence_level);
+                    }
+                    if (gene && item.tissue && item.tissue.toLowerCase().includes('brain')) {
+                        geneMetaMap[gene].is_brain = true;
                     }
 
                     // Map mature miRNA
@@ -2697,6 +2799,8 @@
 
                 if (scope === 'strong' && it.evidence_level !== 'Strong Evidence') return;
                 if (scope === 'sfari' && (!it.sfari_score || it.sfari_score === 'Non-SFARI')) return;
+                if (scope === 'sfari_cat1' && (!it.sfari_score || !it.sfari_score.includes('Category 1'))) return;
+                if (scope === 'brain' && (!it.tissue || !it.tissue.toLowerCase().includes('brain'))) return;
 
                 geneSet.add(gene);
             });
@@ -2704,20 +2808,64 @@
             return Array.from(geneSet).sort();
         }
 
+        // Non-destructive target scope filtering on base gene list
+        function applyTargetScope(genes, scope) {
+            if (!genes || genes.length === 0) return [];
+            if (scope === 'all') return [...genes];
+
+            return genes.filter(gene => {
+                const meta = geneMetaMap[gene];
+                if (!meta) return true; // Keep custom genes if no metadata
+                if (scope === 'strong') {
+                    return meta.evidences && meta.evidences.has('Strong Evidence');
+                }
+                if (scope === 'sfari') {
+                    return meta.is_sfari;
+                }
+                if (scope === 'sfari_cat1') {
+                    return meta.sfari_score && meta.sfari_score.includes('Category 1');
+                }
+                if (scope === 'brain') {
+                    return meta.is_brain === true;
+                }
+                return true;
+            });
+        }
+
         // Populate Gene List UI (Textarea, Chips, Stats)
-        function setEnrichmentGenes(geneList) {
-            currentEnrichmentGenes = geneList;
-            $('#enrichment-gene-input').val(geneList.join(', '));
-            renderGeneChips(geneList);
+        function setEnrichmentGenes(geneList, originDesc = null) {
+            baseEnrichmentGenes = Array.from(new Set((geneList || []).map(g => (g || '').trim().toUpperCase()))).filter(Boolean).sort();
+            if (originDesc) {
+                enrichmentOrigin.desc = originDesc;
+            }
+            $('#enrichment-gene-input').val(baseEnrichmentGenes.join(', '));
+            refreshEnrichmentScopeAndUI();
+        }
+
+        function refreshEnrichmentScopeAndUI() {
+            const scope = $('input[name="target-scope"]:checked').val() || 'all';
+            currentEnrichmentGenes = applyTargetScope(baseEnrichmentGenes, scope);
+            renderGeneChips(currentEnrichmentGenes);
+            updateEnrichmentRibbon();
         }
 
         function renderGeneChips(geneList) {
             const container = $('#enrichment-gene-chips');
             const healthBadge = $('#gene-set-health-badge');
-            if (!geneList || geneList.length === 0) {
-                container.html('<div class="py-2 text-muted small"><i class="fa-solid fa-lightbulb text-warning me-1"></i>No genes selected. Select miRNAs from tables or try a preset: <button type="button" class="btn btn-link btn-xs p-0 text-primary fw-semibold" onclick="$(\'#preset-brain-targets\').trigger(\'click\')">Brain Targets</button> | <button type="button" class="btn btn-link btn-xs p-0 text-primary fw-semibold" onclick="$(\'#preset-sfari-targets\').trigger(\'click\')">SFARI Cat 1</button></div>');
+
+            if (!baseEnrichmentGenes || baseEnrichmentGenes.length === 0) {
+                container.html('<div class="py-2 text-muted small"><i class="fa-solid fa-lightbulb text-warning me-1"></i>No target genes loaded. Select miRNAs from tables or choose a preset above.</div>');
                 $('#gene-set-stats').text('0 Genes (0 SFARI)');
                 healthBadge.attr('class', 'badge bg-secondary-subtle text-secondary border rounded-pill').attr('style', '').text('No Genes');
+                $('#btn-run-enrichment span').text('Run g:Profiler Functional Enrichment');
+                return;
+            }
+
+            if (!geneList || geneList.length === 0) {
+                container.html(`<div class="py-2 text-warning small"><i class="fa-solid fa-triangle-exclamation me-1"></i>0 of ${baseEnrichmentGenes.length} genes match the active scope filter. <button type="button" class="btn btn-link btn-xs p-0 text-primary fw-semibold btn-reset-scope-to-all">Reset to All Targets</button> to view all ${baseEnrichmentGenes.length} genes.</div>`);
+                $('#gene-set-stats').html(`<strong>0</strong> of <strong>${baseEnrichmentGenes.length}</strong> Genes`);
+                healthBadge.attr('class', 'badge bg-warning-subtle text-warning border rounded-pill').attr('style', '').text('0 Filtered');
+                $('#btn-run-enrichment span').text('Run g:Profiler Functional Enrichment (0 Genes)');
                 return;
             }
 
@@ -2762,37 +2910,151 @@
             }).join('');
 
             container.html(chipsHtml);
-            $('#gene-set-stats').html(`<strong>${geneList.length}</strong> Genes (<strong class="text-danger">${sfariCount}</strong> SFARI)`);
-            $('#btn-run-enrichment span').text(geneList.length > 0 ? `Run g:Profiler Functional Enrichment (${geneList.length} Target Genes)` : 'Run g:Profiler Functional Enrichment');
+            $('#gene-set-stats').html(`<strong>${geneList.length}</strong> / <strong>${baseEnrichmentGenes.length}</strong> Genes (<strong class="text-danger">${sfariCount}</strong> SFARI)`);
+            $('#btn-run-enrichment span').text(`Run g:Profiler Functional Enrichment (${geneList.length} Target Genes)`);
+        }
+
+        // Live Context Ribbon updating
+        function updateEnrichmentRibbon() {
+            const container = $('#enrichment-context-tags');
+            if (!container.length) return;
+
+            const tags = [];
+            const totalSelected = selectedExprMature.size + selectedGenMature.size;
+            const scope = $('input[name="target-scope"]:checked').val() || 'all';
+
+            // Tag 1: miRNA Selection
+            if (totalSelected > 0) {
+                tags.push(`
+                    <span class="badge bg-white text-dark border py-2 px-3 rounded-pill shadow-xs d-inline-flex align-items-center gap-2" style="font-size: 0.8rem;">
+                        <i class="fa-solid fa-check-square text-primary"></i>
+                        <span><strong>${totalSelected}</strong> miRNAs Selected</span>
+                        <button type="button" class="btn-close btn-close-xs btn-drop-mirna-selection" title="Deselect miRNAs" aria-label="Deselect miRNAs"></button>
+                    </span>
+                `);
+            } else {
+                tags.push(`
+                    <span class="badge bg-light text-secondary border py-2 px-3 rounded-pill d-inline-flex align-items-center gap-1" style="font-size: 0.8rem;">
+                        <i class="fa-regular fa-square text-muted"></i>
+                        <span>Using Filtered Table miRNAs</span>
+                    </span>
+                `);
+            }
+
+            // Tag 2: Table Filters
+            let activeFilterCount = 0;
+            if ($('#filter-mirna-id').val().trim()) activeFilterCount++;
+            if ($('#filter-mature-id').val().trim()) activeFilterCount++;
+            if ($('#filter-target-gene').val().trim()) activeFilterCount++;
+            if ($('#filter-expression-change').val()) activeFilterCount++;
+            if ($('#filter-overall-evidence').val()) activeFilterCount++;
+            if ($('#filter-genetic-alteration').val()) activeFilterCount++;
+            if ($('#filter-study-desc').val().trim()) activeFilterCount++;
+            if ($('#filter-sfari-category').val()) activeFilterCount++;
+            if ($('#filter-evidence-level').val()) activeFilterCount++;
+            if ($('#filter-target-method').val()) activeFilterCount++;
+            if ($('#filter-target-regulation').val()) activeFilterCount++;
+            if ($('#filter-target-tissue').val().trim()) activeFilterCount++;
+            if ($('#tissue-checkboxes input:checked').length > 0) activeFilterCount++;
+
+            if (activeFilterCount > 0) {
+                tags.push(`
+                    <span class="badge bg-white text-dark border py-2 px-3 rounded-pill shadow-xs d-inline-flex align-items-center gap-2" style="font-size: 0.8rem;">
+                        <i class="fa-solid fa-filter text-primary"></i>
+                        <span><strong>${activeFilterCount}</strong> Table Filters Active</span>
+                        <button type="button" class="btn-close btn-close-xs btn-drop-table-filters" title="Clear all table filters" aria-label="Clear table filters"></button>
+                    </span>
+                `);
+            }
+
+            // Tag 3: Target Scope Filter
+            const scopeLabels = {
+                'all': 'All Targets',
+                'strong': 'Strong Evidence',
+                'sfari': 'SFARI (All)',
+                'sfari_cat1': 'SFARI Cat 1',
+                'brain': 'Brain Validated'
+            };
+            const currentScopeLabel = scopeLabels[scope] || 'Custom Scope';
+
+            if (scope !== 'all') {
+                tags.push(`
+                    <span class="badge bg-primary-subtle text-primary border py-2 px-3 rounded-pill shadow-xs d-inline-flex align-items-center gap-2" style="font-size: 0.8rem;">
+                        <i class="fa-solid fa-bullseye text-primary"></i>
+                        <span>Scope: <strong>${currentScopeLabel}</strong></span>
+                        <button type="button" class="btn-close btn-close-xs btn-drop-scope-filter" title="Reset scope to All Targets" aria-label="Reset target scope"></button>
+                    </span>
+                `);
+            } else {
+                tags.push(`
+                    <span class="badge bg-light text-secondary border py-2 px-3 rounded-pill d-inline-flex align-items-center gap-1" style="font-size: 0.8rem;">
+                        <i class="fa-solid fa-layer-group text-secondary"></i>
+                        <span>Scope: All Targets</span>
+                    </span>
+                `);
+            }
+
+            // Tag 4: Active / Base Gene Count
+            const baseCount = baseEnrichmentGenes.length;
+            const activeCount = currentEnrichmentGenes.length;
+            let sfariActiveCount = 0;
+            currentEnrichmentGenes.forEach(g => {
+                if (geneMetaMap[g] && geneMetaMap[g].is_sfari) sfariActiveCount++;
+            });
+
+            tags.push(`
+                <span class="badge bg-primary text-white py-2 px-3 rounded-pill font-monospace ms-auto" style="font-size: 0.82rem;">
+                    <i class="fa-solid fa-dna me-1"></i>
+                    <strong>${activeCount}</strong> / <strong>${baseCount}</strong> Genes Active (${sfariActiveCount} SFARI)
+                </span>
+            `);
+
+            container.html(tags.join(''));
         }
 
         // Parse user-typed gene symbols from textarea
         const debouncedGeneInput = debounce(function() {
             const raw = $('#enrichment-gene-input').val();
             const genes = raw.split(/[\s,;\n\t]+/).map(g => g.trim().toUpperCase()).filter(g => g.length > 0);
-            const uniqueGenes = Array.from(new Set(genes)).sort();
-            currentEnrichmentGenes = uniqueGenes;
-            renderGeneChips(uniqueGenes);
+            baseEnrichmentGenes = Array.from(new Set(genes)).sort();
+            enrichmentOrigin.desc = 'Custom Gene List';
+            refreshEnrichmentScopeAndUI();
         }, 250);
 
         $('#enrichment-gene-input').on('keyup input change', debouncedGeneInput);
 
-        // Scope Switcher Radio Buttons
+        // Scope Switcher Radio Buttons (Non-destructive filter)
         $('input[name="target-scope"]').on('change', function() {
-            const scope = $(this).val();
-            // Filter current genes according to scope
-            const filteredGenes = currentEnrichmentGenes.filter(gene => {
-                const meta = geneMetaMap[gene];
-                if (!meta) return true;
-                if (scope === 'strong') return meta.evidences && meta.evidences.has('Strong Evidence');
-                if (scope === 'sfari') return meta.is_sfari;
-                return true;
-            });
-            $('#enrichment-gene-input').val(filteredGenes.join(', '));
-            renderGeneChips(filteredGenes);
+            refreshEnrichmentScopeAndUI();
         });
 
         // Quick Preset Handlers
+        function reloadTargetGenesFromCurrentTable() {
+            let matureList = [];
+            let hairpinList = [];
+            let directGenes = [];
+            let originDesc = '';
+
+            if (selectedExprMature.size > 0) {
+                matureList = Array.from(selectedExprMature);
+                originDesc = `${matureList.length} Selected miRNAs from Expression Studies`;
+            } else if (selectedGenMature.size > 0) {
+                matureList = Array.from(selectedGenMature);
+                originDesc = `${matureList.length} Selected miRNAs from Genetic Studies`;
+            } else {
+                const rows = expressionTable ? expressionTable.rows({ search: 'applied' }).data().toArray() : [];
+                rows.forEach(r => {
+                    const m = (r.mature_mirna || '').replace(/<[^>]*>/g, '').trim();
+                    if (m) matureList.push(m);
+                    if (r.precursor_mirna) hairpinList.push(r.precursor_mirna);
+                });
+                originDesc = `Filtered miRNAs from Current Table`;
+            }
+
+            const resolved = resolveTargetGenesFromMiRNAs(matureList, hairpinList, 'all');
+            setEnrichmentGenes(resolved, originDesc);
+        }
+
         $('#preset-active-filter, .btn-analyze-filtered').on('click', function() {
             const sourceTable = $(this).data('source-table') || 'all';
             let matureList = [];
@@ -2848,26 +3110,18 @@
                 }
             }
 
-            const scope = $('input[name="target-scope"]:checked').val() || 'all';
             let resolvedGenes = [];
-
             if (directGenes.length > 0) {
                 resolvedGenes = Array.from(new Set(directGenes)).sort();
             } else {
-                resolvedGenes = resolveTargetGenesFromMiRNAs(matureList, hairpinList, scope);
+                resolvedGenes = resolveTargetGenesFromMiRNAs(matureList, hairpinList, 'all');
             }
 
             // Switch to Enrichment Tab
             const enrichmentTabTrigger = new bootstrap.Tab(document.getElementById('enrichment-tab'));
             enrichmentTabTrigger.show();
 
-            setEnrichmentGenes(resolvedGenes);
-
-            if (originDesc) {
-                $('#enrichment-origin-banner').removeClass('d-none').html(
-                    `<i class="fa-solid fa-circle-check text-success me-2"></i>Loaded <strong>${resolvedGenes.length} target genes</strong> from <strong>${originDesc}</strong>.`
-                );
-            }
+            setEnrichmentGenes(resolvedGenes, originDesc);
 
             // Auto-scroll to top of enrichment panel
             $('html, body').animate({ scrollTop: $('#enrichment').offset().top - 20 }, 300);
@@ -2876,36 +3130,32 @@
         $('#preset-brain-targets').on('click', function() {
             const exprRows = expressionTable.rows().data().toArray();
             const brainMature = exprRows.filter(r => r.tissue && r.tissue.toLowerCase().includes('brain')).map(r => r.mature_mirna);
-            const scope = $('input[name="target-scope"]:checked').val() || 'all';
-            const resolved = resolveTargetGenesFromMiRNAs(brainMature, [], scope);
-            setEnrichmentGenes(resolved);
+            const resolved = resolveTargetGenesFromMiRNAs(brainMature, [], 'all');
+            setEnrichmentGenes(resolved, 'Brain-Associated Targets');
         });
 
         $('#preset-upregulated-targets').on('click', function() {
             const exprRows = expressionTable.rows().data().toArray();
             const upMature = exprRows.filter(r => r.expression_change === 'Upregulated').map(r => r.mature_mirna);
-            const scope = $('input[name="target-scope"]:checked').val() || 'all';
-            const resolved = resolveTargetGenesFromMiRNAs(upMature, [], scope);
-            setEnrichmentGenes(resolved);
+            const resolved = resolveTargetGenesFromMiRNAs(upMature, [], 'all');
+            setEnrichmentGenes(resolved, 'Targets of Upregulated miRNAs');
         });
 
         $('#preset-downregulated-targets').on('click', function() {
             const exprRows = expressionTable.rows().data().toArray();
             const downMature = exprRows.filter(r => r.expression_change === 'Downregulated').map(r => r.mature_mirna);
-            const scope = $('input[name="target-scope"]:checked').val() || 'all';
-            const resolved = resolveTargetGenesFromMiRNAs(downMature, [], scope);
-            setEnrichmentGenes(resolved);
+            const resolved = resolveTargetGenesFromMiRNAs(downMature, [], 'all');
+            setEnrichmentGenes(resolved, 'Targets of Downregulated miRNAs');
         });
 
         $('#preset-sfari-targets').on('click', function() {
             const sfariCat1Genes = Object.keys(geneMetaMap).filter(g => geneMetaMap[g].sfari_score && geneMetaMap[g].sfari_score.includes('Category 1'));
-            $('#scope-sfari').prop('checked', true);
-            setEnrichmentGenes(sfariCat1Genes.sort());
+            setEnrichmentGenes(sfariCat1Genes.sort(), 'All SFARI Cat 1 Target Genes');
         });
 
         // Copy and Clear Handlers
         $('#btn-copy-genes').on('click', function() {
-            const genes = $('#enrichment-gene-input').val();
+            const genes = currentEnrichmentGenes.join(', ');
             if (!genes) return;
             navigator.clipboard.writeText(genes).then(() => {
                 const orig = $(this).html();
@@ -2916,10 +3166,42 @@
 
         $('#btn-clear-genes').on('click', function() {
             $('#enrichment-gene-input').val('');
+            baseEnrichmentGenes = [];
             currentEnrichmentGenes = [];
             renderGeneChips([]);
+            updateEnrichmentRibbon();
             $('#enrichment-results-container').addClass('d-none');
             $('#enrichment-error').addClass('d-none');
+        });
+
+        // Independent Discard Handlers
+        $('body').on('click', '.btn-drop-mirna-selection, #drawer-btn-clear-selection', function() {
+            selectedExprMature.clear();
+            selectedGenMature.clear();
+            $('#expression-table tbody .expr-row-check, #other-table tbody .gen-row-check').prop('checked', false);
+            $('.select-all-expr, .select-all-other').prop('checked', false);
+            updateSelectionUI();
+            reloadTargetGenesFromCurrentTable();
+        });
+
+        $('body').on('click', '.btn-drop-table-filters', function() {
+            $('#resetFilters').trigger('click');
+        });
+
+        $('body').on('click', '.btn-drop-scope-filter, .btn-reset-scope-to-all', function() {
+            $('#scope-all').prop('checked', true);
+            refreshEnrichmentScopeAndUI();
+        });
+
+        $('body').on('click', '.btn-reset-all-pipeline', function() {
+            selectedExprMature.clear();
+            selectedGenMature.clear();
+            $('#expression-table tbody .expr-row-check, #other-table tbody .gen-row-check').prop('checked', false);
+            $('.select-all-expr, .select-all-other').prop('checked', false);
+            updateSelectionUI();
+            $('#resetFilters').trigger('click');
+            $('#scope-all').prop('checked', true);
+            reloadTargetGenesFromCurrentTable();
         });
 
         // Source badge styling helper
@@ -3319,6 +3601,14 @@
             <button type="button" class="btn-close" id="closeFilterDrawer" aria-label="Close filter drawer"></button>
         </div>
         <div class="filter-drawer-body">
+            <!-- Quick Selection status in Drawer -->
+            <div id="drawer-selection-status" class="alert alert-light border py-2 px-3 mb-3 d-flex justify-content-between align-items-center" style="font-size: 0.82rem; display: none;">
+                <div>
+                    <i class="fa-solid fa-check-square text-primary me-1"></i>
+                    <span id="drawer-selection-text">0 miRNAs Selected</span>
+                </div>
+                <button type="button" class="btn btn-link btn-xs p-0 text-danger text-decoration-none" id="drawer-btn-clear-selection" style="font-size: 0.75rem;">Deselect All</button>
+            </div>
             <!-- Quick Enrichment from Drawer -->
             <div class="mb-3">
                 <button type="button" class="btn btn-primary w-100 py-2 fw-bold shadow-sm" id="drawer-btn-enrich">
