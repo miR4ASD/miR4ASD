@@ -396,6 +396,57 @@ def test_regulation_target_gene_filtering():
     assert up_targets != down_targets
 
 
+def test_mirna_selection_prerequisite_and_target_filtering_isolation():
+    """
+    Verify 0 selected miRNAs yields 0 targets.
 
+    Also verify filters only modulate targets of selected miRNAs.
+    """
+    with open("target_genes.json", "r") as f:
+        targets = json.load(f)
 
+    # Index targets by mature and hairpin
+    mature_to_targets = {}
+    hairpin_to_targets = {}
+    for t in targets:
+        m = (t.get("mature_mirna") or "").strip().lower()
+        if m:
+            mature_to_targets.setdefault(m, []).append(t)
+        hps = t.get("precursor_mirna")
+        if hps:
+            for hp in hps.split("; "):
+                hairpin_to_targets.setdefault(hp.strip().lower(), []).append(t)
 
+    def resolve_targets(m_list, hp_list):
+        if not m_list and not hp_list:
+            return set()
+        matched = []
+        for m in m_list:
+            matched.extend(mature_to_targets.get(m.strip().lower(), []))
+        for hp in hp_list:
+            matched.extend(hairpin_to_targets.get(hp.strip().lower(), []))
+        return {t["gene_symbol"] for t in matched if t.get("gene_symbol")}
+
+    # 1. Zero selected miRNAs must yield strictly 0 targets
+    assert len(resolve_targets([], [])) == 0
+
+    # 2. Selecting a specific miRNA yields strictly its targets
+    sel_mirna = "hsa-let-7a-5p"
+    base_targets = resolve_targets([sel_mirna], [])
+    assert len(base_targets) > 0
+    # Confirm it does not include targets unrelated to hsa-let-7a-5p
+    all_genes = {t["gene_symbol"] for t in targets if t.get("gene_symbol")}
+    assert len(base_targets) < len(all_genes)
+
+    # 3. Target filtering strictly modulates that selected set
+    sfari_targets_of_sel = {
+        t["gene_symbol"]
+        for t in mature_to_targets.get(sel_mirna.lower(), [])
+        if t.get("is_sfari") and t.get("gene_symbol")
+    }
+    assert 0 < len(sfari_targets_of_sel) < len(base_targets)
+    # The filtered set is a strict subset of the selected miRNA targets
+    assert sfari_targets_of_sel.issubset(base_targets)
+
+    # 4. Deselecting resets back to empty
+    assert len(resolve_targets([], [])) == 0

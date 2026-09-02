@@ -271,9 +271,7 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
 
         if syndromic_raw == 1:
             score_label = (
-                f"{score_label}, Syndromic".strip(", ")
-                if score_label
-                else "Syndromic"
+                f"{score_label}, Syndromic".strip(", ") if score_label else "Syndromic"
             )
 
         gene_full_desc = (
@@ -394,10 +392,11 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
                     else:
                         entry["regulations"].add(reg)
 
-                if (
-                    pd.notna(row["tissue"])
-                    and str(row["tissue"]).strip() not in ["NA", "nan", ""]
-                ):
+                if pd.notna(row["tissue"]) and str(row["tissue"]).strip() not in [
+                    "NA",
+                    "nan",
+                    "",
+                ]:
                     entry["tissues"].add(str(row["tissue"]).strip())
 
                 if pd.notna(row["article_pubmed_id"]):
@@ -457,27 +456,27 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
             "; ".join(sorted(list(data["methods"]))) if data["methods"] else "—"
         )
         regs_str = (
-            "; ".join(sorted(list(data["regulations"])))
-            if data["regulations"]
-            else "—"
+            "; ".join(sorted(list(data["regulations"]))) if data["regulations"] else "—"
         )
         tissue_str = (
             "; ".join(sorted(list(data["tissues"]))) if data["tissues"] else "—"
         )
 
-        target_records.append({
-            "precursor_mirna": raw_precursor,
-            "mature_mirna": canonical_mir,
-            "gene_symbol": gene_sym,
-            "gene_name": gene_full_name if gene_full_name else gene_sym,
-            "is_sfari": is_sfari,
-            "sfari_score": sfari_score if sfari_score else "Non-SFARI",
-            "evidence_level": evidence_level,
-            "experimental_methods": methods_str,
-            "regulation": regs_str,
-            "tissue": tissue_str,
-            "pmids": pmids_str,
-        })
+        target_records.append(
+            {
+                "precursor_mirna": raw_precursor,
+                "mature_mirna": canonical_mir,
+                "gene_symbol": gene_sym,
+                "gene_name": gene_full_name if gene_full_name else gene_sym,
+                "is_sfari": is_sfari,
+                "sfari_score": sfari_score if sfari_score else "Non-SFARI",
+                "evidence_level": evidence_level,
+                "experimental_methods": methods_str,
+                "regulation": regs_str,
+                "tissue": tissue_str,
+                "pmids": pmids_str,
+            }
+        )
 
     # Sort target records: SFARI rank first, then Strong evidence rank, then Gene Symbol
     def sort_key(rec):
@@ -681,10 +680,12 @@ def main(
     # Build mature -> precursors mapping
     mature_to_precursors = {}
     for _, row in (
-        pd.concat([
-            df_expression[["mature_mirna", "precursor_mirna"]],
-            df_other[["mature_mirna", "precursor_mirna"]],
-        ])
+        pd.concat(
+            [
+                df_expression[["mature_mirna", "precursor_mirna"]],
+                df_other[["mature_mirna", "precursor_mirna"]],
+            ]
+        )
         .dropna()
         .iterrows()
     ):
@@ -773,4 +774,3 @@ def main(
 
 if __name__ == "__main__":
     main()
-

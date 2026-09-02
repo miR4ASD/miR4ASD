@@ -2771,48 +2771,45 @@
             const totalSelected = selectedExprMap.size + selectedGenMap.size;
 
             // 1. Drawer Selection Status & Enrichment Button
+            const drawerEnrichBtn = $('#drawer-btn-enrich');
             if (totalSelected > 0) {
                 $('#drawer-selection-badge').text(`${totalSelected} Selected`).attr('class', 'badge bg-primary text-white border');
                 $('#drawer-enrich-text').text(`Run Target Enrichment for ${totalSelected} Selected miRNAs`);
+                drawerEnrichBtn.prop('disabled', false).removeClass('disabled opacity-50');
             } else {
                 $('#drawer-selection-badge').text('0 Selected').attr('class', 'badge bg-light text-dark border');
-                $('#drawer-enrich-text').text('Run Target Enrichment on Filtered miRNAs');
+                $('#drawer-enrich-text').text('Select miRNAs in Tables to Run Enrichment');
+                drawerEnrichBtn.prop('disabled', true).addClass('disabled opacity-50');
             }
 
             // 2. Expression Table Stepper UI
+            const btnExprEnrich = $('.btn-analyze-filtered[data-source-table="expression"]');
             if (selectedExprMap.size > 0) {
                 $('.expr-selected-badge').show();
                 $('.expr-unselected-badge').hide();
                 $('.expr-selected-count').text(selectedExprMap.size);
                 $('.expr-enrich-label').text(`Run Target Enrichment (${selectedExprMap.size} Selected miRNAs)`);
+                btnExprEnrich.removeClass('btn-secondary opacity-75').addClass('btn-primary').prop('disabled', false);
             } else {
                 $('.expr-selected-badge').hide();
                 $('.expr-unselected-badge').show();
-                let countStr = 'All Filtered miRNAs';
-                if (expressionTable) {
-                    const exprRows = expressionTable.rows({ search: 'applied' }).data().toArray();
-                    const unique = new Set(exprRows.map(r => cleanString(r.mature_mirna) || cleanString(r.precursor_mirna)).filter(Boolean));
-                    if (unique.size > 0) countStr = `${unique.size} Filtered miRNAs`;
-                }
-                $('.expr-enrich-label').text(`Run Target Enrichment (${countStr})`);
+                $('.expr-enrich-label').text('Select miRNAs above to run Target Enrichment');
+                btnExprEnrich.removeClass('btn-primary').addClass('btn-secondary opacity-75');
             }
 
             // 3. Genetic Table Stepper UI
+            const btnGenEnrich = $('.btn-analyze-filtered[data-source-table="genetic"]');
             if (selectedGenMap.size > 0) {
                 $('.gen-selected-badge').show();
                 $('.gen-unselected-badge').hide();
                 $('.gen-selected-count').text(selectedGenMap.size);
                 $('.gen-enrich-label').text(`Run Target Enrichment (${selectedGenMap.size} Selected miRNAs)`);
+                btnGenEnrich.removeClass('btn-secondary opacity-75').addClass('btn-primary').prop('disabled', false);
             } else {
                 $('.gen-selected-badge').hide();
                 $('.gen-unselected-badge').show();
-                let countStr = 'All Filtered miRNAs';
-                if (otherTable) {
-                    const genRows = otherTable.rows({ search: 'applied' }).data().toArray();
-                    const unique = new Set(genRows.map(r => cleanString(r.mature_mirna) || cleanString(r.precursor_mirna)).filter(Boolean));
-                    if (unique.size > 0) countStr = `${unique.size} Filtered miRNAs`;
-                }
-                $('.gen-enrich-label').text(`Run Target Enrichment (${countStr})`);
+                $('.gen-enrich-label').text('Select miRNAs above to run Target Enrichment');
+                btnGenEnrich.removeClass('btn-primary').addClass('btn-secondary opacity-75');
             }
         }
 
@@ -2940,11 +2937,8 @@
                             }
                         });
 
-                        // Auto-initialize enrichment so the tab is never empty on load
-                        if (baseEnrichmentGenes.length === 0) {
-                            const allTargets = resolveTargetGenesFromMiRNAs([], [], 'all');
-                            setEnrichmentGenes(allTargets, 'All Curated ASD Target Genes');
-                        }
+                        // Start with empty enrichment targets awaiting user miRNA selection
+                        setEnrichmentGenes([], 'Awaiting miRNA Selection');
                     })
                     .catch(err => console.error("Error loading expression studies for regulation index:", err));
 
@@ -2967,7 +2961,7 @@
         otherTable.on('draw', updateFilteredCounts);
         targetsTable.on('draw', updateFilteredCounts);
 
-        // Target Gene Resolution Logic
+        // Target Gene Resolution Logic (Only resolves when miRNAs are provided)
         function resolveTargetGenesFromMiRNAs(matureList, hairpinList, scope = 'all') {
             const geneSet = new Set();
             const matchedInteractions = [];
@@ -2975,21 +2969,21 @@
             const mList = matureList || [];
             const hpList = hairpinList || [];
 
-            if (mList.length > 0 || hpList.length > 0) {
-                mList.forEach(m => {
-                    const targets = getTargetsForMiRNA(m, null);
-                    targets.forEach(it => matchedInteractions.push(it));
-                });
-                hpList.forEach(hp => {
-                    const targets = getTargetsForMiRNA(null, hp);
-                    targets.forEach(it => matchedInteractions.push(it));
-                });
+            // If no miRNAs selected, target gene list is strictly empty
+            if (mList.length === 0 && hpList.length === 0) {
+                return [];
             }
 
-            // Fallback to all target interactions if no specific miRNAs were provided
-            const sourcePool = (matchedInteractions.length > 0) ? matchedInteractions : allTargetInteractions;
+            mList.forEach(m => {
+                const targets = getTargetsForMiRNA(m, null);
+                targets.forEach(it => matchedInteractions.push(it));
+            });
+            hpList.forEach(hp => {
+                const targets = getTargetsForMiRNA(null, hp);
+                targets.forEach(it => matchedInteractions.push(it));
+            });
 
-            sourcePool.forEach(it => {
+            matchedInteractions.forEach(it => {
                 const gene = it.gene_symbol ? it.gene_symbol.toUpperCase() : null;
                 if (!gene) return;
 
@@ -3042,13 +3036,13 @@
                 enrichmentOrigin.desc = originDesc;
                 $('#enrichment-source-desc').text(originDesc);
             }
-            $('#enrichment-gene-input').val(baseEnrichmentGenes.join(', '));
             refreshEnrichmentScopeAndUI();
         }
 
         function refreshEnrichmentScopeAndUI() {
             const scope = $('input[name="target-scope"]:checked').val() || 'all';
             currentEnrichmentGenes = applyTargetScope(baseEnrichmentGenes, scope);
+            $('#enrichment-gene-input').val(currentEnrichmentGenes.join(', '));
             renderGeneChips(currentEnrichmentGenes);
         }
 
@@ -3057,16 +3051,42 @@
             const healthBadge = $('#gene-set-health-badge');
 
             if (!baseEnrichmentGenes || baseEnrichmentGenes.length === 0) {
-                container.html('<div class="py-2 text-muted small"><i class="fa-solid fa-circle-info text-primary me-1"></i>No target genes currently in scope. Select miRNAs in the Expression Studies or Genetic Studies tables, or enter custom gene symbols above.</div>');
-                $('#gene-set-stats').text('0 Genes (0 SFARI)');
-                healthBadge.attr('class', 'badge bg-secondary-subtle text-secondary border rounded-pill').attr('style', '').text('No Genes');
-                $('#btn-run-enrichment span').text('Run g:Profiler Functional Enrichment');
+                $('input[name="target-scope"]').prop('disabled', true);
+                $('#btn-run-enrichment').prop('disabled', true).addClass('disabled');
+                $('#btn-run-enrichment span').text('Select miRNAs to Run Functional Enrichment');
+                $('#gene-set-stats').text('0 Target Genes');
+                healthBadge.attr('class', 'badge bg-secondary-subtle text-secondary border rounded-pill').attr('style', '').html('<i class="fa-solid fa-arrow-pointer me-1"></i>Awaiting miRNA Selection');
+
+                container.html(`
+                    <div class="p-4 text-center border rounded-3 bg-white shadow-xs my-2">
+                        <div class="mb-2">
+                            <i class="fa-solid fa-dna text-secondary" style="font-size: 2.2rem; opacity: 0.5;"></i>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-1">Step 1: Select miRNAs to Analyze</h6>
+                        <p class="text-secondary small mb-3" style="max-width: 520px; margin: 0 auto;">
+                            Target genes and functional enrichment are derived exclusively from your chosen miRNAs.
+                            Please select one or more miRNAs using the checkboxes in either study table:
+                        </p>
+                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+                            <button type="button" class="btn btn-outline-primary btn-sm btn-nav-tab" data-target-tab="expression-tab">
+                                <i class="fa-solid fa-table me-1"></i>Select in Expression Studies
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-sm btn-nav-tab" data-target-tab="other-tab">
+                                <i class="fa-solid fa-dna me-1"></i>Select in Genetic Studies
+                            </button>
+                        </div>
+                    </div>
+                `);
                 return;
             }
 
+            // Enable target filters and enrichment action
+            $('input[name="target-scope"]').prop('disabled', false);
+            $('#btn-run-enrichment').prop('disabled', false).removeClass('disabled');
+
             if (!geneList || geneList.length === 0) {
-                container.html(`<div class="py-2 text-secondary small"><i class="fa-solid fa-filter me-1 text-primary"></i>0 of ${baseEnrichmentGenes.length} target genes match the selected filter. <button type="button" class="btn btn-link btn-xs p-0 text-primary fw-semibold btn-reset-scope-to-all">Switch to All Targets</button> to view all ${baseEnrichmentGenes.length} genes.</div>`);
-                $('#gene-set-stats').html(`<strong>0</strong> / <strong>${baseEnrichmentGenes.length}</strong> Genes`);
+                container.html(`<div class="py-3 text-secondary small text-center"><i class="fa-solid fa-filter me-1 text-primary"></i>0 of ${baseEnrichmentGenes.length} target genes match the selected filter. <button type="button" class="btn btn-link btn-xs p-0 text-primary fw-semibold btn-reset-scope-to-all">Switch to All Targets</button> to view all ${baseEnrichmentGenes.length} genes.</div>`);
+                $('#gene-set-stats').html(`<strong>0</strong> / <strong>${baseEnrichmentGenes.length}</strong> Target Genes`);
                 healthBadge.attr('class', 'badge bg-warning-subtle text-warning border rounded-pill').attr('style', '').text('0 Filtered');
                 $('#btn-run-enrichment span').text('Run g:Profiler Functional Enrichment (0 Genes)');
                 return;
@@ -3113,7 +3133,7 @@
             }).join('');
 
             container.html(chipsHtml);
-            $('#gene-set-stats').html(`<strong>${geneList.length}</strong> / <strong>${baseEnrichmentGenes.length}</strong> Genes (<strong class="text-danger">${sfariCount}</strong> SFARI)`);
+            $('#gene-set-stats').html(`<strong>${geneList.length}</strong> / <strong>${baseEnrichmentGenes.length}</strong> Target Genes (<strong class="text-danger">${sfariCount}</strong> SFARI)`);
             $('#btn-run-enrichment span').text(`Run g:Profiler Functional Enrichment (${geneList.length} Target Genes)`);
         }
 
@@ -3136,82 +3156,36 @@
 
         // Quick Table Reload Handler
         function reloadTargetGenesFromCurrentTable() {
-            let matureList = [];
-            let hairpinList = [];
-            let originDesc = '';
-
             const totalSelected = selectedExprMap.size + selectedGenMap.size;
-            if (totalSelected > 0) {
-                matureList = Array.from(new Set([...selectedExprMap.values(), ...selectedGenMap.values()].map(x => x.mature).filter(Boolean)));
-                hairpinList = Array.from(new Set([...selectedExprMap.values(), ...selectedGenMap.values()].map(x => x.hairpin).filter(Boolean)));
-                originDesc = `${totalSelected} Selected miRNAs`;
-            } else {
-                const rows = expressionTable ? expressionTable.rows({ search: 'applied' }).data().toArray() : [];
-                rows.forEach(r => {
-                    const m = cleanString(r.mature_mirna);
-                    if (m) matureList.push(m);
-                    const hp = cleanString(r.precursor_mirna);
-                    if (hp) hairpinList.push(hp);
-                });
-                originDesc = `Filtered miRNAs from Expression Studies`;
+            if (totalSelected === 0) {
+                setEnrichmentGenes([], 'Awaiting miRNA Selection');
+                return;
             }
+
+            const matureList = Array.from(new Set([...selectedExprMap.values(), ...selectedGenMap.values()].map(x => x.mature).filter(Boolean)));
+            const hairpinList = Array.from(new Set([...selectedExprMap.values(), ...selectedGenMap.values()].map(x => x.hairpin).filter(Boolean)));
+            const originDesc = `${totalSelected} Selected miRNAs`;
 
             const resolved = resolveTargetGenesFromMiRNAs(matureList, hairpinList, 'all');
             setEnrichmentGenes(resolved, originDesc);
         }
 
         $('#preset-active-filter, .btn-analyze-filtered').on('click', function() {
-            const sourceTable = $(this).data('source-table') || 'all';
-            let matureList = [];
-            let hairpinList = [];
-            let directGenes = [];
-            let originDesc = '';
-
             const totalSelected = selectedExprMap.size + selectedGenMap.size;
 
-            if (totalSelected > 0) {
-                matureList = Array.from(new Set([...selectedExprMap.values(), ...selectedGenMap.values()].map(x => x.mature).filter(Boolean)));
-                hairpinList = Array.from(new Set([...selectedExprMap.values(), ...selectedGenMap.values()].map(x => x.hairpin).filter(Boolean)));
-                originDesc = `${totalSelected} Selected miRNAs`;
-            } else if (sourceTable === 'expression') {
-                const rows = expressionTable.rows({ search: 'applied' }).data().toArray();
-                rows.forEach(r => {
-                    const m = cleanString(r.mature_mirna);
-                    if (m) matureList.push(m);
-                    const hp = cleanString(r.precursor_mirna);
-                    if (hp) hairpinList.push(hp);
-                });
-                originDesc = `Filtered miRNAs from Expression Studies`;
-            } else if (sourceTable === 'genetic') {
-                const rows = otherTable.rows({ search: 'applied' }).data().toArray();
-                rows.forEach(r => {
-                    const m = cleanString(r.mature_mirna);
-                    if (m) matureList.push(m);
-                    const hp = cleanString(r.precursor_mirna);
-                    if (hp) hairpinList.push(hp);
-                });
-                originDesc = `Filtered miRNAs from Genetic Studies`;
-            } else if (sourceTable === 'targets') {
-                const rows = targetsTable.rows({ search: 'applied' }).data().toArray();
-                directGenes = rows.map(r => r.gene_symbol).filter(Boolean);
-                originDesc = `Filtered Target Genes`;
-            } else {
-                const rows = expressionTable.rows({ search: 'applied' }).data().toArray();
-                rows.forEach(r => {
-                    const m = cleanString(r.mature_mirna);
-                    if (m) matureList.push(m);
-                    const hp = cleanString(r.precursor_mirna);
-                    if (hp) hairpinList.push(hp);
-                });
-                originDesc = `Filtered miRNAs from Current Table`;
+            if (totalSelected === 0) {
+                setEnrichmentGenes([], 'Awaiting miRNA Selection');
+                const enrichmentTabTrigger = new bootstrap.Tab(document.getElementById('enrichment-tab'));
+                enrichmentTabTrigger.show();
+                $('html, body').animate({ scrollTop: $('#enrichment').offset().top - 20 }, 300);
+                return;
             }
 
-            let resolvedGenes = [];
-            if (directGenes.length > 0) {
-                resolvedGenes = Array.from(new Set(directGenes)).sort();
-            } else {
-                resolvedGenes = resolveTargetGenesFromMiRNAs(matureList, hairpinList, 'all');
-            }
+            const matureList = Array.from(new Set([...selectedExprMap.values(), ...selectedGenMap.values()].map(x => x.mature).filter(Boolean)));
+            const hairpinList = Array.from(new Set([...selectedExprMap.values(), ...selectedGenMap.values()].map(x => x.hairpin).filter(Boolean)));
+            const originDesc = `${totalSelected} Selected miRNAs`;
+
+            const resolvedGenes = resolveTargetGenesFromMiRNAs(matureList, hairpinList, 'all');
 
             // Switch to Enrichment Tab
             const enrichmentTabTrigger = new bootstrap.Tab(document.getElementById('enrichment-tab'));
@@ -3241,6 +3215,19 @@
             renderGeneChips([]);
             $('#enrichment-results-container').addClass('d-none');
             $('#enrichment-error').addClass('d-none');
+        });
+
+        // Tab Navigation Shortcut Handler
+        $('body').on('click', '.btn-nav-tab', function() {
+            const tabId = $(this).data('target-tab');
+            if (tabId) {
+                const tabEl = document.getElementById(tabId);
+                if (tabEl) {
+                    const tabTrigger = new bootstrap.Tab(tabEl);
+                    tabTrigger.show();
+                    $('html, body').animate({ scrollTop: $(tabEl).offset().top - 40 }, 300);
+                }
+            }
         });
 
         // Independent Discard & Workflow Action Handlers
@@ -3309,13 +3296,14 @@
 
         // Run g:Profiler Enrichment API Call
         $('#btn-run-enrichment').on('click', function() {
-            const raw = $('#enrichment-gene-input').val();
-            const genes = raw.split(/[\s,;\n\t]+/).map(g => g.trim().toUpperCase()).filter(g => g.length > 0);
-            const queryGenes = Array.from(new Set(genes));
+            // Strictly send currentEnrichmentGenes (the filtered targets of the selected miRNAs)
+            const queryGenes = (currentEnrichmentGenes && currentEnrichmentGenes.length > 0)
+                ? currentEnrichmentGenes
+                : Array.from(new Set($('#enrichment-gene-input').val().split(/[\s,;\n\t]+/).map(g => g.trim().toUpperCase()).filter(Boolean)));
 
             if (queryGenes.length < 2) {
                 $('#enrichment-error').removeClass('d-none');
-                $('#enrichment-error-msg').text('Please provide at least 2 valid gene symbols to perform enrichment analysis.');
+                $('#enrichment-error-msg').text('Please select miRNAs to load at least 2 target genes, or provide at least 2 valid gene symbols to perform enrichment analysis.');
                 $('#enrichment-results-container').addClass('d-none');
                 return;
             }
