@@ -664,22 +664,26 @@
             color: #DC2626;
         }
 
-        /* In-table mini quick enrichment action button */
-        .btn-quick-enrich {
-            font-size: 0.7rem !important;
-            padding: 1px 6px !important;
-            border-radius: 12px !important;
-            border-color: #cbd5e1 !important;
-            color: #475569 !important;
-            background-color: #f8fafc !important;
-            vertical-align: middle;
-            transition: all 0.15s ease !important;
+        /* Selection Checkbox & Toolbar Styles */
+        .select-checkbox-cell {
+            vertical-align: middle !important;
+            text-align: center !important;
+            width: 34px !important;
+            padding-left: 6px !important;
+            padding-right: 6px !important;
         }
-        .btn-quick-enrich:hover {
-            background-color: var(--primary-color) !important;
-            color: #ffffff !important;
-            border-color: var(--primary-color) !important;
-            transform: scale(1.08);
+        .select-checkbox-cell input[type="checkbox"], th input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            margin: 0;
+            vertical-align: middle;
+        }
+        .filter-action-banner {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 16px;
         }
 
         /* Enhanced DataTables Search Input */
@@ -702,6 +706,39 @@
         th[data-bs-toggle="tooltip"] {
             cursor: help !important;
             text-decoration: underline dotted #94A3B8;
+        }
+
+        /* Mobile & Tablet Responsive Enhancements */
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                white-space: nowrap !important;
+                padding-bottom: 4px !important;
+                scrollbar-width: thin;
+            }
+            .nav-tabs .nav-link {
+                padding: 8px 14px !important;
+                font-size: 0.85rem !important;
+            }
+            .header {
+                padding: 1.75rem 1rem !important;
+                margin-bottom: 1.25rem !important;
+            }
+            .header h1 {
+                font-size: 1.35rem !important;
+            }
+            .container-fluid {
+                padding: 0 12px !important;
+            }
+            .card {
+                padding: 1.25rem !important;
+            }
+            .dataTables_filter input {
+                min-width: 180px !important;
+                width: 100% !important;
+            }
         }
     </style>
 </head>
@@ -1268,26 +1305,33 @@
                 </div>
 
                 <div class="tab-pane fade" id="expression" role="tabpanel" aria-labelledby="expression-tab">
-                    <div class="filter-action-banner d-flex flex-column gap-2">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 w-100">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-primary-subtle text-primary border rounded-pill px-2 py-1"><i class="fa-solid fa-bolt me-1 text-warning"></i>Downstream Systems Biology</span>
-                                <span class="text-secondary small">Filter expression studies, then run functional enrichment on target genes of matching miRNAs.</span>
-                            </div>
-                            <button type="button" class="btn btn-sm btn-primary fw-bold btn-analyze-filtered" data-source-table="expression">
-                                <i class="fa-solid fa-dna me-1"></i> Functional Enrichment (<span class="expr-filtered-count">All</span> miRNAs)
-                            </button>
+                    <div class="filter-action-banner d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                        <div class="d-flex align-items-center flex-wrap gap-2">
+                            <span class="badge bg-primary-subtle text-primary border rounded-pill px-2 py-1"><i class="fa-solid fa-bolt me-1 text-warning"></i>Systems Biology</span>
+                            <span class="text-secondary small d-none d-md-inline">Select miRNAs using checkboxes or filter rows, then analyze validated targets.</span>
+                            <span class="badge bg-light text-dark border font-monospace expr-selected-badge" style="display: none; font-size: 0.8rem;">
+                                <i class="fa-solid fa-check-square text-primary me-1"></i><span class="expr-selected-count">0</span> Selected
+                            </span>
+                            <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-primary btn-select-all-visible" data-table="expression" style="font-size: 0.8rem;">Select Visible</button>
+                            <span class="text-muted small">|</span>
+                            <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-secondary btn-clear-selection" data-table="expression" style="font-size: 0.8rem;">Clear Selection</button>
                         </div>
-                        <div class="active-filter-chips-wrapper expr-active-chips" style="display: none;">
-                            <span class="small fw-bold text-muted me-1"><i class="fa-solid fa-filter text-primary me-1"></i>Active:</span>
-                            <div class="chips-list d-inline-flex flex-wrap gap-1"></div>
-                            <button type="button" class="btn btn-link btn-xs p-0 text-danger text-decoration-none ms-2 btn-clear-all-chips" style="font-size: 0.75rem;">Clear All</button>
-                        </div>
+                        <button type="button" class="btn btn-sm btn-primary fw-bold btn-analyze-filtered shadow-sm" data-source-table="expression">
+                            <i class="fa-solid fa-dna me-1"></i> Run Enrichment (<span class="expr-filtered-count">All Filtered</span> miRNAs)
+                        </button>
+                    </div>
+                    <div class="active-filter-chips-wrapper expr-active-chips mb-2" style="display: none;">
+                        <span class="small fw-bold text-muted me-1"><i class="fa-solid fa-filter text-primary me-1"></i>Active:</span>
+                        <div class="chips-list d-inline-flex flex-wrap gap-1"></div>
+                        <button type="button" class="btn btn-link btn-xs p-0 text-danger text-decoration-none ms-2 btn-clear-all-chips" style="font-size: 0.75rem;">Clear All</button>
                     </div>
                     <table id="expression-table" class="display" style="width:100%">
                         <thead>
                             <tr>
-                                <th></th>
+                                <th style="width: 32px;" class="text-center">
+                                    <input type="checkbox" class="select-all-expr form-check-input" title="Select / deselect all visible miRNAs" aria-label="Select all visible miRNAs">
+                                </th>
+                                <th style="width: 24px;"></th>
                                 <th data-bs-toggle="tooltip" title="Stem-loop precursor microRNA identifier according to miRBase v22.1.">Precursor miRNA (hairpin)</th>
                                 <th data-bs-toggle="tooltip" title="Functional mature microRNA single-strand identifier (miRBase v22.1).">Mature miRNA</th>
                                 <th data-bs-toggle="tooltip" title="Reported direction of expression alteration in ASD cases versus neurotypical controls.">Expression change (ASD vs. controls)</th>
@@ -1301,26 +1345,33 @@
                     </table>
                 </div>
                 <div class="tab-pane fade" id="genetic" role="tabpanel" aria-labelledby="genetic-tab">
-                    <div class="filter-action-banner d-flex flex-column gap-2">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 w-100">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-primary-subtle text-primary border rounded-pill px-2 py-1"><i class="fa-solid fa-bolt me-1 text-warning"></i>Downstream Systems Biology</span>
-                                <span class="text-secondary small">Filter genetic variant studies, then run functional enrichment on target genes of matching miRNAs.</span>
-                            </div>
-                            <button type="button" class="btn btn-sm btn-primary fw-bold btn-analyze-filtered" data-source-table="genetic">
-                                <i class="fa-solid fa-dna me-1"></i> Functional Enrichment (<span class="gen-filtered-count">All</span> miRNAs)
-                            </button>
+                    <div class="filter-action-banner d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                        <div class="d-flex align-items-center flex-wrap gap-2">
+                            <span class="badge bg-primary-subtle text-primary border rounded-pill px-2 py-1"><i class="fa-solid fa-bolt me-1 text-warning"></i>Systems Biology</span>
+                            <span class="text-secondary small d-none d-md-inline">Select miRNAs using checkboxes or filter rows, then analyze validated targets.</span>
+                            <span class="badge bg-light text-dark border font-monospace gen-selected-badge" style="display: none; font-size: 0.8rem;">
+                                <i class="fa-solid fa-check-square text-primary me-1"></i><span class="gen-selected-count">0</span> Selected
+                            </span>
+                            <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-primary btn-select-all-visible" data-table="genetic" style="font-size: 0.8rem;">Select Visible</button>
+                            <span class="text-muted small">|</span>
+                            <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-secondary btn-clear-selection" data-table="genetic" style="font-size: 0.8rem;">Clear Selection</button>
                         </div>
-                        <div class="active-filter-chips-wrapper gen-active-chips" style="display: none;">
-                            <span class="small fw-bold text-muted me-1"><i class="fa-solid fa-filter text-primary me-1"></i>Active:</span>
-                            <div class="chips-list d-inline-flex flex-wrap gap-1"></div>
-                            <button type="button" class="btn btn-link btn-xs p-0 text-danger text-decoration-none ms-2 btn-clear-all-chips" style="font-size: 0.75rem;">Clear All</button>
-                        </div>
+                        <button type="button" class="btn btn-sm btn-primary fw-bold btn-analyze-filtered shadow-sm" data-source-table="genetic">
+                            <i class="fa-solid fa-dna me-1"></i> Run Enrichment (<span class="gen-filtered-count">All Filtered</span> miRNAs)
+                        </button>
+                    </div>
+                    <div class="active-filter-chips-wrapper gen-active-chips mb-2" style="display: none;">
+                        <span class="small fw-bold text-muted me-1"><i class="fa-solid fa-filter text-primary me-1"></i>Active:</span>
+                        <div class="chips-list d-inline-flex flex-wrap gap-1"></div>
+                        <button type="button" class="btn btn-link btn-xs p-0 text-danger text-decoration-none ms-2 btn-clear-all-chips" style="font-size: 0.75rem;">Clear All</button>
                     </div>
                     <table id="other-table" class="display" style="width:100%">
                         <thead>
                             <tr>
-                                <th></th>
+                                <th style="width: 32px;" class="text-center">
+                                    <input type="checkbox" class="select-all-other form-check-input" title="Select / deselect all visible miRNAs" aria-label="Select all visible miRNAs">
+                                </th>
+                                <th style="width: 24px;"></th>
                                 <th data-bs-toggle="tooltip" title="Stem-loop precursor microRNA identifier (miRBase v22.1).">Precursor miRNA (hairpin)</th>
                                 <th data-bs-toggle="tooltip" title="Functional mature microRNA identifier (miRBase v22.1).">Mature miRNA</th>
                                 <th data-bs-toggle="tooltip" title="Genomic or functional alteration category (CNV, SNV, SNP, or targeted miRNA expression).">Alteration</th>
@@ -1333,44 +1384,43 @@
                     <div class="alert border-0 shadow-sm mb-3 py-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-2" style="background-color: #EBF8FF; color: #2B6CB0; border-radius: 8px;">
                         <div>
                             <i class="fa-solid fa-circle-info me-2"></i>
-                            <strong>Experimentally Supported miRNA Target Genes:</strong> Sourced from <strong>DIANA-TarBase v9.0</strong> across all experimental assay tiers (Reporter Assays, Western Blot, qPCR, CLIP-Seq, CLASH, and high-throughput transcriptomics) cross-referenced with <strong>SFARI Gene</strong> ASD risk annotations.
+                            <strong>Experimentally Supported miRNA Target Genes:</strong> Sourced from <strong>DIANA-TarBase v9.0</strong> across all experimental assay tiers cross-referenced with <strong>SFARI Gene</strong> ASD risk annotations.
                         </div>
                         <div class="d-flex flex-wrap gap-1">
-                            <span class="badge bg-danger-subtle text-danger border px-2 py-1 rounded-pill"><i class="fa-solid fa-star me-1"></i>SFARI Cat 1 (High Confidence)</span>
-                            <span class="badge border px-2 py-1 rounded-pill" style="background-color: #fef3c7 !important; color: #92400e !important; border-color: #fde68a !important;"><i class="fa-solid fa-star-half-stroke me-1"></i>Cat 2 (Candidate)</span>
-                            <span class="badge bg-info-subtle text-info border px-2 py-1 rounded-pill"><i class="fa-solid fa-circle-info me-1"></i>Cat 3 (Suggestive)</span>
+                            <span class="badge bg-danger-subtle text-danger border px-2 py-1 rounded-pill"><i class="fa-solid fa-star me-1"></i>SFARI Cat 1</span>
+                            <span class="badge border px-2 py-1 rounded-pill" style="background-color: #fef3c7 !important; color: #92400e !important; border-color: #fde68a !important;"><i class="fa-solid fa-star-half-stroke me-1"></i>Cat 2</span>
+                            <span class="badge bg-info-subtle text-info border px-2 py-1 rounded-pill"><i class="fa-solid fa-circle-info me-1"></i>Cat 3</span>
                             <span class="badge border px-2 py-1 rounded-pill" style="background-color: #f3e8ff !important; color: #6b21a8 !important; border-color: #e9d5ff !important;"><i class="fa-solid fa-dna me-1"></i>Syndromic</span>
                         </div>
                     </div>
-                    <div class="filter-action-banner d-flex flex-column gap-2">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 w-100">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-primary-subtle text-primary border rounded-pill px-2 py-1"><i class="fa-solid fa-bolt me-1 text-warning"></i>Downstream Systems Biology</span>
-                                <span class="text-secondary small">Filter targets by gene symbol, evidence tier, or SFARI risk, then send to g:Profiler enrichment.</span>
-                            </div>
-                            <button type="button" class="btn btn-sm btn-primary fw-bold btn-analyze-filtered" data-source-table="targets">
-                                <i class="fa-solid fa-dna me-1"></i> Functional Enrichment (<span class="target-filtered-count">All</span> Targets)
-                            </button>
+                    <div class="filter-action-banner d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-primary-subtle text-primary border rounded-pill px-2 py-1"><i class="fa-solid fa-bolt me-1 text-warning"></i>Systems Biology</span>
+                            <span class="text-secondary small d-none d-md-inline">Filter targets by gene symbol, evidence tier, or SFARI risk, then send to g:Profiler enrichment.</span>
                         </div>
-                        <div class="active-filter-chips-wrapper target-active-chips" style="display: none;">
-                            <span class="small fw-bold text-muted me-1"><i class="fa-solid fa-filter text-primary me-1"></i>Active:</span>
-                            <div class="chips-list d-inline-flex flex-wrap gap-1"></div>
-                            <button type="button" class="btn btn-link btn-xs p-0 text-danger text-decoration-none ms-2 btn-clear-all-chips" style="font-size: 0.75rem;">Clear All</button>
-                        </div>
+                        <button type="button" class="btn btn-sm btn-primary fw-bold btn-analyze-filtered shadow-sm" data-source-table="targets">
+                            <i class="fa-solid fa-dna me-1"></i> Run Enrichment (<span class="target-filtered-count">All Filtered</span> Targets)
+                        </button>
+                    </div>
+                    <div class="active-filter-chips-wrapper target-active-chips mb-2" style="display: none;">
+                        <span class="small fw-bold text-muted me-1"><i class="fa-solid fa-filter text-primary me-1"></i>Active:</span>
+                        <div class="chips-list d-inline-flex flex-wrap gap-1"></div>
+                        <button type="button" class="btn btn-link btn-xs p-0 text-danger text-decoration-none ms-2 btn-clear-all-chips" style="font-size: 0.75rem;">Clear All</button>
                     </div>
                     <table id="targets-table" class="display" style="width:100%">
                         <thead>
                             <tr>
+                                <th style="width: 24px;"></th>
                                 <th data-bs-toggle="tooltip" title="Stem-loop precursor miRNA(s) encoding this mature regulatory RNA.">Precursor miRNA</th>
                                 <th data-bs-toggle="tooltip" title="Mature microRNA identifier with direct experimental validation for this target gene.">Mature miRNA</th>
                                 <th data-bs-toggle="tooltip" title="Official HGNC gene symbol (hyperlinked directly to GeneCards human gene catalog).">Target Gene</th>
                                 <th data-bs-toggle="tooltip" title="Full protein-coding gene name and biological function description.">Gene Description</th>
                                 <th data-bs-toggle="tooltip" title="SFARI Gene autism susceptibility tier: Category 1 (High Confidence), Cat 2 (Candidate), Cat 3 (Suggestive), or Syndromic.">ASD Susceptibility (SFARI)</th>
                                 <th data-bs-toggle="tooltip" title="DIANA-TarBase validation tier: Strong Evidence (Reporter/WB/qPCR), CLIP/CLASH (Physical binding), or High-Throughput Expression.">Evidence Level</th>
-                                <th data-bs-toggle="tooltip" title="Specific experimental laboratory techniques used to validate miRNA-target interaction.">Experimental Methods</th>
-                                <th data-bs-toggle="tooltip" title="Functional regulatory effect observed: Negative (Downregulation), Positive (Upregulation), or Binding-only.">Regulation</th>
-                                <th data-bs-toggle="tooltip" title="Biological tissue, primary cell line, or model system where interaction was validated.">Tissue / Cell Source</th>
                                 <th data-bs-toggle="tooltip" title="PubMed Identifiers (PMIDs) of primary research articles supporting the interaction.">PubMed Reference</th>
+                                <th>Experimental Methods</th>
+                                <th>Regulation</th>
+                                <th>Tissue / Cell Source</th>
                             </tr>
                         </thead>
                     </table>
@@ -1378,200 +1428,208 @@
 
                 <!-- 5. Functional Enrichment Tab Pane -->
                 <div class="tab-pane fade" id="enrichment" role="tabpanel" aria-labelledby="enrichment-tab">
-                    <!-- Enrichment Header & Presets -->
-                    <div class="alert border-0 shadow-sm mb-4 p-3" style="background-color: #EBF8FF; color: #1E3A8A; border-radius: 12px;">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                    <!-- Main Control Panel Card -->
+                    <div class="card p-4 border shadow-sm mb-4" style="border-radius: 12px; border-color: #E2E8F0 !important; background: #ffffff;">
+                        <!-- Header & Title Banner -->
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3 pb-3 border-bottom">
                             <div>
                                 <h4 class="mb-1 fw-bold" style="font-family: 'Montserrat', sans-serif; color: var(--primary-color);">
-                                    <i class="fa-solid fa-dna text-primary me-2"></i>Functional Enrichment Analysis (g:Profiler)
+                                    <i class="fa-solid fa-dna text-primary me-2"></i>Functional Enrichment Analysis
                                 </h4>
-                                <span class="text-secondary small">
-                                    Perform gene set overrepresentation analysis across Gene Ontology (GO:BP, GO:MF, GO:CC), KEGG, Reactome, WikiPathways, and Human Phenotype Ontology terms on target genes regulated by your selected microRNAs.
-                                </span>
+                                <p class="text-secondary small mb-0">
+                                    Analyze biological pathways, gene ontologies (GO:BP, GO:MF, GO:CC), and disease phenotypes (KEGG, Reactome, HP) overrepresented among validated miRNA targets.
+                                </p>
                             </div>
-                            <span class="badge bg-primary text-white px-3 py-2 rounded-pill shadow-sm" style="font-size: 0.85rem;">
-                                <i class="fa-solid fa-server me-1"></i>Powered by g:Profiler REST API
+                            <span class="badge bg-light text-secondary border rounded-pill px-3 py-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-server text-primary me-1"></i>g:Profiler REST API
                             </span>
                         </div>
-                        <hr class="my-2" style="border-color: #BFDBFE;">
-                        <div class="d-flex align-items-center flex-wrap gap-2 pt-1">
-                            <span class="small fw-bold text-dark me-1"><i class="fa-solid fa-wand-magic-sparkles text-primary me-1"></i>Quick Presets:</span>
-                            <button type="button" class="btn btn-sm btn-outline-primary bg-white rounded-pill px-3" id="preset-active-filter">
-                                <i class="fa-solid fa-filter me-1"></i>Use Current Filtered Target Genes
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary bg-white rounded-pill px-3" id="preset-brain-targets">
-                                <i class="fa-solid fa-brain me-1 text-info"></i>Brain-Associated Targets
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary bg-white rounded-pill px-3" id="preset-upregulated-targets">
-                                <i class="fa-solid fa-arrow-up me-1 text-success"></i>Upregulated Targets
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary bg-white rounded-pill px-3" id="preset-downregulated-targets">
-                                <i class="fa-solid fa-arrow-down me-1 text-danger"></i>Downregulated Targets
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary bg-white rounded-pill px-3" id="preset-sfari-targets">
-                                <i class="fa-solid fa-star me-1 text-warning"></i>SFARI High-Confidence Targets
-                            </button>
-                        </div>
-                    </div>
 
-                    <!-- Input Parameters & Configuration Row -->
-                    <div class="row g-4 mb-4">
-                        <!-- Left Column: Target Gene Set & Scope -->
-                        <div class="col-lg-6">
-                            <div class="card h-100 p-3 border shadow-sm" style="background: #ffffff; border-radius: 12px; border-color: #E2E8F0 !important; box-shadow: none !important;">
-                                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2 pb-2 border-bottom">
-                                    <h5 class="mb-0 fw-bold" style="font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--primary-color);">
-                                        <i class="fa-solid fa-list-check text-primary me-2"></i>Target Gene Set Selection
-                                    </h5>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span id="gene-set-stats" class="badge bg-light text-dark border rounded-pill px-3 py-1 font-monospace" style="font-size: 0.8rem;">
-                                            0 Genes (0 SFARI)
-                                        </span>
-                                        <span id="gene-set-health-badge" class="badge bg-secondary-subtle text-secondary border rounded-pill" style="font-size: 0.75rem;">
-                                            No Genes
-                                        </span>
-                                    </div>
-                                </div>
+                        <!-- Dynamic Source Origin Banner -->
+                        <div id="enrichment-origin-banner" class="alert alert-info py-2 px-3 mb-3 d-none rounded-3 border" style="font-size: 0.85rem;"></div>
 
-                                <!-- Target Evidence Scope Switcher -->
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold text-secondary mb-1 small text-uppercase" style="letter-spacing: 0.05em;">Target Evidence Scope</label>
-                                    <div class="btn-group w-100" role="group" aria-label="Target Evidence Scope">
-                                        <input type="radio" class="btn-check" name="target-scope" id="scope-all" value="all" checked>
-                                        <label class="btn btn-outline-primary btn-sm" for="scope-all">All Targets</label>
-
-                                        <input type="radio" class="btn-check" name="target-scope" id="scope-strong" value="strong">
-                                        <label class="btn btn-outline-primary btn-sm" for="scope-strong"><i class="fa-solid fa-check-double me-1"></i>Strong Evidence Only</label>
-
-                                        <input type="radio" class="btn-check" name="target-scope" id="scope-sfari" value="sfari">
-                                        <label class="btn btn-outline-primary btn-sm" for="scope-sfari"><i class="fa-solid fa-star me-1"></i>SFARI ASD Only</label>
-                                    </div>
-                                </div>
-
-                                <!-- Searchable / Editable Gene Textarea -->
-                                <div class="mb-2">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <label for="enrichment-gene-input" class="form-label fw-bold text-secondary mb-0 small text-uppercase" style="letter-spacing: 0.05em;">Gene Symbols (Comma or Space Separated)</label>
-                                        <div class="d-flex gap-2">
-                                            <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none text-primary" id="btn-copy-genes" title="Copy gene symbols to clipboard"><i class="fa-regular fa-copy me-1"></i>Copy</button>
-                                            <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none text-danger" id="btn-clear-genes" title="Clear gene input"><i class="fa-solid fa-trash-can me-1"></i>Clear</button>
-                                        </div>
-                                    </div>
-                                    <textarea id="enrichment-gene-input" class="form-control font-monospace" rows="3" placeholder="e.g. PTEN, SHANK3, MECP2, CHD8, SCN2A..." style="font-size: 0.85rem; resize: vertical;" aria-label="Input Gene Symbols for Enrichment"></textarea>
-                                </div>
-
-                                <!-- Visual Gene Chips Preview -->
-                                <div>
-                                    <span class="small fw-bold text-muted d-block mb-1">Resolved Gene Preview:</span>
-                                    <div id="enrichment-gene-chips" class="gene-chips-container">
-                                        <span class="text-muted small">No genes selected. Select miRNAs from tables or click a preset above.</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Column: g:Profiler Ontologies & Settings -->
-                        <div class="col-lg-6">
-                            <div class="card h-100 p-3 border shadow-sm" style="background: #ffffff; border-radius: 12px; border-color: #E2E8F0 !important; box-shadow: none !important;">
-                                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2 pb-2 border-bottom">
-                                    <h5 class="mb-0 fw-bold" style="font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--primary-color);">
-                                        <i class="fa-solid fa-sliders text-primary me-2"></i>Analysis Settings & Data Sources
-                                    </h5>
-                                    <span class="badge bg-info-subtle text-info border rounded-pill px-2 py-1" style="font-size: 0.75rem;">
-                                        Human (Homo sapiens)
+                        <!-- Step 1: Target Gene Selection & Scope -->
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                                <span class="fw-bold text-dark" style="font-size: 0.9rem;">
+                                    <span class="badge bg-primary text-white rounded-circle me-1" style="width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem;">1</span>
+                                    Target Gene Selection & Scope:
+                                </span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span id="gene-set-stats" class="badge bg-light text-dark border rounded-pill px-3 py-1 font-monospace" style="font-size: 0.8rem;">
+                                        0 Genes (0 SFARI)
+                                    </span>
+                                    <span id="gene-set-health-badge" class="badge bg-secondary-subtle text-secondary border rounded-pill" style="font-size: 0.75rem;">
+                                        No Genes
                                     </span>
                                 </div>
+                            </div>
 
-                                <!-- Data Sources Checkboxes -->
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold text-secondary mb-1 small text-uppercase" style="letter-spacing: 0.05em;">Ontology & Pathway Data Sources</label>
-                                    <div class="row row-cols-2 g-2">
-                                        <div class="col">
-                                            <div class="form-check">
-                                                <input class="form-check-input gprofiler-source" type="checkbox" value="GO:BP" id="src-gobp" checked>
-                                                <label class="form-check-label small" for="src-gobp">
-                                                    <span class="badge badge-source badge-gobp me-1">GO:BP</span> Biological Process
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-check">
-                                                <input class="form-check-input gprofiler-source" type="checkbox" value="GO:MF" id="src-gomf" checked>
-                                                <label class="form-check-label small" for="src-gomf">
-                                                    <span class="badge badge-source badge-gomf me-1">GO:MF</span> Molecular Function
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-check">
-                                                <input class="form-check-input gprofiler-source" type="checkbox" value="GO:CC" id="src-gocc" checked>
-                                                <label class="form-check-label small" for="src-gocc">
-                                                    <span class="badge badge-source badge-gocc me-1">GO:CC</span> Cellular Component
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-check">
-                                                <input class="form-check-input gprofiler-source" type="checkbox" value="KEGG" id="src-kegg" checked>
-                                                <label class="form-check-label small" for="src-kegg">
-                                                    <span class="badge badge-source badge-kegg me-1">KEGG</span> Biological Pathways
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-check">
-                                                <input class="form-check-input gprofiler-source" type="checkbox" value="REAC" id="src-reac" checked>
-                                                <label class="form-check-label small" for="src-reac">
-                                                    <span class="badge badge-source badge-reac me-1">REAC</span> Reactome Pathways
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-check">
-                                                <input class="form-check-input gprofiler-source" type="checkbox" value="HP" id="src-hp" checked>
-                                                <label class="form-check-label small" for="src-hp">
-                                                    <span class="badge badge-source badge-hp me-1">HP</span> Human Phenotype
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-check">
-                                                <input class="form-check-input gprofiler-source" type="checkbox" value="WP" id="src-wp">
-                                                <label class="form-check-label small" for="src-wp">
-                                                    <span class="badge badge-source badge-wp me-1">WP</span> WikiPathways
-                                                </label>
-                                            </div>
-                                        </div>
+                            <!-- Scope Switcher & Presets Row -->
+                            <div class="row g-2 align-items-center mb-3">
+                                <div class="col-lg-6 col-12">
+                                    <div class="btn-group w-100" role="group" aria-label="Target Evidence Scope">
+                                        <input type="radio" class="btn-check" name="target-scope" id="scope-all" value="all" checked>
+                                        <label class="btn btn-outline-primary btn-sm py-2" for="scope-all">All Validated Targets</label>
+
+                                        <input type="radio" class="btn-check" name="target-scope" id="scope-strong" value="strong">
+                                        <label class="btn btn-outline-primary btn-sm py-2" for="scope-strong"><i class="fa-solid fa-check-double me-1"></i>Strong Evidence Only</label>
+
+                                        <input type="radio" class="btn-check" name="target-scope" id="scope-sfari" value="sfari">
+                                        <label class="btn btn-outline-primary btn-sm py-2" for="scope-sfari"><i class="fa-solid fa-star me-1 text-warning"></i>SFARI ASD Only</label>
                                     </div>
                                 </div>
-
-                                <!-- Statistical Thresholds -->
-                                <div class="row g-2 mb-3">
-                                    <div class="col-sm-6">
-                                        <label for="threshold-method" class="form-label fw-bold text-secondary mb-1 small text-uppercase" style="letter-spacing: 0.05em;">Multiple Testing Correction</label>
-                                        <select id="threshold-method" class="form-select form-select-sm" aria-label="Significance Threshold Method">
-                                            <option value="g_SCS" selected>g:SCS (Recommended for GO)</option>
-                                            <option value="fdr">Benjamini-Hochberg FDR</option>
-                                            <option value="bonferroni">Bonferroni Correction</option>
-                                        </select>
+                                <div class="col-lg-6 col-12">
+                                    <div class="dropdown w-100">
+                                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle w-100 py-2 text-start d-flex justify-content-between align-items-center" type="button" id="presetDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <span><i class="fa-solid fa-wand-magic-sparkles text-primary me-2"></i>Quick Presets (Brain, Upregulated, SFARI)...</span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow-sm w-100" aria-labelledby="presetDropdown" style="border-radius: 8px;">
+                                            <li><button class="dropdown-item py-2" type="button" id="preset-active-filter"><i class="fa-solid fa-filter text-primary me-2"></i>Use Target Genes from Current Table Filter</button></li>
+                                            <li><hr class="dropdown-divider my-1"></li>
+                                            <li><button class="dropdown-item py-2" type="button" id="preset-brain-targets"><i class="fa-solid fa-brain text-info me-2"></i>Brain-Associated Targets</button></li>
+                                            <li><button class="dropdown-item py-2" type="button" id="preset-upregulated-targets"><i class="fa-solid fa-arrow-up text-success me-2"></i>Targets of Upregulated miRNAs</button></li>
+                                            <li><button class="dropdown-item py-2" type="button" id="preset-downregulated-targets"><i class="fa-solid fa-arrow-down text-danger me-2"></i>Targets of Downregulated miRNAs</button></li>
+                                            <li><button class="dropdown-item py-2" type="button" id="preset-sfari-targets"><i class="fa-solid fa-star text-warning me-2"></i>SFARI High-Confidence (Cat 1) Targets</button></li>
+                                        </ul>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <label for="threshold-value" class="form-label fw-bold text-secondary mb-1 small text-uppercase" style="letter-spacing: 0.05em;">Significance Threshold</label>
-                                        <select id="threshold-value" class="form-select form-select-sm" aria-label="Significance Cutoff">
-                                            <option value="0.01">p_adj &lt; 0.01 (Strict)</option>
-                                            <option value="0.05" selected>p_adj &lt; 0.05 (Standard)</option>
-                                            <option value="0.10">p_adj &lt; 0.10 (Relaxed)</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- Run Action Button -->
-                                <div>
-                                    <button type="button" class="btn btn-primary w-100 py-2 fw-bold shadow-sm" id="btn-run-enrichment">
-                                        <i class="fa-solid fa-play me-1"></i> Run g:Profiler Functional Enrichment
-                                    </button>
                                 </div>
                             </div>
+
+                            <!-- Collapsible Gene Editor & Chips Box -->
+                            <div class="bg-light p-3 rounded-3 border mb-3">
+                                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="small fw-bold text-secondary text-uppercase" style="letter-spacing: 0.05em;">Resolved Target Genes:</span>
+                                        <button class="btn btn-link btn-xs p-0 text-decoration-none text-primary fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#geneEditorCollapse" aria-expanded="false" aria-controls="geneEditorCollapse">
+                                            <i class="fa-solid fa-pen-to-square me-1"></i>Edit / Paste Custom Gene Symbols ▾
+                                        </button>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-primary" id="btn-copy-genes" title="Copy gene symbols to clipboard"><i class="fa-regular fa-copy me-1"></i>Copy</button>
+                                        <span class="text-muted small">|</span>
+                                        <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-danger" id="btn-clear-genes" title="Clear gene input"><i class="fa-solid fa-trash-can me-1"></i>Clear</button>
+                                    </div>
+                                </div>
+
+                                <!-- Collapsible Textarea Input -->
+                                <div class="collapse mb-2" id="geneEditorCollapse">
+                                    <textarea id="enrichment-gene-input" class="form-control font-monospace mb-2" rows="3" placeholder="Paste or type gene symbols (e.g. PTEN, SHANK3, MECP2, CHD8, SCN2A...)" style="font-size: 0.85rem;" aria-label="Input Gene Symbols for Enrichment"></textarea>
+                                </div>
+
+                                <!-- Compact Chips Container -->
+                                <div id="enrichment-gene-chips" class="gene-chips-container" style="max-height: 120px;">
+                                    <span class="text-muted small">No genes selected. Select miRNAs from tables or click a preset above.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Run & Collapsible Advanced Settings -->
+                        <div class="mb-1">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-bold text-dark" style="font-size: 0.9rem;">
+                                    <span class="badge bg-primary text-white rounded-circle me-1" style="width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem;">2</span>
+                                    Run Overrepresentation Analysis:
+                                </span>
+                                <button class="btn btn-link btn-xs p-0 text-decoration-none text-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSettingsCollapse" aria-expanded="false" aria-controls="advancedSettingsCollapse">
+                                    <i class="fa-solid fa-sliders text-primary me-1"></i>Advanced Parameters & Ontologies ▾
+                                </button>
+                            </div>
+
+                            <!-- Collapsible Advanced Settings -->
+                            <div class="collapse mb-3" id="advancedSettingsCollapse">
+                                <div class="card p-3 border rounded-3 bg-light shadow-none">
+                                    <div class="row g-3">
+                                        <div class="col-lg-7 col-12">
+                                            <label class="form-label fw-bold text-secondary mb-2 small text-uppercase" style="letter-spacing: 0.05em;">Ontology & Pathway Databases</label>
+                                            <div class="row row-cols-2 row-cols-sm-3 g-2">
+                                                <div class="col">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input gprofiler-source" type="checkbox" value="GO:BP" id="src-gobp" checked>
+                                                        <label class="form-check-label small" for="src-gobp">
+                                                            <span class="badge badge-source badge-gobp me-1">GO:BP</span> Biological Process
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input gprofiler-source" type="checkbox" value="GO:MF" id="src-gomf" checked>
+                                                        <label class="form-check-label small" for="src-gomf">
+                                                            <span class="badge badge-source badge-gomf me-1">GO:MF</span> Molecular Function
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input gprofiler-source" type="checkbox" value="GO:CC" id="src-gocc" checked>
+                                                        <label class="form-check-label small" for="src-gocc">
+                                                            <span class="badge badge-source badge-gocc me-1">GO:CC</span> Cellular Component
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input gprofiler-source" type="checkbox" value="KEGG" id="src-kegg" checked>
+                                                        <label class="form-check-label small" for="src-kegg">
+                                                            <span class="badge badge-source badge-kegg me-1">KEGG</span> Pathways
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input gprofiler-source" type="checkbox" value="REAC" id="src-reac" checked>
+                                                        <label class="form-check-label small" for="src-reac">
+                                                            <span class="badge badge-source badge-reac me-1">REAC</span> Reactome
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input gprofiler-source" type="checkbox" value="HP" id="src-hp" checked>
+                                                        <label class="form-check-label small" for="src-hp">
+                                                            <span class="badge badge-source badge-hp me-1">HP</span> Phenotype
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input gprofiler-source" type="checkbox" value="WP" id="src-wp">
+                                                        <label class="form-check-label small" for="src-wp">
+                                                            <span class="badge badge-source badge-wp me-1">WP</span> WikiPathways
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5 col-12">
+                                            <div class="row g-2">
+                                                <div class="col-6">
+                                                    <label for="threshold-method" class="form-label fw-bold text-secondary mb-1 small text-uppercase" style="letter-spacing: 0.05em;">Multiple Testing</label>
+                                                    <select id="threshold-method" class="form-select form-select-sm" aria-label="Significance Threshold Method">
+                                                        <option value="g_SCS" selected>g:SCS (Recommended)</option>
+                                                        <option value="fdr">Benjamini-Hochberg FDR</option>
+                                                        <option value="bonferroni">Bonferroni</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label for="threshold-value" class="form-label fw-bold text-secondary mb-1 small text-uppercase" style="letter-spacing: 0.05em;">Threshold</label>
+                                                    <select id="threshold-value" class="form-select form-select-sm" aria-label="Significance Cutoff">
+                                                        <option value="0.01">p_adj &lt; 0.01</option>
+                                                        <option value="0.05" selected>p_adj &lt; 0.05</option>
+                                                        <option value="0.10">p_adj &lt; 0.10</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Primary Action Button -->
+                            <button type="button" class="btn btn-primary btn-lg w-100 py-3 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2" id="btn-run-enrichment" style="border-radius: 8px; font-family: 'Montserrat', sans-serif;">
+                                <i class="fa-solid fa-play"></i>
+                                <span>Run g:Profiler Functional Enrichment</span>
+                            </button>
                         </div>
                     </div>
 
@@ -1635,7 +1693,12 @@
                                 <h5 class="fw-bold mb-0" style="font-family: 'Montserrat', sans-serif; color: var(--primary-color);">
                                     <i class="fa-solid fa-chart-bar text-primary me-2"></i>Top 15 Enriched Biological Pathways & Ontologies
                                 </h5>
-                                <span class="text-muted small">Ranked by Significance (−log₁₀ p-adj)</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="text-muted small d-none d-md-inline">Ranked by Significance (−log₁₀ p-adj)</span>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" id="btn-export-enrichment-chart" title="Download high-resolution chart image as PNG">
+                                        <i class="fa-solid fa-image me-1"></i>Download Chart PNG
+                                    </button>
+                                </div>
                             </div>
                             <div style="height: 380px; width: 100%;">
                                 <canvas id="enrichmentChart" role="img" aria-label="Horizontal bar chart showing top enriched pathways ranked by significance"></canvas>
@@ -1746,6 +1809,68 @@
         });
         table += '</tbody></table></div>';
         return table;
+    }
+
+    function formatTargetDetails(d) {
+        if (!d) return '<div class="p-3 text-muted">No additional target interaction details available.</div>';
+
+        // Format experimental methods as distinct badges
+        const methods = (d.experimental_methods || '').split('; ').filter(Boolean);
+        const methodsHtml = methods.length > 0
+            ? methods.map(m => `<span class="badge bg-light text-dark border me-1 mb-1 px-2 py-1" style="font-size: 0.78rem;"><i class="fa-solid fa-flask text-primary me-1"></i>${m}</span>`).join('')
+            : '<span class="text-muted">—</span>';
+
+        // Format regulation with intuitive styling
+        let regBadge = '<span class="text-muted">—</span>';
+        if (d.regulation) {
+            const regLower = d.regulation.toLowerCase();
+            if (regLower.includes('negative') || regLower.includes('down')) {
+                regBadge = `<span class="badge bg-danger-subtle text-danger border px-2 py-1" style="font-size: 0.8rem;"><i class="fa-solid fa-arrow-down me-1"></i>${d.regulation}</span>`;
+            } else if (regLower.includes('positive') || regLower.includes('up')) {
+                regBadge = `<span class="badge bg-success-subtle text-success border px-2 py-1" style="font-size: 0.8rem;"><i class="fa-solid fa-arrow-up me-1"></i>${d.regulation}</span>`;
+            } else {
+                regBadge = `<span class="badge bg-secondary-subtle text-secondary border px-2 py-1" style="font-size: 0.8rem;"><i class="fa-solid fa-link me-1"></i>${d.regulation}</span>`;
+            }
+        }
+
+        // Format tissues as pills with scrollable container if many
+        const tissues = (d.tissue || '').split('; ').filter(Boolean);
+        const tissuesHtml = tissues.length > 0
+            ? tissues.map(t => `<span class="badge bg-white text-secondary border me-1 mb-1 px-2 py-1" style="font-size: 0.75rem;"><i class="fa-solid fa-location-dot text-info me-1"></i>${t}</span>`).join('')
+            : '<span class="text-muted">—</span>';
+
+        return `
+            <div class="table-responsive p-3" style="background-color: var(--secondary-color); border-radius: 8px;">
+                <div class="card border-0 shadow-sm p-3" style="background-color: #ffffff; border-radius: 8px; border: 1px solid #E2E8F0 !important;">
+                    <div class="row g-3">
+                        <div class="col-lg-4 col-md-6">
+                            <div class="fw-bold text-secondary small text-uppercase mb-1" style="letter-spacing: 0.05em;">
+                                <i class="fa-solid fa-vial-circle-check text-primary me-1"></i>Experimental Methods
+                            </div>
+                            <div class="d-flex flex-wrap gap-1 mt-1">
+                                ${methodsHtml}
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="fw-bold text-secondary small text-uppercase mb-1" style="letter-spacing: 0.05em;">
+                                <i class="fa-solid fa-sliders text-primary me-1"></i>Observed Regulation
+                            </div>
+                            <div class="mt-1">
+                                ${regBadge}
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-md-12">
+                            <div class="fw-bold text-secondary small text-uppercase mb-1" style="letter-spacing: 0.05em;">
+                                <i class="fa-solid fa-dna text-primary me-1"></i>Tissue / Cell Source
+                            </div>
+                            <div class="d-flex flex-wrap gap-1 mt-1" style="max-height: 120px; overflow-y: auto;">
+                                ${tissuesHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
     $(document).ready(function() {
@@ -1895,14 +2020,30 @@
             return table;
         }
 
+        // Selection state sets for miRNA tables
+        const selectedExprMature = new Set();
+        const selectedGenMature = new Set();
+
         // Expression Studies Table
         var expressionTable = initializeDataTable(
             '#expression-table',
             `expression_studies.json?v=${DB_VERSION}`,
             [
                 {
+                    "orderable": false,
+                    "searchable": false,
+                    "className": 'select-checkbox-cell',
+                    "data": "mature_mirna",
+                    "render": function(data, type, row) {
+                        const mature = (data || '').replace(/<[^>]*>/g, '').trim();
+                        const isChecked = selectedExprMature.has(mature) ? 'checked' : '';
+                        return `<input type="checkbox" class="form-check-input expr-row-check" value="${mature}" ${isChecked} aria-label="Select ${mature}">`;
+                    }
+                },
+                {
                     "className":      'details-control',
                     "orderable":      false,
+                    "searchable":     false,
                     "data":           null,
                     "defaultContent": '<i class="fa-solid fa-plus-circle"></i>'
                 },
@@ -1911,12 +2052,7 @@
                     "data": "mature_mirna",
                     "render": function(data) {
                         if (!data) return '<span class="text-muted">—</span>';
-                        return `<div class="d-flex align-items-center justify-content-between gap-1">
-                            ${data}
-                            <button type="button" class="btn btn-quick-enrich" data-mirna="${data.replace(/<[^>]*>/g, '').trim()}" title="Run g:Profiler enrichment on targets of this miRNA">
-                                <i class="fa-solid fa-dna text-primary me-1"></i>Enrich
-                            </button>
-                        </div>`;
+                        return `<span class="fw-semibold text-dark font-monospace">${data}</span>`;
                     }
                 },
                 { "data": "expression_change" },
@@ -1934,8 +2070,20 @@
             `other_studies.json?v=${DB_VERSION}`,
             [
                 {
+                    "orderable": false,
+                    "searchable": false,
+                    "className": 'select-checkbox-cell',
+                    "data": "mature_mirna",
+                    "render": function(data, type, row) {
+                        const mature = (data || '').replace(/<[^>]*>/g, '').trim();
+                        const isChecked = selectedGenMature.has(mature) ? 'checked' : '';
+                        return `<input type="checkbox" class="form-check-input gen-row-check" value="${mature}" ${isChecked} aria-label="Select ${mature}">`;
+                    }
+                },
+                {
                     "className":      'details-control',
                     "orderable":      false,
+                    "searchable":     false,
                     "data":           null,
                     "defaultContent": '<i class="fa-solid fa-plus-circle"></i>'
                 },
@@ -1944,12 +2092,7 @@
                     "data": "mature_mirna",
                     "render": function(data) {
                         if (!data) return '<span class="text-muted">—</span>';
-                        return `<div class="d-flex align-items-center justify-content-between gap-1">
-                            ${data}
-                            <button type="button" class="btn btn-quick-enrich" data-mirna="${data.replace(/<[^>]*>/g, '').trim()}" title="Run g:Profiler enrichment on targets of this miRNA">
-                                <i class="fa-solid fa-dna text-primary me-1"></i>Enrich
-                            </button>
-                        </div>`;
+                        return `<span class="fw-semibold text-dark font-monospace">${data}</span>`;
                     }
                 },
                 { "data": "alteration" },
@@ -1963,6 +2106,13 @@
             `target_genes.json?v=${DB_VERSION}`,
             [
                 {
+                    "className":      'details-control',
+                    "orderable":      false,
+                    "searchable":     false,
+                    "data":           null,
+                    "defaultContent": '<i class="fa-solid fa-plus-circle"></i>'
+                },
+                {
                     "data": "precursor_mirna",
                     "render": function(data) {
                         if (!data) return '<span class="text-muted">—</span>';
@@ -1975,12 +2125,7 @@
                     "data": "mature_mirna",
                     "render": function(data) {
                         if (!data) return '<span class="text-muted">—</span>';
-                        return `<div class="d-flex align-items-center justify-content-between gap-1">
-                            <a href="https://www.mirbase.org/mature/${data}" target="_blank" class="fw-bold text-decoration-none" style="color: var(--primary-color);">${data}</a>
-                            <button type="button" class="btn btn-quick-enrich" data-mirna="${data}" title="Run g:Profiler enrichment on targets of ${data}">
-                                <i class="fa-solid fa-dna text-primary me-1"></i>Enrich
-                            </button>
-                        </div>`;
+                        return `<a href="https://www.mirbase.org/mature/${data}" target="_blank" class="fw-bold text-decoration-none font-monospace" style="color: var(--primary-color);">${data}</a>`;
                     }
                 },
                 {
@@ -2026,21 +2171,21 @@
                         return '<span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded-pill" style="font-size: 0.75rem;"><i class="fa-solid fa-microchip me-1"></i>High-Throughput</span>';
                     }
                 },
-                { "data": "experimental_methods" },
-                { "data": "regulation" },
-                { "data": "tissue" },
                 {
                     "data": "pmids",
                     "render": function(data) {
                         if (!data) return '<span class="text-muted">—</span>';
                         const list = data.split('; ').filter(p => p);
-                        let html = list.slice(0, 4).map(p => `<a href="https://pubmed.ncbi.nlm.nih.gov/${p}/" target="_blank" class="badge bg-secondary-subtle text-secondary border text-decoration-none me-1" style="font-size: 0.75rem;">${p}</a>`).join('');
+                        let html = list.slice(0, 4).map(p => `<a href="https://pubmed.ncbi.nlm.nih.gov/${p}/" target="_blank" class="badge bg-secondary-subtle text-secondary border text-decoration-none me-1 mb-1" style="font-size: 0.75rem;">${p}</a>`).join('');
                         if (list.length > 4) {
                             html += `<span class="badge bg-light text-muted border" style="font-size: 0.75rem;">+${list.length - 4} more</span>`;
                         }
                         return html;
                     }
-                }
+                },
+                { "data": "experimental_methods", "visible": false },
+                { "data": "regulation", "visible": false },
+                { "data": "tissue", "visible": false }
             ]
         );
 
@@ -2057,7 +2202,12 @@
                 icon.removeClass('fa-minus-circle').addClass('fa-plus-circle');
             }
             else {
-                row.child( format(row.data().StudyDetails) ).show();
+                var rowData = row.data();
+                if (rowData && rowData.StudyDetails) {
+                    row.child( format(rowData.StudyDetails) ).show();
+                } else if (rowData) {
+                    row.child( formatTargetDetails(rowData) ).show();
+                }
                 tr.addClass('details');
                 icon.removeClass('fa-plus-circle').addClass('fa-minus-circle');
             }
@@ -2093,11 +2243,33 @@
             myModal.show();
         });
 
+        // Helper to escape regex special characters
+        function escapeRegex(text) {
+            return (text || '').replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        }
+
+        // Helper to parse multiple tokens (space, comma, semicolon, newline, tab)
+        function parseTokens(text) {
+            if (!text) return [];
+            return text.split(/[\s,;\n\t]+/).map(t => t.trim()).filter(t => t.length > 0);
+        }
+
+        // Helper to build a regex pattern from tokens
+        function buildTokenRegex(tokens, exact = false) {
+            if (!tokens || tokens.length === 0) return '';
+            const escaped = tokens.map(t => escapeRegex(t));
+            if (exact) {
+                return '^(' + escaped.join('|') + ')$';
+            }
+            return '(' + escaped.join('|') + ')';
+        }
+
         // Render Dismissible Active Filter Chips above Tables
         function renderActiveFilterChips(filters) {
             const chips = [];
-            if (filters.mirnaId) chips.push({ label: `Hairpin: ${filters.mirnaId}`, field: 'mirna-id', val: filters.mirnaId });
+            if (filters.mirnaId) chips.push({ label: `Hairpins: ${filters.mirnaId}`, field: 'mirna-id', val: filters.mirnaId });
             if (filters.matureId) chips.push({ label: `Mature: ${filters.matureId}`, field: 'mature-id', val: filters.matureId });
+            if (filters.targetGene) chips.push({ label: `Genes: ${filters.targetGene}`, field: 'target-gene', val: filters.targetGene });
             if (filters.exprChange) chips.push({ label: `Expression: ${filters.exprChange}`, field: 'expression-change', val: filters.exprChange });
             if (filters.overallEvidence) chips.push({ label: `Evidence: ${filters.overallEvidence}`, field: 'overall-evidence', val: filters.overallEvidence });
             if (filters.selectedTissues && filters.selectedTissues.length > 0) {
@@ -2107,7 +2279,6 @@
             }
             if (filters.geneticAlteration) chips.push({ label: `Variant: ${filters.geneticAlteration}`, field: 'genetic-alteration', val: filters.geneticAlteration });
             if (filters.studyDesc) chips.push({ label: `Desc: ${filters.studyDesc}`, field: 'study-desc', val: filters.studyDesc });
-            if (filters.targetGene) chips.push({ label: `Gene: ${filters.targetGene}`, field: 'target-gene', val: filters.targetGene });
             if (filters.sfariCategory) chips.push({ label: `SFARI: ${filters.sfariCategory}`, field: 'sfari-category', val: filters.sfariCategory });
             if (filters.evidenceLevel) chips.push({ label: `Level: ${filters.evidenceLevel}`, field: 'evidence-level', val: filters.evidenceLevel });
             if (filters.targetMethod) chips.push({ label: `Method: ${filters.targetMethod}`, field: 'target-method', val: filters.targetMethod });
@@ -2144,12 +2315,17 @@
             $('#resetFilters').trigger('click');
         });
 
-        // Advanced Filtering Logic
+        // Advanced Filtering Logic with Multi-Token & Cross-Table Gene Mapping
         function applyAdvancedFilters() {
             // Shared Filters (applies across all tables)
-            const mirnaId = $('#filter-mirna-id').val().trim();
-            const matureId = $('#filter-mature-id').val().trim();
-            
+            const rawHairpin = $('#filter-mirna-id').val().trim();
+            const rawMature = $('#filter-mature-id').val().trim();
+            const rawTargetGene = $('#filter-target-gene').val().trim();
+
+            const hairpinTokens = parseTokens(rawHairpin);
+            const matureTokens = parseTokens(rawMature);
+            const geneTokens = parseTokens(rawTargetGene).map(g => g.toUpperCase());
+
             // Expression Studies Filters (applies to Expression tab)
             const exprChange = $('#filter-expression-change').val();
             const overallEvidence = $('#filter-overall-evidence').val();
@@ -2163,7 +2339,6 @@
             const studyDesc = $('#filter-study-desc').val().trim();
 
             // Target Genes Filters (applies to Target Genes tab)
-            const targetGene = $('#filter-target-gene').val().trim();
             const sfariCategory = $('#filter-sfari-category').val();
             const evidenceLevel = $('#filter-evidence-level').val();
             const targetMethod = $('#filter-target-method').val();
@@ -2172,14 +2347,14 @@
 
             // Calculate active filter count across all filter inputs
             let activeFilterCount = 0;
-            if (mirnaId) activeFilterCount++;
-            if (matureId) activeFilterCount++;
+            if (hairpinTokens.length > 0) activeFilterCount++;
+            if (matureTokens.length > 0) activeFilterCount++;
+            if (geneTokens.length > 0) activeFilterCount++;
             if (exprChange) activeFilterCount++;
             if (overallEvidence) activeFilterCount++;
             if (selectedTissues.length > 0) activeFilterCount++;
             if (geneticAlteration) activeFilterCount++;
             if (studyDesc) activeFilterCount++;
-            if (targetGene) activeFilterCount++;
             if (sfariCategory) activeFilterCount++;
             if (evidenceLevel) activeFilterCount++;
             if (targetMethod) activeFilterCount++;
@@ -2195,60 +2370,100 @@
 
             // Render active filter chips above tables
             renderActiveFilterChips({
-                mirnaId, matureId, exprChange, overallEvidence, selectedTissues,
-                geneticAlteration, studyDesc, targetGene, sfariCategory,
+                mirnaId: hairpinTokens.length > 0 ? (hairpinTokens.length > 2 ? `${hairpinTokens.length} Hairpins` : hairpinTokens.join(', ')) : '',
+                matureId: matureTokens.length > 0 ? (matureTokens.length > 2 ? `${matureTokens.length} Mature` : matureTokens.join(', ')) : '',
+                targetGene: geneTokens.length > 0 ? (geneTokens.length > 2 ? `${geneTokens.length} Genes` : geneTokens.join(', ')) : '',
+                exprChange, overallEvidence, selectedTissues,
+                geneticAlteration, studyDesc, sfariCategory,
                 evidenceLevel, targetMethod, targetRegulation, targetTissue
             });
 
+            // Mature search pattern:
+            // If matureTokens provided, search by them.
+            // Else if geneTokens provided, find miRNAs that regulate those genes.
+            let matureSearchPattern = '';
+            let matureUseRegex = false;
+
+            if (matureTokens.length > 0) {
+                matureSearchPattern = buildTokenRegex(matureTokens);
+                matureUseRegex = true;
+            } else if (geneTokens.length > 0) {
+                const targetMatures = new Set();
+                geneTokens.forEach(g => {
+                    if (geneToMature[g]) {
+                        geneToMature[g].forEach(m => targetMatures.add(m));
+                    }
+                });
+                if (targetMatures.size > 0) {
+                    matureSearchPattern = buildTokenRegex(Array.from(targetMatures));
+                    matureUseRegex = true;
+                } else {
+                    matureSearchPattern = '___NO_MATCH___';
+                    matureUseRegex = false;
+                }
+            }
+
+            const hairpinSearchPattern = buildTokenRegex(hairpinTokens);
+            const hairpinUseRegex = hairpinTokens.length > 0;
+
             // Apply filters to Expression Table
-            expressionTable.column(1).search(mirnaId);
-            expressionTable.column(2).search(matureId);
-            expressionTable.column(3).search(exprChange);
+            // Col 0: Checkbox, Col 1: Details, Col 2: Precursor, Col 3: Mature, Col 4: Expr change, Col 5: Tissue, Col 6: Overall evidence
+            expressionTable.column(2).search(hairpinSearchPattern, hairpinUseRegex, false);
+            expressionTable.column(3).search(matureSearchPattern, matureUseRegex, false);
+            expressionTable.column(4).search(exprChange);
             
             if (selectedTissues.length > 0) {
-                const escapedTissues = selectedTissues.map(t => t.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'));
+                const escapedTissues = selectedTissues.map(t => escapeRegex(t));
                 const pattern = escapedTissues.join('|');
-                expressionTable.column(4).search(pattern, true, false);
+                expressionTable.column(5).search(pattern, true, false);
             } else {
-                expressionTable.column(4).search('');
+                expressionTable.column(5).search('');
             }
             
-            expressionTable.column(5).search(overallEvidence);
+            expressionTable.column(6).search(overallEvidence);
             expressionTable.draw();
 
             // Apply filters to Genetic & Other Studies Table
-            otherTable.column(1).search(mirnaId);
-            otherTable.column(2).search(matureId);
-            otherTable.column(3).search(geneticAlteration);
-            otherTable.column(4).search(studyDesc);
+            // Col 0: Checkbox, Col 1: Details, Col 2: Precursor, Col 3: Mature, Col 4: Alteration, Col 5: Study description
+            otherTable.column(2).search(hairpinSearchPattern, hairpinUseRegex, false);
+            otherTable.column(3).search(matureSearchPattern, matureUseRegex, false);
+            otherTable.column(4).search(geneticAlteration);
+            otherTable.column(5).search(studyDesc);
             otherTable.draw();
 
             // Apply filters to Target Genes Table
-            targetsTable.column(0).search(mirnaId);
-            targetsTable.column(1).search(matureId);
-            targetsTable.column(2).search(targetGene);
+            // Col 0: Details, Col 1: Precursor, Col 2: Mature, Col 3: Target Gene, Col 5: SFARI, Col 6: Evidence, Col 8: Method, Col 9: Regulation, Col 10: Tissue
+            targetsTable.column(1).search(hairpinSearchPattern, hairpinUseRegex, false);
+            targetsTable.column(2).search(matureTokens.length > 0 ? buildTokenRegex(matureTokens) : '', matureTokens.length > 0, false);
             
-            if (sfariCategory === 'SFARI') {
-                targetsTable.column(4).search('^(?!.*Non-SFARI).*$', true, false);
-            } else if (sfariCategory === 'Non-SFARI') {
-                targetsTable.column(4).search('Non-SFARI');
-            } else if (sfariCategory) {
-                targetsTable.column(4).search(sfariCategory);
+            if (geneTokens.length > 0) {
+                const geneExactPattern = buildTokenRegex(geneTokens, true);
+                targetsTable.column(3).search(geneExactPattern, true, false);
             } else {
-                targetsTable.column(4).search('');
+                targetsTable.column(3).search('');
             }
 
-            targetsTable.column(5).search(evidenceLevel);
-            targetsTable.column(6).search(targetMethod);
-            targetsTable.column(7).search(targetRegulation);
-            targetsTable.column(8).search(targetTissue);
+            if (sfariCategory === 'SFARI') {
+                targetsTable.column(5).search('^(?!.*Non-SFARI).*$', true, false);
+            } else if (sfariCategory === 'Non-SFARI') {
+                targetsTable.column(5).search('Non-SFARI');
+            } else if (sfariCategory) {
+                targetsTable.column(5).search(sfariCategory);
+            } else {
+                targetsTable.column(5).search('');
+            }
+
+            targetsTable.column(6).search(evidenceLevel);
+            targetsTable.column(8).search(targetMethod);
+            targetsTable.column(9).search(targetRegulation);
+            targetsTable.column(10).search(targetTissue);
             targetsTable.draw();
         }
 
         const debouncedFilter = debounce(applyAdvancedFilters, 150);
 
         // Event listeners for real-time filtering
-        $('#filter-mirna-id, #filter-mature-id, #filter-study-desc, #filter-target-gene, #filter-target-tissue').on('keyup input', debouncedFilter);
+        $('#filter-mirna-id, #filter-mature-id, #filter-target-gene, #filter-study-desc, #filter-target-tissue').on('keyup input', debouncedFilter);
         $('#filter-expression-change, #filter-overall-evidence, #filter-genetic-alteration, #filter-sfari-category, #filter-evidence-level, #filter-target-method, #filter-target-regulation').on('change', applyAdvancedFilters);
         $('body').on('change', '#tissue-checkboxes input', applyAdvancedFilters);
 
@@ -2256,11 +2471,11 @@
         $('#resetFilters').on('click', function() {
             $('#filter-mirna-id').val('');
             $('#filter-mature-id').val('');
+            $('#filter-target-gene').val('');
             $('#filter-expression-change').val('');
             $('#filter-overall-evidence').val('');
             $('#filter-genetic-alteration').val('');
             $('#filter-study-desc').val('');
-            $('#filter-target-gene').val('');
             $('#filter-sfari-category').val('');
             $('#filter-evidence-level').val('');
             $('#filter-target-method').val('');
@@ -2270,19 +2485,110 @@
             applyAdvancedFilters();
         });
 
-        // Direct in-table single-miRNA quick enrichment click handler
-        $('body').on('click', '.btn-quick-enrich', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const mirna = $(this).data('mirna');
-            if (!mirna) return;
-            const scope = $('input[name="target-scope"]:checked').val() || 'all';
-            const resolved = resolveTargetGenesFromMiRNAs([mirna], [mirna], scope);
-            const enrichmentTabTrigger = new bootstrap.Tab(document.getElementById('enrichment-tab'));
-            enrichmentTabTrigger.show();
-            setEnrichmentGenes(resolved);
-            $('html, body').animate({ scrollTop: $('#enrichment').offset().top - 20 }, 300);
+        // Row Selection Checkbox Event Handlers
+        $('#expression-table tbody').on('change', '.expr-row-check', function() {
+            const val = $(this).val();
+            if ($(this).is(':checked')) {
+                selectedExprMature.add(val);
+            } else {
+                selectedExprMature.delete(val);
+            }
+            updateSelectionUI();
         });
+
+        $('.select-all-expr').on('change', function() {
+            const isChecked = $(this).is(':checked');
+            $('#expression-table tbody .expr-row-check').each(function() {
+                $(this).prop('checked', isChecked);
+                const val = $(this).val();
+                if (isChecked) selectedExprMature.add(val);
+                else selectedExprMature.delete(val);
+            });
+            updateSelectionUI();
+        });
+
+        $('#other-table tbody').on('change', '.gen-row-check', function() {
+            const val = $(this).val();
+            if ($(this).is(':checked')) {
+                selectedGenMature.add(val);
+            } else {
+                selectedGenMature.delete(val);
+            }
+            updateSelectionUI();
+        });
+
+        $('.select-all-other').on('change', function() {
+            const isChecked = $(this).is(':checked');
+            $('#other-table tbody .gen-row-check').each(function() {
+                $(this).prop('checked', isChecked);
+                const val = $(this).val();
+                if (isChecked) selectedGenMature.add(val);
+                else selectedGenMature.delete(val);
+            });
+            updateSelectionUI();
+        });
+
+        $('.btn-select-all-visible').on('click', function() {
+            const tbl = $(this).data('table');
+            if (tbl === 'expression') {
+                const rows = expressionTable.rows({ search: 'applied', page: 'current' }).data().toArray();
+                rows.forEach(r => {
+                    const m = (r.mature_mirna || '').replace(/<[^>]*>/g, '').trim();
+                    if (m) selectedExprMature.add(m);
+                });
+                expressionTable.draw(false);
+            } else if (tbl === 'genetic') {
+                const rows = otherTable.rows({ search: 'applied', page: 'current' }).data().toArray();
+                rows.forEach(r => {
+                    const m = (r.mature_mirna || '').replace(/<[^>]*>/g, '').trim();
+                    if (m) selectedGenMature.add(m);
+                });
+                otherTable.draw(false);
+            }
+            updateSelectionUI();
+        });
+
+        $('.btn-clear-selection').on('click', function() {
+            const tbl = $(this).data('table');
+            if (tbl === 'expression') {
+                selectedExprMature.clear();
+                $('.select-all-expr').prop('checked', false);
+                expressionTable.draw(false);
+            } else if (tbl === 'genetic') {
+                selectedGenMature.clear();
+                $('.select-all-other').prop('checked', false);
+                otherTable.draw(false);
+            }
+            updateSelectionUI();
+        });
+
+        function updateSelectionUI() {
+            if (selectedExprMature.size > 0) {
+                $('.expr-selected-badge').show();
+                $('.expr-selected-count').text(selectedExprMature.size);
+                $('.expr-filtered-count').text(`${selectedExprMature.size} Selected`);
+            } else {
+                $('.expr-selected-badge').hide();
+                if (expressionTable) {
+                    const exprRows = expressionTable.rows({ search: 'applied' }).data().toArray();
+                    const unique = new Set(exprRows.map(r => (r.mature_mirna || '').replace(/<[^>]*>/g, '').trim()).filter(Boolean));
+                    $('.expr-filtered-count').text(unique.size > 0 ? `${unique.size} Filtered` : 'All Filtered');
+                }
+            }
+
+            if (selectedGenMature.size > 0) {
+                $('.gen-selected-badge').show();
+                $('.gen-selected-count').text(selectedGenMature.size);
+                $('.gen-filtered-count').text(`${selectedGenMature.size} Selected`);
+            } else {
+                $('.gen-selected-badge').hide();
+                if (otherTable) {
+                    const genRows = otherTable.rows({ search: 'applied' }).data().toArray();
+                    const unique = new Set(genRows.map(r => (r.mature_mirna || '').replace(/<[^>]*>/g, '').trim()).filter(Boolean));
+                    $('.gen-filtered-count').text(unique.size > 0 ? `${unique.size} Filtered` : 'All Filtered');
+                }
+            }
+        }
 
         // ==========================================
         // FEATURE 2: FUNCTIONAL ENRICHMENT (g:Profiler)
@@ -2290,6 +2596,8 @@
         let allTargetInteractions = [];
         let matureToTargets = {};
         let hairpinToTargets = {};
+        let geneToMature = {};
+        let geneToHairpins = {};
         let geneMetaMap = {}; // geneSymbol -> { geneName, isSfari, sfariScore, maxEvidence }
         let currentEnrichmentGenes = [];
         let enrichmentChartInstance = null;
@@ -2302,12 +2610,20 @@
             .then(data => {
                 allTargetInteractions = data;
                 data.forEach(item => {
-                    const gene = item.gene_symbol;
-                    const mature = item.mature_mirna;
+                    const gene = item.gene_symbol ? item.gene_symbol.toUpperCase() : null;
+                    const mature = item.mature_mirna ? item.mature_mirna.replace(/<[^>]*>/g, '').trim() : null;
                     const hairpins = item.precursor_mirna ? item.precursor_mirna.split('; ') : [];
 
+                    // Map gene to miRNAs
+                    if (gene) {
+                        if (!geneToMature[gene]) geneToMature[gene] = new Set();
+                        if (mature) geneToMature[gene].add(mature);
+                        if (!geneToHairpins[gene]) geneToHairpins[gene] = new Set();
+                        hairpins.forEach(hp => { if (hp) geneToHairpins[gene].add(hp); });
+                    }
+
                     // Track metadata per gene
-                    if (!geneMetaMap[gene]) {
+                    if (gene && !geneMetaMap[gene]) {
                         geneMetaMap[gene] = {
                             gene_symbol: gene,
                             gene_name: item.gene_name || '',
@@ -2316,7 +2632,7 @@
                             evidences: new Set()
                         };
                     }
-                    if (item.evidence_level) {
+                    if (gene && item.evidence_level) {
                         geneMetaMap[gene].evidences.add(item.evidence_level);
                     }
 
@@ -2340,16 +2656,7 @@
 
         // Update counts of visible/filtered miRNAs across tables
         function updateFilteredCounts() {
-            if (expressionTable) {
-                const exprRows = expressionTable.rows({ search: 'applied' }).data().toArray();
-                const uniqueMature = new Set(exprRows.map(r => r.mature_mirna).filter(m => m));
-                $('.expr-filtered-count').text(uniqueMature.size > 0 ? `${uniqueMature.size}` : 'All');
-            }
-            if (otherTable) {
-                const genRows = otherTable.rows({ search: 'applied' }).data().toArray();
-                const uniqueMature = new Set(genRows.map(r => r.mature_mirna).filter(m => m));
-                $('.gen-filtered-count').text(uniqueMature.size > 0 ? `${uniqueMature.size}` : 'All');
-            }
+            updateSelectionUI();
             if (targetsTable) {
                 const targetRows = targetsTable.rows({ search: 'applied' }).data().toArray();
                 const uniqueGenes = new Set(targetRows.map(r => r.gene_symbol).filter(g => g));
@@ -2456,6 +2763,7 @@
 
             container.html(chipsHtml);
             $('#gene-set-stats').html(`<strong>${geneList.length}</strong> Genes (<strong class="text-danger">${sfariCount}</strong> SFARI)`);
+            $('#btn-run-enrichment span').text(geneList.length > 0 ? `Run g:Profiler Functional Enrichment (${geneList.length} Target Genes)` : 'Run g:Profiler Functional Enrichment');
         }
 
         // Parse user-typed gene symbols from textarea
@@ -2490,24 +2798,54 @@
             let matureList = [];
             let hairpinList = [];
             let directGenes = [];
+            let originDesc = '';
 
-            if (sourceTable === 'expression' || sourceTable === 'all') {
-                const rows = expressionTable.rows({ search: 'applied' }).data().toArray();
-                rows.forEach(r => {
-                    if (r.mature_mirna) matureList.push(r.mature_mirna);
-                    if (r.precursor_mirna) hairpinList.push(r.precursor_mirna);
-                });
-            }
-            if (sourceTable === 'genetic' || (sourceTable === 'all' && matureList.length === 0)) {
-                const rows = otherTable.rows({ search: 'applied' }).data().toArray();
-                rows.forEach(r => {
-                    if (r.mature_mirna) matureList.push(r.mature_mirna);
-                    if (r.precursor_mirna) hairpinList.push(r.precursor_mirna);
-                });
-            }
-            if (sourceTable === 'targets') {
+            if (sourceTable === 'expression') {
+                if (selectedExprMature.size > 0) {
+                    matureList = Array.from(selectedExprMature);
+                    originDesc = `${matureList.length} Selected miRNAs from Expression Studies`;
+                } else {
+                    const rows = expressionTable.rows({ search: 'applied' }).data().toArray();
+                    rows.forEach(r => {
+                        const m = (r.mature_mirna || '').replace(/<[^>]*>/g, '').trim();
+                        if (m) matureList.push(m);
+                        if (r.precursor_mirna) hairpinList.push(r.precursor_mirna);
+                    });
+                    originDesc = `Filtered miRNAs from Expression Studies`;
+                }
+            } else if (sourceTable === 'genetic') {
+                if (selectedGenMature.size > 0) {
+                    matureList = Array.from(selectedGenMature);
+                    originDesc = `${matureList.length} Selected miRNAs from Genetic Studies`;
+                } else {
+                    const rows = otherTable.rows({ search: 'applied' }).data().toArray();
+                    rows.forEach(r => {
+                        const m = (r.mature_mirna || '').replace(/<[^>]*>/g, '').trim();
+                        if (m) matureList.push(m);
+                        if (r.precursor_mirna) hairpinList.push(r.precursor_mirna);
+                    });
+                    originDesc = `Filtered miRNAs from Genetic Studies`;
+                }
+            } else if (sourceTable === 'targets') {
                 const rows = targetsTable.rows({ search: 'applied' }).data().toArray();
-                directGenes = rows.map(r => r.gene_symbol).filter(g => g);
+                directGenes = rows.map(r => r.gene_symbol).filter(Boolean);
+                originDesc = `Filtered Target Genes`;
+            } else { // 'all' or default preset
+                if (selectedExprMature.size > 0) {
+                    matureList = Array.from(selectedExprMature);
+                    originDesc = `${matureList.length} Selected miRNAs from Expression Studies`;
+                } else if (selectedGenMature.size > 0) {
+                    matureList = Array.from(selectedGenMature);
+                    originDesc = `${matureList.length} Selected miRNAs from Genetic Studies`;
+                } else {
+                    const rows = expressionTable.rows({ search: 'applied' }).data().toArray();
+                    rows.forEach(r => {
+                        const m = (r.mature_mirna || '').replace(/<[^>]*>/g, '').trim();
+                        if (m) matureList.push(m);
+                        if (r.precursor_mirna) hairpinList.push(r.precursor_mirna);
+                    });
+                    originDesc = `Filtered miRNAs from Current Table`;
+                }
             }
 
             const scope = $('input[name="target-scope"]:checked').val() || 'all';
@@ -2524,6 +2862,12 @@
             enrichmentTabTrigger.show();
 
             setEnrichmentGenes(resolvedGenes);
+
+            if (originDesc) {
+                $('#enrichment-origin-banner').removeClass('d-none').html(
+                    `<i class="fa-solid fa-circle-check text-success me-2"></i>Loaded <strong>${resolvedGenes.length} target genes</strong> from <strong>${originDesc}</strong>.`
+                );
+            }
 
             // Auto-scroll to top of enrichment panel
             $('html, body').animate({ scrollTop: $('#enrichment').offset().top - 20 }, 300);
@@ -2754,7 +3098,8 @@
                             data: chartScores,
                             backgroundColor: chartColors,
                             borderRadius: 6,
-                            borderWidth: 0
+                            borderWidth: 0,
+                            maxBarThickness: 26
                         }]
                     },
                     options: {
@@ -2888,11 +3233,25 @@
                         pageLength: 10,
                         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
                         dom: 'Bfrt<"bottom-controls"i<"bottom-right"lp>>',
-                        buttons: []
+                        buttons: [],
+                        initComplete: function() {
+                            $('#enrichment-results-table_filter input').attr('placeholder', 'Search enriched terms, IDs, genes...');
+                            const tooltipTriggerList = document.querySelectorAll('#enrichment-results-table th[data-bs-toggle="tooltip"]');
+                            [...tooltipTriggerList].forEach(el => new bootstrap.Tooltip(el));
+                        }
                     });
                 }
 
-                // 4. Bind Export CSV & External Portal Buttons
+                // 4. Bind Export CSV, Export Chart Image & External Portal Buttons
+                $('#btn-export-enrichment-chart').off('click').on('click', function() {
+                    if (!enrichmentChartInstance) return;
+                    const url = enrichmentChartInstance.toBase64Image('image/png', 1.0);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `mir4ASD_enrichment_chart_${new Date().toISOString().slice(0,10)}.png`;
+                    link.click();
+                });
+
                 $('#btn-export-enrichment-csv').off('click').on('click', function() {
                     const csvRows = [
                         ['Source', 'Term_ID', 'Term_Name', 'Adjusted_P_Value', 'Intersection_Size', 'Query_Size', 'Term_Size', 'Intersecting_Genes'].join(',')
@@ -2918,27 +3277,8 @@
 
                 $('#btn-open-gprofiler-web').off('click').on('click', function() {
                     if (!queryGenes || queryGenes.length === 0) return;
-                    // Dynamic form submission to support arbitrary large gene sets via POST
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = 'https://biit.cs.ut.ee/gprofiler/gost';
-                    form.target = '_blank';
-
-                    const orgInput = document.createElement('input');
-                    orgInput.type = 'hidden';
-                    orgInput.name = 'organism';
-                    orgInput.value = 'hsapiens';
-                    form.appendChild(orgInput);
-
-                    const queryInput = document.createElement('input');
-                    queryInput.type = 'hidden';
-                    queryInput.name = 'query';
-                    queryInput.value = queryGenes.join(' ');
-                    form.appendChild(queryInput);
-
-                    document.body.appendChild(form);
-                    form.submit();
-                    document.body.removeChild(form);
+                    const url = 'https://biit.cs.ut.ee/gprofiler/gost?organism=hsapiens&query=' + encodeURIComponent(queryGenes.join(' '));
+                    window.open(url, '_blank');
                 });
             })
             .catch(err => {
@@ -2949,18 +3289,24 @@
             });
         });
 
-        // Drawer slide-out toggle actions
-        $('#closeFilterDrawer, #drawerBackdrop, #closeFilterDrawerBtn').on('click', function() {
+        // Drawer slide-out toggle actions & keyboard accessibility
+        function closeDrawer() {
             $('#filterDrawer').removeClass('open').attr('aria-hidden', 'true');
             $('#drawerBackdrop').removeClass('show');
             $('.btn-filter').attr('aria-expanded', 'false');
+        }
+
+        $('#closeFilterDrawer, #drawerBackdrop, #closeFilterDrawerBtn').on('click', closeDrawer);
+
+        $(document).on('keydown', function(e) {
+            if (e.key === 'Escape' && $('#filterDrawer').hasClass('open')) {
+                closeDrawer();
+            }
         });
 
         // Drawer enrichment button closes drawer and switches to enrichment
         $('#drawer-btn-enrich').on('click', function() {
-            $('#filterDrawer').removeClass('open').attr('aria-hidden', 'true');
-            $('#drawerBackdrop').removeClass('show');
-            $('.btn-filter').attr('aria-expanded', 'false');
+            closeDrawer();
             $('#preset-active-filter').trigger('click');
         });
     });
@@ -2982,43 +3328,43 @@
             <!-- 1. Shared Filters -->
             <div class="filter-section-card">
                 <div class="filter-section-header">
-                    <h6><i class="fa-solid fa-globe text-primary me-2"></i>Shared miRNA Filters</h6>
+                    <h6><i class="fa-solid fa-globe text-primary me-2"></i>Shared Batch Search</h6>
                     <span class="badge bg-primary-subtle text-primary border rounded-pill" style="font-size: 0.7rem;">All Tables</span>
                 </div>
                 
-                <!-- Search miRNA Hairpin ID -->
+                <!-- Search miRNA Hairpin ID (Batch support) -->
                 <div class="mb-3">
-                    <label for="filter-mirna-id" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">miRNA Hairpin ID</label>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="text" id="filter-mirna-id" class="form-control border-start-0 ps-0" placeholder="e.g. hsa-let-7a-1" aria-label="Filter by miRNA Hairpin ID">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label for="filter-mirna-id" class="form-label fw-bold text-secondary mb-0" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">miRNA Hairpin ID(s)</label>
+                        <span class="text-muted" style="font-size: 0.68rem;">Commas, spaces, or lines</span>
                     </div>
+                    <textarea id="filter-mirna-id" class="form-control font-monospace" rows="2" placeholder="e.g. hsa-let-7a-1, hsa-mir-132, hsa-mir-146a..." style="font-size: 0.8rem;" aria-label="Filter by miRNA Hairpin ID(s)"></textarea>
                 </div>
                 
-                <!-- Search miRNA Mature ID -->
-                <div class="mb-0">
-                    <label for="filter-mature-id" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">miRNA Mature ID</label>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="text" id="filter-mature-id" class="form-control border-start-0 ps-0" placeholder="e.g. hsa-let-7a-5p" aria-label="Filter by miRNA Mature ID">
+                <!-- Search miRNA Mature ID (Batch support) -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label for="filter-mature-id" class="form-label fw-bold text-secondary mb-0" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">miRNA Mature ID(s)</label>
+                        <span class="text-muted" style="font-size: 0.68rem;">Commas, spaces, or lines</span>
                     </div>
+                    <textarea id="filter-mature-id" class="form-control font-monospace" rows="2" placeholder="e.g. hsa-let-7a-5p, hsa-miR-132-3p, hsa-miR-146a-5p..." style="font-size: 0.8rem;" aria-label="Filter by miRNA Mature ID(s)"></textarea>
+                </div>
+
+                <!-- Search by Regulated Target Genes (Batch support across tables) -->
+                <div class="mb-0">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label for="filter-target-gene" class="form-label fw-bold text-secondary mb-0" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Target Gene Symbol(s)</label>
+                        <span class="text-muted" style="font-size: 0.68rem;">Find miRNAs for genes</span>
+                    </div>
+                    <textarea id="filter-target-gene" class="form-control font-monospace" rows="2" placeholder="e.g. PTEN, SHANK3, MECP2, CHD8, SCN2A..." style="font-size: 0.8rem;" aria-label="Search miRNAs for Target Genes"></textarea>
                 </div>
             </div>
 
             <!-- 2. Target Genes Filters -->
             <div class="filter-section-card">
                 <div class="filter-section-header">
-                    <h6><i class="fa-solid fa-bullseye text-primary me-2"></i>Target Genes Filters</h6>
+                    <h6><i class="fa-solid fa-bullseye text-primary me-2"></i>Target Annotation Filters</h6>
                     <span class="badge bg-primary-subtle text-primary border rounded-pill" style="font-size: 0.7rem;">Targets Tab</span>
-                </div>
-
-                <!-- Search Target Gene Symbol -->
-                <div class="mb-3">
-                    <label for="filter-target-gene" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Target Gene Symbol</label>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="text" id="filter-target-gene" class="form-control border-start-0 ps-0" placeholder="e.g. PTEN, SHANK3, MECP2..." aria-label="Filter by Target Gene Symbol">
-                    </div>
                 </div>
 
                 <!-- SFARI ASD Category -->
@@ -3177,6 +3523,10 @@
           <div class="modal-body text-center p-4 bg-white">
             <img id="modalImage" src="" alt="Full size figure" class="img-fluid rounded shadow-sm" style="max-height: 80vh;">
           </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Floating Back-to-Top Button -->
     <button type="button" class="btn back-to-top" id="btn-back-to-top" aria-label="Scroll back to top of page" title="Scroll to top">
         <i class="fa-solid fa-arrow-up"></i>

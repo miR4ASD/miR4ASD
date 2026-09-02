@@ -203,3 +203,59 @@ def test_target_resolution_for_enrichment():
     query_payload = sorted(list(genes_132))
     assert all(isinstance(g, str) and len(g) > 0 for g in query_payload)
 
+
+def test_multi_mirna_and_gene_mapping():
+    """Verify multi-miRNA batch resolution and reverse gene-to-miRNA mapping."""
+    with open("target_genes.json", "r") as f:
+        targets = json.load(f)
+
+    # Build bidirectional maps
+    mature_to_genes = {}
+    gene_to_matures = {}
+    for item in targets:
+        mature = item.get("mature_mirna")
+        gene = item.get("gene_symbol")
+        if mature and gene:
+            mature_to_genes.setdefault(mature, set()).add(gene)
+            gene_to_matures.setdefault(gene.upper(), set()).add(mature)
+
+    # 1. Multi-miRNA selection union test
+    selected_mirnas = ["hsa-let-7a-5p", "hsa-miR-132-3p"]
+    combined_targets = set()
+    for m in selected_mirnas:
+        if m in mature_to_genes:
+            combined_targets.update(mature_to_genes[m])
+    assert len(combined_targets) > len(mature_to_genes["hsa-let-7a-5p"])
+    assert len(combined_targets) > len(mature_to_genes["hsa-miR-132-3p"])
+
+    # 2. Multi-gene to miRNAs search test
+    query_genes = ["PTEN", "SHANK3"]
+    regulating_mirnas = set()
+    for g in query_genes:
+        if g in gene_to_matures:
+            regulating_mirnas.update(gene_to_matures[g])
+    assert len(regulating_mirnas) > 0
+    # Both PTEN and SHANK3 have validated miRNAs in DIANA-TarBase
+    assert any("miR" in m or "let" in m for m in regulating_mirnas)
+
+
+def test_target_genes_child_details_structure():
+    """Verify target interactions contain required metadata fields for child rows."""
+    with open("target_genes.json", "r") as f:
+        targets = json.load(f)
+
+    assert len(targets) > 0
+    # Sample verification for required child row fields
+    for item in targets[:100]:
+        assert "experimental_methods" in item
+        assert "regulation" in item
+        assert "tissue" in item
+        assert "pmids" in item
+        # Verify methods can be split cleanly
+        methods = [
+            m.strip() for m in item["experimental_methods"].split(";") if m.strip()
+        ]
+        assert len(methods) > 0
+
+
+
