@@ -845,7 +845,7 @@
                                         </span>
                                         <div>
                                             <h6 class="mb-1" style="font-weight: 700; color: #2D3748;">Validated Target Genes</h6>
-                                            <span style="font-size: 0.9rem; color: #718096;">Incorporates DIANA-TarBase v9.0 strong experimental targets cross-referenced with SFARI Gene ASD scores.</span>
+                                            <span style="font-size: 0.9rem; color: #718096;">Incorporates miRTarBase 10.0 and DIANA-TarBase v9.0 experimental targets with consensus tagging, cross-referenced with SFARI Gene ASD scores.</span>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-start">
@@ -1186,12 +1186,23 @@
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Evidence Level</strong></td>
-                                                                <td>Experimental evidence classification tier from DIANA-TarBase v9.0.</td>
+                                                                <td>Experimental evidence classification tier from miRTarBase 10.0 and DIANA-TarBase v9.0.</td>
                                                                 <td>
                                                                     <ul class="mb-0 ps-3" style="font-size: 0.85rem;">
                                                                         <li><span class="badge bg-success-subtle text-success border rounded-pill">Strong Evidence:</span> Direct low-throughput molecular assays (Luciferase Reporter, Western Blot, qPCR, Northern Blot, ELISA).</li>
                                                                         <li><span class="badge bg-primary-subtle text-primary border rounded-pill">Direct Binding (CLIP/CLASH):</span> High-throughput physical cross-linking and sequencing (HITS-CLIP, PAR-CLIP, CLASH, qCLASH, RIP-Seq, AGO-IP).</li>
                                                                         <li><span class="badge bg-secondary-subtle text-secondary border rounded-pill">High-Throughput Expression:</span> Whole-transcriptome profiling (RNA-Seq, Microarrays, sRNA-Seq).</li>
+                                                                    </ul>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Database Source</strong></td>
+                                                                <td>Curated database source verifying the miRNA-target interaction.</td>
+                                                                <td>
+                                                                    <ul class="mb-0 ps-3" style="font-size: 0.85rem;">
+                                                                        <li><span class="badge bg-success-subtle text-success border rounded-pill">miRTarBase 10.0:</span> Validated interaction curated from miRTarBase 10.0.</li>
+                                                                        <li><span class="badge bg-light text-secondary border rounded-pill">DIANA-TarBase v9.0:</span> Experimentally supported interaction from DIANA-TarBase v9.0.</li>
+                                                                        <li><span class="badge bg-primary-subtle text-primary border rounded-pill"><i class="fa-solid fa-check-double text-warning me-1"></i>TarBase & miRTarBase (Consensus):</span> Cross-validated independently in <em>both</em> miRTarBase 10.0 and DIANA-TarBase v9.0.</li>
                                                                     </ul>
                                                                 </td>
                                                             </tr>
@@ -1495,7 +1506,7 @@
                     <div class="alert border-0 shadow-sm mb-3 py-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-2" style="background-color: #EBF8FF; color: #2B6CB0; border-radius: 8px;">
                         <div>
                             <i class="fa-solid fa-circle-info me-2"></i>
-                            <strong>Experimentally Supported miRNA Target Genes:</strong> Sourced from <strong>DIANA-TarBase v9.0</strong> across all experimental assay tiers cross-referenced with <strong>SFARI Gene</strong> ASD risk annotations.
+                            <strong>Experimentally Supported miRNA Target Genes:</strong> Sourced from <strong>miRTarBase 10.0</strong> and <strong>DIANA-TarBase v9.0</strong> across experimental assay tiers cross-referenced with <strong>SFARI Gene</strong> ASD risk annotations.
                         </div>
                         <div class="d-flex flex-wrap gap-1">
                             <span class="badge bg-danger-subtle text-danger border px-2 py-1 rounded-pill"><i class="fa-solid fa-star me-1"></i>SFARI Cat 1</span>
@@ -1504,10 +1515,42 @@
                             <span class="badge border px-2 py-1 rounded-pill" style="background-color: #f3e8ff !important; color: #6b21a8 !important; border-color: #e9d5ff !important;"><i class="fa-solid fa-dna me-1"></i>Syndromic</span>
                         </div>
                     </div>
+
+                    <!-- Target Database Selection Toolbar (miRTarBase default) -->
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3 p-2 bg-light border rounded-3">
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <span class="small fw-bold text-dark"><i class="fa-solid fa-database text-primary me-1"></i>Database Source:</span>
+                            <div class="btn-group btn-group-sm" role="group" id="target-db-switcher">
+                                <input type="radio" class="btn-check" name="target-db-radio" id="db-mirtarbase" value="mirtarbase" checked autocomplete="off">
+                                <label class="btn btn-outline-primary fw-semibold" for="db-mirtarbase" title="Interactions supported by miRTarBase 10.0 (Default)">
+                                    <i class="fa-solid fa-check me-1"></i>miRTarBase 10.0 (Default)
+                                </label>
+
+                                <input type="radio" class="btn-check" name="target-db-radio" id="db-consensus" value="consensus" autocomplete="off">
+                                <label class="btn btn-outline-primary fw-semibold" for="db-consensus" title="Cross-validated in BOTH miRTarBase & DIANA-TarBase">
+                                    <i class="fa-solid fa-check-double me-1 text-warning"></i>Consensus (Both DBs)
+                                </label>
+
+                                <input type="radio" class="btn-check" name="target-db-radio" id="db-tarbase" value="tarbase" autocomplete="off">
+                                <label class="btn btn-outline-primary fw-semibold" for="db-tarbase" title="Interactions supported by DIANA-TarBase v9.0">
+                                    DIANA-TarBase v9.0
+                                </label>
+
+                                <input type="radio" class="btn-check" name="target-db-radio" id="db-all" value="all" autocomplete="off">
+                                <label class="btn btn-outline-primary fw-semibold" for="db-all" title="All merged interactions across both databases">
+                                    All Sources (Union)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-white text-secondary border"><span id="db-active-count" class="fw-bold text-primary">17,150</span> Target Interactions</span>
+                        </div>
+                    </div>
+
                     <div class="filter-action-banner d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
                         <div class="d-flex align-items-center gap-2">
                             <span class="badge bg-primary-subtle text-primary border rounded-pill px-2 py-1"><i class="fa-solid fa-bolt me-1 text-warning"></i>Systems Biology</span>
-                            <span class="text-secondary small d-none d-md-inline">Filter targets by gene symbol, evidence tier, or SFARI risk, then send to g:Profiler enrichment.</span>
+                            <span class="text-secondary small d-none d-md-inline">Filter targets by gene symbol, database source, evidence tier, or SFARI risk, then send to g:Profiler enrichment.</span>
                         </div>
                         <button type="button" class="btn btn-sm btn-primary fw-bold btn-analyze-filtered shadow-sm" data-source-table="targets">
                             <i class="fa-solid fa-dna me-1"></i> Run Enrichment (<span class="target-filtered-count">All Filtered</span> Targets)
@@ -1527,7 +1570,8 @@
                                 <th data-bs-toggle="tooltip" title="Official HGNC gene symbol (hyperlinked directly to GeneCards human gene catalog).">Target Gene</th>
                                 <th data-bs-toggle="tooltip" title="Full protein-coding gene name and biological function description.">Gene Description</th>
                                 <th data-bs-toggle="tooltip" title="SFARI Gene autism susceptibility tier: Category 1 (High Confidence), Cat 2 (Candidate), Cat 3 (Suggestive), or Syndromic.">ASD Susceptibility (SFARI)</th>
-                                <th data-bs-toggle="tooltip" title="DIANA-TarBase validation tier: Strong Evidence (Reporter/WB/qPCR), CLIP/CLASH (Physical binding), or High-Throughput Expression.">Evidence Level</th>
+                                <th data-bs-toggle="tooltip" title="Experimental validation tier: Strong Evidence (Reporter/WB/qPCR), CLIP/CLASH (Physical binding), or High-Throughput Expression.">Evidence Level</th>
+                                <th data-bs-toggle="tooltip" title="Experimental target interaction database provenance: miRTarBase 10.0, DIANA-TarBase v9.0, or Consensus (Both).">Database Source</th>
                                 <th data-bs-toggle="tooltip" title="PubMed Identifiers (PMIDs) of primary research articles supporting the interaction.">PubMed Reference</th>
                                 <th>Experimental Methods</th>
                                 <th>Regulation</th>
@@ -1572,6 +1616,34 @@
                                 <span id="gene-set-health-badge" class="badge bg-secondary-subtle text-secondary border rounded-pill" style="font-size: 0.75rem;">
                                     Loading...
                                 </span>
+                            </div>
+                        </div>
+
+                        <!-- Target Database Source Selector (miRTarBase default) -->
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary text-uppercase mb-1" style="font-size: 0.75rem; letter-spacing: 0.05em;">
+                                <i class="fa-solid fa-database text-primary me-1"></i>Target Interaction Database:
+                            </label>
+                            <div class="btn-group w-100 flex-wrap" role="group" aria-label="Target Database Selector">
+                                <input type="radio" class="btn-check" name="enrichment-db-source" id="enrich-db-mirtarbase" value="mirtarbase" checked>
+                                <label class="btn btn-outline-primary btn-sm py-2 fw-semibold" for="enrich-db-mirtarbase">
+                                    <i class="fa-solid fa-check me-1"></i>miRTarBase 10.0 (Default)
+                                </label>
+
+                                <input type="radio" class="btn-check" name="enrichment-db-source" id="enrich-db-consensus" value="consensus">
+                                <label class="btn btn-outline-primary btn-sm py-2 fw-semibold" for="enrich-db-consensus">
+                                    <i class="fa-solid fa-check-double text-warning me-1"></i>Consensus (Both DBs)
+                                </label>
+
+                                <input type="radio" class="btn-check" name="enrichment-db-source" id="enrich-db-tarbase" value="tarbase">
+                                <label class="btn btn-outline-primary btn-sm py-2 fw-semibold" for="enrich-db-tarbase">
+                                    DIANA-TarBase v9.0
+                                </label>
+
+                                <input type="radio" class="btn-check" name="enrichment-db-source" id="enrich-db-all" value="all">
+                                <label class="btn btn-outline-primary btn-sm py-2 fw-semibold" for="enrich-db-all">
+                                    All Sources (Union)
+                                </label>
                             </div>
                         </div>
 
@@ -1947,11 +2019,29 @@
             ? tissues.map(t => `<span class="badge bg-white text-secondary border me-1 mb-1 px-2 py-1" style="font-size: 0.75rem;"><i class="fa-solid fa-location-dot text-info me-1"></i>${t}</span>`).join('')
             : '<span class="text-muted">—</span>';
 
+        // Database source badge
+        let dbSourceBadge = '<span class="badge bg-light text-secondary border px-2 py-1">Unknown</span>';
+        if (d.database_source && d.database_source.includes('Consensus')) {
+            dbSourceBadge = '<span class="badge bg-primary-subtle text-primary border px-2 py-1" style="font-size: 0.8rem;"><i class="fa-solid fa-check-double text-warning me-1"></i>TarBase & miRTarBase (Consensus)</span>';
+        } else if (d.database_source && d.database_source.includes('miRTarBase')) {
+            dbSourceBadge = '<span class="badge bg-success-subtle text-success border px-2 py-1" style="font-size: 0.8rem;"><i class="fa-solid fa-database me-1"></i>miRTarBase 10.0</span>';
+        } else if (d.database_source) {
+            dbSourceBadge = '<span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 0.8rem;"><i class="fa-solid fa-database me-1"></i>DIANA-TarBase v9.0</span>';
+        }
+
         return `
             <div class="table-responsive p-3" style="background-color: var(--secondary-color); border-radius: 8px;">
                 <div class="card border-0 shadow-sm p-3" style="background-color: #ffffff; border-radius: 8px; border: 1px solid #E2E8F0 !important;">
                     <div class="row g-3">
-                        <div class="col-lg-4 col-md-6">
+                        <div class="col-lg-3 col-md-6">
+                            <div class="fw-bold text-secondary small text-uppercase mb-1" style="letter-spacing: 0.05em;">
+                                <i class="fa-solid fa-database text-primary me-1"></i>Database Source
+                            </div>
+                            <div class="mt-1">
+                                ${dbSourceBadge}
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
                             <div class="fw-bold text-secondary small text-uppercase mb-1" style="letter-spacing: 0.05em;">
                                 <i class="fa-solid fa-vial-circle-check text-primary me-1"></i>Experimental Methods
                             </div>
@@ -1959,7 +2049,7 @@
                                 ${methodsHtml}
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-6">
+                        <div class="col-lg-2 col-md-6">
                             <div class="fw-bold text-secondary small text-uppercase mb-1" style="letter-spacing: 0.05em;">
                                 <i class="fa-solid fa-sliders text-primary me-1"></i>Observed Regulation
                             </div>
@@ -1967,7 +2057,7 @@
                                 ${regBadge}
                             </div>
                         </div>
-                        <div class="col-lg-5 col-md-12">
+                        <div class="col-lg-4 col-md-6">
                             <div class="fw-bold text-secondary small text-uppercase mb-1" style="letter-spacing: 0.05em;">
                                 <i class="fa-solid fa-dna text-primary me-1"></i>Tissue / Cell Source
                             </div>
@@ -2001,9 +2091,10 @@
             .then(response => response.json())
             .then(data => {
                 const statsContainer = document.getElementById('statistics-container');
-                const targetGenes = data.target_stats ? data.target_stats.total_target_genes : 1877;
-                const sfariGenes = data.target_stats ? data.target_stats.total_sfari_target_genes : 893;
-                const targetInteractions = data.target_stats ? data.target_stats.total_target_interactions : 66498;
+                const targetGenes = data.target_stats ? data.target_stats.total_target_genes : 3281;
+                const sfariGenes = data.target_stats ? data.target_stats.total_sfari_target_genes : 901;
+                const targetInteractions = data.target_stats ? data.target_stats.total_target_interactions : 78153;
+                const consensusCount = data.target_stats ? (data.target_stats.consensus_interactions || 7492) : 7492;
 
                 statsContainer.innerHTML = `
                     <div class="col-xl col-md-4 col-sm-6">
@@ -2040,10 +2131,13 @@
                     <div class="col-xl col-md-6 col-sm-12">
                         <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
                             <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Validated Targets</h5>
-                            <div class="d-flex justify-content-center align-items-center gap-2 mt-1">
-                                <span class="fs-4 fw-bold" style="color: var(--primary-color);">${targetGenes}</span>
+                            <div class="d-flex justify-content-center align-items-center gap-2 mt-1 flex-wrap">
+                                <span class="fs-4 fw-bold" style="color: var(--primary-color);">${targetGenes.toLocaleString()}</span>
                                 <span class="badge bg-danger-subtle text-danger border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: 700;">
                                     <i class="fa-solid fa-star me-1"></i>${sfariGenes} SFARI
+                                </span>
+                                <span class="badge bg-primary-subtle text-primary border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: 700;" title="Interactions cross-validated in both miRTarBase 10.0 and TarBase v9.0">
+                                    <i class="fa-solid fa-check-double text-warning me-1"></i>${consensusCount.toLocaleString()} Consensus
                                 </span>
                             </div>
                         </div>
@@ -2307,6 +2401,19 @@
                     }
                 },
                 {
+                    "data": "database_source",
+                    "render": function(data) {
+                        if (!data) return '<span class="text-muted">—</span>';
+                        if (data.includes('Consensus')) {
+                            return '<span class="badge bg-primary-subtle text-primary border px-2 py-1 rounded-pill" style="font-size: 0.75rem;"><i class="fa-solid fa-check-double text-warning me-1"></i>Consensus (Both)</span>';
+                        }
+                        if (data.includes('miRTarBase')) {
+                            return '<span class="badge bg-success-subtle text-success border px-2 py-1 rounded-pill" style="font-size: 0.75rem;"><i class="fa-solid fa-database me-1"></i>miRTarBase 10.0</span>';
+                        }
+                        return '<span class="badge bg-light text-secondary border px-2 py-1 rounded-pill" style="font-size: 0.75rem;"><i class="fa-solid fa-database me-1"></i>TarBase v9.0</span>';
+                    }
+                },
+                {
                     "data": "pmids",
                     "render": function(data) {
                         if (!data) return '<span class="text-muted">—</span>';
@@ -2505,11 +2612,41 @@
                 if (hairpinTokens.length > 0) summaryItems.push('Hairpin');
                 if (matureTokens.length > 0) summaryItems.push('Mature');
                 if (geneTokens.length > 0) summaryItems.push('Gene');
+            const targetDbSource = $('input[name="target-db-radio"]:checked').val() || $('#filter-target-db').val() || 'mirtarbase';
+            // Sync controls
+            $(`input[name="target-db-radio"][value="${targetDbSource}"]`).prop('checked', true);
+            $('#filter-target-db').val(targetDbSource);
+
+            let activeFilterCount = 0;
+            if (hairpinTokens.length > 0) activeFilterCount++;
+            if (matureTokens.length > 0) activeFilterCount++;
+            if (geneTokens.length > 0) activeFilterCount++;
+            if (exprChange) activeFilterCount++;
+            if (overallEvidence) activeFilterCount++;
+            if (selectedTissues.length > 0) activeFilterCount += selectedTissues.length;
+            if (geneticAlteration) activeFilterCount++;
+            if (studyDesc) activeFilterCount++;
+            if (sfariCategory) activeFilterCount++;
+            if (evidenceLevel) activeFilterCount++;
+            if (targetMethod) activeFilterCount++;
+            if (targetRegulation) activeFilterCount++;
+            if (targetTissue) activeFilterCount++;
+            if (targetDbSource !== 'mirtarbase') activeFilterCount++;
+
+            if (activeFilterCount > 0) {
+                $('.filter-count').text(activeFilterCount).show();
+                $('#drawer-filter-count-badge').text(`${activeFilterCount} Active`).attr('class', 'badge bg-primary text-white');
+                
+                const summaryItems = [];
+                if (hairpinTokens.length > 0) summaryItems.push(`${hairpinTokens.length} Hairpins`);
+                if (matureTokens.length > 0) summaryItems.push(`${matureTokens.length} Mature`);
+                if (geneTokens.length > 0) summaryItems.push(`${geneTokens.length} Genes`);
                 if (exprChange) summaryItems.push(exprChange);
                 if (overallEvidence) summaryItems.push(overallEvidence);
                 if (selectedTissues.length > 0) summaryItems.push(`${selectedTissues.length} Tissues`);
                 if (geneticAlteration) summaryItems.push(geneticAlteration);
                 if (studyDesc) summaryItems.push('Desc');
+                if (targetDbSource !== 'mirtarbase') summaryItems.push(targetDbSource === 'consensus' ? 'Consensus' : (targetDbSource === 'tarbase' ? 'TarBase' : 'All DBs'));
                 if (sfariCategory) summaryItems.push(sfariCategory);
                 if (evidenceLevel) summaryItems.push(evidenceLevel);
                 if (targetMethod) summaryItems.push(targetMethod);
@@ -2533,6 +2670,7 @@
                 mirnaId: hairpinTokens.length > 0 ? (hairpinTokens.length > 2 ? `${hairpinTokens.length} Hairpins` : hairpinTokens.join(', ')) : '',
                 matureId: matureTokens.length > 0 ? (matureTokens.length > 2 ? `${matureTokens.length} Mature` : matureTokens.join(', ')) : '',
                 targetGene: geneTokens.length > 0 ? (geneTokens.length > 2 ? `${geneTokens.length} Genes` : geneTokens.join(', ')) : '',
+                targetDbSource: targetDbSource !== 'mirtarbase' ? (targetDbSource === 'consensus' ? 'Consensus (Both DBs)' : (targetDbSource === 'tarbase' ? 'TarBase v9.0' : 'All DBs')) : '',
                 exprChange, overallEvidence, selectedTissues,
                 geneticAlteration, studyDesc, sfariCategory,
                 evidenceLevel, targetMethod, targetRegulation, targetTissue
@@ -2592,7 +2730,7 @@
             otherTable.draw();
 
             // Apply filters to Target Genes Table
-            // Col 0: Details, Col 1: Precursor, Col 2: Mature, Col 3: Target Gene, Col 5: SFARI, Col 6: Evidence, Col 8: Method, Col 9: Regulation, Col 10: Tissue
+            // Col 0: Details, Col 1: Precursor, Col 2: Mature, Col 3: Target Gene, Col 4: Gene Name, Col 5: SFARI, Col 6: Evidence, Col 7: Database Source, Col 8: PMIDs, Col 9: Method, Col 10: Regulation, Col 11: Tissue
             targetsTable.column(1).search(hairpinSearchPattern, hairpinUseRegex, false);
             targetsTable.column(2).search(matureTokens.length > 0 ? buildTokenRegex(matureTokens) : '', matureTokens.length > 0, false);
             
@@ -2614,10 +2752,25 @@
             }
 
             targetsTable.column(6).search(evidenceLevel);
-            targetsTable.column(8).search(targetMethod);
-            targetsTable.column(9).search(targetRegulation);
-            targetsTable.column(10).search(targetTissue);
+
+            // Database source filtering (miRTarBase 10.0 default)
+            if (targetDbSource === 'mirtarbase') {
+                targetsTable.column(7).search('miRTarBase', true, false);
+            } else if (targetDbSource === 'tarbase') {
+                targetsTable.column(7).search('(DIANA-TarBase|Consensus)', true, false);
+            } else if (targetDbSource === 'consensus') {
+                targetsTable.column(7).search('Consensus', true, false);
+            } else {
+                targetsTable.column(7).search('');
+            }
+
+            targetsTable.column(9).search(targetMethod);
+            targetsTable.column(10).search(targetRegulation);
+            targetsTable.column(11).search(targetTissue);
             targetsTable.draw();
+
+            // Update interaction count in switcher bar
+            $('#db-active-count').text(targetsTable.rows({ search: 'applied' }).count().toLocaleString());
 
             updateSelectionUI();
         }
@@ -2626,7 +2779,11 @@
 
         // Event listeners for real-time filtering
         $('#filter-mirna-id, #filter-mature-id, #filter-target-gene, #filter-study-desc, #filter-target-tissue').on('keyup input', debouncedFilter);
-        $('#filter-expression-change, #filter-overall-evidence, #filter-genetic-alteration, #filter-sfari-category, #filter-evidence-level, #filter-target-method, #filter-target-regulation').on('change', applyAdvancedFilters);
+        $('#filter-expression-change, #filter-overall-evidence, #filter-genetic-alteration, #filter-sfari-category, #filter-evidence-level, #filter-target-method, #filter-target-regulation, #filter-target-db').on('change', applyAdvancedFilters);
+        $('input[name="target-db-radio"]').on('change', function() {
+            $('#filter-target-db').val($(this).val());
+            applyAdvancedFilters();
+        });
         $('body').on('change', '#tissue-checkboxes input', applyAdvancedFilters);
 
         // Clear All Filters button action
@@ -2638,6 +2795,8 @@
             $('#filter-overall-evidence').val('');
             $('#filter-genetic-alteration').val('');
             $('#filter-study-desc').val('');
+            $('#filter-target-db').val('mirtarbase');
+            $('#db-mirtarbase').prop('checked', true);
             $('#filter-sfari-category').val('');
             $('#filter-evidence-level').val('');
             $('#filter-target-method').val('');
@@ -2888,11 +3047,17 @@
                                 sfari_score: item.sfari_score || 'Non-SFARI',
                                 is_sfari: item.sfari_score && item.sfari_score !== 'Non-SFARI',
                                 is_brain: false,
-                                evidences: new Set()
+                                evidences: new Set(),
+                                sources: new Set()
                             };
                         }
                         if (item.evidence_level) {
                             geneMetaMap[gene].evidences.add(item.evidence_level);
+                        }
+                        if (item.database_source) {
+                            if (item.database_source.includes('miRTarBase')) geneMetaMap[gene].sources.add('mirtarbase');
+                            if (item.database_source.includes('TarBase')) geneMetaMap[gene].sources.add('tarbase');
+                            if (item.database_source.includes('Consensus')) geneMetaMap[gene].sources.add('consensus');
                         }
                         if (item.tissue && item.tissue.toLowerCase().includes('brain')) {
                             geneMetaMap[gene].is_brain = true;
@@ -2942,6 +3107,8 @@
                     })
                     .catch(err => console.error("Error loading expression studies for regulation index:", err));
 
+                // Apply initial miRTarBase default filter to targets table
+                applyAdvancedFilters();
                 updateFilteredCounts();
             })
             .catch(err => console.error("Error loading target interactions for enrichment:", err));
@@ -2962,7 +3129,7 @@
         targetsTable.on('draw', updateFilteredCounts);
 
         // Target Gene Resolution Logic (Only resolves when miRNAs are provided)
-        function resolveTargetGenesFromMiRNAs(matureList, hairpinList, scope = 'all') {
+        function resolveTargetGenesFromMiRNAs(matureList, hairpinList, scope = 'all', dbSource = 'all') {
             const geneSet = new Set();
             const matchedInteractions = [];
 
@@ -2987,6 +3154,10 @@
                 const gene = it.gene_symbol ? it.gene_symbol.toUpperCase() : null;
                 if (!gene) return;
 
+                if (dbSource === 'mirtarbase' && !it.database_source.includes('miRTarBase')) return;
+                if (dbSource === 'tarbase' && !it.database_source.includes('TarBase')) return;
+                if (dbSource === 'consensus' && !it.database_source.includes('Consensus')) return;
+
                 if (scope === 'strong' && it.evidence_level !== 'Strong Evidence') return;
                 if (scope === 'sfari' && (!it.sfari_score || it.sfari_score === 'Non-SFARI')) return;
                 if (scope === 'sfari_cat1' && (!it.sfari_score || !it.sfari_score.includes('Category 1'))) return;
@@ -3001,23 +3172,31 @@
         }
 
         // Non-destructive target scope filtering on base gene list
-        function applyTargetScope(genes, scope) {
+        function applyTargetScope(genes, scope = 'all', dbSource = 'mirtarbase') {
             if (!genes || genes.length === 0) return [];
-            if (scope === 'all') return [...genes];
 
             return genes.filter(gene => {
                 const meta = geneMetaMap[gene];
+                if (!meta) return false;
+
+                // 1. Database provenance filter (miRTarBase 10.0 default)
+                if (dbSource === 'mirtarbase' && !meta.sources.has('mirtarbase')) return false;
+                if (dbSource === 'tarbase' && !meta.sources.has('tarbase')) return false;
+                if (dbSource === 'consensus' && !meta.sources.has('consensus')) return false;
+                // 'all' includes any source
+
+                // 2. Evidence / Risk / Regulation Scope
                 if (scope === 'strong') {
-                    return meta && meta.evidences && meta.evidences.has('Strong Evidence');
+                    return meta.evidences && meta.evidences.has('Strong Evidence');
                 }
                 if (scope === 'sfari') {
-                    return meta && meta.is_sfari;
+                    return meta.is_sfari;
                 }
                 if (scope === 'sfari_cat1') {
-                    return meta && meta.sfari_score && meta.sfari_score.includes('Category 1');
+                    return meta.sfari_score && meta.sfari_score.includes('Category 1');
                 }
                 if (scope === 'brain') {
-                    return meta && meta.is_brain === true;
+                    return meta.is_brain === true;
                 }
                 if (scope === 'upregulated') {
                     return upregulatedTargetGenes.has(gene);
@@ -3041,7 +3220,8 @@
 
         function refreshEnrichmentScopeAndUI() {
             const scope = $('input[name="target-scope"]:checked').val() || 'all';
-            currentEnrichmentGenes = applyTargetScope(baseEnrichmentGenes, scope);
+            const dbSource = $('input[name="enrichment-db-source"]:checked').val() || 'mirtarbase';
+            currentEnrichmentGenes = applyTargetScope(baseEnrichmentGenes, scope, dbSource);
             $('#enrichment-gene-input').val(currentEnrichmentGenes.join(', '));
             renderGeneChips(currentEnrichmentGenes);
         }
@@ -3051,7 +3231,7 @@
             const healthBadge = $('#gene-set-health-badge');
 
             if (!baseEnrichmentGenes || baseEnrichmentGenes.length === 0) {
-                $('input[name="target-scope"]').prop('disabled', true);
+                $('input[name="target-scope"], input[name="enrichment-db-source"]').prop('disabled', true);
                 $('#btn-run-enrichment').prop('disabled', true).addClass('disabled');
                 $('#btn-run-enrichment span').text('Select miRNAs to Run Functional Enrichment');
                 $('#gene-set-stats').text('0 Target Genes');
@@ -3081,11 +3261,11 @@
             }
 
             // Enable target filters and enrichment action
-            $('input[name="target-scope"]').prop('disabled', false);
+            $('input[name="target-scope"], input[name="enrichment-db-source"]').prop('disabled', false);
             $('#btn-run-enrichment').prop('disabled', false).removeClass('disabled');
 
             if (!geneList || geneList.length === 0) {
-                container.html(`<div class="py-3 text-secondary small text-center"><i class="fa-solid fa-filter me-1 text-primary"></i>0 of ${baseEnrichmentGenes.length} target genes match the selected filter. <button type="button" class="btn btn-link btn-xs p-0 text-primary fw-semibold btn-reset-scope-to-all">Switch to All Targets</button> to view all ${baseEnrichmentGenes.length} genes.</div>`);
+                container.html(`<div class="py-3 text-secondary small text-center"><i class="fa-solid fa-filter me-1 text-primary"></i>0 of ${baseEnrichmentGenes.length} target genes match the selected filter. <button type="button" class="btn btn-link btn-xs p-0 text-primary fw-semibold btn-reset-scope-to-all">Switch to All Sources & Targets</button> to view all ${baseEnrichmentGenes.length} genes.</div>`);
                 $('#gene-set-stats').html(`<strong>0</strong> / <strong>${baseEnrichmentGenes.length}</strong> Target Genes`);
                 healthBadge.attr('class', 'badge bg-warning-subtle text-warning border rounded-pill').attr('style', '').text('0 Filtered');
                 $('#btn-run-enrichment span').text('Run g:Profiler Functional Enrichment (0 Genes)');
@@ -3151,6 +3331,18 @@
 
         // Scope Switcher Radio Buttons (Non-destructive filter)
         $('input[name="target-scope"]').on('change', function() {
+            refreshEnrichmentScopeAndUI();
+        });
+
+        // Target Database Selector (Enrichment Tab)
+        $('input[name="enrichment-db-source"]').on('change', function() {
+            refreshEnrichmentScopeAndUI();
+        });
+
+        // Reset scope button in empty filter state
+        $('body').on('click', '.btn-reset-scope-to-all', function() {
+            $('#scope-all').prop('checked', true);
+            $('#enrich-db-all').prop('checked', true);
             refreshEnrichmentScopeAndUI();
         });
 
@@ -3748,6 +3940,17 @@
                 <div class="filter-section-header">
                     <h6><i class="fa-solid fa-bullseye text-primary me-2"></i>Target Annotation Filters</h6>
                     <span class="badge bg-primary-subtle text-primary border rounded-pill" style="font-size: 0.7rem;">Targets Tab</span>
+                </div>
+
+                <!-- Database Source (miRTarBase default) -->
+                <div class="mb-3">
+                    <label for="filter-target-db" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Target Database Source</label>
+                    <select id="filter-target-db" class="form-select form-select-sm" aria-label="Filter by Target Database Source">
+                        <option value="mirtarbase" selected>miRTarBase 10.0 (Default)</option>
+                        <option value="consensus">Consensus (Validated in Both DBs)</option>
+                        <option value="tarbase">DIANA-TarBase v9.0</option>
+                        <option value="all">All Sources (Merged Union)</option>
+                    </select>
                 </div>
 
                 <!-- SFARI ASD Category -->

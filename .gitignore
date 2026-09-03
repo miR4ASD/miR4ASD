@@ -9,6 +9,7 @@ target_genes_compact.json
 raw_data/*.tsv.gz
 raw_data/*.gz
 raw_data/*.html
+raw_data/hsa_MTI.csv
 
 # Spreadsheets, word docs, text files, and internal markdown
 *.xlsx

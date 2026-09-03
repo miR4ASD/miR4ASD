@@ -251,6 +251,12 @@ def test_target_genes_child_details_structure():
         assert "regulation" in item
         assert "tissue" in item
         assert "pmids" in item
+        assert "database_source" in item
+        assert item["database_source"] in [
+            "DIANA-TarBase v9.0",
+            "miRTarBase 10.0",
+            "TarBase & miRTarBase (Consensus)",
+        ]
         # Verify methods can be split cleanly
         methods = [
             m.strip() for m in item["experimental_methods"].split(";") if m.strip()
@@ -450,3 +456,32 @@ def test_mirna_selection_prerequisite_and_target_filtering_isolation():
 
     # 4. Deselecting resets back to empty
     assert len(resolve_targets([], [])) == 0
+
+
+def test_dual_database_source_integrity_and_provenance():
+    """Verify dual-database source tags (TarBase, miRTarBase, Consensus)."""
+    with open("target_genes.json", "r") as f:
+        targets = json.load(f)
+    with open("statistics.json", "r") as f:
+        stats = json.load(f)
+
+    # Database source distribution
+    source_counts = {}
+    for item in targets:
+        src = item.get("database_source")
+        source_counts[src] = source_counts.get(src, 0) + 1
+
+    assert "DIANA-TarBase v9.0" in source_counts
+    assert "miRTarBase 10.0" in source_counts
+    assert "TarBase & miRTarBase (Consensus)" in source_counts
+
+    # Verify meaningful numbers in all 3 classes
+    assert source_counts["DIANA-TarBase v9.0"] > 50000
+    assert source_counts["miRTarBase 10.0"] > 5000
+    assert source_counts["TarBase & miRTarBase (Consensus)"] > 5000
+
+    # Verify statistics.json metrics
+    t_stats = stats.get("target_stats", {})
+    assert t_stats.get("consensus_interactions", 0) > 5000
+    assert t_stats.get("mirtarbase_total_interactions", 0) > 15000
+    assert t_stats.get("tarbase_total_interactions", 0) > 60000

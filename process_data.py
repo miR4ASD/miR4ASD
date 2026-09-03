@@ -219,11 +219,13 @@ def create_mirbase_mature_link(mature_name, gff_file="hsa.gff3"):
 
 def process_target_genes(raw_mature_set, mature_precursor_map):
     """
-    Process DIANA-TarBase v9 experimental targets and cross-reference with SFARI.
+    Process DIANA-TarBase v9 and miRTarBase 10.0 targets, cross-referencing with SFARI.
 
     Includes strong evidence interactions (Reporter assay, Western blot, qPCR,
     etc.), all experimental assays for SFARI ASD risk genes (CLIP-seq, CLASH,
     RIP-seq, RNA-seq), and multi-assay targets with evidence tier categorization.
+    Annotates each interaction with its database source
+    (TarBase, miRTarBase, or Consensus).
 
     Parameters
     ----------
@@ -237,14 +239,23 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
     tuple
         (target_records, target_stats, per_mirna_target_counts)
     """
+    import csv
     import gzip
     import os
 
     tarbase_path = os.path.join("raw_data", "Homo_sapiens_TarBase-v9.tsv.gz")
+    mirtarbase_path = os.path.join("raw_data", "hsa_MTI.csv")
     sfari_path = os.path.join("raw_data", "sfari_genes.csv")
 
-    if not os.path.exists(tarbase_path) or not os.path.exists(sfari_path):
-        print(f"Warning: TarBase ({tarbase_path}) or SFARI ({sfari_path}) not found.")
+    if not os.path.exists(sfari_path):
+        print(f"Warning: SFARI file ({sfari_path}) not found.")
+        return [], {}, {}
+
+    if not os.path.exists(tarbase_path) and not os.path.exists(mirtarbase_path):
+        print(
+            f"Warning: Neither TarBase ({tarbase_path}) "
+            f"nor miRTarBase ({mirtarbase_path}) found."
+        )
         return [], {}, {}
 
     # 1. Load SFARI Genes
@@ -296,6 +307,11 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
         "In Situ Hybridization",
         "Flow Cytometry",
         "Genetic Testing",
+        "Luciferase reporter assay",
+        "Western blot",
+        "Western blotting",
+        "qRT-PCR",
+        "Northern blot",
     }
     clip_methods = {
         "HITS-CLIP",
@@ -307,6 +323,8 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
         "IMPACT-Seq",
         "3LIFE",
         "TRAP",
+        "CLIP-seq",
+        "eCLIP",
     }
 
     # Build lookup set for matching miRNAs (both exact and case-normalized)
@@ -317,34 +335,136 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
 
     interaction_map = {}
 
-    with gzip.open(tarbase_path, "rt", encoding="utf-8", errors="ignore") as f:
-        for chunk in pd.read_csv(
-            f,
-            sep="\t",
-            chunksize=250000,
-            low_memory=False,
-            usecols=[
-                "mirna_name",
-                "mirna_id",
-                "gene_name",
-                "gene_id",
-                "experimental_method",
-                "regulation",
-                "tissue",
-                "cell_line",
-                "article_pubmed_id",
-            ],
-        ):
-            for _, row in chunk.iterrows():
-                raw_mir = str(row["mirna_name"]).strip()
-                canonical_mir = mirna_lookup.get(raw_mir) or mirna_lower_lookup.get(
-                    raw_mir.lower()
-                )
+    # Helper to retrieve canonical miRNA ID
+    def get_canonical_mirna(raw_name):
+        clean_name = str(raw_name).strip()
+        if not clean_name:
+            return None
+        canon = mirna_lookup.get(clean_name) or mirna_lower_lookup.get(
+            clean_name.lower()
+        )
+        if canon:
+            return canon
+        lower = clean_name.lower()
+        if lower.startswith("hsa-"):
+            return mirna_lower_lookup.get(lower[4:])
+        return mirna_lower_lookup.get(f"hsa-{lower}")
+
+    # 3. Process DIANA-TarBase v9.0 (if present)
+    if os.path.exists(tarbase_path):
+        print(f"Processing DIANA-TarBase v9: {tarbase_path}")
+        with gzip.open(tarbase_path, "rt", encoding="utf-8", errors="ignore") as f:
+            for chunk in pd.read_csv(
+                f,
+                sep="\t",
+                chunksize=250000,
+                low_memory=False,
+                usecols=[
+                    "mirna_name",
+                    "mirna_id",
+                    "gene_name",
+                    "gene_id",
+                    "experimental_method",
+                    "regulation",
+                    "tissue",
+                    "cell_line",
+                    "article_pubmed_id",
+                ],
+            ):
+                for _, row in chunk.iterrows():
+                    canonical_mir = get_canonical_mirna(row["mirna_name"])
+                    if not canonical_mir:
+                        continue
+
+                    gene_sym = str(row["gene_name"]).strip()
+                    if not gene_sym or gene_sym == "nan":
+                        continue
+
+                    pair_key = (canonical_mir, gene_sym)
+                    if pair_key not in interaction_map:
+                        interaction_map[pair_key] = {
+                            "canonical_mir": canonical_mir,
+                            "gene_symbol": gene_sym,
+                            "gene_id": (
+                                str(row["gene_id"]).strip()
+                                if pd.notna(row["gene_id"])
+                                else ""
+                            ),
+                            "sources": set(),
+                            "methods": set(),
+                            "regulations": set(),
+                            "tissues": set(),
+                            "cell_lines": set(),
+                            "pmids": set(),
+                            "has_strong": False,
+                            "has_clip": False,
+                            "is_sfari": gene_sym.upper() in sfari_dict,
+                        }
+
+                    entry = interaction_map[pair_key]
+                    entry["sources"].add("TarBase")
+                    m = (
+                        str(row["experimental_method"]).strip()
+                        if pd.notna(row["experimental_method"])
+                        else ""
+                    )
+                    if m:
+                        entry["methods"].add(m)
+                        if m in strong_methods:
+                            entry["has_strong"] = True
+                        if m in clip_methods or "CLIP" in m or "CLASH" in m:
+                            entry["has_clip"] = True
+
+                    if (
+                        pd.notna(row["regulation"])
+                        and str(row["regulation"]).strip() != "NA"
+                    ):
+                        reg = str(row["regulation"]).strip()
+                        if reg.lower() == "negative":
+                            entry["regulations"].add("Negative (Downregulation)")
+                        elif reg.lower() == "positive":
+                            entry["regulations"].add("Positive (Upregulation)")
+                        else:
+                            entry["regulations"].add(reg)
+
+                    if pd.notna(row["tissue"]) and str(row["tissue"]).strip() not in [
+                        "NA",
+                        "nan",
+                        "",
+                    ]:
+                        entry["tissues"].add(str(row["tissue"]).strip())
+
+                    if pd.notna(row["article_pubmed_id"]):
+                        try:
+                            pmid_val = str(int(float(row["article_pubmed_id"])))
+                            if pmid_val and pmid_val != "0":
+                                entry["pmids"].add(pmid_val)
+                        except (ValueError, TypeError):
+                            pass
+
+    # 4. Process miRTarBase 10.0 (if present)
+    if os.path.exists(mirtarbase_path):
+        print(f"Processing miRTarBase 10.0: {mirtarbase_path}")
+        with open(mirtarbase_path, "r", encoding="utf-8", errors="ignore") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                st = (row.get("Support Type") or "").strip()
+                if "Non-Functional" in st:
+                    continue
+
+                canonical_mir = get_canonical_mirna(row.get("miRNA"))
                 if not canonical_mir:
                     continue
 
-                gene_sym = str(row["gene_name"]).strip()
+                gene_sym = (row.get("Target Gene") or "").strip()
                 if not gene_sym or gene_sym == "nan":
+                    continue
+
+                is_sfari = gene_sym.upper() in sfari_dict
+                is_strong = st == "Functional MTI"
+
+                # Biological inclusion criterion: Strong evidence OR SFARI ASD risk gene
+                if not is_strong and not is_sfari:
                     continue
 
                 pair_key = (canonical_mir, gene_sym)
@@ -353,10 +473,9 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
                         "canonical_mir": canonical_mir,
                         "gene_symbol": gene_sym,
                         "gene_id": (
-                            str(row["gene_id"]).strip()
-                            if pd.notna(row["gene_id"])
-                            else ""
+                            str(row.get("Target Gene (Entrez ID)", "")).strip()
                         ),
+                        "sources": set(),
                         "methods": set(),
                         "regulations": set(),
                         "tissues": set(),
@@ -364,50 +483,38 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
                         "pmids": set(),
                         "has_strong": False,
                         "has_clip": False,
-                        "is_sfari": gene_sym.upper() in sfari_dict,
+                        "is_sfari": is_sfari,
                     }
 
                 entry = interaction_map[pair_key]
-                m = (
-                    str(row["experimental_method"]).strip()
-                    if pd.notna(row["experimental_method"])
-                    else ""
-                )
-                if m:
-                    entry["methods"].add(m)
-                    if m in strong_methods:
-                        entry["has_strong"] = True
-                    if m in clip_methods:
-                        entry["has_clip"] = True
+                entry["sources"].add("miRTarBase")
+                if is_strong:
+                    entry["has_strong"] = True
 
-                if (
-                    pd.notna(row["regulation"])
-                    and str(row["regulation"]).strip() != "NA"
-                ):
-                    reg = str(row["regulation"]).strip()
-                    if reg.lower() == "negative":
-                        entry["regulations"].add("Negative (Downregulation)")
-                    elif reg.lower() == "positive":
-                        entry["regulations"].add("Positive (Upregulation)")
-                    else:
-                        entry["regulations"].add(reg)
+                experiments_raw = row.get("Experiments") or ""
+                for exp in experiments_raw.split("//"):
+                    exp_clean = exp.strip()
+                    if exp_clean:
+                        entry["methods"].add(exp_clean)
+                        if exp_clean in strong_methods:
+                            entry["has_strong"] = True
+                        if (
+                            exp_clean in clip_methods
+                            or "CLIP" in exp_clean.upper()
+                            or "CLASH" in exp_clean.upper()
+                        ):
+                            entry["has_clip"] = True
 
-                if pd.notna(row["tissue"]) and str(row["tissue"]).strip() not in [
-                    "NA",
-                    "nan",
-                    "",
-                ]:
-                    entry["tissues"].add(str(row["tissue"]).strip())
-
-                if pd.notna(row["article_pubmed_id"]):
+                pmid_raw = (row.get("References (PMID)") or "").strip()
+                if pmid_raw:
                     try:
-                        pmid_val = str(int(float(row["article_pubmed_id"])))
+                        pmid_val = str(int(float(pmid_raw)))
                         if pmid_val and pmid_val != "0":
                             entry["pmids"].add(pmid_val)
                     except (ValueError, TypeError):
                         pass
 
-    # 3. Structure Target Records
+    # 5. Structure Target Records with Provenance Annotation
     target_records = []
     unique_target_genes = set()
     unique_sfari_genes = set()
@@ -444,6 +551,15 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
         else:
             evidence_level = "High-Throughput Expression"
 
+        # Database Source Provenance Annotation
+        sources = data.get("sources", set())
+        if "TarBase" in sources and "miRTarBase" in sources:
+            db_source = "TarBase & miRTarBase (Consensus)"
+        elif "miRTarBase" in sources:
+            db_source = "miRTarBase 10.0"
+        else:
+            db_source = "DIANA-TarBase v9.0"
+
         # Precursor miRNAs
         precursors = mature_precursor_map.get(canonical_mir, set())
         raw_precursor = "; ".join(sorted(precursors)) if precursors else ""
@@ -471,6 +587,7 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
                 "is_sfari": is_sfari,
                 "sfari_score": sfari_score if sfari_score else "Non-SFARI",
                 "evidence_level": evidence_level,
+                "database_source": db_source,
                 "experimental_methods": methods_str,
                 "regulation": regs_str,
                 "tissue": tissue_str,
@@ -490,6 +607,19 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
         "total_target_genes": len(unique_target_genes),
         "total_sfari_target_genes": len(unique_sfari_genes),
         "total_target_interactions": len(target_records),
+        "consensus_interactions": sum(
+            1
+            for r in target_records
+            if r["database_source"] == "TarBase & miRTarBase (Consensus)"
+        ),
+        "tarbase_interactions": sum(
+            1
+            for r in target_records
+            if "DIANA" in r["database_source"] or "Consensus" in r["database_source"]
+        ),
+        "mirtarbase_interactions": sum(
+            1 for r in target_records if "miRTarBase" in r["database_source"]
+        ),
     }
 
     return target_records, target_stats, per_mirna_target_counts
@@ -582,151 +712,191 @@ def main(
     # Ensure GFF maps are cached
     get_gff_maps(gff_path)
 
-    # Read the Excel file
-    xls = pd.ExcelFile(excel_path)
+    if os.path.exists(excel_path):
+        # Read the Excel file
+        xls = pd.ExcelFile(excel_path)
 
-    # Read the sheets into dataframes
-    df_expression = pd.read_excel(xls, "miRNA_expression_studies")
-    df_other = pd.read_excel(xls, "miRNA_other_studies")
-    df_details = pd.read_excel(xls, "miRNA_study_details")
+        # Read the sheets into dataframes
+        df_expression = pd.read_excel(xls, "miRNA_expression_studies")
+        df_other = pd.read_excel(xls, "miRNA_other_studies")
+        df_details = pd.read_excel(xls, "miRNA_study_details")
 
-    # Clean column names
-    df_expression = clean_col_names(df_expression)
-    df_other = clean_col_names(df_other)
-    df_details = clean_col_names(df_details)
+        # Clean column names
+        df_expression = clean_col_names(df_expression)
+        df_other = clean_col_names(df_other)
+        df_details = clean_col_names(df_details)
 
-    # Harmonize column names for df_details
-    details_rename_map = {
-        "Paper": "Study",
-        "Reference (DOI)": "DOI",
-        "Study methods": "Title",
-    }
-    df_details = df_details.rename(columns=details_rename_map)
-    df_details["Study"] = df_details["Study"].astype(str).str.strip()
-
-    study_details_records = df_details.to_dict(orient="records")
-    study_details_map = {study["Study"]: study for study in study_details_records}
-
-    # Standardize delimiters
-    df_expression["Study"] = (
-        df_expression["Study"].astype(str).str.replace(r"\s*,\s*", "; ", regex=True)
-    )
-    df_expression["Tissue"] = (
-        df_expression["Tissue"].astype(str).str.replace(r"\s*,\s*", "; ", regex=True)
-    )
-
-    def get_study_details_for_expression(row):
-        study_names = [s.strip() for s in str(row["Study"]).split(";")]
-        details_list = []
-        for study_name in study_names:
-            study_name_norm = normalize_study_name(study_name)
-            if study_name_norm in study_details_map:
-                details_list.append(study_details_map[study_name_norm])
-        return details_list
-
-    df_expression["StudyDetails"] = df_expression.apply(
-        get_study_details_for_expression, axis=1
-    )
-
-    cols_to_drop = [
-        c
-        for c in ["Study", "Observations", "Unnamed: 10"]
-        if c in df_expression.columns
-    ]
-    df_expression = df_expression.drop(columns=cols_to_drop)
-
-    df_expression = df_expression.rename(
-        columns={
-            "Precursor miRNA (hairpin)": "precursor_mirna",
-            "Mature miRNA": "mature_mirna",
-            "Expression change (ASD vs. controls)": "expression_change",
-            "Tissue": "tissue",
-            "Overall evidence": "overall_evidence",
-            "Number of studies (Upregulated)": "upregulation_studies",
-            "Number of studies (Downregulated)": "downregulation_studies",
-            "Total studies": "total_studies",
+        # Harmonize column names for df_details
+        details_rename_map = {
+            "Paper": "Study",
+            "Reference (DOI)": "DOI",
+            "Study methods": "Title",
         }
-    )
+        df_details = df_details.rename(columns=details_rename_map)
+        df_details["Study"] = df_details["Study"].astype(str).str.strip()
 
-    df_other["Study"] = (
-        df_other["Study"].astype(str).str.replace(r"\s*,\s*", "; ", regex=True)
-    )
-    df_other["Study description"] = (
-        df_other["Study description"]
-        .astype(str)
-        .str.replace(r"\s*,\s*", "; ", regex=True)
-    )
+        study_details_records = df_details.to_dict(orient="records")
+        study_details_map = {study["Study"]: study for study in study_details_records}
 
-    def get_study_details_for_other(row):
-        study_names = [s.strip() for s in str(row["Study"]).split(";")]
-        details_list = []
-        for study_name in study_names:
-            study_name_norm = normalize_study_name(study_name)
-            if study_name_norm in study_details_map:
-                details_list.append(study_details_map[study_name_norm])
-        return details_list
-
-    df_other["StudyDetails"] = df_other.apply(get_study_details_for_other, axis=1)
-    df_other = df_other.drop(columns=["Study", "Study Type"])
-    df_other = df_other.rename(
-        columns={
-            "miRNA ID": "precursor_mirna",
-            "miRNA mature ID": "mature_mirna",
-            "Alteration": "alteration",
-            "Study description": "study_description",
-        }
-    )
-
-    # Build mature -> precursors mapping
-    mature_to_precursors = {}
-    for _, row in (
-        pd.concat(
-            [
-                df_expression[["mature_mirna", "precursor_mirna"]],
-                df_other[["mature_mirna", "precursor_mirna"]],
-            ]
+        # Standardize delimiters
+        df_expression["Study"] = (
+            df_expression["Study"].astype(str).str.replace(r"\s*,\s*", "; ", regex=True)
         )
-        .dropna()
-        .iterrows()
-    ):
-        mat = str(row["mature_mirna"]).strip()
-        hair = str(row["precursor_mirna"]).strip()
-        if mat:
-            if mat not in mature_to_precursors:
-                mature_to_precursors[mat] = set()
+        df_expression["Tissue"] = (
+            df_expression["Tissue"]
+            .astype(str)
+            .str.replace(r"\s*,\s*", "; ", regex=True)
+        )
+
+        def get_study_details_for_expression(row):
+            study_names = [s.strip() for s in str(row["Study"]).split(";")]
+            details_list = []
+            for study_name in study_names:
+                study_name_norm = normalize_study_name(study_name)
+                if study_name_norm in study_details_map:
+                    details_list.append(study_details_map[study_name_norm])
+            return details_list
+
+        df_expression["StudyDetails"] = df_expression.apply(
+            get_study_details_for_expression, axis=1
+        )
+        df_expression = df_expression.drop(columns=["Study", "Study Type"])
+        df_expression = df_expression.rename(
+            columns={
+                "miRNA ID": "precursor_mirna",
+                "miRNA mature ID": "mature_mirna",
+                "Expression Change": "expression_change",
+                "Study description": "study_description",
+                "Tissue": "tissue",
+                "Expression": "expression",
+                "Upregulation studies": "upregulation_studies",
+                "Downregulation studies": "downregulation_studies",
+            }
+        )
+
+        df_other["Study"] = (
+            df_other["Study"].astype(str).str.replace(r"\s*,\s*", "; ", regex=True)
+        )
+        df_other["Study description"] = (
+            df_other["Study description"]
+            .astype(str)
+            .str.replace(r"\s*,\s*", "; ", regex=True)
+        )
+
+        def get_study_details_for_other(row):
+            study_names = [s.strip() for s in str(row["Study"]).split(";")]
+            details_list = []
+            for study_name in study_names:
+                study_name_norm = normalize_study_name(study_name)
+                if study_name_norm in study_details_map:
+                    details_list.append(study_details_map[study_name_norm])
+            return details_list
+
+        df_other["StudyDetails"] = df_other.apply(get_study_details_for_other, axis=1)
+        df_other = df_other.drop(columns=["Study", "Study Type"])
+        df_other = df_other.rename(
+            columns={
+                "miRNA ID": "precursor_mirna",
+                "miRNA mature ID": "mature_mirna",
+                "Alteration": "alteration",
+                "Study description": "study_description",
+            }
+        )
+
+        # Build mature -> precursors mapping
+        mature_to_precursors = {}
+        for _, row in (
+            pd.concat(
+                [
+                    df_expression[["mature_mirna", "precursor_mirna"]],
+                    df_other[["mature_mirna", "precursor_mirna"]],
+                ]
+            )
+            .dropna()
+            .iterrows()
+        ):
+            mat = str(row["mature_mirna"]).strip()
+            hair = str(row["precursor_mirna"]).strip()
+            if mat:
+                if mat not in mature_to_precursors:
+                    mature_to_precursors[mat] = set()
+                if hair:
+                    mature_to_precursors[mat].add(hair)
+
+        raw_mirna_ids = (
+            pd.concat([df_expression["precursor_mirna"], df_other["precursor_mirna"]])
+            .dropna()
+            .astype(str)
+            .str.strip()
+        )
+        total_mirna_genes = int(raw_mirna_ids.nunique())
+
+        raw_mature_ids = (
+            pd.concat([df_expression["mature_mirna"], df_other["mature_mirna"]])
+            .dropna()
+            .astype(str)
+            .str.strip()
+        )
+        total_mirna_mature = int(raw_mature_ids.nunique())
+        unique_total_studies = int(df_details["Study"].nunique())
+
+        # Apply link generation
+        df_expression["precursor_mirna"] = df_expression["precursor_mirna"].apply(
+            create_mirbase_hairpin_link
+        )
+        df_other["precursor_mirna"] = df_other["precursor_mirna"].apply(
+            create_mirbase_hairpin_link
+        )
+        df_expression["mature_mirna"] = df_expression["mature_mirna"].apply(
+            create_mirbase_mature_link
+        )
+        df_other["mature_mirna"] = df_other["mature_mirna"].apply(
+            create_mirbase_mature_link
+        )
+    else:
+        print(
+            f"Notice: {excel_path} not found. "
+            "Using existing JSON feeds for miRNA mappings."
+        )
+        with open("expression_studies.json", "r", encoding="utf-8") as f:
+            expr_data = json.load(f)
+        with open("other_studies.json", "r", encoding="utf-8") as f:
+            other_data = json.load(f)
+        with open("study_details.json", "r", encoding="utf-8") as f:
+            study_details_records = json.load(f)
+
+        df_expression = pd.DataFrame(expr_data)
+        df_other = pd.DataFrame(other_data)
+        df_details = pd.DataFrame(study_details_records)
+
+        def clean_raw_mir(val):
+            if not val or pd.isna(val):
+                return ""
+            s = str(val).strip()
+            if "<" in s:
+                return s.split(">")[-2].split("<")[0].strip()
+            return s
+
+        mature_to_precursors = {}
+        raw_matures = []
+        raw_precursors = []
+
+        for r in expr_data + other_data:
+            mat = clean_raw_mir(r.get("mature_mirna"))
+            hair = clean_raw_mir(r.get("precursor_mirna"))
+            if mat:
+                raw_matures.append(mat)
+                if mat not in mature_to_precursors:
+                    mature_to_precursors[mat] = set()
+                if hair:
+                    mature_to_precursors[mat].add(hair)
             if hair:
-                mature_to_precursors[mat].add(hair)
+                raw_precursors.append(hair)
 
-    raw_mirna_ids = (
-        pd.concat([df_expression["precursor_mirna"], df_other["precursor_mirna"]])
-        .dropna()
-        .astype(str)
-        .str.strip()
-    )
-    total_mirna_genes = int(raw_mirna_ids.nunique())
-
-    raw_mature_ids = (
-        pd.concat([df_expression["mature_mirna"], df_other["mature_mirna"]])
-        .dropna()
-        .astype(str)
-        .str.strip()
-    )
-    total_mirna_mature = int(raw_mature_ids.nunique())
-    unique_total_studies = int(df_details["Study"].nunique())
-
-    # Apply link generation
-    df_expression["precursor_mirna"] = df_expression["precursor_mirna"].apply(
-        create_mirbase_hairpin_link
-    )
-    df_other["precursor_mirna"] = df_other["precursor_mirna"].apply(
-        create_mirbase_hairpin_link
-    )
-    df_expression["mature_mirna"] = df_expression["mature_mirna"].apply(
-        create_mirbase_mature_link
-    )
-    df_other["mature_mirna"] = df_other["mature_mirna"].apply(
-        create_mirbase_mature_link
-    )
+        raw_mature_ids = pd.Series(raw_matures)
+        total_mirna_genes = len(set(raw_precursors))
+        total_mirna_mature = len(set(raw_matures))
+        unique_total_studies = len(study_details_records)
 
     # Process target genes
     target_records, target_stats, per_mirna_counts = process_target_genes(

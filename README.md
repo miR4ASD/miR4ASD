@@ -16,10 +16,13 @@
 * **Interactive Triple Tables:** Fast, client-side exploration using DataTables 2.0 with pagination, column sorting, and CSV export.
   * **Expression Studies Tab:** Precursor/mature miRNA, observed expression change, tissue localization, and study consistency evidence.
   * **Genetic & Other Studies Tab:** Precursor/mature miRNA, variant alteration types (CNVs, SNVs), and descriptive methodology.
-  * **Validated Target Genes Tab:** Comprehensive catalog of **66,498 experimental target interactions** across **1,877 target genes** (including **893 SFARI ASD-risk genes**) sourced from **DIANA-TarBase v9.0** and cross-referenced with **SFARI Gene**.
+  * **Validated Target Genes Tab:** Comprehensive catalog of **78,153 experimental target interactions** across **3,281 target genes** (including **901 SFARI ASD-risk genes**), integrating **miRTarBase 10.0** and **DIANA-TarBase v9.0** with **7,492 cross-database consensus interactions** and **miRTarBase 10.0 as the default interactive view**.
+* **Dual-Database Provenance & Interactive Switcher:**
+  * **Database Toggle Toolbar:** Instantly toggle between **miRTarBase 10.0 (Default)**, **Consensus (Both DBs)**, **DIANA-TarBase v9.0**, and **All Sources (Union)**.
+  * **Provenance Badges:** Color-coded badges for *miRTarBase 10.0*, *DIANA-TarBase v9.0*, and gold-accented *Consensus (Both)*.
 * **Functional Enrichment Analysis (g:Profiler):** Seamless downstream systems biology workflow connecting filtered miRNAs to pathway overrepresentation analysis.
-  * **Filter-to-Enrichment Pipeline:** Filter miRNAs across any table and launch enrichment analysis with 1-click.
-  * **Evidence Scope Control:** Filter resolved target genes across *All Targets*, *Strong Evidence Only*, or *SFARI ASD Risk Genes Only*.
+  * **Strict miRNA-First Architecture:** Enrichment target resolution is derived exclusively from user-selected miRNAs.
+  * **Dual Database & Target Scope Controls:** Non-destructively filter target cohorts by database source (miRTarBase default, Consensus, TarBase, All) and biological criteria (*All Targets*, *Strong Evidence*, *SFARI Risk*, *SFARI Cat 1*, *Brain Targets*, *Upregulated*, *Downregulated*).
   * **Multi-Ontology Analysis:** Query Gene Ontology (Biological Process, Molecular Function, Cellular Component), KEGG Pathways, Reactome, WikiPathways, and Human Phenotype Ontology (`HP`).
   * **Interactive Visualizations:** Chart.js horizontal bar charts ranked by $-\log_{10}(P_{\text{adj}})$, metric summary ribbons, and dedicated interactive DataTables with intersecting gene badges and direct GeneCards links.
   * **Export & Web Portal:** One-click CSV export and direct submission to the official [g:Profiler web portal](https://biit.cs.ut.ee/gprofiler/gost).
@@ -29,7 +32,7 @@
   * **Direct Resource Links:** Clickable links to [GeneCards](https://www.genecards.org/) for target genes and [PubMed](https://pubmed.ncbi.nlm.nih.gov/) for primary literature references.
 * **Unified Advanced Filter Drawer:**
   * **Shared Filters:** Filter all tables simultaneously by Hairpin ID or Mature ID.
-  * **Target Genes Filters:** Filter by Target Gene Symbol, SFARI Category, Evidence Level, Experimental Technique, Regulation (Down/Up), and Tissue/Cell Source.
+  * **Target Genes Filters:** Filter by Target Database Source, Target Gene Symbol, SFARI Category, Evidence Level, Experimental Technique, Regulation (Down/Up), and Tissue/Cell Source.
   * **Expression Filters:** Targeted filtering by expression change direction (Up/Down), overall evidence type, and tissue type checklists.
   * **Genetic Filters:** Filter by variant alteration type and search study descriptions.
   * **Cross-Tab Filter Memory:** Filters remain active when navigating between tabs.
