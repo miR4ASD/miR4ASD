@@ -3055,7 +3055,7 @@
                 if (targetDbSource === 'mirtarbase') {
                     targetsTable.column(7).search('miRTarBase', true, false);
                 } else if (targetDbSource === 'tarbase') {
-                    targetsTable.column(7).search('(TarBase|DIANA)', true, false);
+                    targetsTable.column(7).search('(DIANA|Consensus)', true, false);
                 } else if (targetDbSource === 'consensus') {
                     targetsTable.column(7).search('Consensus', true, false);
                 } else {
@@ -3359,7 +3359,7 @@
                         }
                         if (item.database_source) {
                             if (item.database_source.includes('miRTarBase')) geneMetaMap[gene].sources.add('mirtarbase');
-                            if (item.database_source.includes('TarBase')) geneMetaMap[gene].sources.add('tarbase');
+                            if (item.database_source.includes('DIANA') || item.database_source.includes('Consensus')) geneMetaMap[gene].sources.add('tarbase');
                             if (item.database_source.includes('Consensus')) geneMetaMap[gene].sources.add('consensus');
                         }
                         if (item.tissue && item.tissue.toLowerCase().includes('brain')) {
