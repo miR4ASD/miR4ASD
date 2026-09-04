@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-EW31T0H5KX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-EW31T0H5KX');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>miR4ASD: A Database of microRNAs associated in Autism Spectrum Disorder</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EW31T0H5KX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-EW31T0H5KX');
+    </script>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -409,11 +409,12 @@
         }
 
         .footer a {
-            color: var(--accent-color);
-            text-decoration: none;
+            color: #93C5FD;
+            text-decoration: underline;
         }
 
         .footer a:hover {
+            color: #FFFFFF;
             text-decoration: underline;
         }
 
@@ -693,12 +694,6 @@
             margin: 0;
             vertical-align: middle;
         }
-        .filter-action-banner {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 10px 16px;
-        }
         .btn-close-xs {
             width: 0.45rem !important;
             height: 0.45rem !important;
@@ -784,30 +779,32 @@
     </style>
 </head>
 <body>
-    <div class="header">
+    <header class="header" role="banner">
         <h1>miR4ASD: A Database of microRNAs associated in Autism Spectrum Disorder</h1>
-    </div>
+    </header>
 
-    <div class="container-fluid">
+    <main id="main-content" class="container-fluid" role="main">
         <div class="card">
             <div class="d-flex justify-content-between align-items-center flex-wrap border-bottom pe-3">
-                <ul class="nav nav-tabs border-0" id="myTab" role="tablist" style="margin-bottom: -1px;">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="true">About miR4ASD</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="expression-tab" data-bs-toggle="tab" data-bs-target="#expression" type="button" role="tab" aria-controls="expression" aria-selected="false">Expression Studies</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="genetic-tab" data-bs-toggle="tab" data-bs-target="#genetic" type="button" role="tab" aria-controls="genetic" aria-selected="false">Genetic & Other Studies</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="targets-tab" data-bs-toggle="tab" data-bs-target="#targets" type="button" role="tab" aria-controls="targets" aria-selected="false">Target Genes</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="enrichment-tab" data-bs-toggle="tab" data-bs-target="#enrichment" type="button" role="tab" aria-controls="enrichment" aria-selected="false">Functional Enrichment</button>
-                    </li>
-                </ul>
+                <nav aria-label="Database sections">
+                    <ul class="nav nav-tabs border-0" id="myTab" role="tablist" style="margin-bottom: -1px;">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="true">About miR4ASD</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="expression-tab" data-bs-toggle="tab" data-bs-target="#expression" type="button" role="tab" aria-controls="expression" aria-selected="false">Expression Studies</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="genetic-tab" data-bs-toggle="tab" data-bs-target="#genetic" type="button" role="tab" aria-controls="genetic" aria-selected="false">Genetic & Other Studies</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="targets-tab" data-bs-toggle="tab" data-bs-target="#targets" type="button" role="tab" aria-controls="targets" aria-selected="false">Target Genes</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="enrichment-tab" data-bs-toggle="tab" data-bs-target="#enrichment" type="button" role="tab" aria-controls="enrichment" aria-selected="false">Functional Enrichment</button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
             <div class="tab-content p-3" id="myTabContent">
                 <!-- About Tab Pane (Active by Default) -->
@@ -821,21 +818,21 @@
                         <!-- Left column: Database Introduction -->
                         <div class="col-lg-5">
                             <div class="card h-100 p-4 border shadow-sm" style="background: #ffffff; border-radius: 12px; border-color: #E5E7EB !important; box-shadow: none !important;">
-                                <h3 class="mb-3" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color);">
+                                <h2 class="mb-3" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color); font-size: 1.4rem;">
                                     <i class="fa-solid fa-circle-info me-2 text-primary"></i>Database Overview
-                                </h3>
+                                </h2>
                                 <p style="line-height: 1.6; text-align: justify; color: #4A5568;">
                                     <strong>miR4ASD</strong> is an open-access, literature-based database that compiles human microRNAs (miRNAs) that were experimentally associated with Autism Spectrum Disorder (ASD). It includes manually curated data from peer-reviewed case-control studies, covering gene expression and genetic variant analysis. All miRNA names from different studies are standardized to miRBase version 22.1.
                                 </p>
                                 
-                                <h4 class="mt-4 mb-3" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color);">Key Features of miR4ASD:</h4>
+                                <h3 class="mt-4 mb-3" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color); font-size: 1.15rem;">Key Features of miR4ASD:</h3>
                                 <div class="d-flex flex-column gap-3">
                                     <div class="d-flex align-items-start">
                                         <span class="badge p-2 rounded-circle me-3" style="background-color: #EBF8FF; color: #2B6CB0; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px;">
                                             <i class="fa-solid fa-code-fork"></i>
                                         </span>
                                         <div>
-                                            <h6 class="mb-1" style="font-weight: 700; color: #2D3748;">Integrated Data</h6>
+                                            <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">Integrated Data</h4>
                                             <span style="font-size: 0.9rem; color: #718096;">Integrates gene expression and miRNA profiling data from ASD-control studies.</span>
                                         </div>
                                     </div>
@@ -844,7 +841,7 @@
                                             <i class="fa-solid fa-bullseye"></i>
                                         </span>
                                         <div>
-                                            <h6 class="mb-1" style="font-weight: 700; color: #2D3748;">Validated Target Genes</h6>
+                                            <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">Validated Target Genes</h4>
                                             <span style="font-size: 0.9rem; color: #718096;">Incorporates miRTarBase 10.0 and DIANA-TarBase v9.0 experimental targets with consensus tagging, cross-referenced with SFARI Gene ASD scores.</span>
                                         </div>
                                     </div>
@@ -853,7 +850,7 @@
                                             <i class="fa-solid fa-brain"></i>
                                         </span>
                                         <div>
-                                            <h6 class="mb-1" style="font-weight: 700; color: #2D3748;">Tissue-Specific Patterns</h6>
+                                            <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">Tissue-Specific Patterns</h4>
                                             <span style="font-size: 0.9rem; color: #718096;">Highlights tissue-specific expression patterns across brain and peripheral samples.</span>
                                         </div>
                                     </div>
@@ -862,7 +859,7 @@
                                             <i class="fa-solid fa-dna"></i>
                                         </span>
                                         <div>
-                                            <h6 class="mb-1" style="font-weight: 700; color: #2D3748;">Genetic Variants</h6>
+                                            <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">Genetic Variants</h4>
                                             <span style="font-size: 0.9rem; color: #718096;">Includes miRNAs with reported genetic variants — an underexplored area in ASD research.</span>
                                         </div>
                                     </div>
@@ -871,7 +868,7 @@
                                             <i class="fa-solid fa-microscope"></i>
                                         </span>
                                         <div>
-                                            <h6 class="mb-1" style="font-weight: 700; color: #2D3748;">Research Enabler</h6>
+                                            <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">Research Enabler</h4>
                                             <span style="font-size: 0.9rem; color: #718096;">Supports biomarker discovery, functional studies, and genetic research in ASD.</span>
                                         </div>
                                     </div>
@@ -882,9 +879,9 @@
                         <!-- Right column: Database Workflow Figure -->
                         <div class="col-lg-7">
                             <div class="figure-card card h-100 p-4 border shadow-sm" style="background: #ffffff; border-radius: 12px; border-color: #E5E7EB !important; box-shadow: none !important;">
-                                <h3 class="mb-3 figure-title" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color);">
+                                <h2 class="mb-3 figure-title" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color); font-size: 1.4rem;">
                                     <i class="fa-solid fa-diagram-project me-2 text-primary"></i>Curation & Processing Workflow
-                                </h3>
+                                </h2>
                                 <div class="text-center figure-img-container p-2 mb-2 bg-white border-0" style="min-height: auto;">
                                     <img class="img-fluid figure-img" src="images/Workflow.png" alt="Curation & Processing Workflow" style="max-height: 460px; border-radius: 8px;">
                                 </div>
@@ -898,9 +895,9 @@
                     <!-- Grid of other Figures -->
                     <div class="row g-4 mt-3">
                         <div class="col-12">
-                            <h3 class="mb-1" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color);">
+                            <h2 class="mb-1" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color); font-size: 1.4rem;">
                                 <i class="fa-solid fa-chart-pie me-2 text-primary"></i>Database Statistics & Visualizations
-                            </h3>
+                            </h2>
                             <p class="text-muted mb-2">Click on any chart to open it in high resolution.</p>
                         </div>
                     </div>
@@ -912,7 +909,7 @@
                                     <img class="img-fluid figure-img" src="images/Eligible_studies.jpg" alt="Eligible Studies Distribution">
                                 </div>
                                 <div class="figure-caption">
-                                    <h6 class="figure-title fw-bold mb-1" style="color: var(--primary-color);">Eligible Studies</h6>
+                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1rem;">Eligible Studies</h3>
                                     <span class="text-muted" style="font-size: 0.85rem;">Pie chart showing the distribution and categorization of eligible studies included in the database.</span>
                                 </div>
                             </div>
@@ -921,11 +918,11 @@
                         <div class="col">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
-                                    <img class="img-fluid figure-img" src="images/Expression_Studies_by_tissue_type.jpg" alt="Expression Studies by Tissue">
+                                    <img class="img-fluid figure-img" src="images/miRNAs_by_tissue.png" alt="Expression Studies by Tissue">
                                 </div>
                                 <div class="figure-caption">
-                                    <h6 class="figure-title fw-bold mb-1" style="color: var(--primary-color);">Expression Studies by Tissue</h6>
-                                    <span class="text-muted" style="font-size: 0.85rem;">Breakdown of expression studies grouped by the type of tissue analyzed (e.g., Blood, Brain, LCLs).</span>
+                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1rem;">Expression Studies by Tissue</h3>
+                                    <span class="text-muted" style="font-size: 0.85rem;">Distribution of profiled microRNAs grouped across brain, blood, serum, and saliva tissues.</span>
                                 </div>
                             </div>
                         </div>
@@ -933,11 +930,11 @@
                         <div class="col">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
-                                    <img class="img-fluid figure-img" src="images/Genetic_Studies_by_variant_type.jpg" alt="Genetic Studies by Variant">
+                                    <img class="img-fluid figure-img" src="images/miRNAs_by_genetic_alteration.png" alt="Genetic Studies by Variant">
                                 </div>
                                 <div class="figure-caption">
-                                    <h6 class="figure-title fw-bold mb-1" style="color: var(--primary-color);">Genetic Studies by Variant</h6>
-                                    <span class="text-muted" style="font-size: 0.85rem;">Distribution of genetic and other studies classified by the underlying variant types analyzed.</span>
+                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1rem;">Genetic Studies by Variant</h3>
+                                    <span class="text-muted" style="font-size: 0.85rem;">Classification of genetic alterations affecting microRNA genes (CNVs, SNVs, and SNPs).</span>
                                 </div>
                             </div>
                         </div>
@@ -945,11 +942,11 @@
                         <div class="col">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
-                                    <img class="img-fluid figure-img" src="images/Top_10_miRNAs.jpg" alt="Top 10 Associated miRNAs">
+                                    <img class="img-fluid figure-img" src="images/Top_10_miRNAs.png" alt="Top 10 Associated miRNAs">
                                 </div>
                                 <div class="figure-caption">
-                                    <h6 class="figure-title fw-bold mb-1" style="color: var(--primary-color);">Top 10 Associated miRNAs</h6>
-                                    <span class="text-muted" style="font-size: 0.85rem;">The top 10 human microRNAs ranked by the total number of independent studies reporting an association with ASD.</span>
+                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1rem;">Top 10 Associated miRNAs</h3>
+                                    <span class="text-muted" style="font-size: 0.85rem;">Ranking of the most frequently reported dysregulated microRNAs in independent ASD studies.</span>
                                 </div>
                             </div>
                         </div>
@@ -957,11 +954,11 @@
                         <div class="col">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
-                                    <img class="img-fluid figure-img" src="images/12_miRNAs_in_common.jpg" alt="miRNAs in Common">
+                                    <img class="img-fluid figure-img" src="images/miRNAs_in_common.png" alt="miRNAs in Common">
                                 </div>
                                 <div class="figure-caption">
-                                    <h6 class="figure-title fw-bold mb-1" style="color: var(--primary-color);">miRNAs in Common</h6>
-                                    <span class="text-muted" style="font-size: 0.85rem;">Analysis of microRNAs common across different patient datasets or tissue groups.</span>
+                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1rem;">miRNAs in Common</h3>
+                                    <span class="text-muted" style="font-size: 0.85rem;">Overlap of candidate microRNAs identified across both expression profiling and genetic investigations.</span>
                                 </div>
                             </div>
                         </div>
@@ -972,19 +969,19 @@
                                     <img class="img-fluid figure-img" src="images/miRNAs_expression_studies.png" alt="Expression Studies Summary">
                                 </div>
                                 <div class="figure-caption">
-                                    <h6 class="figure-title fw-bold mb-1" style="color: var(--primary-color);">Expression Studies Summary</h6>
-                                    <span class="text-muted" style="font-size: 0.85rem;">Overview of specific miRNAs and their reported alterations in gene expression studies.</span>
+                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1rem;">Expression Studies Summary</h3>
+                                    <span class="text-muted" style="font-size: 0.85rem;">Comprehensive summary of microRNA expression alterations reported across all analyzed publications.</span>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="col-lg-4 col-md-6 col-12 mx-auto">
+                        <div class="col">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
                                     <img class="img-fluid figure-img" src="images/miRNAs_genetic_and_other_studies.png" alt="Genetic Studies Summary">
                                 </div>
                                 <div class="figure-caption">
-                                    <h6 class="figure-title fw-bold mb-1" style="color: var(--primary-color);">Genetic Studies Summary</h6>
+                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1rem;">Genetic Studies Summary</h3>
                                     <span class="text-muted" style="font-size: 0.85rem;">Overview of specific miRNAs and their association with genetic variants in ASD datasets.</span>
                                 </div>
                             </div>
@@ -996,9 +993,9 @@
                         <div class="col-12">
                             <div class="card p-4 border shadow-sm" style="background: #ffffff; border-radius: 12px; border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-                                    <h3 class="mb-0" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color);">
+                                    <h2 class="mb-0" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color); font-size: 1.4rem;">
                                         <i class="fa-solid fa-book-open me-2 text-primary"></i>Data Dictionary & Column Definitions
-                                    </h3>
+                                    </h2>
                                     <span class="badge bg-primary-subtle text-primary border rounded-pill px-3 py-2" style="font-size: 0.8rem;">
                                         <i class="fa-solid fa-layer-group me-1"></i>4 Table Specifications
                                     </span>
@@ -1010,11 +1007,11 @@
                                 <div class="accordion" id="dictionaryAccordion">
                                     <!-- Accordion Item 1: Expression Studies -->
                                     <div class="accordion-item border rounded mb-3 overflow-hidden">
-                                        <h2 class="accordion-header" id="headingExpr">
+                                        <h3 class="accordion-header" id="headingExpr">
                                             <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExpr" aria-expanded="false" aria-controls="collapseExpr" style="background-color: #F8FAFC; color: var(--primary-color);">
                                                 <i class="fa-solid fa-chart-column text-success me-2"></i>1. Expression Studies Table Specifications
                                             </button>
-                                        </h2>
+                                        </h3>
                                         <div id="collapseExpr" class="accordion-collapse collapse" aria-labelledby="headingExpr" data-bs-parent="#dictionaryAccordion">
                                             <div class="accordion-body p-3">
                                                 <div class="table-responsive">
@@ -1081,11 +1078,11 @@
 
                                     <!-- Accordion Item 2: Genetic Studies -->
                                     <div class="accordion-item border rounded mb-3 overflow-hidden">
-                                        <h2 class="accordion-header" id="headingGen">
+                                        <h3 class="accordion-header" id="headingGen">
                                             <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGen" aria-expanded="false" aria-controls="collapseGen" style="background-color: #F8FAFC; color: var(--primary-color);">
                                                 <i class="fa-solid fa-dna text-info me-2"></i>2. Genetic & Other Studies Table Specifications
                                             </button>
-                                        </h2>
+                                        </h3>
                                         <div id="collapseGen" class="accordion-collapse collapse" aria-labelledby="headingGen" data-bs-parent="#dictionaryAccordion">
                                             <div class="accordion-body p-3">
                                                 <div class="table-responsive">
@@ -1134,11 +1131,11 @@
 
                                     <!-- Accordion Item 3: Validated Target Genes -->
                                     <div class="accordion-item border rounded mb-3 overflow-hidden">
-                                        <h2 class="accordion-header" id="headingTar">
+                                        <h3 class="accordion-header" id="headingTar">
                                             <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTar" aria-expanded="false" aria-controls="collapseTar" style="background-color: #F8FAFC; color: var(--primary-color);">
                                                 <i class="fa-solid fa-bullseye text-primary me-2"></i>3. Validated Target Genes Table Specifications
                                             </button>
-                                        </h2>
+                                        </h3>
                                         <div id="collapseTar" class="accordion-collapse collapse" aria-labelledby="headingTar" data-bs-parent="#dictionaryAccordion">
                                             <div class="accordion-body p-3">
                                                 <div class="table-responsive">
@@ -1235,11 +1232,11 @@
 
                                     <!-- Accordion Item 4: Nested Study Details -->
                                     <div class="accordion-item border rounded mb-0 overflow-hidden">
-                                        <h2 class="accordion-header" id="headingDet">
+                                        <h3 class="accordion-header" id="headingDet">
                                             <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDet" aria-expanded="false" aria-controls="collapseDet" style="background-color: #F8FAFC; color: var(--primary-color);">
                                                 <i class="fa-solid fa-list-check text-warning me-2"></i>4. Nested Study Details Metadata Specifications
                                             </button>
-                                        </h2>
+                                        </h3>
                                         <div id="collapseDet" class="accordion-collapse collapse" aria-labelledby="headingDet" data-bs-parent="#dictionaryAccordion">
                                             <div class="accordion-body p-3">
                                                 <div class="table-responsive">
@@ -1296,11 +1293,11 @@
 
                                     <!-- 5. Functional Enrichment Accordion Item -->
                                     <div class="accordion-item border rounded mb-2 overflow-hidden">
-                                        <h2 class="accordion-header" id="headingEnrich">
+                                        <h3 class="accordion-header" id="headingEnrich">
                                             <button class="accordion-button collapsed fw-bold py-2 px-3 bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEnrich" aria-expanded="false" aria-controls="collapseEnrich">
                                                 <i class="fa-solid fa-dna text-primary me-2"></i>5. Functional Enrichment Analysis & g:Profiler Parameters
                                             </button>
-                                        </h2>
+                                        </h3>
                                         <div id="collapseEnrich" class="accordion-collapse collapse" aria-labelledby="headingEnrich" data-bs-parent="#dictionaryAccordion">
                                             <div class="accordion-body p-3">
                                                 <div class="table-responsive">
@@ -1359,6 +1356,7 @@
                 </div>
 
                 <div class="tab-pane fade" id="expression" role="tabpanel" aria-labelledby="expression-tab">
+                    <h2 class="visually-hidden">Expression Profiling Studies</h2>
                     <!-- 3-Step Analytical Workflow Toolbar -->
                     <div class="card p-3 mb-3 workflow-stepper-card shadow-sm">
                         <div class="row g-3 align-items-center">
@@ -1416,23 +1414,24 @@
                     <table id="expression-table" class="display" style="width:100%">
                         <thead>
                             <tr>
-                                <th style="width: 32px;" class="text-center">
+                                <th scope="col" style="width: 32px;" class="text-center">
                                     <input type="checkbox" class="select-all-expr form-check-input" title="Select / deselect all visible miRNAs" aria-label="Select all visible miRNAs">
                                 </th>
-                                <th style="width: 24px;"></th>
-                                <th data-bs-toggle="tooltip" title="Stem-loop precursor microRNA identifier according to miRBase v22.1.">Precursor miRNA (hairpin)</th>
-                                <th data-bs-toggle="tooltip" title="Functional mature microRNA single-strand identifier (miRBase v22.1).">Mature miRNA</th>
-                                <th data-bs-toggle="tooltip" title="Reported direction of expression alteration in ASD cases versus neurotypical controls.">Expression change (ASD vs. controls)</th>
-                                <th data-bs-toggle="tooltip" title="Biological tissue, cell type, or bodily fluid analyzed in the study cohort.">Tissue</th>
-                                <th data-bs-toggle="tooltip" title="Multi-study consistency synthesis: Consistent (≥2 studies same direction), Conflicting (divergent), or Single-study.">Overall evidence</th>
-                                <th data-bs-toggle="tooltip" title="Count of independent publications reporting statistically significant upregulation in ASD.">Number of studies (Upregulated)</th>
-                                <th data-bs-toggle="tooltip" title="Count of independent publications reporting statistically significant downregulation in ASD.">Number of studies (Downregulated)</th>
-                                <th data-bs-toggle="tooltip" title="Total independent expression profiling studies evaluating this miRNA in ASD cohorts.">Total studies</th>
+                                <th scope="col" style="width: 24px;" aria-label="Row details"><span class="visually-hidden">Details</span></th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Stem-loop precursor microRNA identifier according to miRBase v22.1.">Precursor miRNA (hairpin)</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Functional mature microRNA single-strand identifier (miRBase v22.1).">Mature miRNA</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Reported direction of expression alteration in ASD cases versus neurotypical controls.">Expression change (ASD vs. controls)</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Biological tissue, cell type, or bodily fluid analyzed in the study cohort.">Tissue</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Multi-study consistency synthesis: Consistent (≥2 studies same direction), Conflicting (divergent), or Single-study.">Overall evidence</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Count of independent publications reporting statistically significant upregulation in ASD.">Number of studies (Upregulated)</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Count of independent publications reporting statistically significant downregulation in ASD.">Number of studies (Downregulated)</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Total independent expression profiling studies evaluating this miRNA in ASD cohorts.">Total studies</th>
                             </tr>
                         </thead>
                     </table>
                 </div>
                 <div class="tab-pane fade" id="genetic" role="tabpanel" aria-labelledby="genetic-tab">
+                    <h2 class="visually-hidden">Genetic & Other ASD Studies</h2>
                     <!-- 3-Step Analytical Workflow Toolbar -->
                     <div class="card p-3 mb-3 workflow-stepper-card shadow-sm">
                         <div class="row g-3 align-items-center">
@@ -1490,19 +1489,20 @@
                     <table id="other-table" class="display" style="width:100%">
                         <thead>
                             <tr>
-                                <th style="width: 32px;" class="text-center">
+                                <th scope="col" style="width: 32px;" class="text-center">
                                     <input type="checkbox" class="select-all-other form-check-input" title="Select / deselect all visible miRNAs" aria-label="Select all visible miRNAs">
                                 </th>
-                                <th style="width: 24px;"></th>
-                                <th data-bs-toggle="tooltip" title="Stem-loop precursor microRNA identifier (miRBase v22.1).">Precursor miRNA (hairpin)</th>
-                                <th data-bs-toggle="tooltip" title="Functional mature microRNA identifier (miRBase v22.1).">Mature miRNA</th>
-                                <th data-bs-toggle="tooltip" title="Genomic or functional alteration category (CNV, SNV, SNP, or targeted miRNA expression).">Alteration</th>
-                                <th data-bs-toggle="tooltip" title="Methodological description, sequencing platform, and genetic cohort summary.">Study description</th>
+                                <th scope="col" style="width: 24px;" aria-label="Row details"><span class="visually-hidden">Details</span></th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Stem-loop precursor microRNA identifier (miRBase v22.1).">Precursor miRNA (hairpin)</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Functional mature microRNA identifier (miRBase v22.1).">Mature miRNA</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Genomic or functional alteration category (CNV, SNV, SNP, or targeted miRNA expression).">Alteration</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Methodological description, sequencing platform, and genetic cohort summary.">Study description</th>
                             </tr>
                         </thead>
                     </table>
                 </div>
                 <div class="tab-pane fade" id="targets" role="tabpanel" aria-labelledby="targets-tab">
+                    <h2 class="visually-hidden">Target Genes & Experimental Validation</h2>
                     <div class="alert border-0 shadow-sm mb-3 py-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-2" style="background-color: #EBF8FF; color: #2B6CB0; border-radius: 8px;">
                         <div>
                             <i class="fa-solid fa-circle-info me-2"></i>
@@ -1564,18 +1564,18 @@
                     <table id="targets-table" class="display" style="width:100%">
                         <thead>
                             <tr>
-                                <th style="width: 24px;"></th>
-                                <th data-bs-toggle="tooltip" title="Stem-loop precursor miRNA(s) encoding this mature regulatory RNA.">Precursor miRNA</th>
-                                <th data-bs-toggle="tooltip" title="Mature microRNA identifier with direct experimental validation for this target gene.">Mature miRNA</th>
-                                <th data-bs-toggle="tooltip" title="Official HGNC gene symbol (hyperlinked directly to GeneCards human gene catalog).">Target Gene</th>
-                                <th data-bs-toggle="tooltip" title="Full protein-coding gene name and biological function description.">Gene Description</th>
-                                <th data-bs-toggle="tooltip" title="SFARI Gene autism susceptibility tier: Category 1 (High Confidence), Cat 2 (Candidate), Cat 3 (Suggestive), or Syndromic.">ASD Susceptibility (SFARI)</th>
-                                <th data-bs-toggle="tooltip" title="Experimental validation tier: Strong Evidence (Reporter/WB/qPCR), CLIP/CLASH (Physical binding), or High-Throughput Expression.">Evidence Level</th>
-                                <th data-bs-toggle="tooltip" title="Experimental target interaction database provenance: miRTarBase 10.0, DIANA-TarBase v9.0, or Consensus (Both).">Database Source</th>
-                                <th data-bs-toggle="tooltip" title="PubMed Identifiers (PMIDs) of primary research articles supporting the interaction.">PubMed Reference</th>
-                                <th>Experimental Methods</th>
-                                <th>Regulation</th>
-                                <th>Tissue / Cell Source</th>
+                                <th scope="col" style="width: 24px;" aria-label="Row details"><span class="visually-hidden">Details</span></th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Stem-loop precursor miRNA(s) encoding this mature regulatory RNA.">Precursor miRNA</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Mature microRNA identifier with direct experimental validation for this target gene.">Mature miRNA</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Official HGNC gene symbol (hyperlinked directly to GeneCards human gene catalog).">Target Gene</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Full protein-coding gene name and biological function description.">Gene Description</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="SFARI Gene autism susceptibility tier: Category 1 (High Confidence), Cat 2 (Candidate), Cat 3 (Suggestive), or Syndromic.">ASD Susceptibility (SFARI)</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Experimental validation tier: Strong Evidence (Reporter/WB/qPCR), CLIP/CLASH (Physical binding), or High-Throughput Expression.">Evidence Level</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Experimental target interaction database provenance: miRTarBase 10.0, DIANA-TarBase v9.0, or Consensus (Both).">Database Source</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="PubMed Identifiers (PMIDs) of primary research articles supporting the interaction.">PubMed Reference</th>
+                                <th scope="col">Experimental Methods</th>
+                                <th scope="col">Regulation</th>
+                                <th scope="col">Tissue / Cell Source</th>
                             </tr>
                         </thead>
                     </table>
@@ -1588,9 +1588,9 @@
                         <!-- Header & Title Banner -->
                         <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3 pb-3 border-bottom">
                             <div>
-                                <h4 class="mb-1 fw-bold" style="font-family: 'Montserrat', sans-serif; color: var(--primary-color);">
+                                <h2 class="mb-1 fw-bold" style="font-family: 'Montserrat', sans-serif; color: var(--primary-color); font-size: 1.4rem;">
                                     <i class="fa-solid fa-dna text-primary me-2"></i>Functional Enrichment Analysis
-                                </h4>
+                                </h2>
                                 <p class="text-secondary small mb-0">
                                     Analyze biological pathways, gene ontologies (GO:BP, GO:MF, GO:CC), and disease phenotypes (KEGG, Reactome, HP) overrepresented among validated miRNA targets.
                                 </p>
@@ -1702,7 +1702,6 @@
                                     <span class="text-muted small">No genes selected. Select miRNAs from tables or click a preset above.</span>
                                 </div>
                             </div>
-                        </div>
 
                         <!-- Step 2: Run & Collapsible Advanced Settings -->
                         <div class="mb-1">
@@ -1903,13 +1902,13 @@
                             <table id="enrichment-results-table" class="display" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th data-bs-toggle="tooltip" title="Origin database (GO:BP, GO:MF, GO:CC, KEGG, Reactome, HP, WikiPathways).">Source</th>
-                                        <th data-bs-toggle="tooltip" title="Official ontology identifier (links directly to source portal).">Term ID</th>
-                                        <th data-bs-toggle="tooltip" title="Human-readable biological process, pathway, or phenotype name.">Term Name</th>
-                                        <th data-bs-toggle="tooltip" title="Corrected overrepresentation significance value (hypergeometric test).">Adjusted P-Value</th>
-                                        <th data-bs-toggle="tooltip" title="Overlap ratio: number of query target genes in term (k) divided by total query size (N).">Overlap (k/N)</th>
-                                        <th data-bs-toggle="tooltip" title="Total annotated human protein-coding genes in this pathway.">Term Size</th>
-                                        <th data-bs-toggle="tooltip" title="Query target genes present in this term with SFARI autism risk confidence badges.">Intersecting Target Genes</th>
+                                        <th scope="col" data-bs-toggle="tooltip" title="Origin database (GO:BP, GO:MF, GO:CC, KEGG, Reactome, HP, WikiPathways).">Source</th>
+                                        <th scope="col" data-bs-toggle="tooltip" title="Official ontology identifier (links directly to source portal).">Term ID</th>
+                                        <th scope="col" data-bs-toggle="tooltip" title="Human-readable biological process, pathway, or phenotype name.">Term Name</th>
+                                        <th scope="col" data-bs-toggle="tooltip" title="Corrected overrepresentation significance value (hypergeometric test).">Adjusted P-Value</th>
+                                        <th scope="col" data-bs-toggle="tooltip" title="Overlap ratio: number of query target genes in term (k) divided by total query size (N).">Overlap (k/N)</th>
+                                        <th scope="col" data-bs-toggle="tooltip" title="Total annotated human protein-coding genes in this pathway.">Term Size</th>
+                                        <th scope="col" data-bs-toggle="tooltip" title="Query target genes present in this term with SFARI autism risk confidence badges.">Intersecting Target Genes</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -1918,13 +1917,279 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <footer class="footer mt-auto py-3 bg-light">
+    <footer class="footer mt-auto py-3" role="contentinfo">
         <div class="container text-center">
-            <span class="text-muted">© 2025 miR4ASD | <a href="https://github.com/miR4ASD/miR4ASD">GitHub Repository</a> | This work is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span>
+            <span class="text-white-50">© 2025 miR4ASD | <a href="https://github.com/miR4ASD/miR4ASD" class="text-white text-decoration-underline" target="_blank" rel="noopener noreferrer">GitHub Repository</a> | This work is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="text-white text-decoration-underline" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span>
         </div>
     </footer>
+
+    <!-- Advanced Filters Drawer -->
+    <div id="filterDrawer" class="filter-drawer" aria-hidden="true" role="dialog" aria-labelledby="filterDrawerTitle">
+        <div class="filter-drawer-header">
+            <h5 id="filterDrawerTitle"><i class="fa-solid fa-sliders me-2 text-primary"></i>Advanced Filters & Queries</h5>
+            <button type="button" class="btn-close" id="closeFilterDrawer" aria-label="Close filter drawer"></button>
+        </div>
+        <div class="filter-drawer-body">
+            <!-- 3-Step Analytical Workflow Guide Card -->
+            <div class="card border p-3 mb-3" style="background-color: #f8fafc; border-color: #e2e8f0 !important; border-radius: 10px;">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <strong style="font-size: 0.82rem; color: var(--primary-color);">
+                        <i class="fa-solid fa-circle-info text-primary me-1"></i>Selection & Filtering Workflow:
+                    </strong>
+                </div>
+                <div class="text-secondary mb-2" style="font-size: 0.74rem; line-height: 1.45;">
+                    <div><strong>1. Selection:</strong> Table checkboxes define <em>which specific miRNAs</em> you analyze.</div>
+                    <div><strong>2. Filtering:</strong> Modulates <em>study conditions or target criteria</em> (e.g. Brain, SFARI) without deselecting your chosen miRNAs.</div>
+                    <div><strong>3. Enrichment:</strong> Analyzes biological pathways for your target cohort.</div>
+                </div>
+                <!-- Decoupled Selection & Filter Status Bar -->
+                <div class="d-flex justify-content-between align-items-center pt-2 border-top gap-2" style="font-size: 0.78rem;">
+                    <div>
+                        <span class="fw-semibold">Selection:</span> 
+                        <span id="drawer-selection-badge" class="badge bg-light text-dark border">0 Selected</span>
+                        <button type="button" class="btn btn-link btn-xs p-0 text-danger ms-1 text-decoration-none" id="drawer-btn-clear-selection">Deselect</button>
+                    </div>
+                    <div>
+                        <span class="fw-semibold">Filters:</span> 
+                        <span id="drawer-filter-count-badge" class="badge bg-light text-dark border">0 Active</span>
+                        <button type="button" class="btn btn-link btn-xs p-0 text-danger ms-1 text-decoration-none" id="drawer-btn-reset-filters">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Quick Enrichment Action from Drawer -->
+            <div class="mb-3">
+                <button type="button" class="btn btn-primary w-100 py-2 fw-bold shadow-sm d-flex justify-content-between align-items-center" id="drawer-btn-enrich">
+                    <span><i class="fa-solid fa-dna me-1 text-warning"></i> <span id="drawer-enrich-text">Run Target Enrichment on Filtered miRNAs</span></span>
+                    <i class="fa-solid fa-arrow-right ms-1"></i>
+                </button>
+            </div>
+
+            <!-- 1. Search by miRNA or Gene Symbol (All Tables) -->
+            <div class="filter-section-card">
+                <div class="filter-section-header">
+                    <div>
+                        <h6 class="mb-0"><i class="fa-solid fa-magnifying-glass text-primary me-2"></i>Search by miRNA or Gene Symbol</h6>
+                        <span class="text-muted" style="font-size: 0.7rem;">Filters simultaneously across All Tables</span>
+                    </div>
+                    <span class="badge bg-primary-subtle text-primary border rounded-pill" style="font-size: 0.7rem;">Shared Search</span>
+                </div>
+                <p class="text-muted mt-2 mb-2" style="font-size: 0.74rem; line-height: 1.35;">
+                    Filter all tables by typing or pasting one or more miRNA identifiers or target gene symbols (separated by commas, spaces, or lines).
+                </p>
+                
+                <!-- Search miRNA Hairpin ID (Batch support) -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label for="filter-mirna-id" class="form-label fw-bold text-secondary mb-0" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">miRNA Precursor / Hairpin ID(s)</label>
+                        <span class="text-muted" style="font-size: 0.68rem;">Stem-loops (e.g. hsa-let-7a-1)</span>
+                    </div>
+                    <textarea id="filter-mirna-id" class="form-control font-monospace" rows="2" placeholder="e.g. hsa-let-7a-1, hsa-mir-132, hsa-mir-146a..." style="font-size: 0.8rem;" aria-label="Filter by miRNA Hairpin ID(s)"></textarea>
+                </div>
+                
+                <!-- Search miRNA Mature ID (Batch support) -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label for="filter-mature-id" class="form-label fw-bold text-secondary mb-0" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">miRNA Mature ID(s)</label>
+                        <span class="text-muted" style="font-size: 0.68rem;">Mature strands (e.g. hsa-miR-132-3p)</span>
+                    </div>
+                    <textarea id="filter-mature-id" class="form-control font-monospace" rows="2" placeholder="e.g. hsa-let-7a-5p, hsa-miR-132-3p, hsa-miR-146a-5p..." style="font-size: 0.8rem;" aria-label="Filter by miRNA Mature ID(s)"></textarea>
+                </div>
+
+                <!-- Search by Regulated Target Genes (Batch support across tables) -->
+                <div class="mb-0">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label for="filter-target-gene" class="form-label fw-bold text-secondary mb-0" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Target Gene Symbol(s)</label>
+                        <span class="text-muted" style="font-size: 0.68rem;">Find miRNAs regulating genes</span>
+                    </div>
+                    <textarea id="filter-target-gene" class="form-control font-monospace" rows="2" placeholder="e.g. PTEN, SHANK3, MECP2, CHD8, SCN2A..." style="font-size: 0.8rem;" aria-label="Search miRNAs for Target Genes"></textarea>
+                </div>
+            </div>
+
+            <!-- 2. Target Genes Filters -->
+            <div class="filter-section-card">
+                <div class="filter-section-header">
+                    <h6><i class="fa-solid fa-bullseye text-primary me-2"></i>Target Annotation Filters</h6>
+                    <span class="badge bg-primary-subtle text-primary border rounded-pill" style="font-size: 0.7rem;">Targets Tab</span>
+                </div>
+
+                <!-- Database Source (miRTarBase default) -->
+                <div class="mb-3">
+                    <label for="filter-target-db" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Target Database Source</label>
+                    <select id="filter-target-db" class="form-select form-select-sm" aria-label="Filter by Target Database Source">
+                        <option value="mirtarbase" selected>miRTarBase 10.0 (Default)</option>
+                        <option value="consensus">Consensus (Validated in Both DBs)</option>
+                        <option value="tarbase">DIANA-TarBase v9.0</option>
+                        <option value="all">All Sources (Merged Union)</option>
+                    </select>
+                </div>
+
+                <!-- SFARI ASD Category -->
+                <div class="mb-3">
+                    <label for="filter-sfari-category" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">ASD Susceptibility (SFARI)</label>
+                    <select id="filter-sfari-category" class="form-select form-select-sm" aria-label="Filter by ASD Susceptibility SFARI Category">
+                        <option value="">All Target Genes</option>
+                        <option value="SFARI">All SFARI ASD Genes</option>
+                        <option value="Category 1">SFARI Category 1 (High Confidence)</option>
+                        <option value="Category 2">SFARI Category 2 (Strong Candidate)</option>
+                        <option value="Category 3">SFARI Category 3 (Suggestive)</option>
+                        <option value="Syndromic">SFARI Syndromic</option>
+                        <option value="Non-SFARI">Other Targets (Non-SFARI)</option>
+                    </select>
+                </div>
+
+                <!-- Evidence Level -->
+                <div class="mb-3">
+                    <label for="filter-evidence-level" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Evidence Level</label>
+                    <select id="filter-evidence-level" class="form-select form-select-sm" aria-label="Filter by Target Evidence Level">
+                        <option value="">All Evidence Levels</option>
+                        <option value="Strong Evidence">Strong Evidence (Reporter / WB / qPCR)</option>
+                        <option value="Direct Binding">Direct Binding (CLIP / CLASH / RIP)</option>
+                        <option value="High-Throughput">High-Throughput Expression (RNA-Seq / Microarrays)</option>
+                    </select>
+                </div>
+
+                <!-- Validation Method -->
+                <div class="mb-3">
+                    <label for="filter-target-method" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Experimental Technique</label>
+                    <select id="filter-target-method" class="form-select form-select-sm" aria-label="Filter by Experimental Technique">
+                        <option value="">All Experimental Methods</option>
+                        <option value="Luciferase Reporter Assay">Luciferase Reporter Assay</option>
+                        <option value="Western Blot">Western Blot</option>
+                        <option value="qPCR">qPCR</option>
+                        <option value="HITS-CLIP">HITS-CLIP</option>
+                        <option value="PAR-CLIP">PAR-CLIP</option>
+                        <option value="CLASH">CLASH</option>
+                        <option value="RIP-Seq">RIP-Seq</option>
+                        <option value="RNA-Seq">RNA-Seq</option>
+                        <option value="Microarrays">Microarrays</option>
+                        <option value="Northern Blot">Northern Blot</option>
+                        <option value="Biotin-qPCR">Biotin-qPCR</option>
+                        <option value="ELISA">ELISA</option>
+                    </select>
+                </div>
+
+                <!-- Target Regulation -->
+                <div class="mb-3">
+                    <label for="filter-target-regulation" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Target Regulation</label>
+                    <select id="filter-target-regulation" class="form-select form-select-sm" aria-label="Filter by Target Regulation">
+                        <option value="">All Regulations</option>
+                        <option value="Downregulation">Downregulation (Negative)</option>
+                        <option value="Upregulation">Upregulation (Positive)</option>
+                    </select>
+                </div>
+
+                <!-- Tissue / Cell Source -->
+                <div class="mb-0">
+                    <label for="filter-target-tissue" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Tissue / Cell Source</label>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" id="filter-target-tissue" class="form-control border-start-0 ps-0" placeholder="e.g. Brain, Blood, HEK293..." aria-label="Filter by Target Tissue or Cell Source">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Expression Studies Filters -->
+            <div class="filter-section-card">
+                <div class="filter-section-header">
+                    <h6><i class="fa-solid fa-chart-column text-success me-2"></i>Expression Studies</h6>
+                    <span class="badge bg-success-subtle text-success border rounded-pill" style="font-size: 0.7rem;">Expression Tab</span>
+                </div>
+                
+                <!-- Expression Change -->
+                <div class="mb-3">
+                    <label for="filter-expression-change" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Expression Change</label>
+                    <select id="filter-expression-change" class="form-select form-select-sm" aria-label="Filter by Expression Change">
+                        <option value="">All Expression Changes</option>
+                        <option value="Upregulated">Upregulated</option>
+                        <option value="Downregulated">Downregulated</option>
+                    </select>
+                </div>
+
+                <!-- Overall Evidence -->
+                <div class="mb-3">
+                    <label for="filter-overall-evidence" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Overall Evidence</label>
+                    <select id="filter-overall-evidence" class="form-select form-select-sm" aria-label="Filter by Overall Evidence">
+                        <option value="">All Evidence Types</option>
+                        <option value="Consistent upregulation">Consistent upregulation</option>
+                        <option value="Consistent downregulation">Consistent downregulation</option>
+                        <option value="Conflicting evidence">Conflicting evidence</option>
+                        <option value="Single-study evidence">Single-study evidence</option>
+                    </select>
+                </div>
+
+                <!-- Tissue Group -->
+                <div class="mb-0">
+                    <label class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Tissue Type</label>
+                    <div class="tissue-checklist" id="tissue-checkboxes" style="max-height: 140px;">
+                        <!-- Tissue checkboxes will be populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Genetic & Other Studies Filters -->
+            <div class="filter-section-card mb-0">
+                <div class="filter-section-header">
+                    <h6><i class="fa-solid fa-dna text-info me-2"></i>Genetic & Other Studies</h6>
+                    <span class="badge bg-info-subtle text-info border rounded-pill" style="font-size: 0.7rem;">Genetic Tab</span>
+                </div>
+
+                <!-- Variant / Alteration Type -->
+                <div class="mb-3">
+                    <label for="filter-genetic-alteration" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Variant / Alteration</label>
+                    <select id="filter-genetic-alteration" class="form-select form-select-sm" aria-label="Filter by Genetic Variant or Alteration">
+                        <option value="">All Genetic Alterations</option>
+                        <option value="CNV">CNV</option>
+                        <option value="SNV">SNV</option>
+                        <option value="SNP">SNP</option>
+                        <option value="miRNA expression">miRNA expression</option>
+                    </select>
+                </div>
+
+                <!-- Study Description Keywords -->
+                <div class="mb-0">
+                    <label for="filter-study-desc" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Study Description Keywords</label>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" id="filter-study-desc" class="form-control border-start-0 ps-0" placeholder="e.g. sequencing, deletion..." aria-label="Filter by Study Description Keywords">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="filter-drawer-footer d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary flex-grow-1" id="resetFilters">
+                <i class="fa-solid fa-rotate-left me-1"></i> Clear All
+            </button>
+            <button type="button" class="btn btn-primary flex-grow-1" id="closeFilterDrawerBtn">
+                <i class="fa-solid fa-check me-1"></i> Apply & Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Drawer Backdrop -->
+    <div id="drawerBackdrop" class="drawer-backdrop"></div>
+
+    <!-- Image Modal for Lightbox Effect -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content shadow border-0" style="border-radius: 12px; overflow: hidden;">
+          <div class="modal-header border-0 bg-light py-3 px-4">
+            <h5 class="modal-title fw-bold" id="imageModalLabel" style="font-family: 'Montserrat', sans-serif; color: var(--primary-color);">Figure Preview</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center p-4 bg-white">
+            <img id="modalImage" src="" alt="Full size figure" class="img-fluid rounded shadow-sm" style="max-height: 80vh;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Back-to-Top Button -->
+    <button type="button" class="btn back-to-top" id="btn-back-to-top" aria-label="Scroll back to top of page" title="Scroll to top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
 
     <!-- jQuery -->
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -2175,6 +2440,36 @@
             .catch(error => console.error('Error fetching statistics:', error));
 
 
+        // Drawer slide-out toggle actions & keyboard accessibility (WCAG 2.1 Focus Management)
+        let drawerTriggerElement = null;
+
+        function openDrawer(focusSelector = '#filter-mirna-id', triggerEl = null) {
+            drawerTriggerElement = triggerEl || document.activeElement;
+            $('#filterDrawer').addClass('open').attr('aria-hidden', 'false');
+            $('#drawerBackdrop').addClass('show');
+            $('.btn-filter').attr('aria-expanded', 'true');
+            if (focusSelector && $(focusSelector).length) {
+                $(focusSelector).focus();
+            }
+        }
+
+        function closeDrawer() {
+            $('#filterDrawer').removeClass('open').attr('aria-hidden', 'true');
+            $('#drawerBackdrop').removeClass('show');
+            $('.btn-filter').attr('aria-expanded', 'false');
+            if (drawerTriggerElement && typeof drawerTriggerElement.focus === 'function') {
+                drawerTriggerElement.focus();
+            }
+        }
+
+        $('#closeFilterDrawer, #drawerBackdrop, #closeFilterDrawerBtn').on('click', closeDrawer);
+
+        $(document).on('keydown', function(e) {
+            if (e.key === 'Escape' && $('#filterDrawer').hasClass('open')) {
+                closeDrawer();
+            }
+        });
+
         function initializeDataTable(tableId, ajaxUrl, columnsConfig) {
             var table = $(tableId).DataTable({
                 "ajax": {
@@ -2214,10 +2509,7 @@
                             'aria-expanded': 'false'
                         },
                         action: function ( e, dt, node, config ) {
-                            $('#filterDrawer').addClass('open').attr('aria-hidden', 'false');
-                            $('#drawerBackdrop').addClass('show');
-                            $('.btn-filter').attr('aria-expanded', 'true');
-                            $('#filter-mirna-id').focus();
+                            openDrawer('#filter-mirna-id', node);
                         }
                     }
                 ],
@@ -2243,6 +2535,14 @@
         function normalizeMiRNAKey(str) {
             if (!str) return '';
             return cleanString(str).toLowerCase();
+        }
+
+        // Generate normalized variants for miRNA dictionary lookup (e.g. hsa-let-7a-5p -> [hsa-let-7a-5p, let-7a-5p])
+        function getMiRNAVariants(str) {
+            if (!str) return [];
+            const norm = cleanString(str).toLowerCase();
+            const strip = norm.replace(/^hsa-/, '');
+            return Array.from(new Set([norm, strip, 'hsa-' + strip])).filter(Boolean);
         }
 
         // Selection state maps for miRNA tables: uniqueKey -> { mature, hairpin }
@@ -2587,31 +2887,6 @@
             const targetRegulation = $('#filter-target-regulation').val();
             const targetTissue = $('#filter-target-tissue').val().trim();
 
-            // Calculate active filter count across all filter inputs
-            let activeFilterCount = 0;
-            if (hairpinTokens.length > 0) activeFilterCount++;
-            if (matureTokens.length > 0) activeFilterCount++;
-            if (geneTokens.length > 0) activeFilterCount++;
-            if (exprChange) activeFilterCount++;
-            if (overallEvidence) activeFilterCount++;
-            if (selectedTissues.length > 0) activeFilterCount++;
-            if (geneticAlteration) activeFilterCount++;
-            if (studyDesc) activeFilterCount++;
-            if (sfariCategory) activeFilterCount++;
-            if (evidenceLevel) activeFilterCount++;
-            if (targetMethod) activeFilterCount++;
-            if (targetRegulation) activeFilterCount++;
-            if (targetTissue) activeFilterCount++;
-
-            // Update badge count across filter buttons and drawer
-            if (activeFilterCount > 0) {
-                $('.filter-count').text(activeFilterCount).show();
-                $('#drawer-filter-count-badge').text(`${activeFilterCount} Active`).attr('class', 'badge bg-primary text-white border');
-                
-                const summaryItems = [];
-                if (hairpinTokens.length > 0) summaryItems.push('Hairpin');
-                if (matureTokens.length > 0) summaryItems.push('Mature');
-                if (geneTokens.length > 0) summaryItems.push('Gene');
             const targetDbSource = $('input[name="target-db-radio"]:checked').val() || $('#filter-target-db').val() || 'mirtarbase';
             // Sync controls
             $(`input[name="target-db-radio"][value="${targetDbSource}"]`).prop('checked', true);
@@ -2806,124 +3081,89 @@
             applyAdvancedFilters();
         });
 
-        // Row Selection Checkbox Event Handlers - Expression Table
-        $('#expression-table tbody').on('change', '.expr-row-check', function() {
-            const key = $(this).data('key') || $(this).val();
-            const mature = $(this).data('mature') || '';
-            const hairpin = $(this).data('hairpin') || '';
-            if ($(this).is(':checked')) {
-                selectedExprMap.set(key, { mature, hairpin });
-            } else {
-                selectedExprMap.delete(key);
-            }
-            const totalVis = $('#expression-table tbody .expr-row-check').length;
-            const checkedVis = $('#expression-table tbody .expr-row-check:checked').length;
-            $('.select-all-expr').prop('checked', totalVis > 0 && totalVis === checkedVis);
-            updateSelectionUI();
-        });
-
-        $('.select-all-expr').on('change', function() {
-            const isChecked = $(this).is(':checked');
-            $('#expression-table tbody .expr-row-check').prop('checked', isChecked).each(function() {
+        // Generic table selection binder (Row checkbox, Select All header, and Draw synchronization)
+        function bindTableSelection(tableInstance, tableSelector, rowCheckClass, selectAllSelector, selectionMap) {
+            // Row checkbox change
+            $(tableSelector + ' tbody').on('change', '.' + rowCheckClass, function() {
                 const key = $(this).data('key') || $(this).val();
                 const mature = $(this).data('mature') || '';
                 const hairpin = $(this).data('hairpin') || '';
-                if (key) {
-                    if (isChecked) selectedExprMap.set(key, { mature, hairpin });
-                    else selectedExprMap.delete(key);
+                if ($(this).is(':checked')) {
+                    selectionMap.set(key, { mature, hairpin });
+                } else {
+                    selectionMap.delete(key);
                 }
+                const totalVis = $(tableSelector + ' tbody .' + rowCheckClass).length;
+                const checkedVis = $(tableSelector + ' tbody .' + rowCheckClass + ':checked').length;
+                $(selectAllSelector).prop('checked', totalVis > 0 && totalVis === checkedVis);
+                updateSelectionUI();
             });
-            updateSelectionUI();
-        });
 
-        // Row Selection Checkbox Event Handlers - Genetic Table
-        $('#other-table tbody').on('change', '.gen-row-check', function() {
-            const key = $(this).data('key') || $(this).val();
-            const mature = $(this).data('mature') || '';
-            const hairpin = $(this).data('hairpin') || '';
-            if ($(this).is(':checked')) {
-                selectedGenMap.set(key, { mature, hairpin });
-            } else {
-                selectedGenMap.delete(key);
-            }
-            const totalVis = $('#other-table tbody .gen-row-check').length;
-            const checkedVis = $('#other-table tbody .gen-row-check:checked').length;
-            $('.select-all-other').prop('checked', totalVis > 0 && totalVis === checkedVis);
-            updateSelectionUI();
-        });
-
-        $('.select-all-other').on('change', function() {
-            const isChecked = $(this).is(':checked');
-            $('#other-table tbody .gen-row-check').prop('checked', isChecked).each(function() {
-                const key = $(this).data('key') || $(this).val();
-                const mature = $(this).data('mature') || '';
-                const hairpin = $(this).data('hairpin') || '';
-                if (key) {
-                    if (isChecked) selectedGenMap.set(key, { mature, hairpin });
-                    else selectedGenMap.delete(key);
-                }
+            // Header Select All checkbox change
+            $(selectAllSelector).on('change', function() {
+                const isChecked = $(this).is(':checked');
+                $(tableSelector + ' tbody .' + rowCheckClass).prop('checked', isChecked).each(function() {
+                    const key = $(this).data('key') || $(this).val();
+                    const mature = $(this).data('mature') || '';
+                    const hairpin = $(this).data('hairpin') || '';
+                    if (key) {
+                        if (isChecked) selectionMap.set(key, { mature, hairpin });
+                        else selectionMap.delete(key);
+                    }
+                });
+                updateSelectionUI();
             });
-            updateSelectionUI();
-        });
 
+            // Sync checkboxes on draw (paging, search, sort)
+            tableInstance.on('draw', function() {
+                $(tableSelector + ' tbody .' + rowCheckClass).each(function() {
+                    const key = $(this).data('key') || $(this).val();
+                    $(this).prop('checked', selectionMap.has(key));
+                });
+                const totalVis = $(tableSelector + ' tbody .' + rowCheckClass).length;
+                const checkedVis = $(tableSelector + ' tbody .' + rowCheckClass + ':checked').length;
+                $(selectAllSelector).prop('checked', totalVis > 0 && totalVis === checkedVis);
+            });
+        }
+
+        bindTableSelection(expressionTable, '#expression-table', 'expr-row-check', '.select-all-expr', selectedExprMap);
+        bindTableSelection(otherTable, '#other-table', 'gen-row-check', '.select-all-other', selectedGenMap);
+
+        // Select All Visible Button Handler
         $('.btn-select-all-visible').on('click', function() {
             const tbl = $(this).data('table');
-            if (tbl === 'expression') {
-                $('#expression-table tbody .expr-row-check').prop('checked', true).each(function() {
-                    const key = $(this).data('key') || $(this).val();
-                    const mature = $(this).data('mature') || '';
-                    const hairpin = $(this).data('hairpin') || '';
-                    if (key) selectedExprMap.set(key, { mature, hairpin });
-                });
-                $('.select-all-expr').prop('checked', true);
-            } else if (tbl === 'genetic') {
-                $('#other-table tbody .gen-row-check').prop('checked', true).each(function() {
-                    const key = $(this).data('key') || $(this).val();
-                    const mature = $(this).data('mature') || '';
-                    const hairpin = $(this).data('hairpin') || '';
-                    if (key) selectedGenMap.set(key, { mature, hairpin });
-                });
-                $('.select-all-other').prop('checked', true);
-            }
+            const isExpr = tbl === 'expression';
+            const tableSelector = isExpr ? '#expression-table' : '#other-table';
+            const rowClass = isExpr ? '.expr-row-check' : '.gen-row-check';
+            const selectAllClass = isExpr ? '.select-all-expr' : '.select-all-other';
+            const selectionMap = isExpr ? selectedExprMap : selectedGenMap;
+
+            $(tableSelector + ' tbody ' + rowClass).prop('checked', true).each(function() {
+                const key = $(this).data('key') || $(this).val();
+                const mature = $(this).data('mature') || '';
+                const hairpin = $(this).data('hairpin') || '';
+                if (key) selectionMap.set(key, { mature, hairpin });
+            });
+            $(selectAllClass).prop('checked', true);
             updateSelectionUI();
         });
 
+        // Clear Selection Button Handler
         $('.btn-clear-selection').on('click', function() {
             const tbl = $(this).data('table');
-            if (tbl === 'expression') {
-                selectedExprMap.clear();
-                $('#expression-table tbody .expr-row-check').prop('checked', false);
-                $('.select-all-expr').prop('checked', false);
-            } else if (tbl === 'genetic') {
-                selectedGenMap.clear();
-                $('#other-table tbody .gen-row-check').prop('checked', false);
-                $('.select-all-other').prop('checked', false);
-            }
+            const isExpr = tbl === 'expression';
+            const tableSelector = isExpr ? '#expression-table' : '#other-table';
+            const rowClass = isExpr ? '.expr-row-check' : '.gen-row-check';
+            const selectAllClass = isExpr ? '.select-all-expr' : '.select-all-other';
+            const selectionMap = isExpr ? selectedExprMap : selectedGenMap;
+
+            selectionMap.clear();
+            $(tableSelector + ' tbody ' + rowClass).prop('checked', false);
+            $(selectAllClass).prop('checked', false);
             updateSelectionUI();
             if (typeof reloadTargetGenesFromCurrentTable === 'function') {
                 reloadTargetGenesFromCurrentTable();
             }
-        });
-
-        // Synchronize row checkboxes state with selected maps on draw (paging, sorting, filtering)
-        expressionTable.on('draw', function() {
-            $('#expression-table tbody .expr-row-check').each(function() {
-                const key = $(this).data('key') || $(this).val();
-                $(this).prop('checked', selectedExprMap.has(key));
-            });
-            const totalVis = $('#expression-table tbody .expr-row-check').length;
-            const checkedVis = $('#expression-table tbody .expr-row-check:checked').length;
-            $('.select-all-expr').prop('checked', totalVis > 0 && totalVis === checkedVis);
-        });
-
-        otherTable.on('draw', function() {
-            $('#other-table tbody .gen-row-check').each(function() {
-                const key = $(this).data('key') || $(this).val();
-                $(this).prop('checked', selectedGenMap.has(key));
-            });
-            const totalVis = $('#other-table tbody .gen-row-check').length;
-            const checkedVis = $('#other-table tbody .gen-row-check:checked').length;
-            $('.select-all-other').prop('checked', totalVis > 0 && totalVis === checkedVis);
         });
 
         function updateSelectionUI() {
@@ -3006,18 +3246,10 @@
             }
 
             if (mature) {
-                const normM = normalizeMiRNAKey(mature);
-                const stripM = normM.replace(/^hsa-/, '');
-                addMatches(matureToTargets[normM]);
-                addMatches(matureToTargets[stripM]);
-                addMatches(matureToTargets['hsa-' + stripM]);
+                getMiRNAVariants(mature).forEach(k => addMatches(matureToTargets[k]));
             }
             if (hairpin) {
-                const normHp = normalizeMiRNAKey(hairpin);
-                const stripHp = normHp.replace(/^hsa-/, '');
-                addMatches(hairpinToTargets[normHp]);
-                addMatches(hairpinToTargets[stripHp]);
-                addMatches(hairpinToTargets['hsa-' + stripHp]);
+                getMiRNAVariants(hairpin).forEach(k => addMatches(hairpinToTargets[k]));
             }
             return list;
         }
@@ -3066,9 +3298,7 @@
 
                     // Map mature miRNA with normalized variants
                     if (mature) {
-                        const normM = normalizeMiRNAKey(mature);
-                        const stripM = normM.replace(/^hsa-/, '');
-                        [normM, stripM, 'hsa-' + stripM].forEach(k => {
+                        getMiRNAVariants(mature).forEach(k => {
                             if (!matureToTargets[k]) matureToTargets[k] = [];
                             matureToTargets[k].push(item);
                         });
@@ -3076,9 +3306,7 @@
 
                     // Map hairpin miRNAs with normalized variants
                     hairpins.forEach(hp => {
-                        const normHp = normalizeMiRNAKey(hp);
-                        const stripHp = normHp.replace(/^hsa-/, '');
-                        [normHp, stripHp, 'hsa-' + stripHp].forEach(k => {
+                        getMiRNAVariants(hp).forEach(k => {
                             if (!hairpinToTargets[k]) hairpinToTargets[k] = [];
                             hairpinToTargets[k].push(item);
                         });
@@ -3423,7 +3651,7 @@
         });
 
         // Independent Discard & Workflow Action Handlers
-        $('body').on('click', '.btn-drop-mirna-selection, #drawer-btn-clear-selection, .btn-clear-selection', function() {
+        $('body').on('click', '.btn-drop-mirna-selection, #drawer-btn-clear-selection', function() {
             selectedExprMap.clear();
             selectedGenMap.clear();
             $('#expression-table tbody .expr-row-check, #other-table tbody .gen-row-check').prop('checked', false);
@@ -3440,9 +3668,7 @@
 
         $('body').on('click', '.btn-open-drawer-link', function(e) {
             e.preventDefault();
-            $('#filterDrawer').addClass('open').attr('aria-hidden', 'false');
-            $('#drawerBackdrop').addClass('show');
-            $('.btn-filter').attr('aria-expanded', 'true');
+            openDrawer('#filter-mirna-id', this);
         });
 
         $('body').on('click', '.btn-drop-scope-filter, .btn-reset-scope-to-all', function() {
@@ -3829,21 +4055,6 @@
             });
         });
 
-        // Drawer slide-out toggle actions & keyboard accessibility
-        function closeDrawer() {
-            $('#filterDrawer').removeClass('open').attr('aria-hidden', 'true');
-            $('#drawerBackdrop').removeClass('show');
-            $('.btn-filter').attr('aria-expanded', 'false');
-        }
-
-        $('#closeFilterDrawer, #drawerBackdrop, #closeFilterDrawerBtn').on('click', closeDrawer);
-
-        $(document).on('keydown', function(e) {
-            if (e.key === 'Escape' && $('#filterDrawer').hasClass('open')) {
-                closeDrawer();
-            }
-        });
-
         // Drawer enrichment button closes drawer and switches to enrichment
         $('#drawer-btn-enrich').on('click', function() {
             closeDrawer();
@@ -3852,270 +4063,5 @@
     });
     </script>
 
-    <!-- Advanced Filters Drawer -->
-    <div id="filterDrawer" class="filter-drawer" aria-hidden="true" role="dialog" aria-labelledby="filterDrawerTitle">
-        <div class="filter-drawer-header">
-            <h5 id="filterDrawerTitle"><i class="fa-solid fa-sliders me-2 text-primary"></i>Advanced Filters & Queries</h5>
-            <button type="button" class="btn-close" id="closeFilterDrawer" aria-label="Close filter drawer"></button>
-        </div>
-        <div class="filter-drawer-body">
-            <!-- 3-Step Analytical Workflow Guide Card -->
-            <div class="card border p-3 mb-3" style="background-color: #f8fafc; border-color: #e2e8f0 !important; border-radius: 10px;">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                    <strong style="font-size: 0.82rem; color: var(--primary-color);">
-                        <i class="fa-solid fa-circle-info text-primary me-1"></i>Selection & Filtering Workflow:
-                    </strong>
-                </div>
-                <div class="text-secondary mb-2" style="font-size: 0.74rem; line-height: 1.45;">
-                    <div><strong>1. Selection:</strong> Table checkboxes define <em>which specific miRNAs</em> you analyze.</div>
-                    <div><strong>2. Filtering:</strong> Modulates <em>study conditions or target criteria</em> (e.g. Brain, SFARI) without deselecting your chosen miRNAs.</div>
-                    <div><strong>3. Enrichment:</strong> Analyzes biological pathways for your target cohort.</div>
-                </div>
-                <!-- Decoupled Selection & Filter Status Bar -->
-                <div class="d-flex justify-content-between align-items-center pt-2 border-top gap-2" style="font-size: 0.78rem;">
-                    <div>
-                        <span class="fw-semibold">Selection:</span> 
-                        <span id="drawer-selection-badge" class="badge bg-light text-dark border">0 Selected</span>
-                        <button type="button" class="btn btn-link btn-xs p-0 text-danger ms-1 text-decoration-none" id="drawer-btn-clear-selection">Deselect</button>
-                    </div>
-                    <div>
-                        <span class="fw-semibold">Filters:</span> 
-                        <span id="drawer-filter-count-badge" class="badge bg-light text-dark border">0 Active</span>
-                        <button type="button" class="btn btn-link btn-xs p-0 text-danger ms-1 text-decoration-none" id="drawer-btn-reset-filters">Reset</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dynamic Quick Enrichment Action from Drawer -->
-            <div class="mb-3">
-                <button type="button" class="btn btn-primary w-100 py-2 fw-bold shadow-sm d-flex justify-content-between align-items-center" id="drawer-btn-enrich">
-                    <span><i class="fa-solid fa-dna me-1 text-warning"></i> <span id="drawer-enrich-text">Run Target Enrichment on Filtered miRNAs</span></span>
-                    <i class="fa-solid fa-arrow-right ms-1"></i>
-                </button>
-            </div>
-
-            <!-- 1. Search by miRNA or Gene Symbol (All Tables) -->
-            <div class="filter-section-card">
-                <div class="filter-section-header">
-                    <div>
-                        <h6 class="mb-0"><i class="fa-solid fa-magnifying-glass text-primary me-2"></i>Search by miRNA or Gene Symbol</h6>
-                        <span class="text-muted" style="font-size: 0.7rem;">Filters simultaneously across All Tables</span>
-                    </div>
-                    <span class="badge bg-primary-subtle text-primary border rounded-pill" style="font-size: 0.7rem;">Shared Search</span>
-                </div>
-                <p class="text-muted mt-2 mb-2" style="font-size: 0.74rem; line-height: 1.35;">
-                    Filter all tables by typing or pasting one or more miRNA identifiers or target gene symbols (separated by commas, spaces, or lines).
-                </p>
-                
-                <!-- Search miRNA Hairpin ID (Batch support) -->
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <label for="filter-mirna-id" class="form-label fw-bold text-secondary mb-0" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">miRNA Precursor / Hairpin ID(s)</label>
-                        <span class="text-muted" style="font-size: 0.68rem;">Stem-loops (e.g. hsa-let-7a-1)</span>
-                    </div>
-                    <textarea id="filter-mirna-id" class="form-control font-monospace" rows="2" placeholder="e.g. hsa-let-7a-1, hsa-mir-132, hsa-mir-146a..." style="font-size: 0.8rem;" aria-label="Filter by miRNA Hairpin ID(s)"></textarea>
-                </div>
-                
-                <!-- Search miRNA Mature ID (Batch support) -->
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <label for="filter-mature-id" class="form-label fw-bold text-secondary mb-0" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">miRNA Mature ID(s)</label>
-                        <span class="text-muted" style="font-size: 0.68rem;">Mature strands (e.g. hsa-miR-132-3p)</span>
-                    </div>
-                    <textarea id="filter-mature-id" class="form-control font-monospace" rows="2" placeholder="e.g. hsa-let-7a-5p, hsa-miR-132-3p, hsa-miR-146a-5p..." style="font-size: 0.8rem;" aria-label="Filter by miRNA Mature ID(s)"></textarea>
-                </div>
-
-                <!-- Search by Regulated Target Genes (Batch support across tables) -->
-                <div class="mb-0">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <label for="filter-target-gene" class="form-label fw-bold text-secondary mb-0" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Target Gene Symbol(s)</label>
-                        <span class="text-muted" style="font-size: 0.68rem;">Find miRNAs regulating genes</span>
-                    </div>
-                    <textarea id="filter-target-gene" class="form-control font-monospace" rows="2" placeholder="e.g. PTEN, SHANK3, MECP2, CHD8, SCN2A..." style="font-size: 0.8rem;" aria-label="Search miRNAs for Target Genes"></textarea>
-                </div>
-            </div>
-
-            <!-- 2. Target Genes Filters -->
-            <div class="filter-section-card">
-                <div class="filter-section-header">
-                    <h6><i class="fa-solid fa-bullseye text-primary me-2"></i>Target Annotation Filters</h6>
-                    <span class="badge bg-primary-subtle text-primary border rounded-pill" style="font-size: 0.7rem;">Targets Tab</span>
-                </div>
-
-                <!-- Database Source (miRTarBase default) -->
-                <div class="mb-3">
-                    <label for="filter-target-db" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Target Database Source</label>
-                    <select id="filter-target-db" class="form-select form-select-sm" aria-label="Filter by Target Database Source">
-                        <option value="mirtarbase" selected>miRTarBase 10.0 (Default)</option>
-                        <option value="consensus">Consensus (Validated in Both DBs)</option>
-                        <option value="tarbase">DIANA-TarBase v9.0</option>
-                        <option value="all">All Sources (Merged Union)</option>
-                    </select>
-                </div>
-
-                <!-- SFARI ASD Category -->
-                <div class="mb-3">
-                    <label for="filter-sfari-category" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">ASD Susceptibility (SFARI)</label>
-                    <select id="filter-sfari-category" class="form-select form-select-sm" aria-label="Filter by ASD Susceptibility SFARI Category">
-                        <option value="">All Target Genes</option>
-                        <option value="SFARI">All SFARI ASD Genes</option>
-                        <option value="Category 1">SFARI Category 1 (High Confidence)</option>
-                        <option value="Category 2">SFARI Category 2 (Strong Candidate)</option>
-                        <option value="Category 3">SFARI Category 3 (Suggestive)</option>
-                        <option value="Syndromic">SFARI Syndromic</option>
-                        <option value="Non-SFARI">Other Targets (Non-SFARI)</option>
-                    </select>
-                </div>
-
-                <!-- Evidence Level -->
-                <div class="mb-3">
-                    <label for="filter-evidence-level" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Evidence Level</label>
-                    <select id="filter-evidence-level" class="form-select form-select-sm" aria-label="Filter by Target Evidence Level">
-                        <option value="">All Evidence Levels</option>
-                        <option value="Strong Evidence">Strong Evidence (Reporter / WB / qPCR)</option>
-                        <option value="Direct Binding">Direct Binding (CLIP / CLASH / RIP)</option>
-                        <option value="High-Throughput">High-Throughput Expression (RNA-Seq / Microarrays)</option>
-                    </select>
-                </div>
-
-                <!-- Validation Method -->
-                <div class="mb-3">
-                    <label for="filter-target-method" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Experimental Technique</label>
-                    <select id="filter-target-method" class="form-select form-select-sm" aria-label="Filter by Experimental Technique">
-                        <option value="">All Experimental Methods</option>
-                        <option value="Luciferase Reporter Assay">Luciferase Reporter Assay</option>
-                        <option value="Western Blot">Western Blot</option>
-                        <option value="qPCR">qPCR</option>
-                        <option value="HITS-CLIP">HITS-CLIP</option>
-                        <option value="PAR-CLIP">PAR-CLIP</option>
-                        <option value="CLASH">CLASH</option>
-                        <option value="RIP-Seq">RIP-Seq</option>
-                        <option value="RNA-Seq">RNA-Seq</option>
-                        <option value="Microarrays">Microarrays</option>
-                        <option value="Northern Blot">Northern Blot</option>
-                        <option value="Biotin-qPCR">Biotin-qPCR</option>
-                        <option value="ELISA">ELISA</option>
-                    </select>
-                </div>
-
-                <!-- Target Regulation -->
-                <div class="mb-3">
-                    <label for="filter-target-regulation" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Target Regulation</label>
-                    <select id="filter-target-regulation" class="form-select form-select-sm" aria-label="Filter by Target Regulation">
-                        <option value="">All Regulations</option>
-                        <option value="Downregulation">Downregulation (Negative)</option>
-                        <option value="Upregulation">Upregulation (Positive)</option>
-                    </select>
-                </div>
-
-                <!-- Tissue / Cell Source -->
-                <div class="mb-0">
-                    <label for="filter-target-tissue" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Tissue / Cell Source</label>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="text" id="filter-target-tissue" class="form-control border-start-0 ps-0" placeholder="e.g. Brain, Blood, HEK293..." aria-label="Filter by Target Tissue or Cell Source">
-                    </div>
-                </div>
-            </div>
-
-            <!-- 3. Expression Studies Filters -->
-            <div class="filter-section-card">
-                <div class="filter-section-header">
-                    <h6><i class="fa-solid fa-chart-column text-success me-2"></i>Expression Studies</h6>
-                    <span class="badge bg-success-subtle text-success border rounded-pill" style="font-size: 0.7rem;">Expression Tab</span>
-                </div>
-                
-                <!-- Expression Change -->
-                <div class="mb-3">
-                    <label for="filter-expression-change" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Expression Change</label>
-                    <select id="filter-expression-change" class="form-select form-select-sm" aria-label="Filter by Expression Change">
-                        <option value="">All Expression Changes</option>
-                        <option value="Upregulated">Upregulated</option>
-                        <option value="Downregulated">Downregulated</option>
-                    </select>
-                </div>
-
-                <!-- Overall Evidence -->
-                <div class="mb-3">
-                    <label for="filter-overall-evidence" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Overall Evidence</label>
-                    <select id="filter-overall-evidence" class="form-select form-select-sm" aria-label="Filter by Overall Evidence">
-                        <option value="">All Evidence Types</option>
-                        <option value="Consistent upregulation">Consistent upregulation</option>
-                        <option value="Consistent downregulation">Consistent downregulation</option>
-                        <option value="Conflicting evidence">Conflicting evidence</option>
-                        <option value="Single-study evidence">Single-study evidence</option>
-                    </select>
-                </div>
-
-                <!-- Tissue Group -->
-                <div class="mb-0">
-                    <label class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Tissue Type</label>
-                    <div class="tissue-checklist" id="tissue-checkboxes" style="max-height: 140px;">
-                        <!-- Tissue checkboxes will be populated dynamically -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4. Genetic & Other Studies Filters -->
-            <div class="filter-section-card mb-0">
-                <div class="filter-section-header">
-                    <h6><i class="fa-solid fa-dna text-info me-2"></i>Genetic & Other Studies</h6>
-                    <span class="badge bg-info-subtle text-info border rounded-pill" style="font-size: 0.7rem;">Genetic Tab</span>
-                </div>
-
-                <!-- Variant / Alteration Type -->
-                <div class="mb-3">
-                    <label for="filter-genetic-alteration" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Variant / Alteration</label>
-                    <select id="filter-genetic-alteration" class="form-select form-select-sm" aria-label="Filter by Genetic Variant or Alteration">
-                        <option value="">All Genetic Alterations</option>
-                        <option value="CNV">CNV</option>
-                        <option value="SNV">SNV</option>
-                        <option value="SNP">SNP</option>
-                        <option value="miRNA expression">miRNA expression</option>
-                    </select>
-                </div>
-
-                <!-- Study Description Keywords -->
-                <div class="mb-0">
-                    <label for="filter-study-desc" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Study Description Keywords</label>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="text" id="filter-study-desc" class="form-control border-start-0 ps-0" placeholder="e.g. sequencing, deletion..." aria-label="Filter by Study Description Keywords">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="filter-drawer-footer d-flex gap-2">
-            <button type="button" class="btn btn-outline-secondary flex-grow-1" id="resetFilters">
-                <i class="fa-solid fa-rotate-left me-1"></i> Clear All
-            </button>
-            <button type="button" class="btn btn-primary flex-grow-1" id="closeFilterDrawerBtn">
-                <i class="fa-solid fa-check me-1"></i> Apply & Close
-            </button>
-        </div>
-    </div>
-
-    <!-- Drawer Backdrop -->
-    <div id="drawerBackdrop" class="drawer-backdrop"></div>
-
-    <!-- Image Modal for Lightbox Effect -->
-    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content shadow border-0" style="border-radius: 12px; overflow: hidden;">
-          <div class="modal-header border-0 bg-light py-3 px-4">
-            <h5 class="modal-title fw-bold" id="imageModalLabel" style="font-family: 'Montserrat', sans-serif; color: var(--primary-color);">Figure Preview</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-center p-4 bg-white">
-            <img id="modalImage" src="" alt="Full size figure" class="img-fluid rounded shadow-sm" style="max-height: 80vh;">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Floating Back-to-Top Button -->
-    <button type="button" class="btn back-to-top" id="btn-back-to-top" aria-label="Scroll back to top of page" title="Scroll to top">
-        <i class="fa-solid fa-arrow-up"></i>
-    </button>
 </body>
 </html>
