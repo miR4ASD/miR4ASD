@@ -36,17 +36,39 @@ def test_figure_cards_do_not_open_modal_on_click(app_page: Page, base_url: str):
 
 
 def test_data_dictionary_accordion_expandable(app_page: Page, base_url: str):
-    """Verify that data dictionary accordion sections expand and display definitions."""
+    """Verify that all 5 data dictionary accordion sections expand and display specs."""
     figures_page = FiguresPage(app_page, base_url)
     figures_page.navigate_to_figures()
 
-    # Click first accordion button
-    first_accordion = app_page.locator("#dictionaryAccordion .accordion-button").first
-    first_accordion.scroll_into_view_if_needed()
-    if first_accordion.get_attribute("aria-expanded") != "true":
-        first_accordion.click()
-        app_page.wait_for_timeout(300)
+    # Verify 5 specifications badge
+    badge = app_page.locator("span:has-text('Table Specifications')").first
+    assert "5 Table Specifications" in badge.inner_text()
 
-    # First accordion collapse body should now be visible
-    first_body = app_page.locator("#dictionaryAccordion .accordion-collapse").first
-    assert first_body.is_visible(), "Data dictionary accordion section failed to expand"
+    accordion_buttons = app_page.locator("#dictionaryAccordion .accordion-button")
+    assert accordion_buttons.count() == 5, (
+        f"Expected 5 accordion specifications, found {accordion_buttons.count()}"
+    )
+
+    expected_headers_per_section = [
+        ["Number of studies (Upregulated)", "Number of studies (Downregulated)"],
+        ["Alteration", "Study description"],
+        ["ASD Susceptibility (SFARI)", "PubMed Reference"],
+        ["Tissue Type", "Tissue Subtype", "ASD Samples", "Control Samples"],
+        ["Term ID", "Term Name", "Adjusted P-Value", "Overlap (k/N)", "Term Size"],
+    ]
+
+    # Verify each accordion section expands and shows its matching headers
+    for i in range(5):
+        btn = accordion_buttons.nth(i)
+        btn.scroll_into_view_if_needed()
+        if btn.get_attribute("aria-expanded") != "true":
+            btn.click()
+            app_page.wait_for_timeout(300)
+
+        collapse = app_page.locator("#dictionaryAccordion .accordion-collapse").nth(i)
+        assert collapse.is_visible(), f"Accordion section {i + 1} failed to expand"
+        collapse_text = collapse.inner_text()
+        for header in expected_headers_per_section[i]:
+            assert header in collapse_text, (
+                f"Header '{header}' missing from section {i + 1}"
+            )

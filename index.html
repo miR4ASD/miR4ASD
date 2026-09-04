@@ -1000,7 +1000,7 @@
                                         <i class="fa-solid fa-book-open me-2 text-primary"></i>Data Dictionary & Column Definitions
                                     </h2>
                                     <span class="badge bg-primary-subtle text-primary border rounded-pill px-3 py-2" style="font-size: 0.8rem;">
-                                        <i class="fa-solid fa-layer-group me-1"></i>4 Table Specifications
+                                        <i class="fa-solid fa-layer-group me-1"></i>5 Table Specifications
                                     </span>
                                 </div>
                                 <p class="text-secondary mb-4" style="line-height: 1.6;">
@@ -1063,8 +1063,13 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Number of studies (Upregulated / Downregulated)</strong></td>
-                                                                <td>Count of independent peer-reviewed studies reporting upregulation or downregulation respectively.</td>
+                                                                <td><strong>Number of studies (Upregulated)</strong></td>
+                                                                <td>Count of independent peer-reviewed publications reporting statistically significant upregulation in ASD cohorts.</td>
+                                                                <td>Non-negative integers (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3+</code>)</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Number of studies (Downregulated)</strong></td>
+                                                                <td>Count of independent peer-reviewed publications reporting statistically significant downregulation in ASD cohorts.</td>
                                                                 <td>Non-negative integers (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3+</code>)</td>
                                                             </tr>
                                                             <tr>
@@ -1207,24 +1212,24 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Experimental Methods</strong></td>
-                                                                <td>Exact laboratory techniques used to confirm the miRNA-target interaction.</td>
-                                                                <td>Semicolon-separated methods (e.g. <code>Luciferase Reporter Assay</code>, <code>Western Blot</code>, <code>HITS-CLIP</code>, <code>qPCR</code>).</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Regulation</strong></td>
-                                                                <td>Directional regulatory consequence on target mRNA / protein expression.</td>
-                                                                <td><code>Negative (Downregulation)</code>, <code>Positive (Upregulation)</code>, or <code>—</code> (Binding assay only).</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Tissue / Cell Source</strong></td>
-                                                                <td>Biological tissue or cell line model used in the experiment.</td>
-                                                                <td>e.g. <code>Brain</code>, <code>Blood</code>, <code>HEK293</code>, <code>HeLa</code>, <code>Primary Neurons</code>, etc.</td>
-                                                            </tr>
-                                                            <tr>
                                                                 <td><strong>PubMed Reference</strong></td>
                                                                 <td>PubMed Identifiers (PMIDs) linking directly to the primary research articles.</td>
                                                                 <td>Clickable PMID badges (e.g. <code>24312487</code>, <code>20144220</code>).</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Experimental Methods</strong> <span class="badge bg-light text-secondary border ms-1" style="font-size: 0.7rem;">Extended Details</span></td>
+                                                                <td>Exact laboratory techniques used to confirm the miRNA-target interaction (viewable in row details & filter drawer).</td>
+                                                                <td>Semicolon-separated methods (e.g. <code>Luciferase Reporter Assay</code>, <code>Western Blot</code>, <code>HITS-CLIP</code>, <code>qPCR</code>).</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Regulation</strong> <span class="badge bg-light text-secondary border ms-1" style="font-size: 0.7rem;">Extended Details</span></td>
+                                                                <td>Directional regulatory consequence on target mRNA / protein expression (viewable in row details & filter drawer).</td>
+                                                                <td><code>Negative (Downregulation)</code>, <code>Positive (Upregulation)</code>, or <code>—</code> (Binding assay only).</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Tissue / Cell Source</strong> <span class="badge bg-light text-secondary border ms-1" style="font-size: 0.7rem;">Extended Details</span></td>
+                                                                <td>Biological tissue or cell line model used in the experiment (viewable in row details & filter drawer).</td>
+                                                                <td>e.g. <code>Brain</code>, <code>Blood</code>, <code>HEK293</code>, <code>HeLa</code>, <code>Primary Neurons</code>, etc.</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -1254,18 +1259,13 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td><strong>Study</strong></td>
-                                                                <td>Author-year citation key linking to publication metadata.</td>
+                                                                <td>Author-year citation key with direct clickable DOI hyperlink to the publisher's article.</td>
                                                                 <td><code>Seno (2011)</code>, <code>Vasu (2014)</code>, <code>Mundalil (2014)</code></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Description / Title</strong></td>
-                                                                <td>Full title of the published article or methodological summary.</td>
-                                                                <td>Full peer-reviewed publication title.</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>DOI</strong></td>
-                                                                <td>Direct hyperlink to the publisher's Digital Object Identifier.</td>
-                                                                <td><code>https://doi.org/10.1016/j.gene.2011.06.017</code></td>
+                                                                <td>Full peer-reviewed publication title and methodological summary.</td>
+                                                                <td>e.g. <em>Serum microRNA expression in children with autism spectrum disorder</em></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Study Type</strong></td>
@@ -1273,18 +1273,28 @@
                                                                 <td><code>Expression</code>, <code>Genetic</code>, <code>Sequencing</code>, <code>Candidate Gene</code></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Tissue Type / Subtype</strong></td>
-                                                                <td>Biological tissue and specific anatomical brain region or lineage.</td>
-                                                                <td><code>Brain (Cerebellum)</code>, <code>Blood (PBMCs)</code>, <code>Saliva</code></td>
+                                                                <td><strong>Tissue Type</strong></td>
+                                                                <td>Primary biological tissue or specimen analyzed in expression studies.</td>
+                                                                <td><code>Brain</code>, <code>Blood</code>, <code>Saliva</code>, <code>Serum</code>, <code>LCLs</code></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>ASD / Control Samples</strong></td>
-                                                                <td>Exact cohort participant counts analyzed in the study.</td>
-                                                                <td>e.g. <code>28 ASD / 28 Control</code>, <code>55 ASD / 50 Control</code></td>
+                                                                <td><strong>Tissue Subtype</strong></td>
+                                                                <td>Specific anatomical brain subregion or refined cellular fraction.</td>
+                                                                <td><code>Cerebellum</code>, <code>Frontal cortex</code>, <code>PBMCs</code>, <code>Vermis</code></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>ASD Samples</strong></td>
+                                                                <td>Exact count of participants in the autism spectrum disorder cohort.</td>
+                                                                <td>e.g. <code>28</code>, <code>55</code>, <code>104</code></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Control Samples</strong></td>
+                                                                <td>Exact count of neurotypical participants in the control comparison cohort.</td>
+                                                                <td>e.g. <code>28</code>, <code>50</code>, <code>92</code></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Country / Pop.</strong></td>
-                                                                <td>Geographical origin of the patient cohort.</td>
+                                                                <td>Geographical and ancestral origin of the analyzed cohort.</td>
                                                                 <td><code>USA</code>, <code>Brazil</code>, <code>China</code>, <code>Italy</code>, <code>Japan</code>, etc.</td>
                                                             </tr>
                                                         </tbody>
@@ -1314,7 +1324,7 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr>
-                                                                <td><strong>Ontology Source</strong></td>
+                                                                <td><strong>Source</strong></td>
                                                                 <td>Curated biological pathway or gene ontology database queried.</td>
                                                                 <td>
                                                                     <span class="badge badge-source badge-gobp me-1">GO:BP</span> Biological Process<br>
@@ -1327,24 +1337,39 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Adjusted P-Value ($p_{\text{adj}}$)</strong></td>
-                                                                <td>Statistical overrepresentation corrected for multiple hypothesis testing.</td>
-                                                                <td>Calculated via <code>g:SCS</code> (default), <code>Benjamini-Hochberg FDR</code>, or <code>Bonferroni</code>. Default threshold $p_{\text{adj}} < 0.05$.</td>
+                                                                <td><strong>Term ID</strong></td>
+                                                                <td>Official ontology or pathway database identifier hyperlinking to the external source repository.</td>
+                                                                <td>e.g. <code>GO:0007268</code>, <code>KEGG:04724</code>, <code>REAC:R-HSA-112316</code>, <code>HP:0000729</code></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Overlap Ratio ($k / N$)</strong></td>
-                                                                <td>Ratio of submitted target genes present in the term ($k$) relative to query size ($N$).</td>
-                                                                <td>e.g. <code>25 / 120</code> target genes intersecting the enriched biological pathway.</td>
+                                                                <td><strong>Term Name</strong></td>
+                                                                <td>Human-readable biological process, functional cascade, or clinical phenotype description.</td>
+                                                                <td>e.g. <em>chemical synaptic transmission</em>, <em>Glutamatergic synapse</em>, <em>Autistic behavior</em></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Significance Score</strong></td>
-                                                                <td>Ranking metric used in bar charts: $-\log_{10}(p_{\text{adj}})$.</td>
+                                                                <td><strong>Adjusted P-Value</strong></td>
+                                                                <td>Corrected statistical significance value for hypergeometric overrepresentation.</td>
+                                                                <td>Corrected via <code>g:SCS</code> (default), <code>Benjamini-Hochberg FDR</code>, or <code>Bonferroni</code> ($p_{\text{adj}} < 0.05$).</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Overlap (k/N)</strong></td>
+                                                                <td>Ratio of user submitted target genes in term ($k$) relative to total submitted query size ($N$).</td>
+                                                                <td>e.g. <code>25 / 120</code> target genes intersecting the enriched term.</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Term Size</strong></td>
+                                                                <td>Total number of annotated human protein-coding genes belonging to this functional term.</td>
+                                                                <td>Positive integer (e.g. <code>210</code>, <code>450</code>, <code>1,280</code>).</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Intersecting Target Genes</strong></td>
+                                                                <td>List of user query target genes found in the term with clickable GeneCards links and SFARI autism risk confidence tiers.</td>
+                                                                <td>Clickable GeneCards links with badges (<span class="badge bg-danger-subtle text-danger border">SFARI Cat 1</span>, <span class="badge border" style="background-color: #fef3c7; color: #92400e;">Cat 2</span>, <span class="badge bg-info-subtle text-info border">Cat 3</span>, <span class="badge border" style="background-color: #f3e8ff; color: #6b21a8;">Syndromic</span>).</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Significance Score</strong> <span class="badge bg-light text-secondary border ms-1" style="font-size: 0.7rem;">Bar Chart Metric</span></td>
+                                                                <td>Ranking metric used in Top 15 enrichment visualization charts: $-\log_{10}(p_{\text{adj}})$.</td>
                                                                 <td>Higher values denote stronger statistical enrichment and lower false discovery rates.</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Intersecting Genes</strong></td>
-                                                                <td>List of user query target genes found in the term with SFARI risk annotations.</td>
-                                                                <td>Clickable GeneCards hyperlinks with color-coded SFARI ASD-risk indicators (Category 1, 2, 3, Syndromic).</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
