@@ -16,34 +16,40 @@ def test_default_database_is_mirtarbase(app_page: Page, base_url: str):
         "Default selected database is not miRTarBase"
     )
 
-    # Count badge should indicate ~17,150 target interactions
+    # Count badges should indicate 17,150 target interactions and 2,995 target genes
     count_text = targets_page.get_active_count_text()
-    assert "17,150" in count_text or "17" in count_text, (
-        f"Unexpected default interaction count: {count_text}"
+    genes_count_text = targets_page.get_active_genes_count_text()
+    assert "17,150" in count_text, f"Unexpected default interaction count: {count_text}"
+    assert "2,995" in genes_count_text, (
+        f"Unexpected default gene count: {genes_count_text}"
     )
 
 
 def test_database_switcher_counts_and_isolation(app_page: Page, base_url: str):
-    """Verify switching database modes updates interaction counts dynamically."""
+    """Verify switching database updates interaction and gene counts dynamically."""
     targets_page = TargetsPage(app_page, base_url)
     targets_page.navigate_to_targets()
 
-    # 1. Consensus mode (7,492)
+    # 1. Consensus mode (7,492 interactions, 2,130 unique genes)
     targets_page.select_database("consensus")
     assert "7,492" in targets_page.get_active_count_text()
+    assert "2,130" in targets_page.get_active_genes_count_text()
     assert "Consensus" in targets_page.get_table_body_text()
 
-    # 2. DIANA-TarBase v9.0 mode (68,495)
+    # 2. DIANA-TarBase v9.0 mode (68,495 interactions, 2,577 unique genes)
     targets_page.select_database("tarbase")
     assert "68,495" in targets_page.get_active_count_text()
+    assert "2,577" in targets_page.get_active_genes_count_text()
 
-    # 3. All Sources mode (78,153)
+    # 3. All Sources mode (78,153 interactions, 3,281 unique genes)
     targets_page.select_database("all")
     assert "78,153" in targets_page.get_active_count_text()
+    assert "3,281" in targets_page.get_active_genes_count_text()
 
-    # 4. Return to miRTarBase 10.0 mode (17,150)
+    # 4. Return to miRTarBase 10.0 mode (17,150 interactions, 2,995 unique genes)
     targets_page.select_database("mirtarbase")
     assert "17,150" in targets_page.get_active_count_text()
+    assert "2,995" in targets_page.get_active_genes_count_text()
 
 
 def test_cross_tab_database_synchronization(app_page: Page, base_url: str):

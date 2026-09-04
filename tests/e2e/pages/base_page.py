@@ -46,6 +46,10 @@ class BasePage:
 
     def open_filter_drawer(self) -> None:
         """Open the slide-over advanced filter drawer."""
+        btn = self.page.locator(".tab-pane.active .btn-filter, .btn-filter:visible")
+        if btn.count() == 0 or not btn.first.is_visible():
+            self.switch_tab("expression")
+            self.page.wait_for_selector(".btn-filter:visible", timeout=15000)
         self.page.locator(
             ".tab-pane.active .btn-filter, .btn-filter:visible"
         ).first.click()
@@ -56,9 +60,38 @@ class BasePage:
         self.page.locator("#closeFilterDrawer").click()
         self.page.wait_for_timeout(300)
 
+    def close_filter_drawer_via_apply(self) -> None:
+        """Close filter drawer by clicking Apply & Close button."""
+        self.page.locator("#closeFilterDrawerBtn").click()
+        self.page.wait_for_timeout(300)
+
+    def close_filter_drawer_via_backdrop(self) -> None:
+        """Close filter drawer by clicking backdrop overlay."""
+        self.page.locator("#drawerBackdrop").click(position={"x": 10, "y": 10})
+        self.page.wait_for_timeout(300)
+
+    def is_filter_drawer_open(self) -> bool:
+        """Check if filter drawer has open CSS class applied."""
+        drawer = self.page.locator("#filterDrawer")
+        return "open" in (drawer.get_attribute("class") or "")
+
+    def click_back_to_top(self) -> None:
+        """Click floating back to top button."""
+        self.page.locator("#btn-back-to-top").click()
+        self.page.wait_for_timeout(500)
+
+    def is_back_to_top_visible(self) -> bool:
+        """Check if back-to-top button is visible."""
+        return self.page.locator("#btn-back-to-top").is_visible()
+
     def get_toast_message(self) -> str:
         """Retrieve current text content of the warning toast message."""
         toast_body = self.page.locator("#selectionWarningToastMsg")
         if toast_body.is_visible():
             return toast_body.inner_text().strip()
         return ""
+
+    def dismiss_toast(self) -> None:
+        """Dismiss warning toast by clicking close button."""
+        self.page.locator("#selectionWarningToast .btn-close").click()
+        self.page.wait_for_timeout(300)

@@ -1414,7 +1414,7 @@
                         <thead>
                             <tr>
                                 <th scope="col" style="width: 32px;" class="text-center">
-                                    <input type="checkbox" class="select-all-expr form-check-input" title="Select / deselect all visible miRNAs" aria-label="Select all visible miRNAs">
+                                    <input type="checkbox" class="select-all-expr form-check-input" style="position: relative; z-index: 5; cursor: pointer;" title="Select / deselect all visible miRNAs" aria-label="Select all visible miRNAs">
                                 </th>
                                 <th scope="col" style="width: 24px;" aria-label="Row details"><span class="visually-hidden">Details</span></th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Stem-loop precursor microRNA identifier according to miRBase v22.1.">Precursor miRNA (hairpin)</th>
@@ -1485,7 +1485,7 @@
                         <thead>
                             <tr>
                                 <th scope="col" style="width: 32px;" class="text-center">
-                                    <input type="checkbox" class="select-all-other form-check-input" title="Select / deselect all visible miRNAs" aria-label="Select all visible miRNAs">
+                                    <input type="checkbox" class="select-all-other form-check-input" style="position: relative; z-index: 5; cursor: pointer;" title="Select / deselect all visible miRNAs" aria-label="Select all visible miRNAs">
                                 </th>
                                 <th scope="col" style="width: 24px;" aria-label="Row details"><span class="visually-hidden">Details</span></th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Stem-loop precursor microRNA identifier (miRBase v22.1).">Precursor miRNA (hairpin)</th>
@@ -1524,7 +1524,7 @@
                                         All Sources (Union)
                                     </label>
                                 </div>
-                                <span class="badge bg-white text-secondary border"><span id="db-active-count" class="fw-bold text-primary">17,150</span> Target Interactions</span>
+                                <span class="badge bg-white text-secondary border"><span id="db-active-count" class="fw-bold text-primary">17,150</span> Target Interactions (<span id="db-active-genes-count" class="fw-bold text-success">2,995</span> Target Genes)</span>
                             </div>
                             <div class="d-flex align-items-center gap-2 flex-wrap">
                                 <button type="button" class="btn btn-sm btn-secondary opacity-75 fw-bold btn-analyze-filtered shadow-sm" data-source-table="targets" disabled>
@@ -1884,9 +1884,9 @@
                                     <button type="button" class="btn btn-sm btn-outline-primary" id="btn-export-enrichment-csv">
                                         <i class="fa-solid fa-download me-1"></i>Download CSV
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-outline-success" id="btn-open-gprofiler-web">
+                                    <a class="btn btn-sm btn-outline-success" id="btn-open-gprofiler-web" href="#" target="_blank" rel="noopener noreferrer">
                                         <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>Open in g:Profiler Web Portal
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                             <table id="enrichment-results-table" class="display" style="width:100%">
@@ -2792,9 +2792,9 @@
         // Floating Back-to-Top scroll listener
         $(window).on('scroll', function() {
             if ($(this).scrollTop() > 300) {
-                $('#btn-back-to-top').fadeIn(200).css('display', 'flex');
+                $('#btn-back-to-top').addClass('show').fadeIn(200).css('display', 'flex');
             } else {
-                $('#btn-back-to-top').fadeOut(200);
+                $('#btn-back-to-top').removeClass('show').fadeOut(200);
             }
         });
         $('#btn-back-to-top').on('click', function() {
@@ -3079,8 +3079,12 @@
                 targetsTable.column(11).search(targetTissue);
                 targetsTable.draw();
 
-                // Update interaction count in switcher bar
-                $('#db-active-count').text(targetsTable.rows({ search: 'applied' }).count().toLocaleString());
+                // Update interaction count and unique target genes in switcher bar
+                const appliedRows = targetsTable.rows({ search: 'applied' });
+                const totalInteractions = appliedRows.count();
+                const uniqueGenes = new Set(appliedRows.data().toArray().map(r => r && r.gene_symbol ? cleanString(r.gene_symbol).toUpperCase() : '').filter(Boolean)).size;
+                $('#db-active-count').text(totalInteractions.toLocaleString());
+                $('#db-active-genes-count').text(uniqueGenes.toLocaleString());
             }
 
             updateSelectionUI();
@@ -3113,6 +3117,10 @@
 
         // Clear All Filters button action
         $('#resetFilters').on('click', function() {
+            $('input[type="search"]').val('');
+            if (typeof expressionTable !== 'undefined' && expressionTable) expressionTable.search('');
+            if (typeof otherTable !== 'undefined' && otherTable) otherTable.search('');
+            if (typeof targetsTable !== 'undefined' && targetsTable) targetsTable.search('');
             $('#filter-mirna-id').val('');
             $('#filter-mature-id').val('');
             $('#filter-target-gene').val('');
@@ -3238,6 +3246,7 @@
                 toast.show();
             }
         }
+        window.showSelectionWarning = showSelectionWarning;
 
         function updateSelectionUI() {
             const totalSelected = selectedExprMap.size + selectedGenMap.size;
@@ -3471,7 +3480,7 @@
                 if (!gene) return;
 
                 if (dbSource === 'mirtarbase' && !it.database_source.includes('miRTarBase')) return;
-                if (dbSource === 'tarbase' && !it.database_source.includes('TarBase')) return;
+                if (dbSource === 'tarbase' && !it.database_source.includes('DIANA') && !it.database_source.includes('Consensus')) return;
                 if (dbSource === 'consensus' && !it.database_source.includes('Consensus')) return;
 
                 if (scope === 'strong' && it.evidence_level !== 'Strong Evidence') return;
@@ -3493,7 +3502,12 @@
 
             return genes.filter(gene => {
                 const meta = geneMetaMap[gene];
-                if (!meta) return false;
+                if (!meta) {
+                    if (enrichmentOrigin && enrichmentOrigin.desc === 'Custom Gene List' && scope === 'all') {
+                        return true;
+                    }
+                    return false;
+                }
 
                 // 1. Database provenance filter (miRTarBase 10.0 default)
                 if (dbSource === 'mirtarbase' && !meta.sources.has('mirtarbase')) return false;
@@ -3537,6 +3551,18 @@
         function refreshEnrichmentScopeAndUI() {
             const scope = $('input[name="target-scope"]:checked').val() || 'all';
             const dbSource = $('input[name="enrichment-db-source"]:checked').val() || 'mirtarbase';
+
+            if (enrichmentOrigin && enrichmentOrigin.desc !== 'Custom Gene List') {
+                const matureList = Array.from(new Set([...selectedExprMap.values(), ...selectedGenMap.values()].map(x => x.mature).filter(Boolean)));
+                const hairpinList = Array.from(new Set([...selectedExprMap.values(), ...selectedGenMap.values()].map(x => x.hairpin).filter(Boolean)));
+                if (matureList.length > 0 || hairpinList.length > 0) {
+                    currentEnrichmentGenes = resolveTargetGenesFromMiRNAs(matureList, hairpinList, scope, dbSource);
+                    $('#enrichment-gene-input').val(currentEnrichmentGenes.join(', '));
+                    renderGeneChips(currentEnrichmentGenes);
+                    return;
+                }
+            }
+
             currentEnrichmentGenes = applyTargetScope(baseEnrichmentGenes, scope, dbSource);
             $('#enrichment-gene-input').val(currentEnrichmentGenes.join(', '));
             renderGeneChips(currentEnrichmentGenes);
@@ -4136,10 +4162,13 @@
                     link.click();
                 });
 
-                $('#btn-open-gprofiler-web').off('click').on('click', function() {
-                    if (!queryGenes || queryGenes.length === 0) return;
-                    const url = 'https://biit.cs.ut.ee/gprofiler/gost?organism=hsapiens&query=' + encodeURIComponent(queryGenes.join(' '));
-                    window.open(url, '_blank');
+                const portalUrl = 'https://biit.cs.ut.ee/gprofiler/gost?organism=hsapiens&query=' + encodeURIComponent(queryGenes.join(' '));
+                $('#btn-open-gprofiler-web').attr('href', portalUrl).attr('data-url', portalUrl);
+                $('#btn-open-gprofiler-web').off('click').on('click', function(e) {
+                    if (!queryGenes || queryGenes.length === 0) {
+                        e.preventDefault();
+                        return;
+                    }
                 });
             })
             .catch(err => {
@@ -4159,7 +4188,7 @@
                 return;
             }
             closeDrawer();
-            $('#preset-active-filter').trigger('click');
+            $('.btn-analyze-filtered').first().trigger('click');
         });
     });
     </script>

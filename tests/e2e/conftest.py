@@ -62,7 +62,10 @@ def app_page(base_url: str) -> Generator[Page, None, None]:
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        context = browser.new_context(viewport={"width": 1400, "height": 900})
+        context = browser.new_context(
+            viewport={"width": 1400, "height": 900},
+            permissions=["clipboard-read", "clipboard-write"],
+        )
         page = context.new_page()
 
         # Capture unhandled JavaScript exceptions
