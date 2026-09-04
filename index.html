@@ -51,6 +51,11 @@
             --shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
+        html, body {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+
         body {
             font-family: 'Lato', sans-serif;
             background-color: var(--secondary-color);
@@ -475,11 +480,13 @@
             z-index: 1060;
             display: flex;
             flex-direction: column;
-            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            visibility: hidden;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s;
         }
 
         .filter-drawer.open {
             right: 0;
+            visibility: visible;
         }
 
         .filter-drawer-header {
@@ -781,9 +788,9 @@
 
     <main id="main-content" class="container-fluid" role="main">
         <div class="card">
-            <div class="d-flex justify-content-between align-items-center flex-wrap border-bottom pe-3">
-                <nav aria-label="Database sections">
-                    <ul class="nav nav-tabs border-0" id="myTab" role="tablist" style="margin-bottom: -1px;">
+            <div class="d-flex justify-content-between align-items-center flex-wrap border-bottom pe-3 overflow-hidden">
+                <nav aria-label="Database sections" class="w-100 overflow-x-auto" style="-webkit-overflow-scrolling: touch;">
+                    <ul class="nav nav-tabs border-0 flex-nowrap" id="myTab" role="tablist" style="margin-bottom: -1px; width: max-content;">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="true">About miR4ASD</button>
                         </li>
@@ -2775,6 +2782,11 @@
             if (enrichmentChartInstance) {
                 enrichmentChartInstance.resize();
             }
+            if (e.target.id === 'enrichment-tab') {
+                if (typeof reloadTargetGenesFromCurrentTable === 'function' && typeof enrichmentOrigin !== 'undefined' && enrichmentOrigin && enrichmentOrigin.desc !== 'Custom Gene List') {
+                    reloadTargetGenesFromCurrentTable();
+                }
+            }
         });
 
         // Floating Back-to-Top scroll listener
@@ -3280,6 +3292,11 @@
             } else {
                 $('.target-enrich-label').text('Select miRNAs in tables to run Target Enrichment');
                 btnTargetsEnrich.removeClass('btn-primary').addClass('btn-secondary opacity-75 disabled').prop('disabled', true);
+            }
+
+            // 5. Automatic Target Gene Synchronization for Functional Enrichment
+            if (typeof reloadTargetGenesFromCurrentTable === 'function' && typeof enrichmentOrigin !== 'undefined' && enrichmentOrigin && enrichmentOrigin.desc !== 'Custom Gene List') {
+                reloadTargetGenesFromCurrentTable();
             }
         }
 
