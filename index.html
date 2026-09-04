@@ -429,32 +429,26 @@
             position: relative;
         }
         .figure-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
         .figure-img-container {
             background-color: #ffffff;
             text-align: center;
-            padding: 12px;
+            padding: 1.25rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 160px;
+            min-height: 280px;
         }
         .figure-img {
-            max-height: 175px;
-            max-width: 100%;
+            max-height: 480px;
+            width: 100%;
             object-fit: contain;
-            cursor: pointer;
-            transition: opacity 0.2s ease, transform 0.2s ease;
-            border-radius: 4px;
-        }
-        .figure-img:hover {
-            opacity: 0.9;
-            transform: scale(1.02);
+            cursor: default;
+            border-radius: 6px;
         }
         .figure-caption {
-            padding: 0.85rem 1rem;
+            padding: 0.85rem 1.25rem;
             border-top: 1px solid #F0F4F8;
             background-color: #FCFDFE;
         }
@@ -894,25 +888,25 @@
                         </div>
                     </div>
 
-                    <!-- Grid of other Figures -->
+                    <!-- Grid of Figures -->
                     <div class="row g-4 mt-3">
                         <div class="col-12">
                             <h2 class="mb-1" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color); font-size: 1.4rem;">
                                 <i class="fa-solid fa-chart-pie me-2 text-primary"></i>Database Statistics & Visualizations
                             </h2>
-                            <p class="text-muted mb-2">Click on any chart to open it in high resolution.</p>
+                            <p class="text-muted mb-2">Curated visualizations and synthesis distributions across independent ASD cohorts and study categories.</p>
                         </div>
                     </div>
 
-                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-3">
+                    <div class="row row-cols-1 row-cols-lg-2 g-4 mb-4">
                         <div class="col">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
                                     <img class="img-fluid figure-img" src="images/Eligible_studies.jpg" alt="Eligible Studies Distribution">
                                 </div>
                                 <div class="figure-caption">
-                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1rem;">Eligible Studies</h3>
-                                    <span class="text-muted" style="font-size: 0.85rem;">Pie chart showing the distribution and categorization of eligible studies included in the database.</span>
+                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1.05rem;">Eligible Studies</h3>
+                                    <span class="text-muted" style="font-size: 0.88rem;">Pie chart showing the distribution and categorization of eligible studies included in the database.</span>
                                 </div>
                             </div>
                         </div>
@@ -920,11 +914,11 @@
                         <div class="col">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
-                                    <img class="img-fluid figure-img" src="images/miRNAs_by_tissue.png" alt="Expression Studies by Tissue">
+                                    <img class="img-fluid figure-img" src="images/Expression_Studies_by_tissue_type.jpg" alt="Expression Studies by Tissue">
                                 </div>
                                 <div class="figure-caption">
-                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1rem;">Expression Studies by Tissue</h3>
-                                    <span class="text-muted" style="font-size: 0.85rem;">Distribution of profiled microRNAs grouped across brain, blood, serum, and saliva tissues.</span>
+                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1.05rem;">Expression Studies by Tissue</h3>
+                                    <span class="text-muted" style="font-size: 0.88rem;">Distribution of profiled microRNAs grouped across brain, blood, serum, and saliva tissues.</span>
                                 </div>
                             </div>
                         </div>
@@ -932,11 +926,11 @@
                         <div class="col">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
-                                    <img class="img-fluid figure-img" src="images/miRNAs_by_genetic_alteration.png" alt="Genetic Studies by Variant">
+                                    <img class="img-fluid figure-img" src="images/Genetic_Studies_by_variant_type.jpg" alt="Genetic Studies by Variant">
                                 </div>
                                 <div class="figure-caption">
-                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1rem;">Genetic Studies by Variant</h3>
-                                    <span class="text-muted" style="font-size: 0.85rem;">Classification of genetic alterations affecting microRNA genes (CNVs, SNVs, and SNPs).</span>
+                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1.05rem;">Genetic Studies by Variant</h3>
+                                    <span class="text-muted" style="font-size: 0.88rem;">Classification of genetic alterations affecting microRNA genes (CNVs, SNVs, and SNPs).</span>
                                 </div>
                             </div>
                         </div>
@@ -944,11 +938,11 @@
                         <div class="col">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
-                                    <img class="img-fluid figure-img" src="images/Top_10_miRNAs.png" alt="Top 10 Associated miRNAs">
+                                    <img class="img-fluid figure-img" src="images/Top_10_miRNAs.jpg" alt="Top 10 Associated miRNAs">
                                 </div>
                                 <div class="figure-caption">
-                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1rem;">Top 10 Associated miRNAs</h3>
-                                    <span class="text-muted" style="font-size: 0.85rem;">Ranking of the most frequently reported dysregulated microRNAs in independent ASD studies.</span>
+                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1.05rem;">Top 10 Associated miRNAs</h3>
+                                    <span class="text-muted" style="font-size: 0.88rem;">Ranking of the most frequently reported dysregulated microRNAs in independent ASD studies.</span>
                                 </div>
                             </div>
                         </div>
@@ -956,11 +950,11 @@
                         <div class="col">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
-                                    <img class="img-fluid figure-img" src="images/miRNAs_in_common.png" alt="miRNAs in Common">
+                                    <img class="img-fluid figure-img" src="images/12_miRNAs_in_common.jpg" alt="miRNAs in Common">
                                 </div>
                                 <div class="figure-caption">
-                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1rem;">miRNAs in Common</h3>
-                                    <span class="text-muted" style="font-size: 0.85rem;">Overlap of candidate microRNAs identified across both expression profiling and genetic investigations.</span>
+                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1.05rem;">miRNAs in Common</h3>
+                                    <span class="text-muted" style="font-size: 0.88rem;">Overlap of candidate microRNAs identified across both expression profiling and genetic investigations.</span>
                                 </div>
                             </div>
                         </div>
@@ -971,8 +965,8 @@
                                     <img class="img-fluid figure-img" src="images/miRNAs_expression_studies.png" alt="Expression Studies Summary">
                                 </div>
                                 <div class="figure-caption">
-                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1rem;">Expression Studies Summary</h3>
-                                    <span class="text-muted" style="font-size: 0.85rem;">Comprehensive summary of microRNA expression alterations reported across all analyzed publications.</span>
+                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1.05rem;">Expression Studies Summary</h3>
+                                    <span class="text-muted" style="font-size: 0.88rem;">Comprehensive summary of microRNA expression alterations reported across all analyzed publications.</span>
                                 </div>
                             </div>
                         </div>
@@ -983,8 +977,8 @@
                                     <img class="img-fluid figure-img" src="images/miRNAs_genetic_and_other_studies.png" alt="Genetic Studies Summary">
                                 </div>
                                 <div class="figure-caption">
-                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1rem;">Genetic Studies Summary</h3>
-                                    <span class="text-muted" style="font-size: 0.85rem;">Overview of specific miRNAs and their association with genetic variants in ASD datasets.</span>
+                                    <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1.05rem;">Genetic Studies Summary</h3>
+                                    <span class="text-muted" style="font-size: 0.88rem;">Overview of specific miRNAs and their association with genetic variants in ASD datasets.</span>
                                 </div>
                             </div>
                         </div>
@@ -2173,20 +2167,6 @@
     <!-- Drawer Backdrop -->
     <div id="drawerBackdrop" class="drawer-backdrop"></div>
 
-    <!-- Image Modal for Lightbox Effect -->
-    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content shadow border-0" style="border-radius: 12px; overflow: hidden;">
-          <div class="modal-header border-0 bg-light py-3 px-4">
-            <h5 class="modal-title fw-bold" id="imageModalLabel" style="font-family: 'Montserrat', sans-serif; color: var(--primary-color);">Figure Preview</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-center p-4 bg-white">
-            <img id="modalImage" src="" alt="Full size figure" class="img-fluid rounded shadow-sm" style="max-height: 80vh;">
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- Selection Warning Toast Container -->
     <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
@@ -2546,6 +2526,12 @@
                     // Initialize Bootstrap tooltips on headers
                     const tooltipTriggerList = document.querySelectorAll(tableId + ' th[data-bs-toggle="tooltip"]');
                     [...tooltipTriggerList].forEach(el => new bootstrap.Tooltip(el));
+
+                    // When targets table loads its dataset, immediately apply default database filter
+                    if (tableId === '#targets-table') {
+                        applyAdvancedFilters();
+                        updateFilteredCounts();
+                    }
                 }
             });
             return table;
@@ -2727,7 +2713,10 @@
                 },
                 {
                     "data": "database_source",
-                    "render": function(data) {
+                    "render": function(data, type) {
+                        if (type === 'filter' || type === 'sort') {
+                            return data || '';
+                        }
                         if (!data) return '<span class="text-muted">—</span>';
                         if (data.includes('Consensus')) {
                             return '<span class="badge bg-primary-subtle text-primary border px-2 py-1 rounded-pill" style="font-size: 0.75rem;"><i class="fa-solid fa-check-double text-warning me-1"></i>Consensus (Both)</span>';
@@ -2798,16 +2787,6 @@
         });
         $('#btn-back-to-top').on('click', function() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // Image Lightbox/Preview Modal Handler
-        $('body').on('click', '.figure-img', function() {
-            const src = $(this).attr('src');
-            const title = $(this).closest('.figure-card').find('.figure-title').text() || $(this).closest('.card').find('h3').text().trim() || 'Figure Preview';
-            $('#modalImage').attr('src', src);
-            $('#imageModalLabel').text(title);
-            const myModal = new bootstrap.Modal(document.getElementById('imageModal'));
-            myModal.show();
         });
 
         // Helper to escape regex special characters
@@ -2912,9 +2891,10 @@
             const targetRegulation = $('#filter-target-regulation').val();
             const targetTissue = $('#filter-target-tissue').val().trim();
 
-            const targetDbSource = $('input[name="target-db-radio"]:checked').val() || $('#filter-target-db').val() || 'mirtarbase';
-            // Sync controls
+            const targetDbSource = $('input[name="target-db-radio"]:checked').val() || $('input[name="enrichment-db-source"]:checked').val() || $('#filter-target-db').val() || 'mirtarbase';
+            // Sync controls across Target Genes tab, Functional Enrichment tab, and slide-over drawer
             $(`input[name="target-db-radio"][value="${targetDbSource}"]`).prop('checked', true);
+            $(`input[name="enrichment-db-source"][value="${targetDbSource}"]`).prop('checked', true);
             $('#filter-target-db').val(targetDbSource);
 
             let activeFilterCount = 0;
@@ -3048,46 +3028,48 @@
 
             // Apply filters to Target Genes Table
             // Col 0: Details, Col 1: Precursor, Col 2: Mature, Col 3: Target Gene, Col 4: Gene Name, Col 5: SFARI, Col 6: Evidence, Col 7: Database Source, Col 8: PMIDs, Col 9: Method, Col 10: Regulation, Col 11: Tissue
-            targetsTable.column(1).search(hairpinSearchPattern, hairpinUseRegex, false);
-            targetsTable.column(2).search(matureTokens.length > 0 ? buildTokenRegex(matureTokens) : '', matureTokens.length > 0, false);
-            
-            if (geneTokens.length > 0) {
-                const geneExactPattern = buildTokenRegex(geneTokens, true);
-                targetsTable.column(3).search(geneExactPattern, true, false);
-            } else {
-                targetsTable.column(3).search('');
+            if (targetsTable) {
+                targetsTable.column(1).search(hairpinSearchPattern, hairpinUseRegex, false);
+                targetsTable.column(2).search(matureTokens.length > 0 ? buildTokenRegex(matureTokens) : '', matureTokens.length > 0, false);
+                
+                if (geneTokens.length > 0) {
+                    const geneExactPattern = buildTokenRegex(geneTokens, true);
+                    targetsTable.column(3).search(geneExactPattern, true, false);
+                } else {
+                    targetsTable.column(3).search('');
+                }
+
+                if (sfariCategory === 'SFARI') {
+                    targetsTable.column(5).search('^(?!.*Non-SFARI).*$', true, false);
+                } else if (sfariCategory === 'Non-SFARI') {
+                    targetsTable.column(5).search('Non-SFARI');
+                } else if (sfariCategory) {
+                    targetsTable.column(5).search(sfariCategory);
+                } else {
+                    targetsTable.column(5).search('');
+                }
+
+                targetsTable.column(6).search(evidenceLevel);
+
+                // Database source filtering (miRTarBase 10.0 default)
+                if (targetDbSource === 'mirtarbase') {
+                    targetsTable.column(7).search('miRTarBase', true, false);
+                } else if (targetDbSource === 'tarbase') {
+                    targetsTable.column(7).search('(TarBase|DIANA)', true, false);
+                } else if (targetDbSource === 'consensus') {
+                    targetsTable.column(7).search('Consensus', true, false);
+                } else {
+                    targetsTable.column(7).search('');
+                }
+
+                targetsTable.column(9).search(targetMethod);
+                targetsTable.column(10).search(targetRegulation);
+                targetsTable.column(11).search(targetTissue);
+                targetsTable.draw();
+
+                // Update interaction count in switcher bar
+                $('#db-active-count').text(targetsTable.rows({ search: 'applied' }).count().toLocaleString());
             }
-
-            if (sfariCategory === 'SFARI') {
-                targetsTable.column(5).search('^(?!.*Non-SFARI).*$', true, false);
-            } else if (sfariCategory === 'Non-SFARI') {
-                targetsTable.column(5).search('Non-SFARI');
-            } else if (sfariCategory) {
-                targetsTable.column(5).search(sfariCategory);
-            } else {
-                targetsTable.column(5).search('');
-            }
-
-            targetsTable.column(6).search(evidenceLevel);
-
-            // Database source filtering (miRTarBase 10.0 default)
-            if (targetDbSource === 'mirtarbase') {
-                targetsTable.column(7).search('miRTarBase', true, false);
-            } else if (targetDbSource === 'tarbase') {
-                targetsTable.column(7).search('(DIANA-TarBase|Consensus)', true, false);
-            } else if (targetDbSource === 'consensus') {
-                targetsTable.column(7).search('Consensus', true, false);
-            } else {
-                targetsTable.column(7).search('');
-            }
-
-            targetsTable.column(9).search(targetMethod);
-            targetsTable.column(10).search(targetRegulation);
-            targetsTable.column(11).search(targetTissue);
-            targetsTable.draw();
-
-            // Update interaction count in switcher bar
-            $('#db-active-count').text(targetsTable.rows({ search: 'applied' }).count().toLocaleString());
 
             updateSelectionUI();
         }
@@ -3096,10 +3078,24 @@
 
         // Event listeners for real-time filtering
         $('#filter-mirna-id, #filter-mature-id, #filter-target-gene, #filter-study-desc, #filter-target-tissue').on('keyup input', debouncedFilter);
-        $('#filter-expression-change, #filter-overall-evidence, #filter-genetic-alteration, #filter-sfari-category, #filter-evidence-level, #filter-target-method, #filter-target-regulation, #filter-target-db').on('change', applyAdvancedFilters);
+        $('#filter-expression-change, #filter-overall-evidence, #filter-genetic-alteration, #filter-sfari-category, #filter-evidence-level, #filter-target-method, #filter-target-regulation').on('change', applyAdvancedFilters);
         $('input[name="target-db-radio"]').on('change', function() {
-            $('#filter-target-db').val($(this).val());
+            const val = $(this).val();
+            $('#filter-target-db').val(val);
+            $(`input[name="enrichment-db-source"][value="${val}"]`).prop('checked', true);
             applyAdvancedFilters();
+            if (typeof refreshEnrichmentScopeAndUI === 'function') {
+                refreshEnrichmentScopeAndUI();
+            }
+        });
+        $('#filter-target-db').on('change', function() {
+            const val = $(this).val();
+            $(`input[name="target-db-radio"][value="${val}"]`).prop('checked', true);
+            $(`input[name="enrichment-db-source"][value="${val}"]`).prop('checked', true);
+            applyAdvancedFilters();
+            if (typeof refreshEnrichmentScopeAndUI === 'function') {
+                refreshEnrichmentScopeAndUI();
+            }
         });
         $('body').on('change', '#tissue-checkboxes input', applyAdvancedFilters);
 
@@ -3114,6 +3110,7 @@
             $('#filter-study-desc').val('');
             $('#filter-target-db').val('mirtarbase');
             $('#db-mirtarbase').prop('checked', true);
+            $('#enrich-db-mirtarbase').prop('checked', true);
             $('#filter-sfari-category').val('');
             $('#filter-evidence-level').val('');
             $('#filter-target-method').val('');
@@ -3533,7 +3530,8 @@
             const healthBadge = $('#gene-set-health-badge');
 
             if (!baseEnrichmentGenes || baseEnrichmentGenes.length === 0) {
-                $('input[name="target-scope"], input[name="enrichment-db-source"]').prop('disabled', true);
+                $('input[name="target-scope"]').prop('disabled', true);
+                $('input[name="enrichment-db-source"]').prop('disabled', false);
                 $('#btn-run-enrichment').prop('disabled', true).addClass('disabled');
                 $('#btn-run-enrichment span').text('Select miRNAs to Run Functional Enrichment');
                 $('#gene-set-stats').text('0 Target Genes');
@@ -3638,6 +3636,10 @@
 
         // Target Database Selector (Enrichment Tab)
         $('input[name="enrichment-db-source"]').on('change', function() {
+            const val = $(this).val();
+            $(`input[name="target-db-radio"][value="${val}"]`).prop('checked', true);
+            $('#filter-target-db').val(val);
+            applyAdvancedFilters();
             refreshEnrichmentScopeAndUI();
         });
 
@@ -3645,6 +3647,9 @@
         $('body').on('click', '.btn-reset-scope-to-all', function() {
             $('#scope-all').prop('checked', true);
             $('#enrich-db-all').prop('checked', true);
+            $('#db-all').prop('checked', true);
+            $('#filter-target-db').val('all');
+            applyAdvancedFilters();
             refreshEnrichmentScopeAndUI();
         });
 
