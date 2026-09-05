@@ -44,6 +44,11 @@ class BasePage:
         tab_elem.click()
         self.page.wait_for_timeout(500)
 
+    def is_tab_active(self, tab_name: str) -> bool:
+        """Check if designated tab pane is currently active."""
+        pane = self.page.locator(f"#{tab_name}.tab-pane.active")
+        return pane.is_visible()
+
     def open_filter_drawer(self) -> None:
         """Open the slide-over advanced filter drawer."""
         btn = self.page.locator(".tab-pane.active .btn-filter, .btn-filter:visible")

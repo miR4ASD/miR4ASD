@@ -73,6 +73,10 @@ class ExpressionPage(BasePage):
         btn.click()
         self.page.wait_for_timeout(600)
 
+    def click_run_enrichment(self) -> None:
+        """Alias for click_run_target_enrichment_button."""
+        self.click_run_target_enrichment_button()
+
     def is_run_enrichment_button_enabled(self) -> bool:
         """Check if Run Target Enrichment button is enabled."""
         btn = self.page.locator(".btn-analyze-filtered[data-source-table='expression']")
@@ -114,6 +118,15 @@ class ExpressionPage(BasePage):
             "#expression-table tbody tr.details, #expression-table tbody tr.dt-hasChild"
         ).is_visible()
 
+    def get_child_row_text(self) -> str:
+        """Return text inside visible child row details."""
+        child = self.page.locator(
+            "#expression-table tbody tr.child, #expression-table tbody tr.details + tr"
+        ).first
+        if child.is_visible():
+            return child.inner_text()
+        return ""
+
     def click_page(self, page_num: int) -> None:
         """
         Navigate to specific page in DataTables pagination.
@@ -122,7 +135,8 @@ class ExpressionPage(BasePage):
             page_num: Page number (1-indexed).
         """
         btn = self.page.locator(
-            f"button.dt-paging-button:text-is('{page_num}'), "
+            f"button.dt-paging-button[aria-controls='expression-table']"
+            f":text-is('{page_num}'), "
             f"#expression-table_paginate .paginate_button:text-is('{page_num}')"
         ).first
         btn.click()
