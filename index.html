@@ -1401,9 +1401,9 @@
                                     </span>
                                 </div>
                                 <div class="d-flex align-items-center gap-2 ps-4" style="font-size: 0.78rem;">
-                                    <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-primary btn-select-all-visible" data-table="expression">Select Visible</button>
+                                    <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-primary btn-select-all-visible" data-table="expression" data-bs-toggle="tooltip" data-bs-placement="top" title="Select all visible rows on the current table page">Select Visible</button>
                                     <span class="text-muted">|</span>
-                                    <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-secondary btn-clear-selection" data-table="expression">Clear Selection</button>
+                                    <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-secondary btn-clear-selection" data-table="expression" data-bs-toggle="tooltip" data-bs-placement="top" title="Deselect all selected rows across all pages">Clear Selection</button>
                                 </div>
                             </div>
 
@@ -1417,13 +1417,13 @@
                                     </span>
                                 </div>
                                 <div class="d-flex align-items-center gap-2 ps-4" style="font-size: 0.78rem;">
-                                    <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-danger btn-reset-table-filters"><i class="fa-solid fa-rotate-left me-1"></i>Reset Filters</button>
+                                    <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-danger btn-reset-table-filters" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset all search keywords, column filters, and dropdowns to default"><i class="fa-solid fa-rotate-left me-1"></i>Reset Filters</button>
                                 </div>
                             </div>
 
                             <!-- Step 3: Run Target Enrichment -->
                             <div class="col-xl-4 col-12">
-                                <button type="button" class="btn btn-sm btn-secondary opacity-75 fw-bold btn-analyze-filtered w-100 shadow-sm py-2 d-flex justify-content-between align-items-center" data-source-table="expression" disabled>
+                                <button type="button" class="btn btn-sm btn-secondary opacity-75 fw-bold btn-analyze-filtered w-100 shadow-sm py-2 d-flex justify-content-between align-items-center" data-source-table="expression" data-bs-toggle="tooltip" data-bs-placement="top" title="Transfer selected candidate miRNAs and open the Functional Enrichment tab" disabled>
                                     <span><span class="badge bg-white text-dark rounded-circle me-2" style="width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem;">3</span><i class="fa-solid fa-dna me-1 text-warning"></i> <span class="expr-enrich-label">Select miRNAs above to run Target Enrichment</span></span>
                                     <i class="fa-solid fa-arrow-right ms-2"></i>
                                 </button>
@@ -1472,9 +1472,9 @@
                                     </span>
                                 </div>
                                 <div class="d-flex align-items-center gap-2 ps-4" style="font-size: 0.78rem;">
-                                    <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-primary btn-select-all-visible" data-table="genetic">Select Visible</button>
+                                    <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-primary btn-select-all-visible" data-table="genetic" data-bs-toggle="tooltip" data-bs-placement="top" title="Select all visible rows on the current table page">Select Visible</button>
                                     <span class="text-muted">|</span>
-                                    <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-secondary btn-clear-selection" data-table="genetic">Clear Selection</button>
+                                    <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-secondary btn-clear-selection" data-table="genetic" data-bs-toggle="tooltip" data-bs-placement="top" title="Deselect all selected rows across all pages">Clear Selection</button>
                                 </div>
                             </div>
 
@@ -1488,13 +1488,13 @@
                                     </span>
                                 </div>
                                 <div class="d-flex align-items-center gap-2 ps-4" style="font-size: 0.78rem;">
-                                    <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-danger btn-reset-table-filters"><i class="fa-solid fa-rotate-left me-1"></i>Reset Filters</button>
+                                    <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-danger btn-reset-table-filters" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset all search keywords, column filters, and dropdowns to default"><i class="fa-solid fa-rotate-left me-1"></i>Reset Filters</button>
                                 </div>
                             </div>
 
                             <!-- Step 3: Run Target Enrichment -->
                             <div class="col-xl-4 col-12">
-                                <button type="button" class="btn btn-sm btn-secondary opacity-75 fw-bold btn-analyze-filtered w-100 shadow-sm py-2 d-flex justify-content-between align-items-center" data-source-table="genetic" disabled>
+                                <button type="button" class="btn btn-sm btn-secondary opacity-75 fw-bold btn-analyze-filtered w-100 shadow-sm py-2 d-flex justify-content-between align-items-center" data-source-table="genetic" data-bs-toggle="tooltip" data-bs-placement="top" title="Transfer selected candidate miRNAs and open the Functional Enrichment tab" disabled>
                                     <span><span class="badge bg-white text-dark rounded-circle me-2" style="width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem;">3</span><i class="fa-solid fa-dna me-1 text-warning"></i> <span class="gen-enrich-label">Select miRNAs above to run Target Enrichment</span></span>
                                     <i class="fa-solid fa-arrow-right ms-2"></i>
                                 </button>
@@ -1530,29 +1530,29 @@
                                 <span class="small fw-bold text-dark"><i class="fa-solid fa-database text-primary me-1"></i>Database Source:</span>
                                 <div class="btn-group btn-group-sm" role="group" id="target-db-switcher">
                                     <input type="radio" class="btn-check" name="target-db-radio" id="db-mirtarbase" value="mirtarbase" checked autocomplete="off">
-                                    <label class="btn btn-outline-primary fw-semibold" for="db-mirtarbase" title="Interactions supported by miRTarBase 10.0 (Default)">
+                                    <label class="btn btn-outline-primary fw-semibold" for="db-mirtarbase" data-bs-toggle="tooltip" data-bs-placement="top" title="Experimentally validated miRNA-target interactions from miRTarBase 10.0 (default)">
                                         <i class="fa-solid fa-check me-1"></i>miRTarBase 10.0 (Default)
                                     </label>
 
                                     <input type="radio" class="btn-check" name="target-db-radio" id="db-consensus" value="consensus" autocomplete="off">
-                                    <label class="btn btn-outline-primary fw-semibold" for="db-consensus" title="Cross-validated in BOTH miRTarBase & DIANA-TarBase">
+                                    <label class="btn btn-outline-primary fw-semibold" for="db-consensus" data-bs-toggle="tooltip" data-bs-placement="top" title="High-confidence target interactions independently confirmed in both miRTarBase and DIANA-TarBase">
                                         <i class="fa-solid fa-check-double me-1 text-warning"></i>Consensus (Both DBs)
                                     </label>
 
                                     <input type="radio" class="btn-check" name="target-db-radio" id="db-tarbase" value="tarbase" autocomplete="off">
-                                    <label class="btn btn-outline-primary fw-semibold" for="db-tarbase" title="Interactions supported by DIANA-TarBase v9.0">
+                                    <label class="btn btn-outline-primary fw-semibold" for="db-tarbase" data-bs-toggle="tooltip" data-bs-placement="top" title="High-throughput and low-throughput experimentally validated target interactions from DIANA-TarBase v9.0">
                                         DIANA-TarBase v9.0
                                     </label>
 
                                     <input type="radio" class="btn-check" name="target-db-radio" id="db-all" value="all" autocomplete="off">
-                                    <label class="btn btn-outline-primary fw-semibold" for="db-all" title="All merged interactions across both databases">
+                                    <label class="btn btn-outline-primary fw-semibold" for="db-all" data-bs-toggle="tooltip" data-bs-placement="top" title="Merged union of all non-redundant validated interactions from miRTarBase and TarBase">
                                         All Sources (Union)
                                     </label>
                                 </div>
                                 <span class="badge bg-white text-secondary border"><span id="db-active-count" class="fw-bold text-primary">17,150</span> Target Interactions (<span id="db-active-genes-count" class="fw-bold text-success">2,995</span> Target Genes)</span>
                             </div>
                             <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <button type="button" class="btn btn-sm btn-secondary opacity-75 fw-bold btn-analyze-filtered shadow-sm" data-source-table="targets" disabled>
+                                <button type="button" class="btn btn-sm btn-secondary opacity-75 fw-bold btn-analyze-filtered shadow-sm" data-source-table="targets" data-bs-toggle="tooltip" data-bs-placement="top" title="Transfer selected candidate miRNAs and open the Functional Enrichment tab" disabled>
                                     <i class="fa-solid fa-dna me-1 text-warning"></i> <span class="target-enrich-label">Select miRNAs in tables to run Target Enrichment</span>
                                 </button>
                             </div>
@@ -1641,22 +1641,22 @@
                             </label>
                             <div class="btn-group w-100 flex-wrap" role="group" aria-label="Target Database Selector">
                                 <input type="radio" class="btn-check" name="enrichment-db-source" id="enrich-db-mirtarbase" value="mirtarbase" checked>
-                                <label class="btn btn-outline-primary btn-sm py-2 fw-semibold" for="enrich-db-mirtarbase">
+                                <label class="btn btn-outline-primary btn-sm py-2 fw-semibold" for="enrich-db-mirtarbase" data-bs-toggle="tooltip" data-bs-placement="top" title="Experimentally validated miRNA-target interactions from miRTarBase 10.0 (default)">
                                     <i class="fa-solid fa-check me-1"></i>miRTarBase 10.0 (Default)
                                 </label>
 
                                 <input type="radio" class="btn-check" name="enrichment-db-source" id="enrich-db-consensus" value="consensus">
-                                <label class="btn btn-outline-primary btn-sm py-2 fw-semibold" for="enrich-db-consensus">
+                                <label class="btn btn-outline-primary btn-sm py-2 fw-semibold" for="enrich-db-consensus" data-bs-toggle="tooltip" data-bs-placement="top" title="High-confidence target interactions independently confirmed in both miRTarBase and DIANA-TarBase">
                                     <i class="fa-solid fa-check-double text-warning me-1"></i>Consensus (Both DBs)
                                 </label>
 
                                 <input type="radio" class="btn-check" name="enrichment-db-source" id="enrich-db-tarbase" value="tarbase">
-                                <label class="btn btn-outline-primary btn-sm py-2 fw-semibold" for="enrich-db-tarbase">
+                                <label class="btn btn-outline-primary btn-sm py-2 fw-semibold" for="enrich-db-tarbase" data-bs-toggle="tooltip" data-bs-placement="top" title="High-throughput and low-throughput experimentally validated target interactions from DIANA-TarBase v9.0">
                                     DIANA-TarBase v9.0
                                 </label>
 
                                 <input type="radio" class="btn-check" name="enrichment-db-source" id="enrich-db-all" value="all">
-                                <label class="btn btn-outline-primary btn-sm py-2 fw-semibold" for="enrich-db-all">
+                                <label class="btn btn-outline-primary btn-sm py-2 fw-semibold" for="enrich-db-all" data-bs-toggle="tooltip" data-bs-placement="top" title="Merged union of all non-redundant validated interactions from miRTarBase and TarBase">
                                     All Sources (Union)
                                 </label>
                             </div>
@@ -1669,25 +1669,25 @@
                             </label>
                             <div class="btn-group w-100 flex-wrap" role="group" aria-label="Target Filters">
                                 <input type="radio" class="btn-check" name="target-scope" id="scope-all" value="all" checked>
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-all">All Targets</label>
+                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-all" data-bs-toggle="tooltip" data-bs-placement="top" title="Analyze all validated target genes of selected miRNAs across all tissues">All Targets</label>
 
                                 <input type="radio" class="btn-check" name="target-scope" id="scope-strong" value="strong">
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-strong"><i class="fa-solid fa-check-double me-1"></i>Strong Evidence</label>
+                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-strong" data-bs-toggle="tooltip" data-bs-placement="top" title="Include only target genes validated by low-throughput experiments (Luciferase, Western blot, or qPCR)"><i class="fa-solid fa-check-double me-1"></i>Strong Evidence</label>
 
                                 <input type="radio" class="btn-check" name="target-scope" id="scope-sfari" value="sfari">
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-sfari"><i class="fa-solid fa-star me-1 text-warning"></i>SFARI (All)</label>
+                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-sfari" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict to target genes curated in the SFARI Gene autism risk database (all categories)"><i class="fa-solid fa-star me-1 text-warning"></i>SFARI (All)</label>
 
                                 <input type="radio" class="btn-check" name="target-scope" id="scope-sfari-cat1" value="sfari_cat1">
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-sfari-cat1"><i class="fa-solid fa-star text-danger me-1"></i>SFARI Cat 1</label>
+                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-sfari-cat1" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict strictly to high-confidence ASD risk genes (SFARI Category 1)"><i class="fa-solid fa-star text-danger me-1"></i>SFARI Cat 1</label>
 
                                 <input type="radio" class="btn-check" name="target-scope" id="scope-brain" value="brain">
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-brain"><i class="fa-solid fa-brain text-info me-1"></i>Brain Targets</label>
+                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-brain" data-bs-toggle="tooltip" data-bs-placement="top" title="Include only target genes with experimentally validated miRNA interactions in human brain tissue"><i class="fa-solid fa-brain text-info me-1"></i>Brain Targets</label>
 
                                 <input type="radio" class="btn-check" name="target-scope" id="scope-upregulated" value="upregulated">
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-upregulated"><i class="fa-solid fa-arrow-up text-success me-1"></i>Upregulated miRNA Targets</label>
+                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-upregulated" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict to target genes regulated by miRNAs reported as upregulated in ASD"><i class="fa-solid fa-arrow-up text-success me-1"></i>Upregulated miRNA Targets</label>
 
                                 <input type="radio" class="btn-check" name="target-scope" id="scope-downregulated" value="downregulated">
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-downregulated"><i class="fa-solid fa-arrow-down text-danger me-1"></i>Downregulated miRNA Targets</label>
+                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-downregulated" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict to target genes regulated by miRNAs reported as downregulated in ASD"><i class="fa-solid fa-arrow-down text-danger me-1"></i>Downregulated miRNA Targets</label>
                             </div>
                         </div>
 
@@ -1696,14 +1696,14 @@
                                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <span class="small fw-bold text-secondary text-uppercase" style="letter-spacing: 0.05em;">Resolved Target Genes:</span>
-                                        <button class="btn btn-link btn-xs p-0 text-decoration-none text-primary fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#geneEditorCollapse" aria-expanded="false" aria-controls="geneEditorCollapse">
+                                        <button class="btn btn-link btn-xs p-0 text-decoration-none text-primary fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#geneEditorCollapse" aria-expanded="false" aria-controls="geneEditorCollapse" title="Toggle custom gene symbols input panel">
                                             <i class="fa-solid fa-pen-to-square me-1"></i>Edit / Paste Custom Gene Symbols ▾
                                         </button>
                                     </div>
                                     <div class="d-flex gap-2">
-                                        <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-primary" id="btn-copy-genes" title="Copy gene symbols to clipboard"><i class="fa-regular fa-copy me-1"></i>Copy</button>
+                                        <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-primary" id="btn-copy-genes" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy current candidate gene symbols to clipboard"><i class="fa-regular fa-copy me-1"></i>Copy</button>
                                         <span class="text-muted small">|</span>
-                                        <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-danger" id="btn-clear-genes" title="Clear gene input"><i class="fa-solid fa-trash-can me-1"></i>Clear</button>
+                                        <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-danger" id="btn-clear-genes" data-bs-toggle="tooltip" data-bs-placement="top" title="Clear custom gene symbols input"><i class="fa-solid fa-trash-can me-1"></i>Clear</button>
                                     </div>
                                 </div>
 
@@ -1725,7 +1725,7 @@
                                     <span class="badge bg-primary text-white rounded-circle me-1" style="width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem;">2</span>
                                     Run Overrepresentation Analysis:
                                 </span>
-                                <button class="btn btn-link btn-xs p-0 text-decoration-none text-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSettingsCollapse" aria-expanded="false" aria-controls="advancedSettingsCollapse">
+                                <button class="btn btn-link btn-xs p-0 text-decoration-none text-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSettingsCollapse" aria-expanded="false" aria-controls="advancedSettingsCollapse" title="Toggle advanced ontology sources and statistical significance parameters">
                                     <i class="fa-solid fa-sliders text-primary me-1"></i>Advanced Parameters & Ontologies ▾
                                 </button>
                             </div>
@@ -1820,7 +1820,7 @@
                             </div>
 
                             <!-- Primary Action Button -->
-                            <button type="button" class="btn btn-primary btn-lg w-100 py-3 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2" id="btn-run-enrichment" style="border-radius: 8px; font-family: 'Montserrat', sans-serif;">
+                            <button type="button" class="btn btn-primary btn-lg w-100 py-3 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2" id="btn-run-enrichment" data-bs-toggle="tooltip" data-bs-placement="top" title="Execute hypergeometric pathway and ontology overrepresentation analysis via g:Profiler" style="border-radius: 8px; font-family: 'Montserrat', sans-serif;">
                                 <i class="fa-solid fa-play"></i>
                                 <span>Run g:Profiler Functional Enrichment</span>
                             </button>
@@ -1889,7 +1889,7 @@
                                 </h5>
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="text-muted small d-none d-md-inline">Ranked by Significance (−log₁₀ p-adj)</span>
-                                    <button type="button" class="btn btn-sm btn-outline-primary" id="btn-export-enrichment-chart" title="Download high-resolution chart image as PNG">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" id="btn-export-enrichment-chart" data-bs-toggle="tooltip" data-bs-placement="top" title="Download bubble/bar chart visualization as a high-resolution PNG image">
                                         <i class="fa-solid fa-image me-1"></i>Download Chart PNG
                                     </button>
                                 </div>
@@ -1906,10 +1906,10 @@
                                     <i class="fa-solid fa-table-list text-primary me-2"></i>Enriched Terms & Intersecting Target Genes
                                 </h5>
                                 <div class="d-flex gap-2">
-                                    <button type="button" class="btn btn-sm btn-outline-primary" id="btn-export-enrichment-csv">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" id="btn-export-enrichment-csv" data-bs-toggle="tooltip" data-bs-placement="top" title="Export enriched pathways, adjusted p-values, and gene overlap as a CSV spreadsheet">
                                         <i class="fa-solid fa-download me-1"></i>Download CSV
                                     </button>
-                                    <a class="btn btn-sm btn-outline-success" id="btn-open-gprofiler-web" href="#" target="_blank" rel="noopener noreferrer">
+                                    <a class="btn btn-sm btn-outline-success" id="btn-open-gprofiler-web" href="#" target="_blank" rel="noopener noreferrer" data-bs-toggle="tooltip" data-bs-placement="top" title="Open full interactive functional profiling in the official g:Profiler web portal">
                                         <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>Open in g:Profiler Web Portal
                                     </a>
                                 </div>
@@ -1944,7 +1944,7 @@
     <div id="filterDrawer" class="filter-drawer" aria-hidden="true" role="dialog" aria-labelledby="filterDrawerTitle">
         <div class="filter-drawer-header">
             <h5 id="filterDrawerTitle"><i class="fa-solid fa-sliders me-2 text-primary"></i>Advanced Filters & Queries</h5>
-            <button type="button" class="btn-close" id="closeFilterDrawer" aria-label="Close filter drawer"></button>
+            <button type="button" class="btn-close" id="closeFilterDrawer" aria-label="Close filter drawer" data-bs-toggle="tooltip" data-bs-placement="left" title="Close filter drawer"></button>
         </div>
         <div class="filter-drawer-body">
             <!-- 3-Step Analytical Workflow Guide Card -->
@@ -1964,19 +1964,19 @@
                     <div>
                         <span class="fw-semibold">Selection:</span> 
                         <span id="drawer-selection-badge" class="badge bg-light text-dark border">0 Selected</span>
-                        <button type="button" class="btn btn-link btn-xs p-0 text-danger ms-1 text-decoration-none" id="drawer-btn-clear-selection">Deselect</button>
+                        <button type="button" class="btn btn-link btn-xs p-0 text-danger ms-1 text-decoration-none" id="drawer-btn-clear-selection" data-bs-toggle="tooltip" data-bs-placement="top" title="Deselect all selected miRNAs">Deselect</button>
                     </div>
                     <div>
                         <span class="fw-semibold">Filters:</span> 
                         <span id="drawer-filter-count-badge" class="badge bg-light text-dark border">0 Active</span>
-                        <button type="button" class="btn btn-link btn-xs p-0 text-danger ms-1 text-decoration-none" id="drawer-btn-reset-filters">Reset</button>
+                        <button type="button" class="btn btn-link btn-xs p-0 text-danger ms-1 text-decoration-none" id="drawer-btn-reset-filters" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset all filter inputs in this drawer">Reset</button>
                     </div>
                 </div>
             </div>
 
             <!-- Dynamic Quick Enrichment Action from Drawer -->
             <div class="mb-3">
-                <button type="button" class="btn btn-primary w-100 py-2 fw-bold shadow-sm d-flex justify-content-between align-items-center" id="drawer-btn-enrich">
+                <button type="button" class="btn btn-primary w-100 py-2 fw-bold shadow-sm d-flex justify-content-between align-items-center" id="drawer-btn-enrich" data-bs-toggle="tooltip" data-bs-placement="top" title="Transfer filtered miRNAs and open Functional Enrichment tab">
                     <span><i class="fa-solid fa-dna me-1 text-warning"></i> <span id="drawer-enrich-text">Run Target Enrichment on Filtered miRNAs</span></span>
                     <i class="fa-solid fa-arrow-right ms-1"></i>
                 </button>
@@ -1997,13 +1997,13 @@
                 
                 <!-- Mode Switcher Tabs for Shared Search -->
                 <div class="btn-group btn-group-sm w-100 mb-2" role="group" id="search-mode-tabs" aria-label="Search Mode Switcher">
-                    <button type="button" class="btn btn-outline-primary active fw-semibold search-mode-tab py-1" data-target-mode="mature" id="tab-mode-mature">
+                    <button type="button" class="btn btn-outline-primary active fw-semibold search-mode-tab py-1" data-target-mode="mature" id="tab-mode-mature" data-bs-toggle="tooltip" data-bs-placement="top" title="Search all tables by mature miRNA identifiers (e.g. hsa-miR-132-3p)">
                         Mature <span class="badge bg-primary text-white ms-1 search-pill-badge mature-badge" style="display: none; font-size: 0.68rem;">0</span>
                     </button>
-                    <button type="button" class="btn btn-outline-primary fw-semibold search-mode-tab py-1" data-target-mode="hairpin" id="tab-mode-hairpin">
+                    <button type="button" class="btn btn-outline-primary fw-semibold search-mode-tab py-1" data-target-mode="hairpin" id="tab-mode-hairpin" data-bs-toggle="tooltip" data-bs-placement="top" title="Search all tables by stem-loop precursor miRNA identifiers (e.g. hsa-mir-132)">
                         Precursor <span class="badge bg-primary text-white ms-1 search-pill-badge hairpin-badge" style="display: none; font-size: 0.68rem;">0</span>
                     </button>
-                    <button type="button" class="btn btn-outline-primary fw-semibold search-mode-tab py-1" data-target-mode="gene" id="tab-mode-gene">
+                    <button type="button" class="btn btn-outline-primary fw-semibold search-mode-tab py-1" data-target-mode="gene" id="tab-mode-gene" data-bs-toggle="tooltip" data-bs-placement="top" title="Search all tables by target gene symbols (e.g. PTEN, SHANK3, MECP2)">
                         Target Gene <span class="badge bg-primary text-white ms-1 search-pill-badge gene-badge" style="display: none; font-size: 0.68rem;">0</span>
                     </button>
                 </div>
@@ -2187,10 +2187,10 @@
             </div>
         </div>
         <div class="filter-drawer-footer d-flex gap-2">
-            <button type="button" class="btn btn-outline-secondary flex-grow-1" id="resetFilters">
+            <button type="button" class="btn btn-outline-secondary flex-grow-1" id="resetFilters" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset all drawer filter inputs to default">
                 <i class="fa-solid fa-rotate-left me-1"></i> Clear All
             </button>
-            <button type="button" class="btn btn-primary flex-grow-1" id="closeFilterDrawerBtn">
+            <button type="button" class="btn btn-primary flex-grow-1" id="closeFilterDrawerBtn" data-bs-toggle="tooltip" data-bs-placement="top" title="Close drawer and apply active filters to tables">
                 <i class="fa-solid fa-check me-1"></i> Apply & Close
             </button>
         </div>
@@ -2214,7 +2214,7 @@
     </div>
 
     <!-- Floating Back-to-Top Button -->
-    <button type="button" class="btn back-to-top" id="btn-back-to-top" aria-label="Scroll back to top of page" title="Scroll to top">
+    <button type="button" class="btn back-to-top" id="btn-back-to-top" aria-label="Scroll back to top of page" title="Scroll back to top of page" data-bs-toggle="tooltip" data-bs-placement="left">
         <i class="fa-solid fa-arrow-up"></i>
     </button>
 
@@ -2365,6 +2365,19 @@
 
     $(document).ready(function() {
         const DB_VERSION = '4.0';
+
+        // Global Bootstrap Tooltip Initializer
+        function initGlobalTooltips(container = document) {
+            const root = typeof container === 'string' ? document.querySelector(container) : container;
+            if (!root) return;
+            const tooltipElements = root.querySelectorAll('[data-bs-toggle="tooltip"]');
+            [...tooltipElements].forEach(el => {
+                if (!bootstrap.Tooltip.getInstance(el)) {
+                    new bootstrap.Tooltip(el, { boundary: 'window' });
+                }
+            });
+        }
+        initGlobalTooltips();
 
         // Debounce helper for high-frequency text input filtering
         function debounce(func, wait) {
@@ -2525,7 +2538,10 @@
                         extend: 'csv',
                         text: '<i class="fa-solid fa-download me-1"></i> Download CSV',
                         attr: {
-                            'aria-label': 'Download table as CSV'
+                            'aria-label': 'Download table as CSV',
+                            'data-bs-toggle': 'tooltip',
+                            'data-bs-placement': 'top',
+                            'title': 'Download visible table records as a CSV spreadsheet'
                         },
                         exportOptions: {
                             rows: ':visible',
@@ -2543,7 +2559,10 @@
                         attr: {
                             'aria-label': 'Open advanced filter drawer',
                             'aria-controls': 'filterDrawer',
-                            'aria-expanded': 'false'
+                            'aria-expanded': 'false',
+                            'data-bs-toggle': 'tooltip',
+                            'data-bs-placement': 'top',
+                            'title': 'Open slide-over advanced search and multi-parameter filter drawer'
                         },
                         action: function ( e, dt, node, config ) {
                             openDrawer('#filter-mirna-id', node);
@@ -2555,9 +2574,8 @@
                     const searchInput = $(tableId + '_filter input');
                     searchInput.attr('placeholder', 'Search miRNA, Gene, Tissue, DOI...');
                     
-                    // Initialize Bootstrap tooltips on headers
-                    const tooltipTriggerList = document.querySelectorAll(tableId + ' th[data-bs-toggle="tooltip"]');
-                    [...tooltipTriggerList].forEach(el => new bootstrap.Tooltip(el));
+                    // Initialize Bootstrap tooltips on headers and buttons
+                    initGlobalTooltips(document.querySelector(tableId)?.closest('.tab-pane') || document);
 
                     // When targets table loads its dataset, immediately apply default database filter
                     if (tableId === '#targets-table') {
@@ -2812,6 +2830,7 @@
                     reloadTargetGenesFromCurrentTable();
                 }
             }
+            initGlobalTooltips();
         });
 
         // Floating Back-to-Top scroll listener
@@ -4148,8 +4167,7 @@
                         buttons: [],
                         initComplete: function() {
                             $('#enrichment-results-table_filter input').attr('placeholder', 'Search enriched terms, IDs, genes...');
-                            const tooltipTriggerList = document.querySelectorAll('#enrichment-results-table th[data-bs-toggle="tooltip"]');
-                            [...tooltipTriggerList].forEach(el => new bootstrap.Tooltip(el));
+                            initGlobalTooltips('#enrichment-results-container');
                         }
                     });
                 }
