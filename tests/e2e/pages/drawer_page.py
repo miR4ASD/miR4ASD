@@ -132,3 +132,24 @@ class DrawerPage(BasePage):
     def get_selection_badge_text(self) -> str:
         """Return text of drawer selection badge."""
         return self.page.locator("#drawer-selection-badge").inner_text().strip()
+
+    def set_target_scope(self, scope: str) -> None:
+        """
+        Click target scope fast filter button in drawer.
+
+        Args:
+            scope: One of 'all', 'strong', 'sfari', 'sfari-cat1', 'brain',
+                   'upregulated', 'downregulated'.
+        """
+        label = self.page.locator(f"label[for='drawer-scope-{scope}']")
+        label.click()
+        self.page.wait_for_timeout(400)
+
+    def is_scope_selected(self, scope: str) -> bool:
+        """
+        Check if target scope radio in drawer is checked.
+
+        Args:
+            scope: Scope identifier string.
+        """
+        return self.page.locator(f"#drawer-scope-{scope}").is_checked()

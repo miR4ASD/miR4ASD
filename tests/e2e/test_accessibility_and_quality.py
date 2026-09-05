@@ -80,6 +80,13 @@ def test_all_interactive_buttons_and_filter_radios_have_tooltips(
         "scope-brain",
         "scope-upregulated",
         "scope-downregulated",
+        "drawer-scope-all",
+        "drawer-scope-strong",
+        "drawer-scope-sfari",
+        "drawer-scope-sfari-cat1",
+        "drawer-scope-brain",
+        "drawer-scope-upregulated",
+        "drawer-scope-downregulated",
     ]
     for scope_id in scope_radios:
         label = app_page.locator(f"label[for='{scope_id}']")

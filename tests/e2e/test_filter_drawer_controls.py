@@ -105,3 +105,93 @@ def test_drawer_enrich_action_button(app_page: Page, base_url: str):
 
     # Should navigate to Functional Enrichment tab
     assert app_page.locator("#enrichment.tab-pane.active").is_visible()
+
+
+def test_fast_filter_sync_enrichment_to_drawer(app_page: Page, base_url: str):
+    """Verify selecting fast filter in Enrichment tab updates drawer count badge."""
+    from tests.e2e.pages.enrichment_page import EnrichmentPage
+
+    enrich_page = EnrichmentPage(app_page, base_url)
+    drawer_page = DrawerPage(app_page, base_url)
+
+    enrich_page.navigate_to_enrichment()
+    enrich_page.select_target_scope("brain")
+    assert enrich_page.is_scope_selected("brain")
+
+    # Open drawer and verify synchronization
+    drawer_page.open_drawer()
+    assert drawer_page.is_scope_selected("brain")
+    assert "1" in drawer_page.get_filter_count_badge_text()
+
+
+def test_fast_filter_sync_drawer_to_enrichment(app_page: Page, base_url: str):
+    """Verify selecting fast filter in drawer updates Enrichment tab."""
+    from tests.e2e.pages.enrichment_page import EnrichmentPage
+
+    enrich_page = EnrichmentPage(app_page, base_url)
+    drawer_page = DrawerPage(app_page, base_url)
+
+    drawer_page.navigate()
+    drawer_page.open_drawer()
+    drawer_page.set_target_scope("sfari-cat1")
+
+    assert drawer_page.is_scope_selected("sfari-cat1")
+    assert "1" in drawer_page.get_filter_count_badge_text()
+    assert enrich_page.is_scope_selected("sfari-cat1")
+
+
+def test_fast_filter_toggle_to_unset_enrichment_and_drawer(
+    app_page: Page, base_url: str
+):
+    """Verify clicking an active fast filter toggles off (unsets) in both UIs."""
+    from tests.e2e.pages.enrichment_page import EnrichmentPage
+
+    enrich_page = EnrichmentPage(app_page, base_url)
+    drawer_page = DrawerPage(app_page, base_url)
+
+    # 1. Set and toggle-unset from Enrichment tab
+    enrich_page.navigate_to_enrichment()
+    enrich_page.select_target_scope("strong")
+    assert enrich_page.is_scope_selected("strong")
+
+    # Click strong again to unset
+    enrich_page.select_target_scope("strong")
+    assert enrich_page.is_scope_selected("all")
+
+    drawer_page.open_drawer()
+    assert drawer_page.is_scope_selected("all")
+    assert "0" in drawer_page.get_filter_count_badge_text()
+
+    # 2. Set and toggle-unset from Drawer
+    drawer_page.set_target_scope("brain")
+    assert drawer_page.is_scope_selected("brain")
+    assert "1" in drawer_page.get_filter_count_badge_text()
+    assert enrich_page.is_scope_selected("brain")
+
+    # Click brain again in drawer to unset
+    drawer_page.set_target_scope("brain")
+    assert drawer_page.is_scope_selected("all")
+    assert "0" in drawer_page.get_filter_count_badge_text()
+    assert enrich_page.is_scope_selected("all")
+
+
+def test_fast_filter_unset_via_reset_and_clear_all(app_page: Page, base_url: str):
+    """Verify drawer Reset and Clear All unsets fast filter back to All Targets."""
+    from tests.e2e.pages.enrichment_page import EnrichmentPage
+
+    enrich_page = EnrichmentPage(app_page, base_url)
+    drawer_page = DrawerPage(app_page, base_url)
+
+    drawer_page.navigate()
+    drawer_page.open_drawer()
+
+    # Set scope to sfari
+    drawer_page.set_target_scope("sfari")
+    assert drawer_page.is_scope_selected("sfari")
+    assert "1" in drawer_page.get_filter_count_badge_text()
+
+    # Click Reset in drawer header
+    drawer_page.click_reset_filters_header()
+    assert drawer_page.is_scope_selected("all")
+    assert enrich_page.is_scope_selected("all")
+    assert "0" in drawer_page.get_filter_count_badge_text()

@@ -2036,7 +2036,43 @@
                 </div>
             </div>
 
-            <!-- 2. Target Genes Filters -->
+            <!-- 2. Fast Filters: Target Scope (Enrichment Tab) -->
+            <div class="filter-section-card">
+                <div class="filter-section-header">
+                    <div>
+                        <h6 class="mb-0"><i class="fa-solid fa-bolt text-warning me-2"></i>Fast Filters (Target Scope)</h6>
+                        <span class="text-muted" style="font-size: 0.7rem;">Quickly scope target genes for functional enrichment</span>
+                    </div>
+                    <span class="badge bg-primary-subtle text-primary border rounded-pill" style="font-size: 0.7rem;">Enrichment Tab</span>
+                </div>
+                <p class="text-muted mt-2 mb-2" style="font-size: 0.74rem; line-height: 1.35;">
+                    Filter candidate target genes by experimental evidence, ASD risk, or tissue. Click the active button again to unset.
+                </p>
+                <div class="d-flex flex-wrap gap-1" role="group" aria-label="Drawer Fast Filters Target Scope">
+                    <input type="radio" class="btn-check drawer-scope-radio" name="drawer-target-scope" id="drawer-scope-all" value="all" checked>
+                    <label class="btn btn-outline-primary btn-sm flex-fill text-nowrap py-1" for="drawer-scope-all" data-bs-toggle="tooltip" data-bs-placement="top" title="Analyze all validated target genes of selected miRNAs across all tissues">All Targets</label>
+
+                    <input type="radio" class="btn-check drawer-scope-radio" name="drawer-target-scope" id="drawer-scope-strong" value="strong">
+                    <label class="btn btn-outline-primary btn-sm flex-fill text-nowrap py-1" for="drawer-scope-strong" data-bs-toggle="tooltip" data-bs-placement="top" title="Include only target genes validated by low-throughput experiments (Luciferase, Western blot, or qPCR)"><i class="fa-solid fa-check-double me-1"></i>Strong Evidence</label>
+
+                    <input type="radio" class="btn-check drawer-scope-radio" name="drawer-target-scope" id="drawer-scope-sfari" value="sfari">
+                    <label class="btn btn-outline-primary btn-sm flex-fill text-nowrap py-1" for="drawer-scope-sfari" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict to target genes curated in the SFARI Gene autism risk database (all categories)"><i class="fa-solid fa-star me-1 text-warning"></i>SFARI (All)</label>
+
+                    <input type="radio" class="btn-check drawer-scope-radio" name="drawer-target-scope" id="drawer-scope-sfari-cat1" value="sfari_cat1">
+                    <label class="btn btn-outline-primary btn-sm flex-fill text-nowrap py-1" for="drawer-scope-sfari-cat1" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict strictly to high-confidence ASD risk genes (SFARI Category 1)"><i class="fa-solid fa-star text-danger me-1"></i>SFARI Cat 1</label>
+
+                    <input type="radio" class="btn-check drawer-scope-radio" name="drawer-target-scope" id="drawer-scope-brain" value="brain">
+                    <label class="btn btn-outline-primary btn-sm flex-fill text-nowrap py-1" for="drawer-scope-brain" data-bs-toggle="tooltip" data-bs-placement="top" title="Include only target genes with experimentally validated miRNA interactions in human brain tissue"><i class="fa-solid fa-brain text-info me-1"></i>Brain Targets</label>
+
+                    <input type="radio" class="btn-check drawer-scope-radio" name="drawer-target-scope" id="drawer-scope-upregulated" value="upregulated">
+                    <label class="btn btn-outline-primary btn-sm flex-fill text-nowrap py-1" for="drawer-scope-upregulated" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict to target genes regulated by miRNAs reported as upregulated in ASD"><i class="fa-solid fa-arrow-up text-success me-1"></i>Upregulated Targets</label>
+
+                    <input type="radio" class="btn-check drawer-scope-radio" name="drawer-target-scope" id="drawer-scope-downregulated" value="downregulated">
+                    <label class="btn btn-outline-primary btn-sm flex-fill text-nowrap py-1" for="drawer-scope-downregulated" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict to target genes regulated by miRNAs reported as downregulated in ASD"><i class="fa-solid fa-arrow-down text-danger me-1"></i>Downregulated Targets</label>
+                </div>
+            </div>
+
+            <!-- 3. Target Genes Filters -->
             <div class="filter-section-card">
                 <div class="filter-section-header">
                     <h6><i class="fa-solid fa-bullseye text-primary me-2"></i>Target Annotation Filters</h6>
@@ -2119,7 +2155,7 @@
                 </div>
             </div>
 
-            <!-- 3. Expression Studies Filters -->
+            <!-- 4. Expression Studies Filters -->
             <div class="filter-section-card">
                 <div class="filter-section-header">
                     <h6><i class="fa-solid fa-chart-column text-success me-2"></i>Expression Studies</h6>
@@ -2157,7 +2193,7 @@
                 </div>
             </div>
 
-            <!-- 4. Genetic & Other Studies Filters -->
+            <!-- 5. Genetic & Other Studies Filters -->
             <div class="filter-section-card mb-0">
                 <div class="filter-section-header">
                     <h6><i class="fa-solid fa-dna text-info me-2"></i>Genetic & Other Studies</h6>
@@ -2886,6 +2922,17 @@
             if (filters.targetMethod) chips.push({ label: `Method: ${filters.targetMethod}`, field: 'target-method', val: filters.targetMethod });
             if (filters.targetRegulation) chips.push({ label: `Regulation: ${filters.targetRegulation}`, field: 'target-regulation', val: filters.targetRegulation });
             if (filters.targetTissue) chips.push({ label: `Target Tissue: ${filters.targetTissue}`, field: 'target-tissue', val: filters.targetTissue });
+            if (filters.targetScope && filters.targetScope !== 'all') {
+                const scopeLabels = {
+                    'strong': 'Strong Evidence',
+                    'sfari': 'SFARI (All)',
+                    'sfari_cat1': 'SFARI Cat 1',
+                    'brain': 'Brain Targets',
+                    'upregulated': 'Upregulated Targets',
+                    'downregulated': 'Downregulated Targets'
+                };
+                chips.push({ label: `Scope: ${scopeLabels[filters.targetScope] || filters.targetScope}`, field: 'target-scope', val: filters.targetScope });
+            }
 
             const wrappers = $('.expr-active-chips, .gen-active-chips, .target-active-chips');
             if (chips.length === 0) {
@@ -2907,6 +2954,14 @@
             const val = chip.data('filter-val');
             if (field === 'tissue') {
                 $(`#tissue-checkboxes input[value="${val}"]`).prop('checked', false);
+            } else if (field === 'target-scope') {
+                if (typeof setTargetScope === 'function') {
+                    setTargetScope('all', false);
+                } else {
+                    $('#scope-all, #drawer-scope-all').prop('checked', true);
+                    applyAdvancedFilters();
+                }
+                return;
             } else if (field) {
                 $(`#filter-${field}`).val('');
             }
@@ -2953,6 +3008,11 @@
             $(`input[name="enrichment-db-source"][value="${targetDbSource}"]`).prop('checked', true);
             $('#filter-target-db').val(targetDbSource);
 
+            const targetScope = $('input[name="target-scope"]:checked').val() || $('input[name="drawer-target-scope"]:checked').val() || 'all';
+            // Sync target-scope controls across Enrichment tab and slide-over drawer
+            $(`input[name="target-scope"][value="${targetScope}"]`).prop('checked', true);
+            $(`input[name="drawer-target-scope"][value="${targetScope}"]`).prop('checked', true);
+
             let activeFilterCount = 0;
             if (hairpinTokens.length > 0) activeFilterCount++;
             if (matureTokens.length > 0) activeFilterCount++;
@@ -2968,6 +3028,7 @@
             if (targetRegulation) activeFilterCount++;
             if (targetTissue) activeFilterCount++;
             if (targetDbSource !== 'mirtarbase') activeFilterCount++;
+            if (targetScope !== 'all') activeFilterCount++;
 
             if (activeFilterCount > 0) {
                 $('.filter-count').text(activeFilterCount).show();
@@ -2983,6 +3044,17 @@
                 if (geneticAlteration) summaryItems.push(geneticAlteration);
                 if (studyDesc) summaryItems.push('Desc');
                 if (targetDbSource !== 'mirtarbase') summaryItems.push(targetDbSource === 'consensus' ? 'Consensus' : (targetDbSource === 'tarbase' ? 'TarBase' : 'All DBs'));
+                if (targetScope !== 'all') {
+                    const scopeLabels = {
+                        'strong': 'Strong Evidence',
+                        'sfari': 'SFARI (All)',
+                        'sfari_cat1': 'SFARI Cat 1',
+                        'brain': 'Brain Targets',
+                        'upregulated': 'Upregulated Targets',
+                        'downregulated': 'Downregulated Targets'
+                    };
+                    summaryItems.push(scopeLabels[targetScope] || targetScope);
+                }
                 if (sfariCategory) summaryItems.push(sfariCategory);
                 if (evidenceLevel) summaryItems.push(evidenceLevel);
                 if (targetMethod) summaryItems.push(targetMethod);
@@ -3024,6 +3096,7 @@
                 matureId: matureTokens.length > 0 ? (matureTokens.length > 2 ? `${matureTokens.length} Mature` : matureTokens.join(', ')) : '',
                 targetGene: geneTokens.length > 0 ? (geneTokens.length > 2 ? `${geneTokens.length} Genes` : geneTokens.join(', ')) : '',
                 targetDbSource: targetDbSource !== 'mirtarbase' ? (targetDbSource === 'consensus' ? 'Consensus (Both DBs)' : (targetDbSource === 'tarbase' ? 'TarBase v9.0' : 'All DBs')) : '',
+                targetScope,
                 exprChange, overallEvidence, selectedTissues,
                 geneticAlteration, studyDesc, sfariCategory,
                 evidenceLevel, targetMethod, targetRegulation, targetTissue
@@ -3175,6 +3248,8 @@
             $('#filter-target-db').val('mirtarbase');
             $('#db-mirtarbase').prop('checked', true);
             $('#enrich-db-mirtarbase').prop('checked', true);
+            $('#scope-all').prop('checked', true);
+            $('#drawer-scope-all').prop('checked', true);
             $('#filter-sfari-category').val('');
             $('#filter-evidence-level').val('');
             $('#filter-target-method').val('');
@@ -3183,6 +3258,9 @@
             $('#tissue-checkboxes input:checked').prop('checked', false);
             $('.search-pill-badge').hide().text('0');
             applyAdvancedFilters();
+            if (typeof refreshEnrichmentScopeAndUI === 'function') {
+                refreshEnrichmentScopeAndUI();
+            }
         });
 
         // Filter Drawer Mode Tab Switcher
@@ -3617,7 +3695,7 @@
             const healthBadge = $('#gene-set-health-badge');
 
             if (!baseEnrichmentGenes || baseEnrichmentGenes.length === 0) {
-                $('input[name="target-scope"]').prop('disabled', true);
+                $('input[name="target-scope"]').prop('disabled', false);
                 $('input[name="enrichment-db-source"]').prop('disabled', false);
                 $('#btn-run-enrichment').prop('disabled', true).addClass('disabled');
                 $('#btn-run-enrichment span').text('Select miRNAs to Run Functional Enrichment');
@@ -3716,9 +3794,38 @@
 
         $('#enrichment-gene-input').on('keyup input change', debouncedGeneInput);
 
-        // Scope Switcher Radio Buttons (Non-destructive filter)
-        $('input[name="target-scope"]').on('change', function() {
+        // Non-destructive target scope controller with bidirectional sync and toggle-to-unset support
+        function setTargetScope(newScope, isToggle = false) {
+            const currentScope = $('input[name="target-scope"]:checked').val() || $('input[name="drawer-target-scope"]:checked').val() || 'all';
+            let targetScope = newScope;
+
+            // If user clicked the already-active scope (and it's not 'all'), toggle it off to 'all' (unset)
+            if (isToggle && currentScope === newScope && newScope !== 'all') {
+                targetScope = 'all';
+            }
+
+            // Sync both Enrichment tab and Filter Drawer radio inputs
+            $(`input[name="target-scope"][value="${targetScope}"]`).prop('checked', true);
+            $(`input[name="drawer-target-scope"][value="${targetScope}"]`).prop('checked', true);
+
             refreshEnrichmentScopeAndUI();
+            applyAdvancedFilters();
+        }
+
+        // Intercept click on labels for target scope in both Enrichment tab and Filter drawer to enable toggle-unset
+        $('body').on('click', 'label[for^="scope-"], label[for^="drawer-scope-"]', function(e) {
+            e.preventDefault();
+            const forId = $(this).attr('for');
+            const input = document.getElementById(forId);
+            if (!input) return;
+            const val = input.value;
+            setTargetScope(val, true);
+        });
+
+        // Direct change handler for accessibility / keyboard navigation
+        $('input[name="target-scope"], input[name="drawer-target-scope"]').on('change', function() {
+            const val = $(this).val();
+            setTargetScope(val, false);
         });
 
         // Target Database Selector (Enrichment Tab)
@@ -3732,12 +3839,10 @@
 
         // Reset scope button in empty filter state
         $('body').on('click', '.btn-reset-scope-to-all', function() {
-            $('#scope-all').prop('checked', true);
             $('#enrich-db-all').prop('checked', true);
             $('#db-all').prop('checked', true);
             $('#filter-target-db').val('all');
-            applyAdvancedFilters();
-            refreshEnrichmentScopeAndUI();
+            setTargetScope('all', false);
         });
 
         // Quick Table Reload Handler
@@ -3835,9 +3940,8 @@
             openDrawer('#filter-mirna-id', this);
         });
 
-        $('body').on('click', '.btn-drop-scope-filter, .btn-reset-scope-to-all', function() {
-            $('#scope-all').prop('checked', true);
-            refreshEnrichmentScopeAndUI();
+        $('body').on('click', '.btn-drop-scope-filter', function() {
+            setTargetScope('all', false);
         });
 
         $('body').on('click', '.btn-reset-all-pipeline', function() {
@@ -3847,7 +3951,7 @@
             $('.select-all-expr, .select-all-other').prop('checked', false);
             updateSelectionUI();
             $('#resetFilters').trigger('click');
-            $('#scope-all').prop('checked', true);
+            setTargetScope('all', false);
             reloadTargetGenesFromCurrentTable();
         });
 
