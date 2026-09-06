@@ -11,6 +11,9 @@ from process_data import (
     create_mirbase_hairpin_link,
     create_mirbase_mature_link,
     normalize_study_name,
+    parse_pmid,
+    resolve_study_details,
+    standardize_delimiters,
 )
 
 
@@ -485,3 +488,71 @@ def test_dual_database_source_integrity_and_provenance():
     assert t_stats.get("consensus_interactions", 0) > 5000
     assert t_stats.get("mirtarbase_total_interactions", 0) > 15000
     assert t_stats.get("tarbase_total_interactions", 0) > 60000
+
+
+def test_parse_pmid():
+    """Verify robust parsing of PubMed IDs across various raw representations."""
+    assert parse_pmid("30232454") == "30232454"
+    assert parse_pmid("30232454.0") == "30232454"
+    assert parse_pmid(30232454.0) == "30232454"
+    assert parse_pmid(30232454) == "30232454"
+    assert parse_pmid(" 28938743 ") == "28938743"
+
+    # Edge and invalid cases
+    assert parse_pmid(None) is None
+    assert parse_pmid("") is None
+    assert parse_pmid("0") is None
+    assert parse_pmid("0.0") is None
+    assert parse_pmid(0) is None
+    assert parse_pmid("nan") is None
+    assert parse_pmid("NA") is None
+    assert parse_pmid("not_a_pmid") is None
+
+
+def test_standardize_delimiters():
+    """Verify delimiter standardization replaces commas with semicolons."""
+    df = pd.DataFrame(
+        {
+            "Study": ["Study A , Study B", "Study C,Study D", "Study E"],
+            "Tissue": ["Brain, Blood", "Serum", "Cortex , Cerebellum"],
+            "OtherCol": ["keep, comma", "untouched", "value"],
+        }
+    )
+    result = standardize_delimiters(df, ["Study", "Tissue"])
+    assert result["Study"].tolist() == [
+        "Study A; Study B",
+        "Study C; Study D",
+        "Study E",
+    ]
+    assert result["Tissue"].tolist() == [
+        "Brain; Blood",
+        "Serum",
+        "Cortex; Cerebellum",
+    ]
+    assert result["OtherCol"].tolist() == [
+        "keep, comma",
+        "untouched",
+        "value",
+    ]
+
+
+def test_resolve_study_details():
+    """Verify study names are resolved to metadata records via lookup map."""
+    study_map = {
+        "Study 1": {"Study": "Study 1", "DOI": "https://doi.org/10.1/1"},
+        "Study 2": {"Study": "Study 2", "DOI": "https://doi.org/10.1/2"},
+    }
+    # Multiple studies separated by semicolon
+    resolved = resolve_study_details("Study 1; Study 2", study_map)
+    assert len(resolved) == 2
+    assert resolved[0]["DOI"] == "https://doi.org/10.1/1"
+    assert resolved[1]["DOI"] == "https://doi.org/10.1/2"
+
+    # Unmapped study ignored
+    resolved_with_missing = resolve_study_details("Study 1; Unknown Study", study_map)
+    assert len(resolved_with_missing) == 1
+    assert resolved_with_missing[0]["Study"] == "Study 1"
+
+    # None and empty handling
+    assert resolve_study_details(None, study_map) == []
+    assert resolve_study_details("", study_map) == []

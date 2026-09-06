@@ -1,9 +1,13 @@
+import csv
+import gzip
 import json
+import os
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 import pandas as pd
 
 
-def create_gff_maps(gff_file):
+def create_gff_maps(gff_file: str) -> Tuple[Dict[str, str], Dict[str, str]]:
     """
     Parse a GFF3 file and create name-to-ID maps for miRNA hairpins and mature miRNAs.
 
@@ -14,7 +18,7 @@ def create_gff_maps(gff_file):
 
     Returns
     -------
-    tuple
+    Tuple[Dict[str, str], Dict[str, str]]
         (hairpin_map, mature_map) mapping names to miRBase IDs.
     """
     hairpin_map = {}
@@ -43,18 +47,18 @@ def create_gff_maps(gff_file):
     return hairpin_map, mature_map
 
 
-def clean_col_names(df):
+def clean_col_names(df: pd.DataFrame) -> pd.DataFrame:
     """
     Clean the column names of a DataFrame by stripping whitespace and extra text.
 
     Parameters
     ----------
-    df : pandas.DataFrame
+    df : pd.DataFrame
         The DataFrame whose columns should be cleaned.
 
     Returns
     -------
-    pandas.DataFrame
+    pd.DataFrame
         The DataFrame with cleaned column names.
     """
     cols = df.columns
@@ -63,13 +67,13 @@ def clean_col_names(df):
     return df
 
 
-def normalize_study_name(name):
+def normalize_study_name(name: Any) -> str:
     """
     Normalize study names to match keys in the study details sheet.
 
     Parameters
     ----------
-    name : str
+    name : Any
         The raw study name.
 
     Returns
@@ -80,10 +84,14 @@ def normalize_study_name(name):
     return str(name).strip()
 
 
-_GFF_CACHE = None
+_GFF_CACHE: Optional[
+    Tuple[Dict[str, str], Dict[str, str], Dict[str, str], Dict[str, str]]
+] = None
 
 
-def get_gff_maps(gff_file="hsa.gff3"):
+def get_gff_maps(
+    gff_file: str = "hsa.gff3",
+) -> Tuple[Dict[str, str], Dict[str, str], Dict[str, str], Dict[str, str]]:
     """
     Retrieve cached GFF3 maps or load if not initialized.
 
@@ -94,7 +102,7 @@ def get_gff_maps(gff_file="hsa.gff3"):
 
     Returns
     -------
-    tuple
+    Tuple[Dict[str, str], Dict[str, str], Dict[str, str], Dict[str, str]]
         (hairpin_to_id_map, mature_to_id_map, hairpin_lower_map, mature_lower_map)
     """
     global _GFF_CACHE
@@ -106,118 +114,186 @@ def get_gff_maps(gff_file="hsa.gff3"):
     return _GFF_CACHE
 
 
-def create_mirbase_hairpin_link(hairpin_name, gff_file="hsa.gff3"):
+def _create_mirbase_link(
+    name: Any,
+    entity_type: str,
+    exact_map: Dict[str, str],
+    lower_map: Dict[str, str],
+) -> Any:
+    """
+    Generate an HTML anchor tag for a miRNA pointing to miRBase.
+
+    Parameters
+    ----------
+    name : Any
+        Name of the precursor or mature miRNA.
+    entity_type : str
+        Either 'hairpin' or 'mature'.
+    exact_map : Dict[str, str]
+        Case-sensitive mapping of name to miRBase accession ID.
+    lower_map : Dict[str, str]
+        Case-insensitive mapping of lowercase name to miRBase accession ID.
+
+    Returns
+    -------
+    Any
+        HTML anchor string with rel="noopener noreferrer" if mapped,
+        otherwise original value.
+    """
+    if pd.isna(name):
+        return name
+    name_str = str(name).strip()
+    if not name_str:
+        return name
+
+    mirbase_id = None
+    if name_str in exact_map:
+        mirbase_id = exact_map[name_str]
+    else:
+        name_lower = name_str.lower()
+        if name_lower in lower_map:
+            mirbase_id = lower_map[name_lower]
+        elif not name_lower.startswith("hsa-"):
+            prefixed = f"hsa-{name_lower}"
+            if prefixed in lower_map:
+                mirbase_id = lower_map[prefixed]
+
+    if mirbase_id:
+        return (
+            f'<a href="https://www.mirbase.org/{entity_type}/{mirbase_id}" '
+            f'target="_blank" rel="noopener noreferrer">{name_str}</a>'
+        )
+
+    return name_str
+
+
+def create_mirbase_hairpin_link(hairpin_name: Any, gff_file: str = "hsa.gff3") -> Any:
     """
     Generate HTML anchor for hairpin miRNA pointing to miRBase.
 
     Parameters
     ----------
-    hairpin_name : str
+    hairpin_name : Any
         Name of the precursor miRNA hairpin.
     gff_file : str
         Path to the GFF3 file for ID resolution.
 
     Returns
     -------
-    str
+    Any
         HTML anchor link or original string.
     """
-    if pd.isna(hairpin_name):
-        return hairpin_name
-    name_str = str(hairpin_name).strip()
-    if not name_str:
-        return hairpin_name
-
-    hairpin_to_id_map, _, hairpin_lower_map, _ = get_gff_maps(gff_file)
-
-    # 1. Exact match
-    if name_str in hairpin_to_id_map:
-        mirbase_id = hairpin_to_id_map[name_str]
-        return (
-            f'<a href="https://www.mirbase.org/hairpin/{mirbase_id}" '
-            f'target="_blank">{name_str}</a>'
-        )
-
-    # 2. Case-insensitive match
-    name_lower = name_str.lower()
-    if name_lower in hairpin_lower_map:
-        mirbase_id = hairpin_lower_map[name_lower]
-        return (
-            f'<a href="https://www.mirbase.org/hairpin/{mirbase_id}" '
-            f'target="_blank">{name_str}</a>'
-        )
-
-    # 3. Try with 'hsa-' prefix if missing
-    if not name_lower.startswith("hsa-"):
-        prefixed = f"hsa-{name_lower}"
-        if prefixed in hairpin_lower_map:
-            mirbase_id = hairpin_lower_map[prefixed]
-            return (
-                f'<a href="https://www.mirbase.org/hairpin/{mirbase_id}" '
-                f'target="_blank">{name_str}</a>'
-            )
-
-    return name_str
+    hairpin_map, _, hairpin_lower, _ = get_gff_maps(gff_file)
+    return _create_mirbase_link(hairpin_name, "hairpin", hairpin_map, hairpin_lower)
 
 
-def create_mirbase_mature_link(mature_name, gff_file="hsa.gff3"):
+def create_mirbase_mature_link(mature_name: Any, gff_file: str = "hsa.gff3") -> Any:
     """
     Generate HTML anchor for mature miRNA pointing to miRBase.
 
     Parameters
     ----------
-    mature_name : str
+    mature_name : Any
         Name of the mature miRNA.
     gff_file : str
         Path to the GFF3 file for ID resolution.
 
     Returns
     -------
-    str
+    Any
         HTML anchor link or original string.
     """
-    if pd.isna(mature_name):
-        return mature_name
-    name_str = str(mature_name).strip()
-    if not name_str:
-        return mature_name
+    _, mature_map, _, mature_lower = get_gff_maps(gff_file)
+    return _create_mirbase_link(mature_name, "mature", mature_map, mature_lower)
 
-    _, mature_to_id_map, _, mature_lower_map = get_gff_maps(gff_file)
 
-    # 1. Exact match
-    if name_str in mature_to_id_map:
-        mirbase_id = mature_to_id_map[name_str]
-        return (
-            f'<a href="https://www.mirbase.org/mature/{mirbase_id}" '
-            f'target="_blank">{name_str}</a>'
-        )
+def parse_pmid(raw_val: Any) -> Optional[str]:
+    """
+    Parse and validate a PubMed ID into a clean numeric string.
 
-    # 2. Case-insensitive match
-    name_lower = name_str.lower()
-    if name_lower in mature_lower_map:
-        mirbase_id = mature_lower_map[name_lower]
-        return (
-            f'<a href="https://www.mirbase.org/mature/{mirbase_id}" '
-            f'target="_blank">{name_str}</a>'
-        )
+    Parameters
+    ----------
+    raw_val : Any
+        Raw value representing a PMID (string, float, int).
 
-    # 3. Try with 'hsa-' prefix if missing
-    if not name_lower.startswith("hsa-"):
-        prefixed = f"hsa-{name_lower}"
-        if prefixed in mature_lower_map:
-            mirbase_id = mature_lower_map[prefixed]
-            return (
-                f'<a href="https://www.mirbase.org/mature/{mirbase_id}" '
-                f'target="_blank">{name_str}</a>'
-            )
+    Returns
+    -------
+    Optional[str]
+        Clean string PMID (e.g. '30232454'), or None if invalid or zero.
+    """
+    if raw_val is None or pd.isna(raw_val):
+        return None
+    cleaned = str(raw_val).strip()
+    if not cleaned or cleaned.lower() in ("nan", "none", "na", "0"):
+        return None
+    try:
+        pmid_num = int(float(cleaned))
+        if pmid_num > 0:
+            return str(pmid_num)
+    except (ValueError, TypeError, OverflowError):
+        pass
+    return None
 
-    return name_str
+
+def standardize_delimiters(df: pd.DataFrame, columns: List[str]) -> pd.DataFrame:
+    """
+    Standardize column delimiters from comma to semicolon.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        DataFrame to process.
+    columns : List[str]
+        List of column names to standardize.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame with standardized delimiters.
+    """
+    for col in columns:
+        if col in df.columns:
+            df[col] = df[col].astype(str).str.replace(r"\s*,\s*", "; ", regex=True)
+    return df
+
+
+def resolve_study_details(
+    study_string: Any,
+    study_details_map: Dict[str, Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """
+    Resolve study names to their metadata records from a lookup map.
+
+    Parameters
+    ----------
+    study_string : Any
+        Semicolon-separated list of study names.
+    study_details_map : Dict[str, Dict[str, Any]]
+        Lookup dictionary mapping normalized study names to detail dicts.
+
+    Returns
+    -------
+    List[Dict[str, Any]]
+        List of matched study detail records.
+    """
+    if pd.isna(study_string):
+        return []
+    study_names = [s.strip() for s in str(study_string).split(";")]
+    details_list = []
+    for study_name in study_names:
+        study_name_norm = normalize_study_name(study_name)
+        if study_name_norm in study_details_map:
+            details_list.append(study_details_map[study_name_norm])
+    return details_list
 
 
 # --- Process DIANA-TarBase v9.0 Targets & SFARI ASD Risk Genes ---
 
 
-def process_target_genes(raw_mature_set, mature_precursor_map):
+def process_target_genes(
+    raw_mature_set: Set[str],
+    mature_precursor_map: Dict[str, Set[str]],
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, int]]:
     """
     Process DIANA-TarBase v9 and miRTarBase 10.0 targets, cross-referencing with SFARI.
 
@@ -229,20 +305,16 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
 
     Parameters
     ----------
-    raw_mature_set : set
+    raw_mature_set : Set[str]
         Set of raw mature miRNA IDs from miR4ASD.
-    mature_precursor_map : dict
+    mature_precursor_map : Dict[str, Set[str]]
         Mapping from mature miRNA ID to set of precursor miRNA IDs.
 
     Returns
     -------
-    tuple
+    Tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, int]]
         (target_records, target_stats, per_mirna_target_counts)
     """
-    import csv
-    import gzip
-    import os
-
     tarbase_path = os.path.join("raw_data", "Homo_sapiens_TarBase-v9.tsv.gz")
     mirtarbase_path = os.path.join("raw_data", "hsa_MTI.csv")
     sfari_path = os.path.join("raw_data", "sfari_genes.csv")
@@ -435,12 +507,9 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
                         entry["tissues"].add(str(row["tissue"]).strip())
 
                     if pd.notna(row["article_pubmed_id"]):
-                        try:
-                            pmid_val = str(int(float(row["article_pubmed_id"])))
-                            if pmid_val and pmid_val != "0":
-                                entry["pmids"].add(pmid_val)
-                        except (ValueError, TypeError):
-                            pass
+                        pmid_val = parse_pmid(row["article_pubmed_id"])
+                        if pmid_val:
+                            entry["pmids"].add(pmid_val)
 
     # 4. Process miRTarBase 10.0 (if present)
     if os.path.exists(mirtarbase_path):
@@ -505,14 +574,9 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
                         ):
                             entry["has_clip"] = True
 
-                pmid_raw = (row.get("References (PMID)") or "").strip()
-                if pmid_raw:
-                    try:
-                        pmid_val = str(int(float(pmid_raw)))
-                        if pmid_val and pmid_val != "0":
-                            entry["pmids"].add(pmid_val)
-                    except (ValueError, TypeError):
-                        pass
+                pmid_val = parse_pmid(row.get("References (PMID)"))
+                if pmid_val:
+                    entry["pmids"].add(pmid_val)
 
     # 5. Structure Target Records with Provenance Annotation
     target_records = []
@@ -629,13 +693,13 @@ def process_target_genes(raw_mature_set, mature_precursor_map):
 
 
 def calculate_and_save_statistics(
-    df_expr,
-    total_studies_count,
-    total_genes_count,
-    total_mature_count,
-    target_stats,
-    output_file="statistics.json",
-):
+    df_expr: pd.DataFrame,
+    total_studies_count: int,
+    total_genes_count: int,
+    total_mature_count: int,
+    target_stats: Dict[str, Any],
+    output_file: str = "statistics.json",
+) -> None:
     """
     Calculate summary statistics and save as JSON.
 
@@ -691,10 +755,10 @@ def calculate_and_save_statistics(
 
 
 def main(
-    excel_path="Tabelas_miR4ASD.xlsx",
-    gff_path="hsa.gff3",
-    output_dir=".",
-):
+    excel_path: str = "Tabelas_miR4ASD.xlsx",
+    gff_path: str = "hsa.gff3",
+    output_dir: str = ".",
+) -> None:
     """
     Execute the full miR4ASD ETL and database generation pipeline.
 
@@ -707,8 +771,6 @@ def main(
     output_dir : str
         Destination directory for generated JSON feeds.
     """
-    import os
-
     # Ensure GFF maps are cached
     get_gff_maps(gff_path)
 
@@ -738,27 +800,10 @@ def main(
         study_details_records = df_details.to_dict(orient="records")
         study_details_map = {study["Study"]: study for study in study_details_records}
 
-        # Standardize delimiters
-        df_expression["Study"] = (
-            df_expression["Study"].astype(str).str.replace(r"\s*,\s*", "; ", regex=True)
-        )
-        df_expression["Tissue"] = (
-            df_expression["Tissue"]
-            .astype(str)
-            .str.replace(r"\s*,\s*", "; ", regex=True)
-        )
-
-        def get_study_details_for_expression(row):
-            study_names = [s.strip() for s in str(row["Study"]).split(";")]
-            details_list = []
-            for study_name in study_names:
-                study_name_norm = normalize_study_name(study_name)
-                if study_name_norm in study_details_map:
-                    details_list.append(study_details_map[study_name_norm])
-            return details_list
-
-        df_expression["StudyDetails"] = df_expression.apply(
-            get_study_details_for_expression, axis=1
+        # Standardize delimiters and resolve study details
+        df_expression = standardize_delimiters(df_expression, ["Study", "Tissue"])
+        df_expression["StudyDetails"] = df_expression["Study"].apply(
+            lambda s: resolve_study_details(s, study_details_map)
         )
         df_expression = df_expression.drop(columns=["Study", "Study Type"])
         df_expression = df_expression.rename(
@@ -774,25 +819,10 @@ def main(
             }
         )
 
-        df_other["Study"] = (
-            df_other["Study"].astype(str).str.replace(r"\s*,\s*", "; ", regex=True)
+        df_other = standardize_delimiters(df_other, ["Study", "Study description"])
+        df_other["StudyDetails"] = df_other["Study"].apply(
+            lambda s: resolve_study_details(s, study_details_map)
         )
-        df_other["Study description"] = (
-            df_other["Study description"]
-            .astype(str)
-            .str.replace(r"\s*,\s*", "; ", regex=True)
-        )
-
-        def get_study_details_for_other(row):
-            study_names = [s.strip() for s in str(row["Study"]).split(";")]
-            details_list = []
-            for study_name in study_names:
-                study_name_norm = normalize_study_name(study_name)
-                if study_name_norm in study_details_map:
-                    details_list.append(study_details_map[study_name_norm])
-            return details_list
-
-        df_other["StudyDetails"] = df_other.apply(get_study_details_for_other, axis=1)
         df_other = df_other.drop(columns=["Study", "Study Type"])
         df_other = df_other.rename(
             columns={

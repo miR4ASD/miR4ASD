@@ -2293,7 +2293,7 @@
         details.forEach(function(d) {
             let studyLink = d.Study || '';
             if (d.DOI) {
-                studyLink = `<a href="${d.DOI}" target="_blank" class="fw-bold text-decoration-none" style="color: var(--primary-color);"><i class="fa-solid fa-square-arrow-up-right me-1"></i>${d.Study}</a>`;
+                studyLink = `<a href="${d.DOI}" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none" style="color: var(--primary-color);"><i class="fa-solid fa-square-arrow-up-right me-1"></i>${d.Study}</a>`;
             }
 
             // Render sample counts in small badge-like pills if not empty
@@ -2401,6 +2401,43 @@
 
     $(document).ready(function() {
         const DB_VERSION = '4.0';
+
+        // Centralized Application Configuration
+        const APP_CONFIG = Object.freeze({
+            GPROFILER_API_URL: 'https://biit.cs.ut.ee/gprofiler/api/gost/profile/',
+            DEFAULT_TABLE_PAGE_LEN: 10,
+            DEFAULT_TOAST_DELAY: 6000
+        });
+
+        // Fast Filter & Target Scope Configuration
+        const TARGET_SCOPE_CONFIG = Object.freeze({
+            'all': { label: 'All Targets', summaryLabel: 'All' },
+            'strong': { label: 'Strong Evidence', summaryLabel: 'Strong Evidence' },
+            'sfari': { label: 'SFARI (All)', summaryLabel: 'SFARI (All)' },
+            'sfari_cat1': { label: 'SFARI Cat 1', summaryLabel: 'SFARI Cat 1' },
+            'brain': { label: 'Brain Targets', summaryLabel: 'Brain Targets' },
+            'upregulated': { label: 'Upregulated Targets', summaryLabel: 'Upregulated Targets' },
+            'downregulated': { label: 'Downregulated Targets', summaryLabel: 'Downregulated Targets' }
+        });
+
+        // Target Database Source Configuration
+        const DATABASE_SOURCE_CONFIG = Object.freeze({
+            'mirtarbase': { label: 'miRTarBase 10.0', summaryLabel: '' },
+            'tarbase': { label: 'DIANA-TarBase v9.0', summaryLabel: 'TarBase' },
+            'consensus': { label: 'Consensus (Both DBs)', summaryLabel: 'Consensus' },
+            'all': { label: 'All Databases (Union)', summaryLabel: 'All DBs' }
+        });
+
+        // HTML Escaping Utility for XSS Prevention
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
 
         // Global Bootstrap Tooltip Initializer
         function initGlobalTooltips(container = document) {
@@ -2743,7 +2780,7 @@
                     "render": function(data) {
                         if (!data) return '<span class="text-muted">—</span>';
                         return data.split('; ').map(p => {
-                            return `<a href="https://www.mirbase.org/hairpin/${p}" target="_blank" class="badge bg-light text-dark border text-decoration-none me-1 mb-1" style="font-size: 0.78rem;">${p}</a>`;
+                            return `<a href="https://www.mirbase.org/hairpin/${p}" target="_blank" rel="noopener noreferrer" class="badge bg-light text-dark border text-decoration-none me-1 mb-1" style="font-size: 0.78rem;">${p}</a>`;
                         }).join('');
                     }
                 },
@@ -2751,14 +2788,14 @@
                     "data": "mature_mirna",
                     "render": function(data) {
                         if (!data) return '<span class="text-muted">—</span>';
-                        return `<a href="https://www.mirbase.org/mature/${data}" target="_blank" class="fw-bold text-decoration-none font-monospace" style="color: var(--primary-color);">${data}</a>`;
+                        return `<a href="https://www.mirbase.org/mature/${data}" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none font-monospace" style="color: var(--primary-color);">${data}</a>`;
                     }
                 },
                 {
                     "data": "gene_symbol",
                     "render": function(data) {
                         if (!data) return '';
-                        return `<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${data}" target="_blank" class="fw-semibold text-decoration-none" title="View ${data} on GeneCards">${data}</a>`;
+                        return `<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${data}" target="_blank" rel="noopener noreferrer" class="fw-semibold text-decoration-none" title="View ${data} on GeneCards">${data}</a>`;
                     }
                 },
                 {
@@ -2818,7 +2855,7 @@
                     "render": function(data) {
                         if (!data) return '<span class="text-muted">—</span>';
                         const list = data.split('; ').filter(p => p);
-                        let html = list.slice(0, 4).map(p => `<a href="https://pubmed.ncbi.nlm.nih.gov/${p}/" target="_blank" class="badge bg-secondary-subtle text-secondary border text-decoration-none me-1 mb-1" style="font-size: 0.75rem;">${p}</a>`).join('');
+                        let html = list.slice(0, 4).map(p => `<a href="https://pubmed.ncbi.nlm.nih.gov/${p}/" target="_blank" rel="noopener noreferrer" class="badge bg-secondary-subtle text-secondary border text-decoration-none me-1 mb-1" style="font-size: 0.75rem;">${p}</a>`).join('');
                         if (list.length > 4) {
                             html += `<span class="badge bg-light text-muted border" style="font-size: 0.75rem;">+${list.length - 4} more</span>`;
                         }
@@ -2923,15 +2960,8 @@
             if (filters.targetRegulation) chips.push({ label: `Regulation: ${filters.targetRegulation}`, field: 'target-regulation', val: filters.targetRegulation });
             if (filters.targetTissue) chips.push({ label: `Target Tissue: ${filters.targetTissue}`, field: 'target-tissue', val: filters.targetTissue });
             if (filters.targetScope && filters.targetScope !== 'all') {
-                const scopeLabels = {
-                    'strong': 'Strong Evidence',
-                    'sfari': 'SFARI (All)',
-                    'sfari_cat1': 'SFARI Cat 1',
-                    'brain': 'Brain Targets',
-                    'upregulated': 'Upregulated Targets',
-                    'downregulated': 'Downregulated Targets'
-                };
-                chips.push({ label: `Scope: ${scopeLabels[filters.targetScope] || filters.targetScope}`, field: 'target-scope', val: filters.targetScope });
+                const scopeLabel = TARGET_SCOPE_CONFIG[filters.targetScope]?.label || filters.targetScope;
+                chips.push({ label: `Scope: ${scopeLabel}`, field: 'target-scope', val: filters.targetScope });
             }
 
             const wrappers = $('.expr-active-chips, .gen-active-chips, .target-active-chips');
@@ -3043,17 +3073,13 @@
                 if (selectedTissues.length > 0) summaryItems.push(`${selectedTissues.length} Tissues`);
                 if (geneticAlteration) summaryItems.push(geneticAlteration);
                 if (studyDesc) summaryItems.push('Desc');
-                if (targetDbSource !== 'mirtarbase') summaryItems.push(targetDbSource === 'consensus' ? 'Consensus' : (targetDbSource === 'tarbase' ? 'TarBase' : 'All DBs'));
+                if (targetDbSource !== 'mirtarbase') {
+                    const dbSummary = DATABASE_SOURCE_CONFIG[targetDbSource]?.summaryLabel;
+                    if (dbSummary) summaryItems.push(dbSummary);
+                }
                 if (targetScope !== 'all') {
-                    const scopeLabels = {
-                        'strong': 'Strong Evidence',
-                        'sfari': 'SFARI (All)',
-                        'sfari_cat1': 'SFARI Cat 1',
-                        'brain': 'Brain Targets',
-                        'upregulated': 'Upregulated Targets',
-                        'downregulated': 'Downregulated Targets'
-                    };
-                    summaryItems.push(scopeLabels[targetScope] || targetScope);
+                    const scopeSummary = TARGET_SCOPE_CONFIG[targetScope]?.summaryLabel || targetScope;
+                    summaryItems.push(scopeSummary);
                 }
                 if (sfariCategory) summaryItems.push(sfariCategory);
                 if (evidenceLevel) summaryItems.push(evidenceLevel);
@@ -3321,37 +3347,36 @@
         bindTableSelection(expressionTable, '#expression-table', 'expr-row-check', '.select-all-expr', selectedExprMap);
         bindTableSelection(otherTable, '#other-table', 'gen-row-check', '.select-all-other', selectedGenMap);
 
+        function getTableSelectionContext(tbl) {
+            const isExpr = tbl === 'expression';
+            return {
+                isExpr: isExpr,
+                tableSelector: isExpr ? '#expression-table' : '#other-table',
+                rowClass: isExpr ? '.expr-row-check' : '.gen-row-check',
+                selectAllClass: isExpr ? '.select-all-expr' : '.select-all-other',
+                selectionMap: isExpr ? selectedExprMap : selectedGenMap
+            };
+        }
+
         // Select All Visible Button Handler
         $('.btn-select-all-visible').on('click', function() {
-            const tbl = $(this).data('table');
-            const isExpr = tbl === 'expression';
-            const tableSelector = isExpr ? '#expression-table' : '#other-table';
-            const rowClass = isExpr ? '.expr-row-check' : '.gen-row-check';
-            const selectAllClass = isExpr ? '.select-all-expr' : '.select-all-other';
-            const selectionMap = isExpr ? selectedExprMap : selectedGenMap;
-
-            $(tableSelector + ' tbody ' + rowClass).prop('checked', true).each(function() {
+            const ctx = getTableSelectionContext($(this).data('table'));
+            $(ctx.tableSelector + ' tbody ' + ctx.rowClass).prop('checked', true).each(function() {
                 const key = $(this).data('key') || $(this).val();
                 const mature = $(this).data('mature') || '';
                 const hairpin = $(this).data('hairpin') || '';
-                if (key) selectionMap.set(key, { mature, hairpin });
+                if (key) ctx.selectionMap.set(key, { mature, hairpin });
             });
-            $(selectAllClass).prop('checked', true);
+            $(ctx.selectAllClass).prop('checked', true);
             updateSelectionUI();
         });
 
         // Clear Selection Button Handler
         $('.btn-clear-selection').on('click', function() {
-            const tbl = $(this).data('table');
-            const isExpr = tbl === 'expression';
-            const tableSelector = isExpr ? '#expression-table' : '#other-table';
-            const rowClass = isExpr ? '.expr-row-check' : '.gen-row-check';
-            const selectAllClass = isExpr ? '.select-all-expr' : '.select-all-other';
-            const selectionMap = isExpr ? selectedExprMap : selectedGenMap;
-
-            selectionMap.clear();
-            $(tableSelector + ' tbody ' + rowClass).prop('checked', false);
-            $(selectAllClass).prop('checked', false);
+            const ctx = getTableSelectionContext($(this).data('table'));
+            ctx.selectionMap.clear();
+            $(ctx.tableSelector + ' tbody ' + ctx.rowClass).prop('checked', false);
+            $(ctx.selectAllClass).prop('checked', false);
             updateSelectionUI();
             if (typeof reloadTargetGenesFromCurrentTable === 'function') {
                 reloadTargetGenesFromCurrentTable();
@@ -3360,15 +3385,31 @@
 
         function showSelectionWarning(msg) {
             if (msg) {
-                $('#selectionWarningToastMsg').html(`<i class="fa-solid fa-triangle-exclamation me-2 fs-6"></i>${msg}`);
+                $('#selectionWarningToastMsg').html(`<i class="fa-solid fa-triangle-exclamation me-2 fs-6"></i>${escapeHtml(msg)}`);
             }
             const toastEl = document.getElementById('selectionWarningToast');
             if (toastEl && window.bootstrap) {
-                const toast = bootstrap.Toast.getOrCreateInstance(toastEl, { delay: 6000 });
+                const toast = bootstrap.Toast.getOrCreateInstance(toastEl, { delay: APP_CONFIG.DEFAULT_TOAST_DELAY });
                 toast.show();
             }
         }
         window.showSelectionWarning = showSelectionWarning;
+
+        function updateTableStepper(prefix, count) {
+            const btnEnrich = $(`.btn-analyze-filtered[data-source-table="${prefix === 'expr' ? 'expression' : 'genetic'}"]`);
+            if (count > 0) {
+                $(`.${prefix}-selected-badge`).show();
+                $(`.${prefix}-unselected-badge`).hide();
+                $(`.${prefix}-selected-count`).text(count);
+                $(`.${prefix}-enrich-label`).text(`Run Target Enrichment (${count} Selected miRNAs)`);
+                btnEnrich.removeClass('btn-secondary opacity-75').addClass('btn-primary').prop('disabled', false);
+            } else {
+                $(`.${prefix}-selected-badge`).hide();
+                $(`.${prefix}-unselected-badge`).text('0 Selected').show();
+                $(`.${prefix}-enrich-label`).text('Select miRNAs above to run Target Enrichment');
+                btnEnrich.removeClass('btn-primary').addClass('btn-secondary opacity-75').prop('disabled', true);
+            }
+        }
 
         function updateSelectionUI() {
             const totalSelected = selectedExprMap.size + selectedGenMap.size;
@@ -3386,34 +3427,10 @@
             }
 
             // 2. Expression Table Stepper UI
-            const btnExprEnrich = $('.btn-analyze-filtered[data-source-table="expression"]');
-            if (selectedExprMap.size > 0) {
-                $('.expr-selected-badge').show();
-                $('.expr-unselected-badge').hide();
-                $('.expr-selected-count').text(selectedExprMap.size);
-                $('.expr-enrich-label').text(`Run Target Enrichment (${selectedExprMap.size} Selected miRNAs)`);
-                btnExprEnrich.removeClass('btn-secondary opacity-75').addClass('btn-primary').prop('disabled', false);
-            } else {
-                $('.expr-selected-badge').hide();
-                $('.expr-unselected-badge').text('0 Selected').show();
-                $('.expr-enrich-label').text('Select miRNAs above to run Target Enrichment');
-                btnExprEnrich.removeClass('btn-primary').addClass('btn-secondary opacity-75').prop('disabled', true);
-            }
+            updateTableStepper('expr', selectedExprMap.size);
 
             // 3. Genetic Table Stepper UI
-            const btnGenEnrich = $('.btn-analyze-filtered[data-source-table="genetic"]');
-            if (selectedGenMap.size > 0) {
-                $('.gen-selected-badge').show();
-                $('.gen-unselected-badge').hide();
-                $('.gen-selected-count').text(selectedGenMap.size);
-                $('.gen-enrich-label').text(`Run Target Enrichment (${selectedGenMap.size} Selected miRNAs)`);
-                btnGenEnrich.removeClass('btn-secondary opacity-75').addClass('btn-primary').prop('disabled', false);
-            } else {
-                $('.gen-selected-badge').hide();
-                $('.gen-unselected-badge').text('0 Selected').show();
-                $('.gen-enrich-label').text('Select miRNAs above to run Target Enrichment');
-                btnGenEnrich.removeClass('btn-primary').addClass('btn-secondary opacity-75').prop('disabled', true);
-            }
+            updateTableStepper('gen', selectedGenMap.size);
 
             // 4. Target Genes Table UI
             const btnTargetsEnrich = $('.btn-analyze-filtered[data-source-table="targets"]');
@@ -4025,7 +4042,7 @@
                 no_evidences: false
             };
 
-            fetch('https://biit.cs.ut.ee/gprofiler/api/gost/profile/', {
+            fetch(APP_CONFIG.GPROFILER_API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -4216,7 +4233,7 @@
                                 data: 'native',
                                 render: function(d, type, row) {
                                     const url = getTermUrl(row.source, d);
-                                    return `<a href="${url}" target="_blank" class="fw-bold text-decoration-none font-monospace" style="color: var(--primary-color); font-size: 0.8rem;">${d} <i class="fa-solid fa-arrow-up-right-from-square ms-1" style="font-size: 0.65rem;"></i></a>`;
+                                    return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none font-monospace" style="color: var(--primary-color); font-size: 0.8rem;">${d} <i class="fa-solid fa-arrow-up-right-from-square ms-1" style="font-size: 0.65rem;"></i></a>`;
                                 }
                             },
                             {
@@ -4253,9 +4270,9 @@
                                     let html = genes.slice(0, 6).map(g => {
                                         const meta = geneMetaMap[g];
                                         if (meta && meta.is_sfari) {
-                                            return `<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${g}" target="_blank" class="badge bg-danger-subtle text-danger border text-decoration-none me-1 mb-1" style="font-size: 0.75rem;" title="${g} (SFARI ${meta.sfari_score})"><i class="fa-solid fa-star me-1"></i>${g}</a>`;
+                                            return `<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${g}" target="_blank" rel="noopener noreferrer" class="badge bg-danger-subtle text-danger border text-decoration-none me-1 mb-1" style="font-size: 0.75rem;" title="${g} (SFARI ${meta.sfari_score})"><i class="fa-solid fa-star me-1"></i>${g}</a>`;
                                         }
-                                        return `<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${g}" target="_blank" class="badge bg-light text-dark border text-decoration-none me-1 mb-1" style="font-size: 0.75rem;">${g}</a>`;
+                                        return `<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${g}" target="_blank" rel="noopener noreferrer" class="badge bg-light text-dark border text-decoration-none me-1 mb-1" style="font-size: 0.75rem;">${g}</a>`;
                                     }).join('');
                                     if (genes.length > 6) {
                                         html += `<span class="badge bg-secondary-subtle text-secondary border" style="font-size: 0.75rem;">+${genes.length - 6} more</span>`;
@@ -4265,7 +4282,7 @@
                             }
                         ],
                         order: [[3, 'asc']],
-                        pageLength: 10,
+                        pageLength: APP_CONFIG.DEFAULT_TABLE_PAGE_LEN,
                         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
                         dom: 'Bfrt<"bottom-controls"i<"bottom-right"lp>>',
                         buttons: [],
