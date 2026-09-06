@@ -711,6 +711,29 @@
             border: 1px solid #e2e8f0 !important;
             border-radius: 12px !important;
         }
+        @media (min-width: 768px) {
+            .workflow-stepper-card {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03) !important;
+            }
+        }
+        .action-gateway-card {
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .action-gateway-card:hover, .action-gateway-card:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+            border-color: #3182CE !important;
+            outline: none;
+        }
+        .figure-filter-btn {
+            font-size: 0.8rem !important;
+            font-weight: 600 !important;
+            transition: all 0.15s ease-in-out;
+        }
         .step-pill {
             width: 22px;
             height: 22px;
@@ -817,6 +840,70 @@
                         <!-- Statistics will be loaded here -->
                     </div>
 
+                    <!-- Quick-Start Action Gateway -->
+                    <div class="row g-3 mb-4" id="quick-start-gateway">
+                        <div class="col-12">
+                            <div class="card p-3 border shadow-sm" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 12px; border-color: #E2E8F0 !important; box-shadow: none !important;">
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                    <h3 class="h6 fw-bold mb-0 text-dark" style="letter-spacing: -0.01em;">
+                                        <i class="fa-solid fa-compass me-2 text-primary"></i>Explore the Database
+                                    </h3>
+                                    <span class="text-muted small">Quick-start entry points for targeted ASD workflows</span>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-6 col-lg-3">
+                                        <div class="card h-100 p-3 border bg-white shadow-none action-gateway-card btn-nav-tab" role="button" tabindex="0" data-target-tab="expression-tab" style="cursor: pointer; border-radius: 10px; border-color: #E2E8F0 !important;">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <span class="badge p-2 rounded-circle me-2" style="background-color: #EBF8FF; color: #2B6CB0; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;">
+                                                    <i class="fa-solid fa-chart-line"></i>
+                                                </span>
+                                                <span class="fw-bold text-dark small">Expression Studies</span>
+                                            </div>
+                                            <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Explore dysregulated miRNAs across brain and peripheral ASD cohorts.</p>
+                                            <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Browse Expression <i class="fa-solid fa-arrow-right ms-1"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-lg-3">
+                                        <div class="card h-100 p-3 border bg-white shadow-none action-gateway-card btn-nav-tab" role="button" tabindex="0" data-target-tab="genetic-tab" style="cursor: pointer; border-radius: 10px; border-color: #E2E8F0 !important;">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <span class="badge p-2 rounded-circle me-2" style="background-color: #FAF5FF; color: #6B46C1; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;">
+                                                    <i class="fa-solid fa-dna"></i>
+                                                </span>
+                                                <span class="fw-bold text-dark small">Genetic Alterations</span>
+                                            </div>
+                                            <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Inspect CNVs, SNVs, and SNPs altering miRNA genomic loci in ASD.</p>
+                                            <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Browse Genetics <i class="fa-solid fa-arrow-right ms-1"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-lg-3">
+                                        <div class="card h-100 p-3 border bg-white shadow-none action-gateway-card btn-nav-tab" role="button" tabindex="0" data-target-tab="targets-tab" style="cursor: pointer; border-radius: 10px; border-color: #E2E8F0 !important;">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <span class="badge p-2 rounded-circle me-2" style="background-color: #FEFCBF; color: #B7791F; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;">
+                                                    <i class="fa-solid fa-bullseye"></i>
+                                                </span>
+                                                <span class="fw-bold text-dark small">Validated Targets</span>
+                                            </div>
+                                            <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Query experimental targets from miRTarBase & TarBase with SFARI scores.</p>
+                                            <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Query Targets <i class="fa-solid fa-arrow-right ms-1"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-lg-3">
+                                        <div class="card h-100 p-3 border bg-white shadow-none action-gateway-card btn-nav-tab" role="button" tabindex="0" data-target-tab="enrichment-tab" style="cursor: pointer; border-radius: 10px; border-color: #E2E8F0 !important;">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <span class="badge p-2 rounded-circle me-2" style="background-color: #E6FFFA; color: #234E52; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;">
+                                                    <i class="fa-solid fa-sitemap"></i>
+                                                </span>
+                                                <span class="fw-bold text-dark small">Functional Enrichment</span>
+                                            </div>
+                                            <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Perform Gene Ontology & KEGG pathway analysis on target gene sets.</p>
+                                            <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Run Enrichment <i class="fa-solid fa-arrow-right ms-1"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row g-4">
                         <!-- Left column: Database Introduction -->
                         <div class="col-lg-5">
@@ -895,18 +982,30 @@
                         </div>
                     </div>
 
-                    <!-- Grid of Figures -->
+                    <!-- Interactive Visualizations Gallery -->
                     <div class="row g-4 mt-3">
                         <div class="col-12">
-                            <h2 class="mb-1" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color); font-size: 1.4rem;">
-                                <i class="fa-solid fa-chart-pie me-2 text-primary"></i>Database Statistics & Visualizations
-                            </h2>
-                            <p class="text-muted mb-2">Curated visualizations and synthesis distributions across independent ASD cohorts and study categories.</p>
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                                <div>
+                                    <h2 class="mb-1" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color); font-size: 1.4rem;">
+                                        <i class="fa-solid fa-chart-pie me-2 text-primary"></i>Database Statistics & Visualizations
+                                    </h2>
+                                    <p class="text-muted mb-0" style="font-size: 0.9rem;">Curated visualizations and synthesis distributions across independent ASD cohorts and study categories.</p>
+                                </div>
+                                <!-- Filter Pills -->
+                                <div class="btn-group btn-group-sm" role="group" id="figure-gallery-filters" aria-label="Figure Category Filters">
+                                    <button type="button" class="btn btn-primary active figure-filter-btn" data-filter="all">All (7)</button>
+                                    <button type="button" class="btn btn-outline-secondary figure-filter-btn" data-filter="curation">Literature Curation (1)</button>
+                                    <button type="button" class="btn btn-outline-secondary figure-filter-btn" data-filter="expression">Expression Studies (3)</button>
+                                    <button type="button" class="btn btn-outline-secondary figure-filter-btn" data-filter="genetic">Genetic Studies (2)</button>
+                                    <button type="button" class="btn btn-outline-secondary figure-filter-btn" data-filter="overlap">Cross-Study Overlap (1)</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row row-cols-1 row-cols-lg-2 g-4 mb-4">
-                        <div class="col">
+                    <div class="row row-cols-1 row-cols-lg-2 g-4 mb-4" id="figures-gallery-grid">
+                        <div class="col figure-gallery-item" data-category="curation">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
                                     <img class="img-fluid figure-img" src="images/Eligible_studies.jpg" alt="Eligible Studies Distribution">
@@ -918,7 +1017,7 @@
                             </div>
                         </div>
                         
-                        <div class="col">
+                        <div class="col figure-gallery-item" data-category="expression">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
                                     <img class="img-fluid figure-img" src="images/Expression_Studies_by_tissue_type.jpg" alt="Expression Studies by Tissue">
@@ -930,7 +1029,7 @@
                             </div>
                         </div>
                         
-                        <div class="col">
+                        <div class="col figure-gallery-item" data-category="genetic">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
                                     <img class="img-fluid figure-img" src="images/Genetic_Studies_by_variant_type.jpg" alt="Genetic Studies by Variant">
@@ -942,7 +1041,7 @@
                             </div>
                         </div>
 
-                        <div class="col">
+                        <div class="col figure-gallery-item" data-category="expression">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
                                     <img class="img-fluid figure-img" src="images/Top_10_miRNAs.jpg" alt="Top 10 Associated miRNAs">
@@ -954,7 +1053,7 @@
                             </div>
                         </div>
                         
-                        <div class="col">
+                        <div class="col figure-gallery-item" data-category="overlap">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
                                     <img class="img-fluid figure-img" src="images/12_miRNAs_in_common.jpg" alt="miRNAs in Common">
@@ -966,7 +1065,7 @@
                             </div>
                         </div>
                         
-                        <div class="col">
+                        <div class="col figure-gallery-item" data-category="expression">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
                                     <img class="img-fluid figure-img" src="images/miRNAs_expression_studies.png" alt="Expression Studies Summary">
@@ -978,7 +1077,7 @@
                             </div>
                         </div>
                         
-                        <div class="col">
+                        <div class="col figure-gallery-item" data-category="genetic">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
                                     <img class="img-fluid figure-img" src="images/miRNAs_genetic_and_other_studies.png" alt="Genetic Studies Summary">
@@ -1386,7 +1485,7 @@
                 <div class="tab-pane fade" id="expression" role="tabpanel" aria-labelledby="expression-tab">
                     <h2 class="visually-hidden">Expression Profiling Studies</h2>
                     <!-- 3-Step Analytical Workflow Toolbar -->
-                    <div class="card p-3 mb-3 workflow-stepper-card shadow-sm">
+                    <div class="card py-2 px-3 mb-2 workflow-stepper-card shadow-sm">
                         <div class="row g-3 align-items-center">
                             <!-- Step 1: Select miRNAs -->
                             <div class="col-xl-4 col-md-6 col-12">
@@ -1457,7 +1556,7 @@
                 <div class="tab-pane fade" id="genetic" role="tabpanel" aria-labelledby="genetic-tab">
                     <h2 class="visually-hidden">Genetic & Other ASD Studies</h2>
                     <!-- 3-Step Analytical Workflow Toolbar -->
-                    <div class="card p-3 mb-3 workflow-stepper-card shadow-sm">
+                    <div class="card py-2 px-3 mb-2 workflow-stepper-card shadow-sm">
                         <div class="row g-3 align-items-center">
                             <!-- Step 1: Select miRNAs -->
                             <div class="col-xl-4 col-md-6 col-12">
@@ -1951,13 +2050,18 @@
             <div class="card border p-3 mb-3" style="background-color: #f8fafc; border-color: #e2e8f0 !important; border-radius: 10px;">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <strong style="font-size: 0.82rem; color: var(--primary-color);">
-                        <i class="fa-solid fa-circle-info text-primary me-1"></i>Selection & Filtering Workflow:
+                        <i class="fa-solid fa-circle-info text-primary me-1"></i>Selection & Filtering Workflow
                     </strong>
+                    <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-muted" data-bs-toggle="collapse" data-bs-target="#drawerGuideCollapse" aria-expanded="false" aria-controls="drawerGuideCollapse" title="Toggle workflow guide">
+                        <i class="fa-solid fa-chevron-down" id="drawerGuideIcon"></i>
+                    </button>
                 </div>
-                <div class="text-secondary mb-2" style="font-size: 0.74rem; line-height: 1.45;">
-                    <div><strong>1. Selection:</strong> Table checkboxes define <em>which specific miRNAs</em> you analyze.</div>
-                    <div><strong>2. Filtering:</strong> Modulates <em>study conditions or target criteria</em> (e.g. Brain, SFARI) without deselecting your chosen miRNAs.</div>
-                    <div><strong>3. Enrichment:</strong> Analyzes biological pathways for your target cohort.</div>
+                <div class="collapse" id="drawerGuideCollapse">
+                    <div class="text-secondary mb-2 pt-1" style="font-size: 0.74rem; line-height: 1.45;">
+                        <div><strong>1. Selection:</strong> Table checkboxes define <em>which specific miRNAs</em> you analyze.</div>
+                        <div><strong>2. Filtering:</strong> Modulates <em>study conditions or target criteria</em> (e.g. Brain, SFARI) without deselecting your chosen miRNAs.</div>
+                        <div><strong>3. Enrichment:</strong> Analyzes biological pathways for your target cohort.</div>
+                    </div>
                 </div>
                 <!-- Decoupled Selection & Filter Status Bar -->
                 <div class="d-flex justify-content-between align-items-center pt-2 border-top gap-2" style="font-size: 0.78rem;">
@@ -2801,7 +2905,9 @@
                 {
                     "data": "gene_name",
                     "render": function(data) {
-                        return `<span class="text-secondary" style="font-size: 0.82rem;">${data || '—'}</span>`;
+                        if (!data) return '<span class="text-muted">—</span>';
+                        const escaped = escapeHtml(data);
+                        return `<span class="text-secondary d-inline-block text-truncate" style="max-width: 220px; font-size: 0.82rem; vertical-align: middle;" title="${escaped}" data-bs-toggle="tooltip">${escaped}</span>`;
                     }
                 },
                 {
@@ -3767,7 +3873,7 @@
             }
 
             let sfariCount = 0;
-            const chipsHtml = geneList.map(gene => {
+            const chipElements = geneList.map(gene => {
                 const meta = geneMetaMap[gene];
                 let sfariClass = '';
                 let badgeIcon = '';
@@ -3792,7 +3898,17 @@
                 }
 
                 return `<span class="gene-chip ${sfariClass}" title="${titleAttr}">${gene}${badgeIcon}</span>`;
-            }).join('');
+            });
+
+            let chipsHtml = '';
+            if (chipElements.length > 25) {
+                const initialChips = chipElements.slice(0, 25).join('');
+                const extraChips = chipElements.slice(25).join('');
+                const remaining = chipElements.length - 25;
+                chipsHtml = `${initialChips}<span id="gene-chips-extra" class="d-none">${extraChips}</span><button type="button" class="btn btn-outline-secondary btn-xs ms-1 my-1 rounded-pill" id="btn-toggle-gene-chips" data-remaining="${remaining}" style="font-size: 0.72rem; padding: 2px 8px;"><i class="fa-solid fa-angles-down me-1"></i>+ ${remaining} more genes</button>`;
+            } else {
+                chipsHtml = chipElements.join('');
+            }
 
             container.html(chipsHtml);
             $('#gene-set-stats').html(`<strong>${geneList.length}</strong> / <strong>${baseEnrichmentGenes.length}</strong> Target Genes (<strong class="text-danger">${sfariCount}</strong> SFARI)`);
@@ -3934,6 +4050,56 @@
                     $('html, body').animate({ scrollTop: $(tabEl).offset().top - 40 }, 300);
                 }
             }
+        });
+
+        // Keyboard access for tab navigation shortcuts
+        $('body').on('keydown', '.btn-nav-tab', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                $(this).click();
+            }
+        });
+
+        // Toggle Expand/Collapse for Gene Chips
+        $('body').on('click', '#btn-toggle-gene-chips', function() {
+            const extra = $('#gene-chips-extra');
+            const remaining = $(this).data('remaining');
+            if (extra.hasClass('d-none')) {
+                extra.removeClass('d-none');
+                $(this).html('<i class="fa-solid fa-angles-up me-1"></i>Show fewer genes');
+            } else {
+                extra.addClass('d-none');
+                $(this).html(`<i class="fa-solid fa-angles-down me-1"></i>+ ${remaining} more genes`);
+            }
+        });
+
+        // Figure Gallery Category Filtering
+        $('#figure-gallery-filters').on('click', '.figure-filter-btn', function() {
+            const filter = $(this).data('filter');
+            $('#figure-gallery-filters .figure-filter-btn')
+                .removeClass('active btn-primary')
+                .addClass('btn-outline-secondary');
+            $(this).removeClass('btn-outline-secondary').addClass('active btn-primary');
+
+            if (filter === 'all') {
+                $('.figure-gallery-item').removeClass('d-none');
+            } else {
+                $('.figure-gallery-item').each(function() {
+                    const category = $(this).data('category');
+                    if (category === filter) {
+                        $(this).removeClass('d-none');
+                    } else {
+                        $(this).addClass('d-none');
+                    }
+                });
+            }
+        });
+
+        // Drawer Workflow Guide Collapse Icon Rotation
+        $('#drawerGuideCollapse').on('show.bs.collapse', function() {
+            $('#drawerGuideIcon').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+        }).on('hide.bs.collapse', function() {
+            $('#drawerGuideIcon').removeClass('fa-chevron-up').addClass('fa-chevron-down');
         });
 
         // Independent Discard & Workflow Action Handlers
