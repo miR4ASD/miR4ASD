@@ -79,6 +79,21 @@ class StudiesTablePage(BasePage):
             return badge.inner_text().strip()
         return "0"
 
+    def get_targets_count(self) -> str:
+        """Return the target genes count text shown in the target badge."""
+        prefix = "expr" if self.data_table_attr == "expression" else "gen"
+        badge = self.page.locator(f".{prefix}-targets-count").first
+        if badge.is_visible():
+            return badge.inner_text().strip()
+        return "0"
+
+    def get_run_enrichment_button_text(self) -> str:
+        """Return the full text of the contextual Run Enrichment CTA button."""
+        btn = self.page.locator(
+            f".btn-analyze-filtered[data-source-table='{self.data_table_attr}']"
+        )
+        return btn.inner_text().strip()
+
     def click_select_visible(self) -> None:
         """Click 'Select Visible' button for studies table."""
         self.page.locator(

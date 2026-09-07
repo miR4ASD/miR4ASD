@@ -1489,11 +1489,14 @@
                         <div class="row g-3 align-items-center">
                             <!-- Step 1: Select miRNAs -->
                             <div class="col-xl-4 col-md-6 col-12">
-                                <div class="d-flex align-items-center gap-2 mb-1">
+                                <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
                                     <span class="step-pill">1</span>
                                     <strong style="font-size: 0.85rem; color: var(--primary-color);">Select miRNAs:</strong>
                                     <span class="badge bg-primary text-white font-monospace expr-selected-badge" style="display: none; font-size: 0.78rem;">
                                         <i class="fa-solid fa-check-square me-1"></i><span class="expr-selected-count">0</span> Selected
+                                    </span>
+                                    <span class="badge bg-success-subtle text-success border font-monospace expr-targets-badge" style="display: none; font-size: 0.78rem;" title="Validated target genes for selected miRNAs">
+                                        <i class="fa-solid fa-bullseye me-1"></i><span class="expr-targets-count">0</span> Targets
                                     </span>
                                     <span class="badge bg-light text-secondary border expr-unselected-badge" style="font-size: 0.75rem;">
                                         0 Selected
@@ -1560,11 +1563,14 @@
                         <div class="row g-3 align-items-center">
                             <!-- Step 1: Select miRNAs -->
                             <div class="col-xl-4 col-md-6 col-12">
-                                <div class="d-flex align-items-center gap-2 mb-1">
+                                <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
                                     <span class="step-pill">1</span>
                                     <strong style="font-size: 0.85rem; color: var(--primary-color);">Select miRNAs:</strong>
                                     <span class="badge bg-primary text-white font-monospace gen-selected-badge" style="display: none; font-size: 0.78rem;">
                                         <i class="fa-solid fa-check-square me-1"></i><span class="gen-selected-count">0</span> Selected
+                                    </span>
+                                    <span class="badge bg-success-subtle text-success border font-monospace gen-targets-badge" style="display: none; font-size: 0.78rem;" title="Validated target genes for selected miRNAs">
+                                        <i class="fa-solid fa-bullseye me-1"></i><span class="gen-targets-count">0</span> Targets
                                     </span>
                                     <span class="badge bg-light text-secondary border gen-unselected-badge" style="font-size: 0.75rem;">
                                         0 Selected
@@ -3501,16 +3507,44 @@
         }
         window.showSelectionWarning = showSelectionWarning;
 
+        function getSelectedTargetsCount(selectionMap) {
+            if (!selectionMap || selectionMap.size === 0) return 0;
+            if (typeof resolveTargetGenesFromMiRNAs !== 'function') return 0;
+            const matureList = Array.from(new Set([...selectionMap.values()].map(x => x.mature).filter(Boolean)));
+            const hairpinList = Array.from(new Set([...selectionMap.values()].map(x => x.hairpin).filter(Boolean)));
+            if (matureList.length === 0 && hairpinList.length === 0) return 0;
+            const resolved = resolveTargetGenesFromMiRNAs(matureList, hairpinList, 'all', 'all');
+            return resolved ? resolved.length : 0;
+        }
+
+        function getTotalSelectedTargetsCount() {
+            if (selectedExprMap.size === 0 && selectedGenMap.size === 0) return 0;
+            if (typeof resolveTargetGenesFromMiRNAs !== 'function') return 0;
+            const matureList = Array.from(new Set([...selectedExprMap.values(), ...selectedGenMap.values()].map(x => x.mature).filter(Boolean)));
+            const hairpinList = Array.from(new Set([...selectedExprMap.values(), ...selectedGenMap.values()].map(x => x.hairpin).filter(Boolean)));
+            if (matureList.length === 0 && hairpinList.length === 0) return 0;
+            const resolved = resolveTargetGenesFromMiRNAs(matureList, hairpinList, 'all', 'all');
+            return resolved ? resolved.length : 0;
+        }
+
         function updateTableStepper(prefix, count) {
             const btnEnrich = $(`.btn-analyze-filtered[data-source-table="${prefix === 'expr' ? 'expression' : 'genetic'}"]`);
+            const selectionMap = prefix === 'expr' ? selectedExprMap : selectedGenMap;
+            const targetsCount = getSelectedTargetsCount(selectionMap);
+
             if (count > 0) {
                 $(`.${prefix}-selected-badge`).show();
                 $(`.${prefix}-unselected-badge`).hide();
                 $(`.${prefix}-selected-count`).text(count);
-                $(`.${prefix}-enrich-label`).text(`Run Target Enrichment (${count} Selected miRNAs)`);
+
+                $(`.${prefix}-targets-badge`).show();
+                $(`.${prefix}-targets-count`).text(targetsCount);
+
+                $(`.${prefix}-enrich-label`).text(`Run Target Enrichment (${count} Selected miRNAs · ${targetsCount} Targets)`);
                 btnEnrich.removeClass('btn-secondary opacity-75').addClass('btn-primary').prop('disabled', false);
             } else {
                 $(`.${prefix}-selected-badge`).hide();
+                $(`.${prefix}-targets-badge`).hide();
                 $(`.${prefix}-unselected-badge`).text('0 Selected').show();
                 $(`.${prefix}-enrich-label`).text('Select miRNAs above to run Target Enrichment');
                 btnEnrich.removeClass('btn-primary').addClass('btn-secondary opacity-75').prop('disabled', true);
@@ -3519,12 +3553,13 @@
 
         function updateSelectionUI() {
             const totalSelected = selectedExprMap.size + selectedGenMap.size;
+            const totalTargets = getTotalSelectedTargetsCount();
 
             // 1. Drawer Selection Status & Enrichment Button
             const drawerEnrichBtn = $('#drawer-btn-enrich');
             if (totalSelected > 0) {
-                $('#drawer-selection-badge').text(`${totalSelected} Selected`).attr('class', 'badge bg-primary text-white border');
-                $('#drawer-enrich-text').text(`Run Target Enrichment for ${totalSelected} Selected miRNAs`);
+                $('#drawer-selection-badge').text(`${totalSelected} Selected (${totalTargets} Targets)`).attr('class', 'badge bg-primary text-white border');
+                $('#drawer-enrich-text').text(`Run Target Enrichment for ${totalSelected} Selected miRNAs (${totalTargets} Targets)`);
                 drawerEnrichBtn.prop('disabled', false).removeClass('disabled opacity-50');
             } else {
                 $('#drawer-selection-badge').text('0 Selected').attr('class', 'badge bg-light text-dark border');
@@ -3541,7 +3576,7 @@
             // 4. Target Genes Table UI
             const btnTargetsEnrich = $('.btn-analyze-filtered[data-source-table="targets"]');
             if (totalSelected > 0) {
-                $('.target-enrich-label').text(`Run Target Enrichment (${totalSelected} Selected miRNAs)`);
+                $('.target-enrich-label').text(`Run Target Enrichment (${totalSelected} Selected miRNAs · ${totalTargets} Targets)`);
                 btnTargetsEnrich.removeClass('btn-secondary opacity-75 disabled').addClass('btn-primary').prop('disabled', false);
             } else {
                 $('.target-enrich-label').text('Select miRNAs in tables to run Target Enrichment');

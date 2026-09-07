@@ -98,3 +98,30 @@ def test_expression_reset_filters_button(app_page: Page, base_url: str):
     # Click Reset Filters
     expr_page.click_reset_filters()
     assert expr_page.get_row_count() == initial_rows
+
+
+def test_expression_targets_count_updates_on_selection(app_page: Page, base_url: str):
+    """Verify target genes count displays alongside miRNA counter and in CTA."""
+    expr_page = ExpressionPage(app_page, base_url)
+    expr_page.navigate_to_expression()
+
+    # Initial state: 0 selected, 0 targets
+    assert expr_page.get_selected_count() == "0"
+    assert expr_page.get_targets_count() == "0"
+
+    # Select first miRNA row
+    expr_page.select_row_by_index(0)
+    assert expr_page.get_selected_count() == "1"
+
+    targets_count = expr_page.get_targets_count()
+    assert int(targets_count) > 0, f"Expected >0 targets, got {targets_count}"
+
+    # Step 3 button text should contain both miRNAs and Targets
+    cta_text = expr_page.get_run_enrichment_button_text()
+    assert "1 Selected miRNAs" in cta_text
+    assert f"{targets_count} Targets" in cta_text
+
+    # Clear selection returns counts to 0
+    expr_page.click_clear_selection()
+    assert expr_page.get_selected_count() == "0"
+    assert expr_page.get_targets_count() == "0"
