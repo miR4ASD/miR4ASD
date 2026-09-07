@@ -65,3 +65,32 @@ def test_targets_analyze_button_states(app_page: Page, base_url: str):
     targets_page.navigate_to_targets()
     assert targets_page.is_analyze_button_enabled()
     assert "Run Target Enrichment" in targets_page.get_analyze_button_text()
+
+
+def test_targets_sfari_symbol_badges(app_page: Page, base_url: str):
+    """Verify SFARI category and syndromic symbol tokens render without star icons."""
+    targets_page = TargetsPage(app_page, base_url)
+    targets_page.navigate_to_targets()
+
+    # 1. Legend should feature SFARI token badges: 1, 2, 3, S, and 2S
+    assert app_page.locator("#targets .sfari-tag-cat1").first.is_visible()
+    assert app_page.locator("#targets .sfari-tag-cat2").first.is_visible()
+    assert app_page.locator("#targets .sfari-tag-cat3").first.is_visible()
+    assert app_page.locator("#targets .sfari-tag-syn").first.is_visible()
+
+    # 2. Verify star icons are eliminated across targets table and controls
+    assert app_page.locator("#targets .fa-star").count() == 0
+    assert app_page.locator("#targets .fa-star-half-stroke").count() == 0
+
+    # 3. Search for CNTNAP2 (Category 2, Syndromic) in targets table
+    targets_page.search("CNTNAP2")
+    composite_cell = app_page.locator("#targets-table tbody tr .sfari-tag-group").first
+    assert composite_cell.is_visible()
+    assert composite_cell.locator(".sfari-tag-cat2").inner_text() == "2"
+    assert composite_cell.locator(".sfari-tag-syn").inner_text() == "S"
+
+    # 4. Search for ANK2 (Category 1) in targets table
+    targets_page.search("ANK2")
+    cat1_cell = app_page.locator("#targets-table tbody tr .sfari-tag-cat1").first
+    assert cat1_cell.is_visible()
+    assert cat1_cell.inner_text() == "1"

@@ -149,6 +149,59 @@
         .gene-chip.sfari-cat3 { border-color: #bae6fd; background-color: #f0f9ff; color: #075985; }
         .gene-chip.sfari-syn  { border-color: #e9d5ff; background-color: #faf5ff; color: #6b21a8; }
 
+        /* SFARI Category & Syndromic Micro-pill Tokens */
+        .sfari-tag {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+            line-height: 1;
+            min-width: 15px;
+            height: 15px;
+            padding: 0 3px;
+            border-radius: 3px;
+            border: 1px solid transparent;
+            vertical-align: middle;
+            user-select: none;
+            box-sizing: border-box;
+        }
+        .sfari-tag-cat1 {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border-color: #fca5a5;
+        }
+        .sfari-tag-cat2 {
+            background-color: #fef3c7;
+            color: #92400e;
+            border-color: #fde68a;
+        }
+        .sfari-tag-cat3 {
+            background-color: #e0f2fe;
+            color: #075985;
+            border-color: #bae6fd;
+        }
+        .sfari-tag-syn {
+            background-color: #f3e8ff;
+            color: #6b21a8;
+            border-color: #e9d5ff;
+        }
+        .sfari-tag-group {
+            display: inline-flex;
+            align-items: center;
+            vertical-align: middle;
+        }
+        .sfari-tag-group .sfari-tag:first-child {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .sfari-tag-group .sfari-tag:last-child {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border-left: 0;
+        }
+
         .filter-action-banner {
             background-color: #F8FAFC;
             border: 1px solid #E2E8F0;
@@ -1280,10 +1333,11 @@
                                                                 <td>Curated autism risk score from the SFARI Gene database (Simons Foundation).</td>
                                                                 <td>
                                                                     <ul class="mb-0 ps-3" style="font-size: 0.85rem;">
-                                                                        <li><span class="badge bg-danger-subtle text-danger border rounded-pill">SFARI Cat 1 (High Confidence):</span> Rigorously validated risk genes with &ge;3 <em>de novo</em> likely gene-disrupting mutations in ASD.</li>
-                                                                        <li><span class="badge border rounded-pill" style="background-color: #fef3c7; color: #92400e;">SFARI Cat 2 (Strong Candidate):</span> Genes with 2 <em>de novo</em> LGD mutations or genome-wide significance.</li>
-                                                                        <li><span class="badge bg-info-subtle text-info border rounded-pill">SFARI Cat 3 (Suggestive):</span> Genes with suggestive single-study evidence.</li>
-                                                                        <li><span class="badge border rounded-pill" style="background-color: #f3e8ff; color: #6b21a8;">SFARI Syndromic:</span> Genes associated with established ASD-penetrant genetic syndromes.</li>
+                                                                        <li><span class="badge bg-danger-subtle text-danger border rounded-pill"><span class="sfari-tag sfari-tag-cat1 me-1">1</span>SFARI Cat 1 (High Confidence):</span> Rigorously validated risk genes with &ge;3 <em>de novo</em> likely gene-disrupting mutations in ASD.</li>
+                                                                        <li><span class="badge border rounded-pill" style="background-color: #fef3c7; color: #92400e;"><span class="sfari-tag sfari-tag-cat2 me-1">2</span>SFARI Cat 2 (Strong Candidate):</span> Genes with 2 <em>de novo</em> LGD mutations or genome-wide significance.</li>
+                                                                        <li><span class="badge bg-info-subtle text-info border rounded-pill"><span class="sfari-tag sfari-tag-cat3 me-1">3</span>SFARI Cat 3 (Suggestive):</span> Genes with suggestive single-study evidence.</li>
+                                                                        <li><span class="badge border rounded-pill" style="background-color: #f3e8ff; color: #6b21a8;"><span class="sfari-tag sfari-tag-syn me-1">S</span>SFARI Syndromic:</span> Genes associated with established ASD-penetrant genetic syndromes.</li>
+                                                                        <li><span class="badge border rounded-pill" style="background-color: #f8fafc; color: #334155; border-color: #cbd5e1;"><span class="sfari-tag-group me-1"><span class="sfari-tag sfari-tag-cat2">2</span><span class="sfari-tag sfari-tag-syn">S</span></span>Dual Status:</span> Genes classified with both a numeric risk tier and syndromic predisposition (e.g., <code>PTEN</code>).</li>
                                                                         <li><span class="badge bg-light text-secondary border rounded-pill">Other Target:</span> Validated target genes not currently cataloged in SFARI.</li>
                                                                     </ul>
                                                                 </td>
@@ -1463,7 +1517,7 @@
                                                             <tr>
                                                                 <td><strong>Intersecting Target Genes</strong></td>
                                                                 <td>List of user query target genes found in the term with clickable GeneCards links and SFARI autism risk confidence tiers.</td>
-                                                                <td>Clickable GeneCards links with badges (<span class="badge bg-danger-subtle text-danger border">SFARI Cat 1</span>, <span class="badge border" style="background-color: #fef3c7; color: #92400e;">Cat 2</span>, <span class="badge bg-info-subtle text-info border">Cat 3</span>, <span class="badge border" style="background-color: #f3e8ff; color: #6b21a8;">Syndromic</span>).</td>
+                                                                <td>Clickable GeneCards links with symbol tokens (<span class="sfari-tag sfari-tag-cat1">1</span> Cat 1, <span class="sfari-tag sfari-tag-cat2">2</span> Cat 2, <span class="sfari-tag sfari-tag-cat3">3</span> Cat 3, <span class="sfari-tag sfari-tag-syn">S</span> Syndromic, <span class="sfari-tag-group"><span class="sfari-tag sfari-tag-cat2">2</span><span class="sfari-tag sfari-tag-syn">S</span></span> Dual Status).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Significance Score</strong> <span class="badge bg-light text-secondary border ms-1" style="font-size: 0.7rem;">Bar Chart Metric</span></td>
@@ -1669,10 +1723,11 @@
                             </div>
                             <div class="d-flex align-items-center gap-1 flex-wrap">
                                 <span class="text-muted small me-1">SFARI Tiers:</span>
-                                <span class="badge bg-danger-subtle text-danger border px-2 py-1 rounded-pill" title="High confidence ASD gene"><i class="fa-solid fa-star me-1"></i>Cat 1</span>
-                                <span class="badge border px-2 py-1 rounded-pill" style="background-color: #fef3c7 !important; color: #92400e !important; border-color: #fde68a !important;" title="Strong candidate ASD gene"><i class="fa-solid fa-star-half-stroke me-1"></i>Cat 2</span>
-                                <span class="badge bg-info-subtle text-info border px-2 py-1 rounded-pill" title="Suggestive ASD gene"><i class="fa-solid fa-circle-info me-1"></i>Cat 3</span>
-                                <span class="badge border px-2 py-1 rounded-pill" style="background-color: #f3e8ff !important; color: #6b21a8 !important; border-color: #e9d5ff !important;" title="Syndromic ASD gene"><i class="fa-solid fa-dna me-1"></i>Syndromic</span>
+                                <span class="badge bg-danger-subtle text-danger border px-2 py-1 rounded-pill d-inline-flex align-items-center gap-1" title="High confidence ASD gene"><span class="sfari-tag sfari-tag-cat1">1</span>Cat 1</span>
+                                <span class="badge border px-2 py-1 rounded-pill d-inline-flex align-items-center gap-1" style="background-color: #fef3c7 !important; color: #92400e !important; border-color: #fde68a !important;" title="Strong candidate ASD gene"><span class="sfari-tag sfari-tag-cat2">2</span>Cat 2</span>
+                                <span class="badge bg-info-subtle text-info border px-2 py-1 rounded-pill d-inline-flex align-items-center gap-1" title="Suggestive ASD gene"><span class="sfari-tag sfari-tag-cat3">3</span>Cat 3</span>
+                                <span class="badge border px-2 py-1 rounded-pill d-inline-flex align-items-center gap-1" style="background-color: #f3e8ff !important; color: #6b21a8 !important; border-color: #e9d5ff !important;" title="Syndromic ASD gene"><span class="sfari-tag sfari-tag-syn">S</span>Syndromic</span>
+                                <span class="badge border px-2 py-1 rounded-pill d-inline-flex align-items-center gap-1" style="background-color: #f8fafc !important; color: #334155 !important; border-color: #cbd5e1 !important;" title="Gene with both numeric category and syndromic classification (e.g. PTEN)"><span class="sfari-tag-group"><span class="sfari-tag sfari-tag-cat2">2</span><span class="sfari-tag sfari-tag-syn">S</span></span>Dual Status</span>
                             </div>
                         </div>
                     </div>
@@ -1780,10 +1835,10 @@
                                 <label class="btn btn-outline-primary btn-sm py-2" for="scope-strong" data-bs-toggle="tooltip" data-bs-placement="top" title="Include only target genes validated by low-throughput experiments (Luciferase, Western blot, or qPCR)"><i class="fa-solid fa-check-double me-1"></i>Strong Evidence</label>
 
                                 <input type="radio" class="btn-check" name="target-scope" id="scope-sfari" value="sfari">
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-sfari" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict to target genes curated in the SFARI Gene autism risk database (all categories)"><i class="fa-solid fa-star me-1 text-warning"></i>SFARI (All)</label>
+                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-sfari" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict to target genes curated in the SFARI Gene autism risk database (all categories)"><i class="fa-solid fa-dna me-1 text-primary"></i>SFARI (All)</label>
 
                                 <input type="radio" class="btn-check" name="target-scope" id="scope-sfari-cat1" value="sfari_cat1">
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-sfari-cat1" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict strictly to high-confidence ASD risk genes (SFARI Category 1)"><i class="fa-solid fa-star text-danger me-1"></i>SFARI Cat 1</label>
+                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-sfari-cat1" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict strictly to high-confidence ASD risk genes (SFARI Category 1)"><span class="sfari-tag sfari-tag-cat1 me-1">1</span>SFARI Cat 1</label>
 
                                 <input type="radio" class="btn-check" name="target-scope" id="scope-brain" value="brain">
                                 <label class="btn btn-outline-primary btn-sm py-2" for="scope-brain" data-bs-toggle="tooltip" data-bs-placement="top" title="Include only target genes with experimentally validated miRNA interactions in human brain tissue"><i class="fa-solid fa-brain text-info me-1"></i>Brain Targets</label>
@@ -2166,10 +2221,10 @@
                     <label class="btn btn-outline-primary btn-sm flex-fill text-nowrap py-1" for="drawer-scope-strong" data-bs-toggle="tooltip" data-bs-placement="top" title="Include only target genes validated by low-throughput experiments (Luciferase, Western blot, or qPCR)"><i class="fa-solid fa-check-double me-1"></i>Strong Evidence</label>
 
                     <input type="radio" class="btn-check drawer-scope-radio" name="drawer-target-scope" id="drawer-scope-sfari" value="sfari">
-                    <label class="btn btn-outline-primary btn-sm flex-fill text-nowrap py-1" for="drawer-scope-sfari" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict to target genes curated in the SFARI Gene autism risk database (all categories)"><i class="fa-solid fa-star me-1 text-warning"></i>SFARI (All)</label>
+                    <label class="btn btn-outline-primary btn-sm flex-fill text-nowrap py-1" for="drawer-scope-sfari" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict to target genes curated in the SFARI Gene autism risk database (all categories)"><i class="fa-solid fa-dna me-1 text-primary"></i>SFARI (All)</label>
 
                     <input type="radio" class="btn-check drawer-scope-radio" name="drawer-target-scope" id="drawer-scope-sfari-cat1" value="sfari_cat1">
-                    <label class="btn btn-outline-primary btn-sm flex-fill text-nowrap py-1" for="drawer-scope-sfari-cat1" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict strictly to high-confidence ASD risk genes (SFARI Category 1)"><i class="fa-solid fa-star text-danger me-1"></i>SFARI Cat 1</label>
+                    <label class="btn btn-outline-primary btn-sm flex-fill text-nowrap py-1" for="drawer-scope-sfari-cat1" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict strictly to high-confidence ASD risk genes (SFARI Category 1)"><span class="sfari-tag sfari-tag-cat1 me-1">1</span>SFARI Cat 1</label>
 
                     <input type="radio" class="btn-check drawer-scope-radio" name="drawer-target-scope" id="drawer-scope-brain" value="brain">
                     <label class="btn btn-outline-primary btn-sm flex-fill text-nowrap py-1" for="drawer-scope-brain" data-bs-toggle="tooltip" data-bs-placement="top" title="Include only target genes with experimentally validated miRNA interactions in human brain tissue"><i class="fa-solid fa-brain text-info me-1"></i>Brain Targets</label>
@@ -2549,6 +2604,65 @@
                 .replace(/'/g, '&#039;');
         }
 
+        // SFARI Risk Classification Helpers
+        function getSfariSymbolsHtml(score) {
+            if (!score || score === 'Non-SFARI') return '';
+            const isCat1 = score.includes('Category 1');
+            const isCat2 = score.includes('Category 2');
+            const isCat3 = score.includes('Category 3');
+            const isSyn = score.includes('Syndromic');
+
+            let catNum = null;
+            if (isCat1) catNum = '1';
+            else if (isCat2) catNum = '2';
+            else if (isCat3) catNum = '3';
+
+            if (!catNum && !isSyn) return '';
+
+            let tokens = '';
+            if (catNum) {
+                tokens += `<span class="sfari-tag sfari-tag-cat${catNum}" title="SFARI Category ${catNum}" aria-label="SFARI Category ${catNum}">${catNum}</span>`;
+            }
+            if (isSyn) {
+                tokens += `<span class="sfari-tag sfari-tag-syn" title="SFARI Syndromic" aria-label="SFARI Syndromic">S</span>`;
+            }
+
+            if (catNum && isSyn) {
+                return `<span class="sfari-tag-group" title="SFARI: ${escapeHtml(score)}" aria-label="SFARI ${escapeHtml(score)}">${tokens}</span>`;
+            }
+            return tokens;
+        }
+
+        function renderSfariTableBadge(data) {
+            if (!data || data === 'Non-SFARI') {
+                return '<span class="badge bg-light text-secondary border px-2 py-1 rounded-pill" style="font-size: 0.78rem; border-color: #e2e8f0 !important;">Other Target</span>';
+            }
+            const symbols = getSfariSymbolsHtml(data);
+            const isCat1 = data.includes('Category 1');
+            const isCat2 = data.includes('Category 2');
+            const isCat3 = data.includes('Category 3');
+            const isSynOnly = data === 'Syndromic' || (!isCat1 && !isCat2 && !isCat3 && data.includes('Syndromic'));
+
+            let badgeStyle = '';
+            let badgeClass = 'badge border px-2 py-1 rounded-pill d-inline-flex align-items-center gap-1';
+
+            if (isCat1) {
+                badgeClass += ' bg-danger-subtle text-danger';
+            } else if (isCat2) {
+                badgeStyle = 'style="font-size: 0.78rem; background-color: #fef3c7 !important; color: #92400e !important; border-color: #fde68a !important;"';
+            } else if (isCat3) {
+                badgeClass += ' bg-info-subtle text-info';
+            } else if (isSynOnly) {
+                badgeStyle = 'style="font-size: 0.78rem; background-color: #f3e8ff !important; color: #6b21a8 !important; border-color: #e9d5ff !important;"';
+            }
+
+            if (!badgeStyle) {
+                badgeStyle = 'style="font-size: 0.78rem;"';
+            }
+
+            return `<span class="${badgeClass}" ${badgeStyle}>${symbols}<span>SFARI ${escapeHtml(data)}</span></span>`;
+        }
+
         // Global Bootstrap Tooltip Initializer
         function initGlobalTooltips(container = document) {
             const root = typeof container === 'string' ? document.querySelector(container) : container;
@@ -2622,7 +2736,7 @@
                             <div class="d-flex justify-content-center align-items-center gap-2 mt-1 flex-wrap">
                                 <span class="fs-4 fw-bold" style="color: var(--primary-color);">${targetGenes.toLocaleString()}</span>
                                 <span class="badge bg-danger-subtle text-danger border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: 700;">
-                                    <i class="fa-solid fa-star me-1"></i>${sfariGenes} SFARI
+                                    <i class="fa-solid fa-dna me-1"></i>${sfariGenes} SFARI
                                 </span>
                                 <span class="badge bg-primary-subtle text-primary border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: 700;" title="Interactions cross-validated in both miRTarBase 10.0 and TarBase v9.0">
                                     <i class="fa-solid fa-check-double text-warning me-1"></i>${consensusCount.toLocaleString()} Consensus
@@ -2919,19 +3033,7 @@
                 {
                     "data": "sfari_score",
                     "render": function(data) {
-                        if (!data || data === 'Non-SFARI') {
-                            return '<span class="badge bg-light text-secondary border px-2 py-1 rounded-pill" style="font-size: 0.78rem; border-color: #e2e8f0 !important;">Other Target</span>';
-                        }
-                        if (data.includes('Category 1')) {
-                            return `<span class="badge bg-danger-subtle text-danger border px-2 py-1 rounded-pill" style="font-size: 0.78rem;"><i class="fa-solid fa-star me-1"></i>SFARI ${data}</span>`;
-                        }
-                        if (data.includes('Category 2')) {
-                            return `<span class="badge border px-2 py-1 rounded-pill" style="font-size: 0.78rem; background-color: #fef3c7 !important; color: #92400e !important; border-color: #fde68a !important;"><i class="fa-solid fa-star-half-stroke me-1"></i>SFARI ${data}</span>`;
-                        }
-                        if (data.includes('Category 3')) {
-                            return `<span class="badge bg-info-subtle text-info border px-2 py-1 rounded-pill" style="font-size: 0.78rem;"><i class="fa-solid fa-circle-info me-1"></i>SFARI ${data}</span>`;
-                        }
-                        return `<span class="badge border px-2 py-1 rounded-pill" style="font-size: 0.78rem; background-color: #f3e8ff !important; color: #6b21a8 !important; border-color: #e9d5ff !important;"><i class="fa-solid fa-dna me-1"></i>SFARI ${data}</span>`;
+                        return renderSfariTableBadge(data);
                     }
                 },
                 {
@@ -3911,28 +4013,25 @@
             const chipElements = geneList.map(gene => {
                 const meta = geneMetaMap[gene];
                 let sfariClass = '';
-                let badgeIcon = '';
+                let symbolsHtml = '';
                 let titleAttr = gene;
 
                 if (meta && meta.is_sfari) {
                     sfariCount++;
                     if (meta.sfari_score.includes('Category 1')) {
                         sfariClass = 'sfari-cat1';
-                        badgeIcon = '<i class="fa-solid fa-star text-danger ms-1" style="font-size: 0.65rem;"></i>';
                     } else if (meta.sfari_score.includes('Category 2')) {
                         sfariClass = 'sfari-cat2';
-                        badgeIcon = '<i class="fa-solid fa-star-half-stroke text-warning ms-1" style="font-size: 0.65rem;"></i>';
                     } else if (meta.sfari_score.includes('Category 3')) {
                         sfariClass = 'sfari-cat3';
-                        badgeIcon = '<i class="fa-solid fa-circle-info text-info ms-1" style="font-size: 0.65rem;"></i>';
                     } else {
                         sfariClass = 'sfari-syn';
-                        badgeIcon = '<i class="fa-solid fa-dna text-purple ms-1" style="font-size: 0.65rem;"></i>';
                     }
+                    symbolsHtml = getSfariSymbolsHtml(meta.sfari_score);
                     titleAttr += ` (SFARI: ${meta.sfari_score})`;
                 }
 
-                return `<span class="gene-chip ${sfariClass}" title="${titleAttr}">${gene}${badgeIcon}</span>`;
+                return `<span class="gene-chip ${sfariClass}" title="${titleAttr}">${gene}${symbolsHtml ? ' ' + symbolsHtml : ''}</span>`;
             });
 
             let chipsHtml = '';
@@ -4471,7 +4570,19 @@
                                     let html = genes.slice(0, 6).map(g => {
                                         const meta = geneMetaMap[g];
                                         if (meta && meta.is_sfari) {
-                                            return `<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${g}" target="_blank" rel="noopener noreferrer" class="badge bg-danger-subtle text-danger border text-decoration-none me-1 mb-1" style="font-size: 0.75rem;" title="${g} (SFARI ${meta.sfari_score})"><i class="fa-solid fa-star me-1"></i>${g}</a>`;
+                                            const symbols = getSfariSymbolsHtml(meta.sfari_score);
+                                            let badgeClass = 'badge border text-decoration-none me-1 mb-1 d-inline-flex align-items-center gap-1';
+                                            let badgeStyle = 'style="font-size: 0.75rem;"';
+                                            if (meta.sfari_score.includes('Category 1')) {
+                                                badgeClass += ' bg-danger-subtle text-danger';
+                                            } else if (meta.sfari_score.includes('Category 2')) {
+                                                badgeStyle = 'style="font-size: 0.75rem; background-color: #fef3c7 !important; color: #92400e !important; border-color: #fde68a !important;"';
+                                            } else if (meta.sfari_score.includes('Category 3')) {
+                                                badgeClass += ' bg-info-subtle text-info';
+                                            } else {
+                                                badgeStyle = 'style="font-size: 0.75rem; background-color: #f3e8ff !important; color: #6b21a8 !important; border-color: #e9d5ff !important;"';
+                                            }
+                                            return `<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${g}" target="_blank" rel="noopener noreferrer" class="${badgeClass}" ${badgeStyle} title="${g} (SFARI: ${meta.sfari_score})" aria-label="${g} SFARI ${meta.sfari_score}"><span>${g}</span>${symbols}</a>`;
                                         }
                                         return `<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${g}" target="_blank" rel="noopener noreferrer" class="badge bg-light text-dark border text-decoration-none me-1 mb-1" style="font-size: 0.75rem;">${g}</a>`;
                                     }).join('');
