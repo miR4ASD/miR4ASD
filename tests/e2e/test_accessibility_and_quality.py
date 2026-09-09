@@ -80,13 +80,6 @@ def test_all_interactive_buttons_and_filter_radios_have_tooltips(
         "scope-brain",
         "scope-upregulated",
         "scope-downregulated",
-        "drawer-scope-all",
-        "drawer-scope-strong",
-        "drawer-scope-sfari",
-        "drawer-scope-sfari-cat1",
-        "drawer-scope-brain",
-        "drawer-scope-upregulated",
-        "drawer-scope-downregulated",
     ]
     for scope_id in scope_radios:
         label = app_page.locator(f"label[for='{scope_id}']")
@@ -109,31 +102,17 @@ def test_all_interactive_buttons_and_filter_radios_have_tooltips(
         "experimentally" in brain_title or "validated" in brain_title
     ), f"Brain Targets tooltip does not explain data provenance: '{brain_title}'"
 
-    # 2. Database switcher labels (Targets tab and Enrichment tab)
-    db_radios = [
-        "db-mirtarbase",
-        "db-consensus",
-        "db-tarbase",
-        "db-all",
-        "enrich-db-mirtarbase",
-        "enrich-db-consensus",
-        "enrich-db-tarbase",
-        "enrich-db-all",
-    ]
-    for db_id in db_radios:
-        label = app_page.locator(f"label[for='{db_id}']")
-        assert label.count() > 0, f"Missing label for {db_id}"
-        title = label.get_attribute("title") or label.get_attribute(
-            "data-bs-original-title"
-        )
-        assert title and len(title.strip()) > 10, (
-            f"DB label '{db_id}' missing or too short tooltip: '{title}'"
+    # 2. Single-source database badges (Targets tab and Enrichment tab)
+    db_badges = ["#active-db-label", "#enrichment-db-badge"]
+    for badge_selector in db_badges:
+        badge = app_page.locator(badge_selector)
+        assert badge.count() > 0, f"Missing single-source badge {badge_selector}"
+        assert "miRTarBase 10.0" in badge.first.inner_text(), (
+            f"Badge {badge_selector} does not show the sole data source"
         )
 
     # 3. Action and toolbar buttons
     action_buttons = [
-        ".btn-select-all-visible",
-        ".btn-clear-selection",
         ".btn-reset-table-filters",
         ".btn-analyze-filtered",
         "#btn-run-enrichment",
@@ -141,12 +120,7 @@ def test_all_interactive_buttons_and_filter_radios_have_tooltips(
         "#btn-clear-genes",
         "#btn-export-enrichment-chart",
         "#btn-export-enrichment-csv",
-        "#btn-open-gprofiler-web",
         "#btn-back-to-top",
-        "#closeFilterDrawer",
-        "#closeFilterDrawerBtn",
-        "#resetFilters",
-        "#drawer-btn-enrich",
     ]
     for selector in action_buttons:
         elements = app_page.locator(selector).all()

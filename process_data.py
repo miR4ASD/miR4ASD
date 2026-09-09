@@ -1,5 +1,4 @@
 import csv
-import gzip
 import json
 import os
 from typing import Any, Dict, List, Optional, Set, Tuple
@@ -287,7 +286,7 @@ def resolve_study_details(
     return details_list
 
 
-# --- Process DIANA-TarBase v9.0 Targets & SFARI ASD Risk Genes ---
+# --- Process miRTarBase 10.0 Targets & SFARI ASD Risk Genes ---
 
 
 def process_target_genes(
@@ -295,13 +294,12 @@ def process_target_genes(
     mature_precursor_map: Dict[str, Set[str]],
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, int]]:
     """
-    Process DIANA-TarBase v9 and miRTarBase 10.0 targets, cross-referencing with SFARI.
+    Process miRTarBase 10.0 targets, cross-referencing with SFARI ASD risk genes.
 
     Includes strong evidence interactions (Reporter assay, Western blot, qPCR,
-    etc.), all experimental assays for SFARI ASD risk genes (CLIP-seq, CLASH,
-    RIP-seq, RNA-seq), and multi-assay targets with evidence tier categorization.
-    Annotates each interaction with its database source
-    (TarBase, miRTarBase, or Consensus).
+    etc.), all experimental assays for SFARI ASD risk genes, and multi-assay
+    targets with evidence tier categorization. Annotates each interaction with
+    its database source (miRTarBase 10.0).
 
     Parameters
     ----------
@@ -315,7 +313,6 @@ def process_target_genes(
     Tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, int]]
         (target_records, target_stats, per_mirna_target_counts)
     """
-    tarbase_path = os.path.join("raw_data", "Homo_sapiens_TarBase-v9.tsv.gz")
     mirtarbase_path = os.path.join("raw_data", "hsa_MTI.csv")
     sfari_path = os.path.join("raw_data", "sfari_genes.csv")
 
@@ -323,11 +320,8 @@ def process_target_genes(
         print(f"Warning: SFARI file ({sfari_path}) not found.")
         return [], {}, {}
 
-    if not os.path.exists(tarbase_path) and not os.path.exists(mirtarbase_path):
-        print(
-            f"Warning: Neither TarBase ({tarbase_path}) "
-            f"nor miRTarBase ({mirtarbase_path}) found."
-        )
+    if not os.path.exists(mirtarbase_path):
+        print(f"Warning: miRTarBase file ({mirtarbase_path}) not found.")
         return [], {}, {}
 
     # 1. Load SFARI Genes
@@ -422,163 +416,73 @@ def process_target_genes(
             return mirna_lower_lookup.get(lower[4:])
         return mirna_lower_lookup.get(f"hsa-{lower}")
 
-    # 3. Process DIANA-TarBase v9.0 (if present)
-    if os.path.exists(tarbase_path):
-        print(f"Processing DIANA-TarBase v9: {tarbase_path}")
-        with gzip.open(tarbase_path, "rt", encoding="utf-8", errors="ignore") as f:
-            for chunk in pd.read_csv(
-                f,
-                sep="\t",
-                chunksize=250000,
-                low_memory=False,
-                usecols=[
-                    "mirna_name",
-                    "mirna_id",
-                    "gene_name",
-                    "gene_id",
-                    "experimental_method",
-                    "regulation",
-                    "tissue",
-                    "cell_line",
-                    "article_pubmed_id",
-                ],
-            ):
-                for _, row in chunk.iterrows():
-                    canonical_mir = get_canonical_mirna(row["mirna_name"])
-                    if not canonical_mir:
-                        continue
+    # 3. Process miRTarBase 10.0
+    print(f"Processing miRTarBase 10.0: {mirtarbase_path}")
+    with open(mirtarbase_path, "r", encoding="utf-8", errors="ignore") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            st = (row.get("Support Type") or "").strip()
+            if "Non-Functional" in st:
+                continue
 
-                    gene_sym = str(row["gene_name"]).strip()
-                    if not gene_sym or gene_sym == "nan":
-                        continue
+            canonical_mir = get_canonical_mirna(row.get("miRNA"))
+            if not canonical_mir:
+                continue
 
-                    pair_key = (canonical_mir, gene_sym)
-                    if pair_key not in interaction_map:
-                        interaction_map[pair_key] = {
-                            "canonical_mir": canonical_mir,
-                            "gene_symbol": gene_sym,
-                            "gene_id": (
-                                str(row["gene_id"]).strip()
-                                if pd.notna(row["gene_id"])
-                                else ""
-                            ),
-                            "sources": set(),
-                            "methods": set(),
-                            "regulations": set(),
-                            "tissues": set(),
-                            "cell_lines": set(),
-                            "pmids": set(),
-                            "has_strong": False,
-                            "has_clip": False,
-                            "is_sfari": gene_sym.upper() in sfari_dict,
-                        }
+            gene_sym = (row.get("Target Gene") or "").strip()
+            if not gene_sym or gene_sym == "nan":
+                continue
 
-                    entry = interaction_map[pair_key]
-                    entry["sources"].add("TarBase")
-                    m = (
-                        str(row["experimental_method"]).strip()
-                        if pd.notna(row["experimental_method"])
-                        else ""
-                    )
-                    if m:
-                        entry["methods"].add(m)
-                        if m in strong_methods:
-                            entry["has_strong"] = True
-                        if m in clip_methods or "CLIP" in m or "CLASH" in m:
-                            entry["has_clip"] = True
+            is_sfari = gene_sym.upper() in sfari_dict
+            is_strong = st == "Functional MTI"
 
+            # Biological inclusion criterion: Strong evidence OR SFARI ASD risk gene
+            if not is_strong and not is_sfari:
+                continue
+
+            pair_key = (canonical_mir, gene_sym)
+            if pair_key not in interaction_map:
+                interaction_map[pair_key] = {
+                    "canonical_mir": canonical_mir,
+                    "gene_symbol": gene_sym,
+                    "gene_id": (
+                        str(row.get("Target Gene (Entrez ID)", "")).strip()
+                    ),
+                    "sources": set(),
+                    "methods": set(),
+                    "regulations": set(),
+                    "tissues": set(),
+                    "cell_lines": set(),
+                    "pmids": set(),
+                    "has_strong": False,
+                    "has_clip": False,
+                    "is_sfari": is_sfari,
+                }
+
+            entry = interaction_map[pair_key]
+            entry["sources"].add("miRTarBase")
+            if is_strong:
+                entry["has_strong"] = True
+
+            experiments_raw = row.get("Experiments") or ""
+            for exp in experiments_raw.split("//"):
+                exp_clean = exp.strip()
+                if exp_clean:
+                    entry["methods"].add(exp_clean)
+                    if exp_clean in strong_methods:
+                        entry["has_strong"] = True
                     if (
-                        pd.notna(row["regulation"])
-                        and str(row["regulation"]).strip() != "NA"
+                        exp_clean in clip_methods
+                        or "CLIP" in exp_clean.upper()
+                        or "CLASH" in exp_clean.upper()
                     ):
-                        reg = str(row["regulation"]).strip()
-                        if reg.lower() == "negative":
-                            entry["regulations"].add("Negative (Downregulation)")
-                        elif reg.lower() == "positive":
-                            entry["regulations"].add("Positive (Upregulation)")
-                        else:
-                            entry["regulations"].add(reg)
+                        entry["has_clip"] = True
 
-                    if pd.notna(row["tissue"]) and str(row["tissue"]).strip() not in [
-                        "NA",
-                        "nan",
-                        "",
-                    ]:
-                        entry["tissues"].add(str(row["tissue"]).strip())
+            pmid_val = parse_pmid(row.get("References (PMID)"))
+            if pmid_val:
+                entry["pmids"].add(pmid_val)
 
-                    if pd.notna(row["article_pubmed_id"]):
-                        pmid_val = parse_pmid(row["article_pubmed_id"])
-                        if pmid_val:
-                            entry["pmids"].add(pmid_val)
-
-    # 4. Process miRTarBase 10.0 (if present)
-    if os.path.exists(mirtarbase_path):
-        print(f"Processing miRTarBase 10.0: {mirtarbase_path}")
-        with open(mirtarbase_path, "r", encoding="utf-8", errors="ignore") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                st = (row.get("Support Type") or "").strip()
-                if "Non-Functional" in st:
-                    continue
-
-                canonical_mir = get_canonical_mirna(row.get("miRNA"))
-                if not canonical_mir:
-                    continue
-
-                gene_sym = (row.get("Target Gene") or "").strip()
-                if not gene_sym or gene_sym == "nan":
-                    continue
-
-                is_sfari = gene_sym.upper() in sfari_dict
-                is_strong = st == "Functional MTI"
-
-                # Biological inclusion criterion: Strong evidence OR SFARI ASD risk gene
-                if not is_strong and not is_sfari:
-                    continue
-
-                pair_key = (canonical_mir, gene_sym)
-                if pair_key not in interaction_map:
-                    interaction_map[pair_key] = {
-                        "canonical_mir": canonical_mir,
-                        "gene_symbol": gene_sym,
-                        "gene_id": (
-                            str(row.get("Target Gene (Entrez ID)", "")).strip()
-                        ),
-                        "sources": set(),
-                        "methods": set(),
-                        "regulations": set(),
-                        "tissues": set(),
-                        "cell_lines": set(),
-                        "pmids": set(),
-                        "has_strong": False,
-                        "has_clip": False,
-                        "is_sfari": is_sfari,
-                    }
-
-                entry = interaction_map[pair_key]
-                entry["sources"].add("miRTarBase")
-                if is_strong:
-                    entry["has_strong"] = True
-
-                experiments_raw = row.get("Experiments") or ""
-                for exp in experiments_raw.split("//"):
-                    exp_clean = exp.strip()
-                    if exp_clean:
-                        entry["methods"].add(exp_clean)
-                        if exp_clean in strong_methods:
-                            entry["has_strong"] = True
-                        if (
-                            exp_clean in clip_methods
-                            or "CLIP" in exp_clean.upper()
-                            or "CLASH" in exp_clean.upper()
-                        ):
-                            entry["has_clip"] = True
-
-                pmid_val = parse_pmid(row.get("References (PMID)"))
-                if pmid_val:
-                    entry["pmids"].add(pmid_val)
-
-    # 5. Structure Target Records with Provenance Annotation
+    # 4. Structure Target Records with Provenance Annotation
     target_records = []
     unique_target_genes = set()
     unique_sfari_genes = set()
@@ -616,13 +520,7 @@ def process_target_genes(
             evidence_level = "High-Throughput Expression"
 
         # Database Source Provenance Annotation
-        sources = data.get("sources", set())
-        if "TarBase" in sources and "miRTarBase" in sources:
-            db_source = "TarBase & miRTarBase (Consensus)"
-        elif "miRTarBase" in sources:
-            db_source = "miRTarBase 10.0"
-        else:
-            db_source = "DIANA-TarBase v9.0"
+        db_source = "miRTarBase 10.0"
 
         # Precursor miRNAs
         precursors = mature_precursor_map.get(canonical_mir, set())
@@ -671,19 +569,7 @@ def process_target_genes(
         "total_target_genes": len(unique_target_genes),
         "total_sfari_target_genes": len(unique_sfari_genes),
         "total_target_interactions": len(target_records),
-        "consensus_interactions": sum(
-            1
-            for r in target_records
-            if r["database_source"] == "TarBase & miRTarBase (Consensus)"
-        ),
-        "tarbase_interactions": sum(
-            1
-            for r in target_records
-            if "DIANA" in r["database_source"] or "Consensus" in r["database_source"]
-        ),
-        "mirtarbase_interactions": sum(
-            1 for r in target_records if "miRTarBase" in r["database_source"]
-        ),
+        "mirtarbase_interactions": len(target_records),
     }
 
     return target_records, target_stats, per_mirna_target_counts

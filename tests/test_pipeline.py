@@ -78,8 +78,8 @@ def test_target_genes_structure_and_sfari_matching():
     with open("target_genes.json", "r") as f:
         targets = json.load(f)
 
-    assert len(targets) > 50000, (
-        f"Expected >50000 target interactions, found {len(targets)}"
+    assert len(targets) > 10000, (
+        f"Expected >10000 target interactions, found {len(targets)}"
     )
 
     required_keys = [
@@ -238,7 +238,7 @@ def test_multi_mirna_and_gene_mapping():
         if g in gene_to_matures:
             regulating_mirnas.update(gene_to_matures[g])
     assert len(regulating_mirnas) > 0
-    # Both PTEN and SHANK3 have validated miRNAs in DIANA-TarBase
+    # Both PTEN and SHANK3 have validated miRNAs in miRTarBase
     assert any("miR" in m or "let" in m for m in regulating_mirnas)
 
 
@@ -255,11 +255,7 @@ def test_target_genes_child_details_structure():
         assert "tissue" in item
         assert "pmids" in item
         assert "database_source" in item
-        assert item["database_source"] in [
-            "DIANA-TarBase v9.0",
-            "miRTarBase 10.0",
-            "TarBase & miRTarBase (Consensus)",
-        ]
+        assert item["database_source"] == "miRTarBase 10.0"
         # Verify methods can be split cleanly
         methods = [
             m.strip() for m in item["experimental_methods"].split(";") if m.strip()
@@ -461,33 +457,27 @@ def test_mirna_selection_prerequisite_and_target_filtering_isolation():
     assert len(resolve_targets([], [])) == 0
 
 
-def test_dual_database_source_integrity_and_provenance():
-    """Verify dual-database source tags (TarBase, miRTarBase, Consensus)."""
+def test_single_database_source_integrity_and_provenance():
+    """Verify the single miRTarBase 10.0 source tag on every target."""
     with open("target_genes.json", "r") as f:
         targets = json.load(f)
     with open("statistics.json", "r") as f:
         stats = json.load(f)
 
-    # Database source distribution
+    # Database source distribution: every interaction is miRTarBase 10.0
     source_counts = {}
     for item in targets:
         src = item.get("database_source")
         source_counts[src] = source_counts.get(src, 0) + 1
 
-    assert "DIANA-TarBase v9.0" in source_counts
-    assert "miRTarBase 10.0" in source_counts
-    assert "TarBase & miRTarBase (Consensus)" in source_counts
+    assert source_counts == {"miRTarBase 10.0": len(targets)}
 
-    # Verify meaningful numbers in all 3 classes
-    assert source_counts["DIANA-TarBase v9.0"] > 50000
-    assert source_counts["miRTarBase 10.0"] > 5000
-    assert source_counts["TarBase & miRTarBase (Consensus)"] > 5000
-
-    # Verify statistics.json metrics
+    # Verify statistics.json metrics reflect the single source
     t_stats = stats.get("target_stats", {})
-    assert t_stats.get("consensus_interactions", 0) > 5000
-    assert t_stats.get("mirtarbase_total_interactions", 0) > 15000
-    assert t_stats.get("tarbase_total_interactions", 0) > 60000
+    assert t_stats.get("total_target_interactions", 0) == len(targets)
+    assert t_stats.get("mirtarbase_interactions", 0) == len(targets)
+    assert t_stats.get("total_target_genes", 0) > 0
+    assert t_stats.get("total_sfari_target_genes", 0) > 0
 
 
 def test_parse_pmid():

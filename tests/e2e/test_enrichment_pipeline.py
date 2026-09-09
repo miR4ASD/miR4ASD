@@ -22,17 +22,17 @@ def test_enrichment_awaiting_mirna_selection_state(app_page: Page, base_url: str
     )
 
 
-def test_enrichment_db_buttons_interactive_before_selection(
+def test_enrichment_single_source_badge_before_selection(
     app_page: Page, base_url: str
 ):
-    """Verify database buttons on enrichment tab are clickable with 0 miRNAs."""
+    """Verify the single-source badge is shown with 0 miRNAs selected."""
     enrichment_page = EnrichmentPage(app_page, base_url)
     enrichment_page.navigate_to_enrichment()
 
-    for db_name in ["mirtarbase", "consensus", "tarbase", "all"]:
-        assert not enrichment_page.is_database_button_disabled(db_name), (
-            f"Database '{db_name}' should NOT be disabled when 0 miRNAs selected"
-        )
+    assert enrichment_page.is_single_source_mirtarbase(), (
+        "Enrichment tab should display the sole miRTarBase 10.0 source"
+    )
+    assert enrichment_page.get_database_badge_text() == "miRTarBase 10.0"
 
 
 def test_mirna_selection_to_enrichment_flow(app_page: Page, base_url: str):

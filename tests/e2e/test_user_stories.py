@@ -12,7 +12,6 @@ from typing import Dict, List
 from playwright.sync_api import Page, Route
 
 from tests.e2e.pages.base_page import BasePage
-from tests.e2e.pages.drawer_page import DrawerPage
 from tests.e2e.pages.enrichment_page import EnrichmentPage
 from tests.e2e.pages.expression_page import ExpressionPage
 from tests.e2e.pages.figures_page import FiguresPage
@@ -72,11 +71,10 @@ def test_user_story_1_expression_discovery_and_selection(
     assert expr_page.get_selected_count() == "0"
     assert not expr_page.is_run_enrichment_button_enabled()
 
-    # Search for specific candidate miRNA (miR-132)
-    initial_count = expr_page.get_row_count()
-    expr_page.search("miR-132")
-    filtered_count = expr_page.get_row_count()
-    assert 0 < filtered_count <= initial_count
+    # Filter for a specific miRNA hairpin (miR-132 family)
+    assert expr_page.get_filtered_total() == 524
+    expr_page.filter_hairpin("hsa-mir-132")
+    assert expr_page.get_filtered_total() == 3
 
     # Expand child row details to verify literature citation and DOI links
     expr_page.expand_row_details(0)
@@ -84,14 +82,14 @@ def test_user_story_1_expression_discovery_and_selection(
     child_text = expr_page.get_child_row_text().lower()
     assert len(child_text) > 0 and ("study" in child_text or "samples" in child_text)
 
-    # Collapse details and reset search
+    # Collapse details and clear the filter
     expr_page.expand_row_details(0)
     assert not expr_page.is_child_row_visible()
-    expr_page.search("")
-    assert expr_page.get_row_count() == initial_count
+    expr_page.filter_hairpin("")
+    assert expr_page.get_filtered_total() == 524
 
-    # Select visible rows and verify enrichment stepper CTA enablement
-    expr_page.click_select_visible()
+    # Select visible rows and verify enrichment CTA enablement
+    expr_page.click_header_select_all()
     selected_count = expr_page.get_selected_count()
     assert int(selected_count) > 0
     assert expr_page.is_run_enrichment_button_enabled()
@@ -101,13 +99,6 @@ def test_user_story_1_expression_discovery_and_selection(
     assert expr_page.get_selected_count() == "0"
     assert not expr_page.is_run_enrichment_button_enabled()
 
-    # Test master header checkbox toggle
-    expr_page.click_header_select_all()
-    assert expr_page.is_header_select_all_checked()
-    assert int(expr_page.get_selected_count()) > 0
-    expr_page.click_header_select_all()
-    assert not expr_page.is_header_select_all_checked()
-    assert expr_page.get_selected_count() == "0"
 
 
 def test_user_story_2_genetic_studies_cross_selection(
@@ -128,10 +119,9 @@ def test_user_story_2_genetic_studies_cross_selection(
     initial_rows = genetic_page.get_row_count()
     assert initial_rows > 0
 
-    # Search for specific alteration type (e.g. SNV)
-    genetic_page.search("SNV")
-    filtered_rows = genetic_page.get_row_count()
-    assert 0 < filtered_rows <= initial_rows
+    # Filter by SNV alteration type
+    genetic_page.select_genetic_alteration("SNV")
+    assert genetic_page.get_filtered_total() == 9
 
     # Expand child row details to verify genomic coordinates / methodology
     genetic_page.expand_row_details(0)
@@ -140,9 +130,9 @@ def test_user_story_2_genetic_studies_cross_selection(
     assert len(child_text) > 0
     genetic_page.expand_row_details(0)
 
-    # Clear search
-    genetic_page.search("")
-    assert genetic_page.get_row_count() == initial_rows
+    # Clear the alteration filter
+    genetic_page.select_genetic_alteration("")
+    assert genetic_page.get_filtered_total() == 93
 
     # Select row on page 1
     genetic_page.select_row_by_index(0)
@@ -164,42 +154,24 @@ def test_user_story_3_target_genes_provenance_and_details(
     app_page: Page, base_url: str
 ) -> None:
     """
-    US-03: Validated target genes exploration, database switcher, and assays.
+    US-03: Validated target genes exploration, single-source badge, and assays.
 
-    Validates switching between miRTarBase, Consensus, TarBase, and All Sources,
-    confirming accurate interaction and unique gene tallies, searching for ASD targets,
-    and verifying experimental assay provenance.
+    Validates the single miRTarBase 10.0 source badge with accurate interaction
+    and unique gene tallies, searching for ASD targets, and verifying
+    experimental assay provenance in expandable child rows.
     """
     targets_page = TargetsPage(app_page, base_url)
     targets_page.navigate_to_targets()
 
-    # 1. miRTarBase (default): 17,150 interactions / 2,995 unique genes
-    assert targets_page.is_database_selected("mirtarbase")
-    assert "17,150" in targets_page.get_active_count_text()
-    assert "2,995" in targets_page.get_active_genes_count_text()
+    # Single source: miRTarBase 10.0, 17,150 interactions / 2,995 unique genes
+    assert targets_page.is_single_source_mirtarbase()
+    assert targets_page.get_database_badge_text() == "miRTarBase 10.0"
+    assert targets_page.get_active_count_text() == "17,150"
+    assert targets_page.get_active_genes_count_text() == "2,995"
 
-    # 2. Consensus: 7,492 interactions / 2,130 unique genes
-    targets_page.select_database("consensus")
-    assert targets_page.is_database_selected("consensus")
-    assert "7,492" in targets_page.get_active_count_text()
-    assert "2,130" in targets_page.get_active_genes_count_text()
-
-    # 3. TarBase: 68,495 interactions / 2,577 unique genes
-    targets_page.select_database("tarbase")
-    assert targets_page.is_database_selected("tarbase")
-    assert "68,495" in targets_page.get_active_count_text()
-    assert "2,577" in targets_page.get_active_genes_count_text()
-
-    # 4. All Sources: 78,153 interactions / 3,281 unique genes
-    targets_page.select_database("all")
-    assert targets_page.is_database_selected("all")
-    assert "78,153" in targets_page.get_active_count_text()
-    assert "3,281" in targets_page.get_active_genes_count_text()
-
-    # Return to miRTarBase and search for ASD target PTEN
-    targets_page.select_database("mirtarbase")
+    # Search for ASD target PTEN
     targets_page.search("PTEN")
-    assert targets_page.get_row_count() > 0
+    assert targets_page.get_filtered_total() == 82
     assert "PTEN" in targets_page.get_table_body_text()
 
     # Expand child row details to verify experimental methods and regulatory effect
@@ -218,7 +190,7 @@ def test_user_story_4_end_to_end_enrichment_pipeline(
     US-04: End-to-end functional enrichment workflow from miRNA selection to reports.
 
     Validates candidate selection in Expression Studies, derivation in Functional
-    Enrichment, real-time database and scope switching, mocked g:Profiler execution,
+    Enrichment, real-time scope switching, mocked g:Profiler execution,
     metrics ribbon, chart canvas, results table, and export capabilities.
     """
     expr_page = ExpressionPage(app_page, base_url)
@@ -242,21 +214,11 @@ def test_user_story_4_end_to_end_enrichment_pipeline(
     expr_page.click_run_enrichment()
     assert enrichment_page.is_tab_active("enrichment")
 
-    # 3. Dynamic database switching updates gene count
-    assert enrichment_page.is_database_selected("mirtarbase")
+    # 3. Single-source badge with derived target gene count
+    assert enrichment_page.is_single_source_mirtarbase()
+    assert enrichment_page.get_database_badge_text() == "miRTarBase 10.0"
     assert "78" in enrichment_page.get_gene_set_stats_text()
     assert enrichment_page.get_chips_count() == 78
-
-    enrichment_page.select_database("consensus")
-    assert "73" in enrichment_page.get_gene_set_stats_text()
-    assert enrichment_page.get_chips_count() == 73
-
-    enrichment_page.select_database("tarbase")
-    assert "792" in enrichment_page.get_gene_set_stats_text()
-    assert enrichment_page.get_chips_count() == 792
-
-    enrichment_page.select_database("mirtarbase")
-    assert "78" in enrichment_page.get_gene_set_stats_text()
 
     # 4. Target scope switching
     enrichment_page.select_target_scope("strong")
@@ -354,64 +316,54 @@ def test_user_story_5_custom_gene_editor_and_parameters(
     assert "error" in enrichment_page.get_error_alert_message().lower()
 
 
-def test_user_story_6_filter_drawer_multi_parameter_query(
+def test_user_story_6_per_tab_multi_parameter_query(
     app_page: Page, base_url: str
 ) -> None:
     """
-    US-06: Unified slide-over multi-parameter filter drawer and query formulation.
+    US-06: Per-tab inline filter cards for multi-parameter query formulation.
 
-    Validates opening and closing the drawer via various methods, switching search
-    mode tabs, applying categorical filters, inspecting the active criteria badge,
-    and triggering enrichment from within the drawer.
+    Validates combining several inline filter parameters on each tab, inspecting
+    the per-tab active criteria indicator and chips, and clearing them with the
+    per-tab reset controls.
     """
     expr_page = ExpressionPage(app_page, base_url)
-    drawer_page = DrawerPage(app_page, base_url)
+    gen_page = GeneticPage(app_page, base_url)
+    targets_page = TargetsPage(app_page, base_url)
+
+    # Expression: mature ID + change + evidence combined on one tab
     expr_page.navigate_to_expression()
-    expr_page.select_row_by_index(0)
+    expr_page.filter_mature("hsa-let-7a-5p")
+    expr_page.select_expression_change("Upregulated")
+    expr_page.select_overall_evidence("Conflicting evidence")
+    assert expr_page.get_filtered_total() == 3
+    assert expr_page.get_active_indicator_text() == (
+        "3 Active: 1 Mature, Upregulated +1"
+    )
+    assert expr_page.get_active_chips_count() == 3
 
-    # Open filter drawer
-    drawer_page.open_drawer()
-    assert drawer_page.is_drawer_open()
+    expr_page.reset_expression_filters()
+    assert expr_page.get_filtered_total() == 524
+    assert expr_page.get_active_indicator_text() == "No Filters Active"
+    assert expr_page.get_active_chips_count() == 0
 
-    # Switch search modes and enter values
-    drawer_page.set_search_mode("hairpin")
-    drawer_page.enter_search_text("hairpin", "mir-132")
+    # Genetic: alteration + study description combined on one tab
+    gen_page.navigate_to_genetic()
+    gen_page.select_genetic_alteration("CNV")
+    gen_page.filter_study_desc("sequencing")
+    assert gen_page.get_active_indicator_text() == "2 Active: CNV, Desc"
+    assert gen_page.get_active_chips_count() == 2
 
-    drawer_page.set_search_mode("gene")
-    drawer_page.enter_search_text("gene", "PTEN")
+    gen_page.click_reset_filters()
+    assert gen_page.get_filtered_total() == 93
+    assert gen_page.get_active_chips_count() == 0
 
-    drawer_page.set_search_mode("mature")
-    drawer_page.enter_search_text("mature", "hsa-let-7a-5p")
+    # Target Genes: inline gene filter narrows the interaction set
+    targets_page.navigate_to_targets()
+    targets_page.search("PTEN")
+    assert targets_page.get_filtered_total() == 82
 
-    # Set categorical dropdown filters
-    drawer_page.select_sfari_category("Category 1")
-    drawer_page.select_evidence_level("Strong Evidence")
-    drawer_page.select_expression_change("Upregulated")
-    drawer_page.select_genetic_alteration("CNV")
-
-    # Active filter count badge should reflect applied filters
-    badge_text = drawer_page.get_filter_count_badge_text()
-    assert badge_text != "" and badge_text != "0"
-
-    # Click drawer enrichment CTA
-    drawer_page.click_drawer_enrich_button()
-    assert drawer_page.is_tab_active("enrichment")
-
-    # Re-open drawer and clear all filters
-    drawer_page.open_drawer()
-    assert drawer_page.is_drawer_open()
-    drawer_page.click_clear_all_footer()
-    assert "0" in drawer_page.get_filter_count_badge_text()
-
-    # Close via header close icon
-    drawer_page.close_drawer_via_icon()
-    assert not drawer_page.is_drawer_open()
-
-    # Re-open and close via backdrop click
-    drawer_page.open_drawer()
-    assert drawer_page.is_drawer_open()
-    drawer_page.close_drawer_via_backdrop()
-    assert not drawer_page.is_drawer_open()
+    targets_page.reset_target_filters()
+    assert targets_page.get_filtered_total() == 17150
 
 
 def test_user_story_7_data_dictionary_and_visualizations(

@@ -6,22 +6,22 @@ from tests.e2e.pages.expression_page import ExpressionPage
 
 
 def test_expression_select_visible_and_clear_selection(app_page: Page, base_url: str):
-    """Verify 'Select Visible' and 'Clear Selection' buttons update state."""
+    """Verify header select-all and global selection clearing update state."""
     expr_page = ExpressionPage(app_page, base_url)
     expr_page.navigate_to_expression()
 
-    # Initial state: 0 selected and analyze CTA disabled
+    # Initial state: 0 selected and enrichment CTA disabled
     assert expr_page.get_selected_count() == "0"
     assert not expr_page.is_run_enrichment_button_enabled()
 
-    # Click 'Select Visible'
-    expr_page.click_select_visible()
+    # Check the header select-all checkbox to select all visible rows
+    expr_page.click_header_select_all()
     selected_count = expr_page.get_selected_count()
     assert int(selected_count) > 0, (
         f"Expected positive selected count, got {selected_count}"
     )
     assert expr_page.is_run_enrichment_button_enabled(), (
-        "Analyze CTA should be enabled when miRNAs are selected"
+        "Enrichment CTA should be enabled when miRNAs are selected"
     )
 
     # Click 'Clear Selection'
@@ -49,21 +49,19 @@ def test_expression_header_select_all_toggle(app_page: Page, base_url: str):
 
 
 def test_expression_table_search_and_pagination(app_page: Page, base_url: str):
-    """Verify search input filters rows and pagination controls navigate."""
+    """Verify inline miRNA filters rows and pagination controls navigate."""
     expr_page = ExpressionPage(app_page, base_url)
     expr_page.navigate_to_expression()
 
-    initial_count = expr_page.get_row_count()
-    assert initial_count > 0
+    assert expr_page.get_filtered_total() == 524
 
-    # Filter with specific miRNA symbol
-    expr_page.search("miR-132")
-    filtered_count = expr_page.get_row_count()
-    assert 0 < filtered_count <= initial_count
+    # Filter with a specific miRNA hairpin ID
+    expr_page.filter_hairpin("hsa-mir-132")
+    assert expr_page.get_filtered_total() == 3
 
-    # Clear search
-    expr_page.search("")
-    assert expr_page.get_row_count() == initial_count
+    # Clear the filter
+    expr_page.filter_hairpin("")
+    assert expr_page.get_filtered_total() == 524
 
     # Pagination navigation to page 2
     expr_page.click_page(2)
@@ -89,25 +87,7 @@ def test_expression_reset_filters_button(app_page: Page, base_url: str):
     expr_page = ExpressionPage(app_page, base_url)
     expr_page.navigate_to_expression()
 
-    initial_rows = expr_page.get_row_count()
-
-    # Apply search filter
-    expr_page.search("hsa-let-7a-5p")
-    assert expr_page.get_row_count() < initial_rows
-
-    # Click Reset Filters
-    expr_page.click_reset_filters()
-    assert expr_page.get_row_count() == initial_rows
-
-
-def test_expression_targets_count_updates_on_selection(app_page: Page, base_url: str):
-    """Verify target genes count displays alongside miRNA counter and in CTA."""
-    expr_page = ExpressionPage(app_page, base_url)
-    expr_page.navigate_to_expression()
-
-    # Initial state: 0 selected, 0 targets
-    assert expr_page.get_selected_count() == "0"
-    assert expr_page.get_targets_count() == "0"
+    assert expr_page.get_filtered_total() == 524
 
     # Select first miRNA row
     expr_page.select_row_by_index(0)
@@ -116,7 +96,7 @@ def test_expression_targets_count_updates_on_selection(app_page: Page, base_url:
     targets_count = expr_page.get_targets_count()
     assert int(targets_count) > 0, f"Expected >0 targets, got {targets_count}"
 
-    # Step 3 button text should contain both miRNAs and Targets
+    # The Target Genes CTA text should contain both miRNAs and Targets
     cta_text = expr_page.get_run_enrichment_button_text()
     assert "1 Selected miRNAs" in cta_text
     assert f"{targets_count} Targets" in cta_text

@@ -6,7 +6,7 @@ from tests.e2e.pages.genetic_page import GeneticPage
 
 
 def test_genetic_select_visible_and_clear(app_page: Page, base_url: str):
-    """Verify 'Select Visible' and 'Clear Selection' on Genetic Studies tab."""
+    """Verify header select-all and global selection clearing on Genetic tab."""
     gen_page = GeneticPage(app_page, base_url)
     gen_page.navigate_to_genetic()
 
@@ -14,8 +14,8 @@ def test_genetic_select_visible_and_clear(app_page: Page, base_url: str):
     assert gen_page.get_selected_count() == "0"
     assert not gen_page.is_run_enrichment_button_enabled()
 
-    # Click Select Visible
-    gen_page.click_select_visible()
+    # Check the header select-all checkbox to select all visible rows
+    gen_page.click_header_select_all()
     count = gen_page.get_selected_count()
     assert int(count) > 0
     assert gen_page.is_run_enrichment_button_enabled()
@@ -43,16 +43,13 @@ def test_genetic_header_select_all(app_page: Page, base_url: str):
 
 
 def test_genetic_search_and_row_details(app_page: Page, base_url: str):
-    """Verify search filter and expandable child row on Genetic Studies tab."""
+    """Verify alteration filter and expandable child row on Genetic Studies tab."""
     gen_page = GeneticPage(app_page, base_url)
     gen_page.navigate_to_genetic()
 
-    initial_count = gen_page.get_row_count()
-
-    # Search for CNV
-    gen_page.search("CNV")
-    filtered = gen_page.get_row_count()
-    assert 0 < filtered <= initial_count
+    # Filter by CNV alterations
+    gen_page.select_genetic_alteration("CNV")
+    assert gen_page.get_filtered_total() == 57
 
     # Expand row details
     gen_page.expand_row_details(0)
@@ -68,12 +65,14 @@ def test_genetic_reset_filters_button(app_page: Page, base_url: str):
     gen_page = GeneticPage(app_page, base_url)
     gen_page.navigate_to_genetic()
 
-    initial_count = gen_page.get_row_count()
-    gen_page.search("sequencing")
-    assert gen_page.get_row_count() < initial_count
+    assert gen_page.get_filtered_total() == 93
+
+    # Apply a study description keyword filter
+    gen_page.filter_study_desc("sequencing")
+    assert gen_page.get_filtered_total() == 5
 
     gen_page.click_reset_filters()
-    assert gen_page.get_row_count() == initial_count
+    assert gen_page.get_filtered_total() == 93
 
 
 def test_genetic_targets_count_updates_on_selection(app_page: Page, base_url: str):
@@ -92,7 +91,7 @@ def test_genetic_targets_count_updates_on_selection(app_page: Page, base_url: st
     targets_count = gen_page.get_targets_count()
     assert int(targets_count) > 0, f"Expected >0 targets, got {targets_count}"
 
-    # Step 3 button text should contain both miRNAs and Targets
+    # The Target Genes CTA text should contain both miRNAs and Targets
     cta_text = gen_page.get_run_enrichment_button_text()
     assert "1 Selected miRNAs" in cta_text
     assert f"{targets_count} Targets" in cta_text

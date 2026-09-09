@@ -1,5 +1,6 @@
 """Intermediate base Page Object for studies tables (Expression and Genetic)."""
 
+import re
 from typing import List
 
 from playwright.sync_api import Locator, Page
@@ -8,7 +9,7 @@ from tests.e2e.pages.base_page import BasePage
 
 
 class StudiesTablePage(BasePage):
-    """Reusable page component for studies DataTables and selection steppers."""
+    """Reusable page component for studies DataTables and global selection."""
 
     def __init__(
         self,
@@ -17,7 +18,6 @@ class StudiesTablePage(BasePage):
         tab_name: str,
         table_id: str,
         row_check_class: str,
-        badge_class: str,
         select_all_class: str,
         container_id: str,
         data_table_attr: str,
@@ -31,7 +31,6 @@ class StudiesTablePage(BasePage):
             tab_name: Navbar tab name ('expression' or 'genetic').
             table_id: DataTable element ID ('expression-table' or 'other-table').
             row_check_class: Class name of row checkboxes ('expr-row-check' etc).
-            badge_class: Selector of selection badge (e.g. '.expr-selected-count').
             select_all_class: Selector of master select-all checkbox.
             container_id: Selector of parent tab container (e.g. '#expression').
             data_table_attr: data-table attribute ('expression' or 'genetic').
@@ -40,7 +39,6 @@ class StudiesTablePage(BasePage):
         self.tab_name = tab_name
         self.table_id = table_id
         self.row_check_class = row_check_class
-        self.badge_class = badge_class
         self.select_all_class = select_all_class
         self.container_id = container_id
         self.data_table_attr = data_table_attr
@@ -73,39 +71,30 @@ class StudiesTablePage(BasePage):
         self.page.wait_for_timeout(400)
 
     def get_selected_count(self) -> str:
-        """Return the count text shown in the selection badge."""
-        badge = self.page.locator(self.badge_class).first
-        if badge.is_visible():
-            return badge.inner_text().strip()
-        return "0"
+        """Return the selected miRNA count from the global nav pill."""
+        text = self.page.locator("#global-nav-selected-text").inner_text().strip()
+        match = re.search(r"(\d+)\s*Selected", text)
+        return match.group(1) if match else "0"
 
     def get_targets_count(self) -> str:
-        """Return the target genes count text shown in the target badge."""
-        prefix = "expr" if self.data_table_attr == "expression" else "gen"
-        badge = self.page.locator(f".{prefix}-targets-count").first
+        """Return the target gene count badge text from the global nav pill."""
+        badge = self.page.locator("#global-nav-targets-text")
         if badge.is_visible():
-            return badge.inner_text().strip()
+            match = re.search(r"(\d+)", badge.inner_text().strip())
+            return match.group(1) if match else "0"
         return "0"
 
     def get_run_enrichment_button_text(self) -> str:
-        """Return the full text of the contextual Run Enrichment CTA button."""
+        """Return the full text of the Target Genes Run Enrichment CTA."""
         btn = self.page.locator(
-            f".btn-analyze-filtered[data-source-table='{self.data_table_attr}']"
+            ".btn-analyze-filtered[data-source-table='targets']"
         )
         return btn.inner_text().strip()
 
-    def click_select_visible(self) -> None:
-        """Click 'Select Visible' button for studies table."""
-        self.page.locator(
-            f".btn-select-all-visible[data-table='{self.data_table_attr}']"
-        ).click()
-        self.page.wait_for_timeout(500)
 
     def click_clear_selection(self) -> None:
-        """Click 'Clear Selection' button for studies table."""
-        self.page.locator(
-            f".btn-clear-selection[data-table='{self.data_table_attr}']"
-        ).click()
+        """Clear the global miRNA selection across all tables and tabs."""
+        self.page.evaluate("window.clearMiRNASelection();")
         self.page.wait_for_timeout(500)
 
     def click_header_select_all(self) -> None:
@@ -118,14 +107,15 @@ class StudiesTablePage(BasePage):
         return self.page.locator(self.select_all_class).is_checked()
 
     def click_reset_filters(self) -> None:
-        """Click 'Reset Filters' button in table toolbar."""
+        """Click the 'Reset Filters' link in the per-tab filter card header."""
         self.page.locator(f"{self.container_id} .btn-reset-table-filters").click()
         self.page.wait_for_timeout(500)
 
     def click_run_target_enrichment_button(self) -> None:
-        """Click contextual 'Run Target Enrichment' button."""
+        """Click the Target Genes tab 'Run Target Enrichment' CTA."""
+        self.switch_tab("targets")
         btn = self.page.locator(
-            f".btn-analyze-filtered[data-source-table='{self.data_table_attr}']"
+            ".btn-analyze-filtered[data-source-table='targets']"
         )
         btn.click()
         self.page.wait_for_timeout(600)
@@ -135,28 +125,32 @@ class StudiesTablePage(BasePage):
         self.click_run_target_enrichment_button()
 
     def is_run_enrichment_button_enabled(self) -> bool:
-        """Check if Run Target Enrichment button is enabled."""
+        """Check if the Target Genes Run Enrichment CTA is enabled."""
         btn = self.page.locator(
-            f".btn-analyze-filtered[data-source-table='{self.data_table_attr}']"
+            ".btn-analyze-filtered[data-source-table='targets']"
         )
         return not btn.is_disabled() and "disabled" not in (
             btn.get_attribute("class") or ""
         )
 
-    def search(self, query: str) -> None:
-        """
-        Filter table by typing query into DataTables search box.
-
-        Args:
-            query: Keyword to search.
-        """
-        search_input = self.page.locator(f"input[aria-controls='{self.table_id}']")
-        search_input.fill(query)
-        self.page.wait_for_timeout(500)
 
     def get_row_count(self) -> int:
-        """Return number of visible rows in table body."""
+        """Return the number of visible rows on the current table page."""
         return self.page.locator(f"#{self.table_id} tbody tr").count()
+
+    def get_filtered_total(self) -> int:
+        """
+        Parse the DataTables info text and return the total matching row count.
+
+        Unlike ``get_row_count()`` (visible rows on the current page), this
+        reflects the full post-filter dataset size from the "X of Y entries"
+        caption, so it is not capped by pagination.
+        """
+        info = self.page.locator(f"#{self.table_id}_info").inner_text()
+        m = re.search(r"of (\d+) entr(?:y|ies)", info)
+        if m:
+            return int(m.group(1))
+        return self.get_row_count()
 
     def expand_row_details(self, index: int = 0) -> None:
         """

@@ -1,44 +1,34 @@
-"""Page Object for Target Genes table and Database Switcher controls."""
+"""Page Object for Target Genes table, single-source DB badge, and inline filters."""
+
+import re
 
 from tests.e2e.pages.base_page import BasePage
 
 
 class TargetsPage(BasePage):
-    """Page component for Target Genes tab, database source switcher, and filters."""
+    """Page component for the Target Genes tab, DB badge, and per-tab filters."""
 
-    DB_RADIO_IDS = {
-        "mirtarbase": "#db-mirtarbase",
-        "consensus": "#db-consensus",
-        "tarbase": "#db-tarbase",
-        "all": "#db-all",
-    }
+    DB_BADGE_ID = "#active-db-label"
+    # Inline per-tab filter selectors (Target Genes Filters card)
+    FILTER_GENE = "#filter-target-gene"
+    FILTER_SFARI = "#filter-sfari-category"
+    FILTER_EVIDENCE = "#filter-evidence-level"
+    FILTER_METHOD = "#filter-target-method"
+    FILTER_REGULATION = "#filter-target-regulation"
+    FILTER_TISSUE = "#filter-target-tissue"
 
     def navigate_to_targets(self) -> None:
         """Switch to Target Genes tab and wait for DataTables to render."""
         self.switch_tab("targets")
         self.page.wait_for_selector("#targets-table tbody tr", timeout=15000)
 
-    def select_database(self, db_name: str) -> None:
-        """
-        Select a target interaction database source.
+    def get_database_badge_text(self) -> str:
+        """Return the single-source database badge text (e.g. 'miRTarBase 10.0')."""
+        return self.page.locator(self.DB_BADGE_ID).inner_text().strip()
 
-        Args:
-            db_name: One of 'mirtarbase', 'consensus', 'tarbase', 'all'.
-        """
-        radio_id = self.DB_RADIO_IDS.get(db_name)
-        if not radio_id:
-            raise ValueError(f"Unknown database name: {db_name}")
-        # Click the associated label to toggle btn-check
-        label = self.page.locator(f"label[for='{radio_id.lstrip('#')}']")
-        label.click()
-        self.page.wait_for_timeout(600)
-
-    def is_database_selected(self, db_name: str) -> bool:
-        """Check if a specific database radio is selected."""
-        radio_id = self.DB_RADIO_IDS.get(db_name)
-        if not radio_id:
-            return False
-        return self.page.locator(radio_id).is_checked()
+    def is_single_source_mirtarbase(self) -> bool:
+        """Check that the badge reflects the sole miRTarBase 10.0 source."""
+        return "miRTarBase" in self.get_database_badge_text()
 
     def get_active_count_text(self) -> str:
         """Return the text of the active interaction count badge."""
@@ -50,19 +40,56 @@ class TargetsPage(BasePage):
         badge = self.page.locator("#db-active-genes-count")
         return badge.inner_text().strip()
 
+    def get_filtered_total(self) -> int:
+        """
+        Return the total post-filter interaction count.
+
+        Parses the active interaction count badge (``#db-active-count``), which
+        reflects the full filtered dataset rather than the visible page.
+        """
+        digits = re.sub(r"\D", "", self.get_active_count_text())
+        return int(digits) if digits else 0
+
+
+
     def get_table_body_text(self) -> str:
         """Return text content of current visible rows in the targets table."""
         return self.page.locator("#targets-table tbody").inner_text()
 
     def search(self, query: str) -> None:
         """
-        Filter targets table by query in DataTables search box.
+        Filter targets table by gene symbol via the inline Target Gene filter.
 
         Args:
-            query: Keyword or gene symbol to search.
+            query: One or more newline/comma separated gene symbols ('' to clear).
         """
-        search_input = self.page.locator("input[aria-controls='targets-table']")
-        search_input.fill(query)
+        self.fill_filter_input(self.FILTER_GENE, query)
+        self.page.wait_for_timeout(300)
+
+    def select_sfari_category(self, value: str) -> None:
+        """Select an SFARI category option ('' for All Target Genes)."""
+        self.select_filter_option(self.FILTER_SFARI, value)
+
+    def select_evidence_level(self, value: str) -> None:
+        """Select an evidence level option ('' for All)."""
+        self.select_filter_option(self.FILTER_EVIDENCE, value)
+
+    def select_method(self, value: str) -> None:
+        """Select an experimental technique option ('' for All)."""
+        self.select_filter_option(self.FILTER_METHOD, value)
+
+    def select_regulation(self, value: str) -> None:
+        """Select a target regulation option ('' for All)."""
+        self.select_filter_option(self.FILTER_REGULATION, value)
+
+    def filter_tissue(self, value: str) -> None:
+        """Set the tissue / cell source filter ('' to clear)."""
+        self.fill_filter_input(self.FILTER_TISSUE, value)
+
+    def reset_target_filters(self) -> None:
+        """Click the per-tab 'Clear All' (targets scope) filter reset button."""
+        sel = '#targets .btn-clear-all-chips[data-reset-scope="targets"]'
+        self.page.locator(sel).click()
         self.page.wait_for_timeout(500)
 
     def get_row_count(self) -> int:

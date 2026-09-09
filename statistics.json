@@ -16,13 +16,9 @@
         "OMSCs": 4
     },
     "target_stats": {
-        "total_target_genes": 3281,
-        "total_sfari_target_genes": 901,
-        "total_target_interactions": 78153,
-        "consensus_interactions": 7492,
-        "mirtarbase_only_interactions": 9658,
-        "tarbase_only_interactions": 61003,
-        "mirtarbase_total_interactions": 17150,
-        "tarbase_total_interactions": 68495
+        "total_target_genes": 2995,
+        "total_sfari_target_genes": 843,
+        "total_target_interactions": 17150,
+        "mirtarbase_interactions": 17150
     }
 }

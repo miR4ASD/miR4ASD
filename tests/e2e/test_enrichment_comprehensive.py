@@ -215,10 +215,10 @@ def test_enrichment_api_error_notice(app_page: Page, base_url: str):
     assert "error" in enrichment_page.get_error_alert_message().lower()
 
 
-def test_enrichment_database_switcher_updates_target_gene_count(
+def test_enrichment_single_source_badge_and_gene_count(
     app_page: Page, base_url: str
 ):
-    """Verify switching database source updates target gene counts dynamically."""
+    """Verify the enrichment tab reflects the single miRTarBase 10.0 source."""
     expr_page = ExpressionPage(app_page, base_url)
     enrichment_page = EnrichmentPage(app_page, base_url)
 
@@ -229,39 +229,11 @@ def test_enrichment_database_switcher_updates_target_gene_count(
     # Navigate to Functional Enrichment
     enrichment_page.navigate_to_enrichment()
 
-    # 1. miRTarBase (default): 78 target genes
-    assert enrichment_page.is_database_selected("mirtarbase")
-    stats_mirtarbase = enrichment_page.get_gene_set_stats_text()
-    assert "78" in stats_mirtarbase
-    assert enrichment_page.get_chips_count() == 78
-    assert "78" in enrichment_page.get_run_button_text()
+    # Single source badge
+    assert enrichment_page.is_single_source_mirtarbase()
+    assert enrichment_page.get_database_badge_text() == "miRTarBase 10.0"
 
-    # 2. Consensus: 73 target genes
-    enrichment_page.select_database("consensus")
-    assert enrichment_page.is_database_selected("consensus")
-    stats_consensus = enrichment_page.get_gene_set_stats_text()
-    assert "73" in stats_consensus
-    assert enrichment_page.get_chips_count() == 73
-    assert "73" in enrichment_page.get_run_button_text()
-
-    # 3. TarBase: 792 target genes
-    enrichment_page.select_database("tarbase")
-    assert enrichment_page.is_database_selected("tarbase")
-    stats_tarbase = enrichment_page.get_gene_set_stats_text()
-    assert "792" in stats_tarbase
-    assert enrichment_page.get_chips_count() == 792
-    assert "792" in enrichment_page.get_run_button_text()
-
-    # 4. All Sources (Union): 797 target genes
-    enrichment_page.select_database("all")
-    assert enrichment_page.is_database_selected("all")
-    stats_all = enrichment_page.get_gene_set_stats_text()
-    assert "797" in stats_all
-    assert enrichment_page.get_chips_count() == 797
-    assert "797" in enrichment_page.get_run_button_text()
-
-    # 5. Return to miRTarBase: 78 target genes
-    enrichment_page.select_database("mirtarbase")
-    assert enrichment_page.is_database_selected("mirtarbase")
+    # miRTarBase 10.0: 78 target genes for the selected miRNA
     assert "78" in enrichment_page.get_gene_set_stats_text()
     assert enrichment_page.get_chips_count() == 78
+    assert "78" in enrichment_page.get_run_button_text()

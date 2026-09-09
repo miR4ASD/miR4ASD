@@ -49,36 +49,27 @@ class BasePage:
         pane = self.page.locator(f"#{tab_name}.tab-pane.active")
         return pane.is_visible()
 
-    def open_filter_drawer(self) -> None:
-        """Open the slide-over advanced filter drawer."""
-        btn = self.page.locator(".tab-pane.active .btn-filter, .btn-filter:visible")
-        if btn.count() == 0 or not btn.first.is_visible():
-            self.switch_tab("expression")
-            self.page.wait_for_selector(".btn-filter:visible", timeout=15000)
-        self.page.locator(
-            ".tab-pane.active .btn-filter, .btn-filter:visible"
-        ).first.click()
-        self.page.wait_for_selector("#filterDrawer.open", timeout=5000)
+    def fill_filter_input(self, selector: str, text: str) -> None:
+        """
+        Fill a per-tab inline filter input/textarea and wait for debounced apply.
 
-    def close_filter_drawer(self) -> None:
-        """Close the slide-over filter drawer."""
-        self.page.locator("#closeFilterDrawer").click()
-        self.page.wait_for_timeout(300)
+        Args:
+            selector: CSS selector of the filter input or textarea.
+            text: Text to enter (may contain multiple newline/comma separated tokens).
+        """
+        self.page.locator(selector).fill(text)
+        self.page.wait_for_timeout(400)
 
-    def close_filter_drawer_via_apply(self) -> None:
-        """Close filter drawer by clicking Apply & Close button."""
-        self.page.locator("#closeFilterDrawerBtn").click()
-        self.page.wait_for_timeout(300)
+    def select_filter_option(self, selector: str, option: str) -> None:
+        """
+        Select a per-tab inline filter <select> option by value.
 
-    def close_filter_drawer_via_backdrop(self) -> None:
-        """Close filter drawer by clicking backdrop overlay."""
-        self.page.locator("#drawerBackdrop").click(position={"x": 10, "y": 10})
-        self.page.wait_for_timeout(300)
-
-    def is_filter_drawer_open(self) -> bool:
-        """Check if filter drawer has open CSS class applied."""
-        drawer = self.page.locator("#filterDrawer")
-        return "open" in (drawer.get_attribute("class") or "")
+        Args:
+            selector: CSS selector of the filter select element.
+            option: Option value to select ('' for the default/All option).
+        """
+        self.page.locator(selector).select_option(option)
+        self.page.wait_for_timeout(400)
 
     def click_back_to_top(self) -> None:
         """Click floating back to top button."""
