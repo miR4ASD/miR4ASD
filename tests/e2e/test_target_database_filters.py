@@ -30,9 +30,9 @@ def test_inline_filter_counts(app_page: Page, base_url: str):
         (lambda: targets_page.search("ANK2"), "27", "1"),
         (lambda: targets_page.select_sfari_category("Category 1"), "2,567", "143"),
         (
-            lambda: targets_page.select_evidence_level("Strong Evidence"),
-            "5,730",
-            "2,372",
+            lambda: targets_page.select_support_type("Functional MTI"),
+            "5,676",
+            "2,357",
         ),
         (
             lambda: targets_page.select_method("Luciferase Reporter Assay"),

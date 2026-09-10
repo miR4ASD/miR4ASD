@@ -189,9 +189,9 @@ def test_user_story_4_end_to_end_enrichment_pipeline(
     """
     US-04: End-to-end functional enrichment workflow from miRNA selection to reports.
 
-    Validates candidate selection in Expression Studies, derivation in Functional
-    Enrichment, real-time scope switching, mocked g:Profiler execution,
-    metrics ribbon, chart canvas, results table, and export capabilities.
+    Validates candidate selection in Expression Studies, target-gene derivation
+    in Functional Enrichment, mocked g:Profiler execution, metrics ribbon,
+    chart canvas, results table, and export capabilities.
     """
     expr_page = ExpressionPage(app_page, base_url)
     enrichment_page = EnrichmentPage(app_page, base_url)
@@ -220,15 +220,9 @@ def test_user_story_4_end_to_end_enrichment_pipeline(
     assert "78" in enrichment_page.get_gene_set_stats_text()
     assert enrichment_page.get_chips_count() == 78
 
-    # 4. Target scope switching
-    enrichment_page.select_target_scope("strong")
-    assert enrichment_page.is_scope_selected("strong")
-    enrichment_page.select_target_scope("sfari")
-    assert enrichment_page.is_scope_selected("sfari")
-    enrichment_page.select_target_scope("brain")
-    assert enrichment_page.is_scope_selected("brain")
-    enrichment_page.select_target_scope("all")
-    assert enrichment_page.is_scope_selected("all")
+    # 4. The CTA is ready to run once the 78 target genes are derived.
+    assert enrichment_page.is_run_button_enabled()
+    assert "78" in enrichment_page.get_run_button_text()
 
     # 5. Execute Enrichment Analysis
     enrichment_page.click_run_enrichment()

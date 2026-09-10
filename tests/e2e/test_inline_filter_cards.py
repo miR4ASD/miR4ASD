@@ -2,7 +2,6 @@
 
 from playwright.sync_api import Page
 
-from tests.e2e.pages.enrichment_page import EnrichmentPage
 from tests.e2e.pages.expression_page import ExpressionPage
 from tests.e2e.pages.genetic_page import GeneticPage
 from tests.e2e.pages.targets_page import TargetsPage
@@ -145,21 +144,26 @@ def test_targets_card_gene_filter_and_reset(app_page: Page, base_url: str):
     assert targets_page.get_active_genes_count_text() == "2,995"
 
 
-def test_enrichment_scope_toggle_round_trip(app_page: Page, base_url: str):
-    """Verify enrichment target-scope radios select and toggle back to All."""
+def test_targets_view_mode_round_trip(app_page: Page, base_url: str):
+    """Selecting a miRNA auto-scopes targets; view modes round-trip correctly."""
     expr_page = ExpressionPage(app_page, base_url)
-    enrichment_page = EnrichmentPage(app_page, base_url)
+    targets_page = TargetsPage(app_page, base_url)
 
     expr_page.navigate_to_expression()
     expr_page.select_row_by_index(0)
-    expr_page.click_run_target_enrichment_button()
 
-    assert enrichment_page.is_scope_selected("all")
-    enrichment_page.select_target_scope("brain")
-    assert enrichment_page.is_scope_selected("brain")
-    assert not enrichment_page.is_scope_selected("all")
+    # Selecting a miRNA auto-scopes the targets table (selected-miRNA view).
+    targets_page.navigate_to_targets()
+    assert targets_page.get_active_view_mode() == "selected-mirna"
+    scoped = targets_page.get_filtered_total()
+    assert 0 < scoped < 17150
 
-    # Clicking the active scope toggles it back to All Targets
-    enrichment_page.select_target_scope("brain")
-    assert enrichment_page.is_scope_selected("all")
-    assert not enrichment_page.is_scope_selected("brain")
+    # Switching to "All" reveals the full catalog.
+    targets_page.set_view_mode("all")
+    assert targets_page.get_active_view_mode() == "all"
+    assert targets_page.get_filtered_total() == 17150
+
+    # Switching back to "Selected miRNAs" restores the scoped subset.
+    targets_page.set_view_mode("selected-mirna")
+    assert targets_page.get_active_view_mode() == "selected-mirna"
+    assert targets_page.get_filtered_total() == scoped

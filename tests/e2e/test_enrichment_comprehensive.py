@@ -8,40 +8,24 @@ from tests.e2e.pages.enrichment_page import EnrichmentPage
 from tests.e2e.pages.expression_page import ExpressionPage
 
 
-def test_enrichment_target_scope_switching(app_page: Page, base_url: str):
-    """Verify switching target scope radios updates gene scope and badges."""
+def test_enrichment_gene_set_derives_from_selection(app_page: Page, base_url: str):
+    """Selecting miRNAs auto-populates the enrichment gene set; the CTA tracks it."""
     expr_page = ExpressionPage(app_page, base_url)
     enrichment_page = EnrichmentPage(app_page, base_url)
 
-    # Select miRNA in Expression Studies
+    # With no selection the enrichment CTA is disabled (awaiting miRNAs).
+    enrichment_page.navigate_to_enrichment()
+    assert not enrichment_page.is_run_button_enabled()
+
+    # Selecting a miRNA (hsa-let-7a-5p) populates 78 target genes.
     expr_page.navigate_to_expression()
     expr_page.select_row_by_index(0)
-
-    # Navigate to Functional Enrichment
     enrichment_page.navigate_to_enrichment()
 
-    # Scope: All Targets (default)
-    assert enrichment_page.is_scope_selected("all")
-
-    # Scope: Strong Evidence
-    enrichment_page.select_target_scope("strong")
-    assert enrichment_page.is_scope_selected("strong")
-
-    # Scope: SFARI Genes
-    enrichment_page.select_target_scope("sfari")
-    assert enrichment_page.is_scope_selected("sfari")
-
-    # Scope: SFARI Category 1
-    enrichment_page.select_target_scope("sfari-cat1")
-    assert enrichment_page.is_scope_selected("sfari-cat1")
-
-    # Scope: Brain Expressed
-    enrichment_page.select_target_scope("brain")
-    assert enrichment_page.is_scope_selected("brain")
-
-    # Return to All
-    enrichment_page.select_target_scope("all")
-    assert enrichment_page.is_scope_selected("all")
+    assert enrichment_page.is_run_button_enabled()
+    assert "78" in enrichment_page.get_gene_set_stats_text()
+    assert enrichment_page.get_chips_count() == 78
+    assert "78" in enrichment_page.get_run_button_text()
 
 
 def test_enrichment_custom_gene_editor(app_page: Page, base_url: str):

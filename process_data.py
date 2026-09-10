@@ -456,6 +456,7 @@ def process_target_genes(
                     "pmids": set(),
                     "has_strong": False,
                     "has_clip": False,
+                    "has_functional": False,
                     "is_sfari": is_sfari,
                 }
 
@@ -463,6 +464,7 @@ def process_target_genes(
             entry["sources"].add("miRTarBase")
             if is_strong:
                 entry["has_strong"] = True
+                entry["has_functional"] = True
 
             experiments_raw = row.get("Experiments") or ""
             for exp in experiments_raw.split("//"):
@@ -549,6 +551,9 @@ def process_target_genes(
                 "is_sfari": is_sfari,
                 "sfari_score": sfari_score if sfari_score else "Non-SFARI",
                 "evidence_level": evidence_level,
+                "support_type": (
+                    "Functional MTI" if data["has_functional"] else "Weak Support"
+                ),
                 "database_source": db_source,
                 "experimental_methods": methods_str,
                 "regulation": regs_str,

@@ -71,36 +71,17 @@ def test_all_interactive_buttons_and_filter_radios_have_tooltips(
     app_page.goto(base_url, wait_until="domcontentloaded")
     app_page.wait_for_timeout(500)
 
-    # 1. Target Scope filter button labels in Enrichment tab
-    scope_radios = [
-        "scope-all",
-        "scope-strong",
-        "scope-sfari",
-        "scope-sfari-cat1",
-        "scope-brain",
-        "scope-upregulated",
-        "scope-downregulated",
-    ]
-    for scope_id in scope_radios:
-        label = app_page.locator(f"label[for='{scope_id}']")
-        assert label.count() > 0, f"Missing label for {scope_id}"
-        title = label.get_attribute("title") or label.get_attribute(
+    # 1. Target Genes view-mode buttons (Targets tab) carry descriptive tooltips.
+    view_modes = ["all", "selected-mirna", "selected-only"]
+    for mode in view_modes:
+        btn = app_page.locator(f'.targets-view-btn[data-view-mode="{mode}"]')
+        assert btn.count() > 0, f"Missing view-mode button for {mode}"
+        title = btn.get_attribute("title") or btn.get_attribute(
             "data-bs-original-title"
         )
         assert title and len(title.strip()) > 10, (
-            f"Scope label '{scope_id}' missing or too short tooltip: '{title}'"
+            f"View-mode button '{mode}' missing or too short tooltip: '{title}'"
         )
-
-    # Verify Brain Targets tooltip specifically mentions brain tissue and validation
-    brain_label = app_page.locator("label[for='scope-brain']")
-    brain_title = (
-        brain_label.get_attribute("title")
-        or brain_label.get_attribute("data-bs-original-title")
-        or ""
-    ).lower()
-    assert "brain" in brain_title and (
-        "experimentally" in brain_title or "validated" in brain_title
-    ), f"Brain Targets tooltip does not explain data provenance: '{brain_title}'"
 
     # 2. Single-source database badges (Targets tab and Enrichment tab)
     db_badges = ["#active-db-label", "#enrichment-db-badge"]

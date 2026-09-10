@@ -49,21 +49,6 @@ class EnrichmentPage(BasePage):
             btn.get_attribute("class") or ""
         )
 
-    def select_target_scope(self, scope: str) -> None:
-        """
-        Select a target gene scope radio button.
-
-        Args:
-            scope: One of 'all', 'strong', 'sfari', 'sfari-cat1', 'brain',
-                   'upregulated', 'downregulated'.
-        """
-        label = self.page.locator(f"label[for='scope-{scope}']")
-        label.click()
-        self.page.wait_for_timeout(400)
-
-    def is_scope_selected(self, scope: str) -> bool:
-        """Check if target scope radio is selected."""
-        return self.page.locator(f"#scope-{scope}").is_checked()
 
     def toggle_gene_editor(self) -> None:
         """Toggle collapsible custom gene editor textarea."""

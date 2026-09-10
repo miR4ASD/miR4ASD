@@ -1237,20 +1237,19 @@
                                                                         <li><span class="badge bg-danger-subtle text-danger border rounded-pill"><span class="sfari-tag sfari-tag-cat1 me-1">1</span>SFARI Cat 1 (High Confidence):</span> Rigorously validated risk genes with &ge;3 <em>de novo</em> likely gene-disrupting mutations in ASD.</li>
                                                                         <li><span class="badge border rounded-pill" style="background-color: #fef3c7; color: #92400e;"><span class="sfari-tag sfari-tag-cat2 me-1">2</span>SFARI Cat 2 (Strong Candidate):</span> Genes with 2 <em>de novo</em> LGD mutations or genome-wide significance.</li>
                                                                         <li><span class="badge bg-info-subtle text-info border rounded-pill"><span class="sfari-tag sfari-tag-cat3 me-1">3</span>SFARI Cat 3 (Suggestive):</span> Genes with suggestive single-study evidence.</li>
-                                                                        <li><span class="badge border rounded-pill" style="background-color: #f3e8ff; color: #6b21a8;"><span class="sfari-tag sfari-tag-syn me-1">S</span>SFARI Syndromic:</span> Genes associated with established ASD-penetrant genetic syndromes.</li>
+                                                                        <li><span class="badge border rounded-pill" style="background-color: #f3e9ff; color: #6b21a5;"><span class="sfari-tag sfari-tag-syn me-1">S</span>SFARI Syndromic:</span> Genes associated with established ASD-penetrant genetic syndromes.</li>
                                                                         <li><span class="badge border rounded-pill" style="background-color: #f8fafc; color: #334155; border-color: #cbd5e1;"><span class="sfari-tag-group me-1"><span class="sfari-tag sfari-tag-cat2">2</span><span class="sfari-tag sfari-tag-syn">S</span></span>Dual Status:</span> Genes classified with both a numeric risk tier and syndromic predisposition (e.g., <code>PTEN</code>).</li>
-                                                                        <li><span class="badge bg-light text-secondary border rounded-pill">Other Target:</span> Validated target genes not currently cataloged in SFARI.</li>
+                                                                        <li><span class="badge bg-light text-secondary border rounded-pill">Other:</span> Validated target genes not currently cataloged in SFARI.</li>
                                                                     </ul>
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Evidence Level</strong></td>
-                                                                <td>Experimental evidence classification tier from miRTarBase 10.0.</td>
+                                                                <td><strong>Support Type</strong></td>
+                                                                <td>Experimental support classification of the miRNA-target interaction from miRTarBase 10.0.</td>
                                                                 <td>
                                                                     <ul class="mb-0 ps-3" style="font-size: 0.85rem;">
-                                                                        <li><span class="badge bg-success-subtle text-success border rounded-pill">Strong Evidence:</span> Direct low-throughput molecular assays (Luciferase Reporter, Western Blot, qPCR, Northern Blot, ELISA).</li>
-                                                                        <li><span class="badge bg-primary-subtle text-primary border rounded-pill">Direct Binding (CLIP/CLASH):</span> High-throughput physical cross-linking and sequencing (HITS-CLIP, PAR-CLIP, CLASH, qCLASH, RIP-Seq, AGO-IP).</li>
-                                                                        <li><span class="badge bg-secondary-subtle text-secondary border rounded-pill">High-Throughput Expression:</span> Whole-transcriptome profiling (RNA-Seq, Microarrays, sRNA-Seq).</li>
+                                                                        <li><span class="badge bg-success-subtle text-success border rounded-pill">Functional MTI:</span> Supported by at least one functional microRNA-target interaction (Luciferase Reporter, Western Blot, qPCR, Northern Blot, ELISA, etc.).</li>
+                                                                        <li><span class="badge bg-secondary-subtle text-secondary border rounded-pill">Weak Support:</span> Supported only by weak-evidence functional interactions.</li>
                                                                     </ul>
                                                                 </td>
                                                             </tr>
@@ -1260,9 +1259,9 @@
                                                                 <td>Clickable PMID badges (e.g. <code>24312487</code>, <code>20144220</code>).</td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Experimental Methods</strong> <span class="badge bg-light text-secondary border ms-1" style="font-size: 0.7rem;">Extended Details</span></td>
-                                                                <td>Exact laboratory techniques used to confirm the miRNA-target interaction (viewable in row details &amp; Target Genes tab filters).</td>
-                                                                <td>Semicolon-separated methods (e.g. <code>Luciferase Reporter Assay</code>, <code>Western Blot</code>, <code>HITS-CLIP</code>, <code>qPCR</code>).</td>
+                                                                <td><strong>Experiments</strong></td>
+                                                                <td>Exact laboratory techniques used to confirm the miRNA-target interaction.</td>
+                                                                <td>Semicolon-separated methods (e.g. <code>Luciferase reporter assay</code>, <code>Western blot</code>, <code>HITS-CLIP</code>, <code>qRT-PCR</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Regulation</strong> <span class="badge bg-light text-secondary border ms-1" style="font-size: 0.7rem;">Extended Details</span></td>
@@ -1302,7 +1301,7 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td><strong>Study</strong></td>
-                                                                <td>Author-year citation key with direct clickable DOI hyperlink to the publisher's article.</td>
+                                                                <td><strong>Description</strong></td>
                                                                 <td><code>Seno (2011)</code>, <code>Vasu (2014)</code>, <code>Mundalil (2014)</code></td>
                                                             </tr>
                                                             <tr>
@@ -1607,9 +1606,17 @@
                                 </span>
                             </div>
                             <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <button type="button" class="btn btn-sm btn-outline-warning fw-bold" id="btn-toggle-targets-scope" data-bs-toggle="tooltip" data-bs-placement="top" title="Toggle between the full interaction catalog and only the targets of selected miRNAs" disabled>
-                                    <i class="fa-solid fa-list-ul me-1"></i><span class="targets-scope-label">Show all interactions</span>
-                                </button>
+                                <div class="btn-group" role="group" aria-label="Targets view mode">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary fw-bold targets-view-btn" data-view-mode="all" data-bs-toggle="tooltip" data-bs-placement="top" title="Show the full miRTarBase interaction catalog">
+                                        <i class="fa-solid fa-table me-1"></i> All interactions
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary fw-bold targets-view-btn" data-view-mode="selected-mirna" data-bs-toggle="tooltip" data-bs-placement="top" title="Show only the interactions of the selected miRNAs">
+                                        <i class="fa-solid fa-bullseye me-1"></i> Selected miRNAs
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary fw-bold targets-view-btn" data-view-mode="selected-only" data-bs-toggle="tooltip" data-bs-placement="top" title="Show only the individually selected target rows">
+                                        <i class="fa-solid fa-check-double me-1"></i> Selected targets
+                                    </button>
+                                </div>
                                 <button type="button" class="btn btn-sm btn-secondary opacity-75 fw-bold btn-analyze-filtered shadow-sm" data-source-table="targets" data-bs-toggle="tooltip" data-bs-placement="top" title="Transfer selected candidate miRNAs and open the Functional Enrichment tab" disabled>
                                     <i class="fa-solid fa-dna me-1 text-warning"></i> <span class="target-enrich-label">Select miRNAs in tables to run Target Enrichment</span>
                                 </button>
@@ -1682,17 +1689,16 @@
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-6 col-12">
-                                <label for="filter-evidence-level" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Evidence Level</label>
-                                <select id="filter-evidence-level" class="form-select form-select-sm" aria-label="Filter by Target Evidence Level">
-                                    <option value="">All Evidence Levels</option>
-                                    <option value="Strong Evidence">Strong Evidence (Reporter / WB / qPCR)</option>
-                                    <option value="Direct Binding">Direct Binding (CLIP / CLASH / RIP)</option>
-                                    <option value="High-Throughput">High-Throughput Expression (RNA-Seq / Microarrays)</option>
+                                <label for="filter-support-type" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Support Type</label>
+                                <select id="filter-support-type" class="form-select form-select-sm" aria-label="Filter by Target Support Type">
+                                    <option value="">All Support Types</option>
+                                    <option value="Functional MTI">Functional MTI</option>
+                                    <option value="Weak Support">Weak Support</option>
                                 </select>
                             </div>
                             <div class="col-lg-3 col-md-6 col-12">
-                                <label for="filter-target-method" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Experimental Technique</label>
-                                <select id="filter-target-method" class="form-select form-select-sm" aria-label="Filter by Experimental Technique">
+                                <label for="filter-target-method" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Experiments</label>
+                                <select id="filter-target-method" class="form-select form-select-sm" aria-label="Filter by Experiments">
                                     <option value="">All Experimental Methods</option>
                                     <option value="Luciferase Reporter Assay">Luciferase Reporter Assay</option>
                                     <option value="Western Blot">Western Blot</option>
@@ -1729,15 +1735,18 @@
                     <table id="targets-table" class="display" style="width:100%">
                         <thead>
                             <tr>
+                                <th scope="col" style="width: 32px;" class="text-center">
+                                    <input type="checkbox" class="select-all-targets form-check-input" style="position: relative; z-index: 5; cursor: pointer;" title="Select / deselect all filtered target interactions" aria-label="Select all filtered target interactions">
+                                </th>
                                 <th scope="col" style="width: 24px;" aria-label="Row details"><span class="visually-hidden">Details</span></th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Stem-loop precursor miRNA(s) encoding this mature regulatory RNA.">Precursor miRNA</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Mature microRNA identifier with direct experimental validation for this target gene.">Mature miRNA</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Official HGNC gene symbol (hyperlinked directly to GeneCards human gene catalog).">Target Gene</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Full protein-coding gene name and biological function description.">Gene Description</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="SFARI Gene autism susceptibility tier: Category 1 (High Confidence), Cat 2 (Candidate), Cat 3 (Suggestive), or Syndromic.">ASD Susceptibility (SFARI)</th>
-                                <th scope="col" data-bs-toggle="tooltip" title="Experimental validation tier: Strong Evidence (Reporter/WB/qPCR), CLIP/CLASH (Physical binding), or High-Throughput Expression.">Evidence Level</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Experimental support classification: Functional MTI (at least one functional microRNA-target interaction) or Weak Support (weak-evidence only).">Support Type</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="PubMed Identifiers (PMIDs) of primary research articles supporting the interaction.">PubMed Reference</th>
-                                <th scope="col">Experimental Methods</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Exact laboratory techniques used to validate the miRNA-target interaction.">Experiments</th>
                                 <th scope="col">Regulation</th>
                                 <th scope="col">Tissue / Cell Source</th>
                             </tr>
@@ -1811,34 +1820,6 @@
                             </div>
                         </div>
 
-                        <!-- Target Gene Filters (Single cohesive row of filter pills, no presets) -->
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold text-secondary text-uppercase mb-1" style="font-size: 0.75rem; letter-spacing: 0.05em;">
-                                <i class="fa-solid fa-filter text-primary me-1"></i>Filter Target Genes by Evidence & ASD Risk:
-                            </label>
-                            <div class="btn-group w-100 flex-wrap" role="group" aria-label="Target Filters">
-                                <input type="radio" class="btn-check" name="target-scope" id="scope-all" value="all" checked>
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-all" data-bs-toggle="tooltip" data-bs-placement="top" title="Analyze all validated target genes of selected miRNAs across all tissues">All Targets</label>
-
-                                <input type="radio" class="btn-check" name="target-scope" id="scope-strong" value="strong">
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-strong" data-bs-toggle="tooltip" data-bs-placement="top" title="Include only target genes validated by low-throughput experiments (Luciferase, Western blot, or qPCR)"><i class="fa-solid fa-check-double me-1"></i>Strong Evidence</label>
-
-                                <input type="radio" class="btn-check" name="target-scope" id="scope-sfari" value="sfari">
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-sfari" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict to target genes curated in the SFARI Gene autism risk database (all categories)"><i class="fa-solid fa-dna me-1 text-primary"></i>SFARI (All)</label>
-
-                                <input type="radio" class="btn-check" name="target-scope" id="scope-sfari-cat1" value="sfari_cat1">
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-sfari-cat1" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict strictly to high-confidence ASD risk genes (SFARI Category 1)"><span class="sfari-tag sfari-tag-cat1 me-1">1</span>SFARI Cat 1</label>
-
-                                <input type="radio" class="btn-check" name="target-scope" id="scope-brain" value="brain">
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-brain" data-bs-toggle="tooltip" data-bs-placement="top" title="Include only target genes with experimentally validated miRNA interactions in human brain tissue"><i class="fa-solid fa-brain text-info me-1"></i>Brain Targets</label>
-
-                                <input type="radio" class="btn-check" name="target-scope" id="scope-upregulated" value="upregulated">
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-upregulated" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict to target genes regulated by miRNAs reported as upregulated in ASD"><i class="fa-solid fa-arrow-up text-success me-1"></i>Upregulated miRNA Targets</label>
-
-                                <input type="radio" class="btn-check" name="target-scope" id="scope-downregulated" value="downregulated">
-                                <label class="btn btn-outline-primary btn-sm py-2" for="scope-downregulated" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict to target genes regulated by miRNAs reported as downregulated in ASD"><i class="fa-solid fa-arrow-down text-danger me-1"></i>Downregulated miRNA Targets</label>
-                            </div>
-                        </div>
 
                             <!-- Collapsible Gene Editor & Chips Box -->
                             <div class="bg-light p-3 rounded-3 border mb-3">
@@ -2142,8 +2123,7 @@
             '<thead style="background-color: #F8FAFC; border-bottom: 2px solid #E2E8F0;">' +
                 '<tr>' +
                     '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Study</th>' +
-                    '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Description / Title</th>' +
-                    '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Study Type</th>';
+                    '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Description</th>';
         
         if (showTissue) {
             table += '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Tissue Type</th>' +
@@ -2167,8 +2147,7 @@
 
             table += '<tr>' +
                 '<td class="align-middle">' + studyLink + '</td>' +
-                '<td class="align-middle text-secondary" style="max-width: 320px; font-size: 0.8rem; line-height: 1.4;">' + (d["Description"] || '') + '</td>' +
-                '<td class="align-middle"><span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded" style="font-size: 0.75rem; font-weight: normal; background-color: #F1F5F9 !important; color: #475569 !important; border-color: #E2E8F0 !important;">' + (d["Study Type"] || '') + '</span></td>';
+                '<td class="align-middle text-secondary" style="max-width: 320px; font-size: 0.8rem; line-height: 1.4;">' + (d["Description"] || '') + '</td>';
             
             if (showTissue) {
                 table += '<td class="align-middle">' + (d["Tissue type"] || '') + '</td>' +
@@ -2275,17 +2254,6 @@
             DEFAULT_TOAST_DELAY: 6000
         });
 
-        // Fast Filter & Target Scope Configuration
-        const TARGET_SCOPE_CONFIG = Object.freeze({
-            'all': { label: 'All Targets', summaryLabel: 'All' },
-            'strong': { label: 'Strong Evidence', summaryLabel: 'Strong Evidence' },
-            'sfari': { label: 'SFARI (All)', summaryLabel: 'SFARI (All)' },
-            'sfari_cat1': { label: 'SFARI Cat 1', summaryLabel: 'SFARI Cat 1' },
-            'brain': { label: 'Brain Targets', summaryLabel: 'Brain Targets' },
-            'upregulated': { label: 'Upregulated Targets', summaryLabel: 'Upregulated Targets' },
-            'downregulated': { label: 'Downregulated Targets', summaryLabel: 'Downregulated Targets' }
-        });
-
 
         // SFARI Risk Classification Helpers
         function getSfariSymbolsHtml(score) {
@@ -2315,7 +2283,6 @@
             }
             return tokens;
         }
-
         function renderSfariTableBadge(data) {
             if (!data || data === 'Non-SFARI') {
                 return '<span class="badge bg-light text-secondary border px-2 py-1 rounded-pill" style="font-size: 0.78rem; border-color: #e2e8f0 !important;">Other Target</span>';
@@ -2630,6 +2597,19 @@
             `target_genes.json?v=${DB_VERSION}`,
             [
                 {
+                    "orderable": false,
+                    "searchable": false,
+                    "className": 'select-checkbox-cell',
+                    "data": null,
+                    "render": function(data, type, row) {
+                        const mature = cleanString(row.mature_mirna);
+                        const gene = row.gene_symbol ? cleanString(row.gene_symbol).toUpperCase() : '';
+                        const key = mature + '|' + gene;
+                        const isChecked = selectedTargetKeys.has(key) ? 'checked' : '';
+                        return `<input type="checkbox" class="form-check-input target-row-check" data-key="${key}" data-mature="${mature}" data-gene="${gene}" value="${key}" ${isChecked} aria-label="Select target ${gene}">`;
+                    }
+                },
+                {
                     "className":      'details-control',
                     "orderable":      false,
                     "searchable":     false,
@@ -2670,15 +2650,12 @@
                     }
                 },
                 {
-                    "data": "evidence_level",
+                    "data": "support_type",
                     "render": function(data) {
-                        if (data === 'Strong Evidence') {
-                            return '<span class="badge bg-success-subtle text-success border px-2 py-1 rounded-pill" style="font-size: 0.75rem;"><i class="fa-solid fa-check-double me-1"></i>Strong Evidence</span>';
+                        if (data === 'Functional MTI') {
+                            return '<span class="badge bg-success-subtle text-success border px-2 py-1 rounded-pill" style="font-size: 0.75rem;"><i class="fa-solid fa-check-double me-1"></i>Functional MTI</span>';
                         }
-                        if (data && data.includes('CLIP')) {
-                            return '<span class="badge bg-primary-subtle text-primary border px-2 py-1 rounded-pill" style="font-size: 0.75rem;"><i class="fa-solid fa-dna me-1"></i>CLIP / Binding</span>';
-                        }
-                        return '<span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded-pill" style="font-size: 0.75rem;"><i class="fa-solid fa-microchip me-1"></i>High-Throughput</span>';
+                        return '<span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded-pill" style="font-size: 0.75rem;"><i class="fa-solid fa-minus-circle me-1"></i>Weak Support</span>';
                     }
                 },
                 {
@@ -2693,7 +2670,7 @@
                         return html;
                     }
                 },
-                { "data": "experimental_methods", "visible": false },
+                { "data": "experimental_methods" },
                 { "data": "regulation", "visible": false },
                 { "data": "tissue", "visible": false }
             ]
@@ -2705,11 +2682,16 @@
         // Target Genes table to those miRNAs' interactions, and the
         // "selected only" toggles mirror that selection per table.
         // ============================================================
-        let targetsShowAllOverride = false;   // Targets: show full catalog vs. selected-miRNA scope
+        // Targets view mode: 'all' (full catalog), 'selected-mirna' (targets of the
+        // selected miRNAs — the default, auto-scopes as the selection changes), or
+        // 'selected-only' (only the individually checkbox-selected target rows).
+        let targetsViewMode = 'selected-mirna';
         let exprShowSelectedOnly = false;     // Expression: show only selected rows
         let genShowSelectedOnly = false;      // Genetic: show only selected rows
         let selectedVariantSet = new Set();   // cached lowercase variant set of all selected miRNAs
-        let lastTargetsScopeSig = '0|false';  // guards the targets re-draw (prevents draw loops)
+        let selectedTargetKeys = new Set();   // keys ("mature|GENE") of selected target rows
+        let deselectedTargetKeys = new Set(); // target keys the user explicitly unchecked
+        let lastTargetsScopeSig = '0|selected-mirna|0'; // guards the targets re-draw (prevents draw loops)
         let lastMiRNAFieldSig = '';           // guards the miRNA chip/textarea re-render
 
         function recomputeSelectedVariantSet() {
@@ -2735,6 +2717,14 @@
             return false;
         }
 
+        // Stable key identifying a target row for checkbox selection:
+        // "mature|GENE" (gene symbol uppercased), mirroring the enrichment gene list.
+        function targetRowKey(rowData) {
+            const mature = cleanString(rowData.mature_mirna);
+            const gene = rowData.gene_symbol ? cleanString(rowData.gene_symbol).toUpperCase() : '';
+            return mature + '|' + gene;
+        }
+
         // One global DataTables ext.search guard (applies to every table; we no-op the rest).
         // Guarded so it is installed exactly once.
         function installMiRNASelectionFilters() {
@@ -2747,7 +2737,9 @@
                     ? settings.nTableId
                     : (settings.nTable ? settings.nTable.id : '');
                 if (id === 'targets-table') {
-                    if (targetsShowAllOverride || selectedMiRNAs.size === 0) return true;
+                    if (targetsViewMode === 'all') return true;
+                    if (selectedMiRNAs.size === 0 || selectedTargetKeys.size === 0) return true;
+                    if (targetsViewMode === 'selected-only') return selectedTargetKeys.has(targetRowKey(rowData));
                     return rowMatchesSelection(rowData);
                 }
                 if (id === 'expression-table') {
@@ -2801,25 +2793,72 @@
             $('#db-active-genes-count').text(formatCount(uniqueGenes));
         }
 
+        // Derive the auto-selected target rows from the current miRNA selection:
+        // every target interaction belonging to a selected miRNA is selected, minus any
+        // rows the user explicitly deselected. Pure function of (selection, deselected),
+        // so it is idempotent and draw-loop safe.
+        function recomputeSelectedTargetKeys() {
+            const next = new Set();
+            if (selectedMiRNAs.size > 0) {
+                for (const row of allTargetInteractions) {
+                    if (!row) continue;
+                    const k = targetRowKey(row);
+                    if (!k || deselectedTargetKeys.has(k)) continue;
+                    if (rowMatchesSelection(row)) next.add(k);
+                }
+            }
+            selectedTargetKeys = next;
+        }
+
+        // Sync the Targets header select-all checkbox from the applied (filtered) rows.
+        function syncTargetHeaderCheckbox() {
+            if (!targetsTable) return;
+            const rows = targetsTable.rows({ search: 'applied' }).data().toArray();
+            let checked = 0;
+            for (const r of rows) { if (selectedTargetKeys.has(targetRowKey(r))) checked++; }
+            $('.select-all-targets').prop('checked', rows.length > 0 && checked === rows.length);
+        }
+
+        // Unique uppercased target genes represented by the currently selected target rows.
+        function getSelectedTargetGenes() {
+            const genes = new Set();
+            for (const key of selectedTargetKeys) {
+                const gene = key.split('|')[1];
+                if (gene) genes.add(gene);
+            }
+            return Array.from(genes).sort();
+        }
+
         // Re-draw the Targets table only when the selection-scope signature actually
         // changed, so the draw -> updateFilteredCounts -> updateSelectionUI path never loops.
         function refreshTargetsSelectionScope() {
-            const sig = selectedMiRNAs.size + '|' + targetsShowAllOverride;
+            const sig = selectedMiRNAs.size + '|' + targetsViewMode + '|' + selectedTargetKeys.size;
             if (sig === lastTargetsScopeSig) return;
             lastTargetsScopeSig = sig;
             targetsTable.draw();
             updateTargetScopeBadges();
         }
 
-        // Keep the three scope toggle buttons' labels, enabled state, and active
-        // styling in sync with the current selection + override flags.
+        // Keep the three targets view-mode buttons' active styling and enabled state
+        // in sync with the current selection + view mode.
         function syncSelectionToggleButtons(totalSelected) {
-            const tBtn = $('#btn-toggle-targets-scope');
-            tBtn.prop('disabled', totalSelected === 0);
-            $('.targets-scope-label').text(targetsShowAllOverride ? 'Show selected miRNAs only' : 'Show all interactions');
-            tBtn.toggleClass('btn-outline-warning', !targetsShowAllOverride).toggleClass('btn-outline-primary', targetsShowAllOverride);
+            $('.targets-view-btn').each(function() {
+                const mode = $(this).data('view-mode');
+                $(this).toggleClass('active', mode === targetsViewMode)
+                    .toggleClass('btn-primary', mode === targetsViewMode)
+                    .toggleClass('btn-outline-primary', mode !== targetsViewMode)
+                    .prop('disabled', totalSelected === 0 && mode !== 'all');
+            });
             $('#expr-show-selected-btn').prop('disabled', totalSelected === 0).toggleClass('active', exprShowSelectedOnly);
             $('#gen-show-selected-btn').prop('disabled', totalSelected === 0).toggleClass('active', genShowSelectedOnly);
+        }
+
+        // Switch the Targets table to a given view mode and re-scope + re-sync.
+        function setTargetsViewMode(mode) {
+            if (mode === targetsViewMode) return;
+            targetsViewMode = mode;
+            refreshTargetsSelectionScope();
+            syncSelectionToggleButtons(selectedMiRNAs.size);
         }
 
         // Render the selected-miRNA chip field (both the Targets toolbar and the
@@ -3007,14 +3046,6 @@
             const val = chip.data('filter-val');
             if (field === 'tissue') {
                 $(`#tissue-checkboxes input[value="${val}"]`).prop('checked', false);
-            } else if (field === 'target-scope') {
-                if (typeof setTargetScope === 'function') {
-                    setTargetScope('all', false);
-                } else {
-                    $('#scope-all').prop('checked', true);
-                    applyAdvancedFilters();
-                }
-                return;
             } else if (field === 'filter-evidence') {
                 $(`#evidence-checkboxes input[value="${val}"]`).prop('checked', false);
             } else if (field === 'filter-sfari') {
@@ -3059,11 +3090,10 @@
             const geneTokens = parseTokens($('#filter-target-gene').val().trim()).map(g => g.toUpperCase());
             const selectedSfari = [];
             $('#sfari-checkboxes input:checked').each(function() { selectedSfari.push($(this).val()); });
-            const evidenceLevel = $('#filter-evidence-level').val();
+            const supportType = $('#filter-support-type').val();
             const targetMethod = $('#filter-target-method').val();
             const targetRegulation = $('#filter-target-regulation').val();
             const targetTissue = $('#filter-target-tissue').val().trim();
-            const targetScope = $('input[name="target-scope"]:checked').val() || 'all';
 
             // ---- Per-tab active-filter counts & indicators ----
             let exprCount = 0;
@@ -3084,11 +3114,10 @@
             let targetCount = 0;
             if (geneTokens.length > 0) targetCount++;
             targetCount += selectedSfari.length;
-            if (evidenceLevel) targetCount++;
+            if (supportType) targetCount++;
             if (targetMethod) targetCount++;
             if (targetRegulation) targetCount++;
             if (targetTissue) targetCount++;
-            if (targetScope !== 'all') targetCount++;
 
             const exprSummary = buildSummary([
                 exprHairpinTokens.length > 0 ? `${exprHairpinTokens.length} Hairpins` : '',
@@ -3123,13 +3152,10 @@
                 geneticAlteration ? { label: `Variant: ${geneticAlteration}`, field: 'filter-genetic-alteration', val: '' } : null,
                 studyDesc ? { label: `Desc: ${studyDesc}`, field: 'filter-study-desc', val: '' } : null
             ].filter(Boolean));
-
-            const targetScopeLabel = TARGET_SCOPE_CONFIG[targetScope]?.label || targetScope;
             renderChipsInto('.target-active-chips', [
                 geneTokens.length > 0 ? { label: `Genes: ${geneTokens.length > 2 ? `${geneTokens.length} symbols` : geneTokens.join(', ')}`, field: 'filter-target-gene', val: '' } : null,
-                targetScope !== 'all' ? { label: `Scope: ${targetScopeLabel}`, field: 'target-scope', val: targetScope } : null,
                 ...selectedSfari.map(v => ({ label: `SFARI: ${v}`, field: 'filter-sfari', val: v })),
-                evidenceLevel ? { label: `Level: ${evidenceLevel}`, field: 'filter-evidence-level', val: '' } : null,
+                supportType ? { label: `Support Type: ${supportType}`, field: 'filter-support-type', val: '' } : null,
                 targetMethod ? { label: `Method: ${targetMethod}`, field: 'filter-target-method', val: '' } : null,
                 targetRegulation ? { label: `Regulation: ${targetRegulation}`, field: 'filter-target-regulation', val: '' } : null,
                 targetTissue ? { label: `Tissue: ${targetTissue}`, field: 'filter-target-tissue', val: '' } : null
@@ -3163,26 +3189,26 @@
             otherTable.draw();
 
             // ---- Apply filters to Target Genes Table ----
-            // Col 1: Precursor, Col 2: Mature, Col 3: Target Gene, Col 5: SFARI, Col 6: Evidence, Col 7: PubMed, Col 8: Method, Col 9: Regulation, Col 10: Tissue
+            // Col 1: Precursor, Col 2: Mature, Col 4: Target Gene, Col 6: SFARI, Col 7: Support Type, Col 9: Experiments, Col 10: Regulation, Col 11: Tissue (Col 0 = selection checkbox)
             if (targetsTable) {
                 if (geneTokens.length > 0) {
-                    targetsTable.column(3).search(buildTokenRegex(geneTokens, true), true, false);
+                    targetsTable.column(4).search(buildTokenRegex(geneTokens, true), true, false);
                 } else {
-                    targetsTable.column(3).search('');
+                    targetsTable.column(4).search('');
                 }
 
                 if (selectedSfari.length > 0) {
-                    targetsTable.column(5).search(selectedSfari.map(escapeRegex).join('|'), true, false);
+                    targetsTable.column(6).search(selectedSfari.map(escapeRegex).join('|'), true, false);
                 } else {
-                    targetsTable.column(5).search('');
+                    targetsTable.column(6).search('');
                 }
 
-                targetsTable.column(6).search(evidenceLevel);
+                targetsTable.column(7).search(supportType);
 
 
-                targetsTable.column(8).search(targetMethod);
-                targetsTable.column(9).search(targetRegulation);
-                targetsTable.column(10).search(targetTissue);
+                targetsTable.column(9).search(targetMethod);
+                targetsTable.column(10).search(targetRegulation);
+                targetsTable.column(11).search(targetTissue);
                 targetsTable.draw();
 
                 const appliedRows = targetsTable.rows({ search: 'applied' });
@@ -3199,7 +3225,7 @@
 
         // Event listeners for real-time filtering (per-tab inputs)
         $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-study-desc, #filter-target-tissue').on('keyup input', debouncedFilter);
-        $('#filter-expression-change, #filter-genetic-alteration, #filter-evidence-level, #filter-target-method, #filter-target-regulation').on('change', applyAdvancedFilters);
+        $('#filter-expression-change, #filter-genetic-alteration, #filter-support-type, #filter-target-method, #filter-target-regulation').on('change', applyAdvancedFilters);
         $('#filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies').on('input', function() {
             updateExpressionNumericLimits();
             debouncedFilter();
@@ -3231,71 +3257,96 @@
                 clearSearch(targetsTable);
                 $('#filter-target-gene').val('');
                 $('#sfari-checkboxes input:checked').prop('checked', false);
-                $('#filter-evidence-level').val('');
+                $('#filter-support-type').val('');
                 $('#filter-target-method').val('');
                 $('#filter-target-regulation').val('');
                 $('#filter-target-tissue').val('');
-                setTargetScope('all', false);
-                if (typeof refreshEnrichmentScopeAndUI === 'function') {
-                    refreshEnrichmentScopeAndUI();
-                }
             } else {
                 // Fallback: reset everything
                 clearSearch(expressionTable);
                 clearSearch(otherTable);
                 clearSearch(targetsTable);
-                $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-expression-change, #filter-genetic-alteration, #filter-study-desc, #filter-evidence-level, #filter-target-method, #filter-target-regulation, #filter-target-tissue, #filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies').val('');
+                $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-expression-change, #filter-genetic-alteration, #filter-study-desc, #filter-support-type, #filter-target-method, #filter-target-regulation, #filter-target-tissue, #filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies').val('');
                 $('#tissue-checkboxes input:checked, #evidence-checkboxes input:checked, #sfari-checkboxes input:checked').prop('checked', false);
-                setTargetScope('all', false);
             }
             applyAdvancedFilters();
         }
 
-        // Generic table selection binder (Row checkbox, Select All header, and Draw synchronization)
-        function bindTableSelection(tableInstance, tableSelector, rowCheckClass, selectAllSelector) {
+        // Generic table selection binder (Row checkbox, Select All header, and Draw synchronization).
+        // keyMode 'mirna' keys rows by miRNA (selectedMiRNAs); 'target' keys rows by
+        // "mature|GENE" (selectedTargetKeys, driven through deselectedTargetKeys).
+        function bindTableSelection(tableInstance, tableSelector, rowCheckClass, selectAllSelector, keyMode) {
+            const isTarget = keyMode === 'target';
+
             // Row checkbox change
             $(tableSelector + ' tbody').on('change', '.' + rowCheckClass, function() {
                 const key = $(this).data('key') || $(this).val();
-                const mature = $(this).data('mature') || '';
-                const hairpin = $(this).data('hairpin') || '';
-                if ($(this).is(':checked')) {
-                    selectedMiRNAs.set(key, { mature, hairpin });
+                if (!key) return;
+                if (isTarget) {
+                    // Uncheck records an explicit deselection; re-check lifts it.
+                    if ($(this).is(':checked')) deselectedTargetKeys.delete(key);
+                    else deselectedTargetKeys.add(key);
                 } else {
-                    selectedMiRNAs.delete(key);
+                    const mature = $(this).data('mature') || '';
+                    const hairpin = $(this).data('hairpin') || '';
+                    if ($(this).is(':checked')) selectedMiRNAs.set(key, { mature, hairpin });
+                    else selectedMiRNAs.delete(key);
                 }
                 updateSelectionUI();
             });
 
-            // Header Select All checkbox change
+            // Header Select All checkbox change (operates over the applied/filtered rows).
             $(selectAllSelector).on('change', function() {
                 const isChecked = $(this).is(':checked');
-                $(tableSelector + ' tbody .' + rowCheckClass).each(function() {
-                    const key = $(this).data('key') || $(this).val();
-                    const mature = $(this).data('mature') || '';
-                    const hairpin = $(this).data('hairpin') || '';
-                    if (key) {
-                        if (isChecked) selectedMiRNAs.set(key, { mature, hairpin });
+                const applied = tableInstance.rows({ search: 'applied' }).data().toArray();
+                if (isTarget) {
+                    applied.forEach(r => {
+                        const k = targetRowKey(r);
+                        if (!k) return;
+                        if (isChecked) deselectedTargetKeys.delete(k);
+                        else deselectedTargetKeys.add(k);
+                    });
+                } else {
+                    applied.forEach(r => {
+                        const mature = cleanString(r.mature_mirna);
+                        const hp = cleanString(r.precursor_mirna);
+                        const key = mature || hp;
+                        if (!key) return;
+                        if (isChecked) selectedMiRNAs.set(key, { mature, hairpin: hp });
                         else selectedMiRNAs.delete(key);
-                    }
-                });
+                    });
+                }
                 updateSelectionUI();
             });
 
-            // Sync checkboxes on draw (paging, search, sort)
+            // Sync checkboxes on draw (paging, search, sort).
             tableInstance.on('draw', function() {
-                $(tableSelector + ' tbody .' + rowCheckClass).each(function() {
-                    const key = $(this).data('key') || $(this).val();
-                    $(this).prop('checked', selectedMiRNAs.has(key));
-                });
-                const totalVis = $(tableSelector + ' tbody .' + rowCheckClass).length;
-                const checkedVis = $(tableSelector + ' tbody .' + rowCheckClass + ':checked').length;
-                $(selectAllSelector).prop('checked', totalVis > 0 && totalVis === checkedVis);
+                if (isTarget) {
+                    $(tableSelector + ' tbody .' + rowCheckClass).each(function() {
+                        const key = $(this).data('key') || $(this).val();
+                        $(this).prop('checked', key && selectedTargetKeys.has(key));
+                    });
+                    syncTargetHeaderCheckbox();
+                } else {
+                    $(tableSelector + ' tbody .' + rowCheckClass).each(function() {
+                        const key = $(this).data('key') || $(this).val();
+                        $(this).prop('checked', key && selectedMiRNAs.has(key));
+                    });
+                    const rows = tableInstance.rows({ search: 'applied' }).data().toArray();
+                    let checked = 0;
+                    for (const r of rows) {
+                        const mature = cleanString(r.mature_mirna);
+                        const hp = cleanString(r.precursor_mirna);
+                        if (selectedMiRNAs.has(mature || hp)) checked++;
+                    }
+                    $(selectAllSelector).prop('checked', rows.length > 0 && checked === rows.length);
+                }
             });
         }
 
-        bindTableSelection(expressionTable, '#expression-table', 'expr-row-check', '.select-all-expr');
-        bindTableSelection(otherTable, '#other-table', 'gen-row-check', '.select-all-other');
-
+        bindTableSelection(expressionTable, '#expression-table', 'expr-row-check', '.select-all-expr', 'mirna');
+        bindTableSelection(otherTable, '#other-table', 'gen-row-check', '.select-all-other', 'mirna');
+        bindTableSelection(targetsTable, '#targets-table', 'target-row-check', '.select-all-targets', 'target');
 
         function showSelectionWarning(msg) {
             if (msg) {
@@ -3318,31 +3369,25 @@
             }
         };
 
-        function getTotalSelectedTargetsCount() {
-            if (!selectedMiRNAs || selectedMiRNAs.size === 0) return 0;
-            if (typeof resolveTargetGenesFromMiRNAs !== 'function') return 0;
-            const matureList = Array.from(new Set([...selectedMiRNAs.values()].map(x => x.mature).filter(Boolean)));
-            const hairpinList = Array.from(new Set([...selectedMiRNAs.values()].map(x => x.hairpin).filter(Boolean)));
-            if (matureList.length === 0 && hairpinList.length === 0) return 0;
-            const resolved = resolveTargetGenesFromMiRNAs(matureList, hairpinList, 'all');
-            return resolved ? resolved.length : 0;
-        }
-
-
         function updateSelectionUI() {
             const totalSelected = selectedMiRNAs.size;
-            const totalTargets = getTotalSelectedTargetsCount();
 
-            // Recompute the normalized variant set of all selected miRNAs (drives the ext.search scope).
+            // Recompute the normalized variant set (drives the ext.search scope) and
+            // derive the auto-selected target rows from the current miRNA selection
+            // (minus any the user explicitly deselected).
             recomputeSelectedVariantSet();
+            recomputeSelectedTargetKeys();
+            const totalTargets = getSelectedTargetGenes().length;
+
             if (totalSelected === 0) {
-                // No selection: scoping is a no-op and the "selected only" toggles are meaningless.
-                targetsShowAllOverride = false;
+                // No selection: clear the individual target selection + deselections.
+                selectedTargetKeys = new Set();
+                deselectedTargetKeys = new Set();
                 exprShowSelectedOnly = false;
                 genShowSelectedOnly = false;
             }
 
-            // 1. Synchronize row checkboxes across both tables
+            // 1. Synchronize row checkboxes across all three tables
             $('#expression-table tbody .expr-row-check').each(function() {
                 const key = $(this).data('key') || $(this).val();
                 $(this).prop('checked', selectedMiRNAs.has(key));
@@ -3351,15 +3396,33 @@
                 const key = $(this).data('key') || $(this).val();
                 $(this).prop('checked', selectedMiRNAs.has(key));
             });
+            $('#targets-table tbody .target-row-check').each(function() {
+                const key = $(this).data('key') || $(this).val();
+                $(this).prop('checked', selectedTargetKeys.has(key));
+            });
 
-            // 2. Synchronize header select-all checkboxes
-            const totalVisExpr = $('#expression-table tbody .expr-row-check').length;
-            const checkedVisExpr = $('#expression-table tbody .expr-row-check:checked').length;
-            $('.select-all-expr').prop('checked', totalVisExpr > 0 && totalVisExpr === checkedVisExpr);
-
-            const totalVisGen = $('#other-table tbody .gen-row-check').length;
-            const checkedVisGen = $('#other-table tbody .gen-row-check:checked').length;
-            $('.select-all-other').prop('checked', totalVisGen > 0 && totalVisGen === checkedVisGen);
+            // 2. Synchronize header select-all checkboxes from the applied (filtered) rows
+            if (expressionTable) {
+                const rows = expressionTable.rows({ search: 'applied' }).data().toArray();
+                let checked = 0;
+                for (const r of rows) {
+                    const mature = cleanString(r.mature_mirna);
+                    const hp = cleanString(r.precursor_mirna);
+                    if (selectedMiRNAs.has(mature || hp)) checked++;
+                }
+                $('.select-all-expr').prop('checked', rows.length > 0 && checked === rows.length);
+            }
+            if (otherTable) {
+                const rows = otherTable.rows({ search: 'applied' }).data().toArray();
+                let checked = 0;
+                for (const r of rows) {
+                    const mature = cleanString(r.mature_mirna);
+                    const hp = cleanString(r.precursor_mirna);
+                    if (selectedMiRNAs.has(mature || hp)) checked++;
+                }
+                $('.select-all-other').prop('checked', rows.length > 0 && checked === rows.length);
+            }
+            syncTargetHeaderCheckbox();
 
             // 3. Synchronize Global Nav Selection Pill
             const globalPill = $('#global-nav-selection-pill');
@@ -3386,7 +3449,7 @@
             }
 
             // 5. Selection-driven scoping: re-draw the Targets table when the scope changed,
-            //     sync the scope-toggle buttons, and re-render the selected-miRNA fields.
+            //     sync the view-mode buttons, and re-render the selected-miRNA fields.
             refreshTargetsSelectionScope();
             syncSelectionToggleButtons(totalSelected);
             renderMiRNAFields();
@@ -3424,9 +3487,6 @@
         let enrichmentChartInstance = null;
         let enrichmentResultsDataTable = null;
         let lastGProfilerResults = [];
-
-        let upregulatedTargetGenes = new Set();
-        let downregulatedTargetGenes = new Set();
 
         function getTargetsForMiRNA(mature, hairpin) {
             const list = [];
@@ -3508,27 +3568,8 @@
                     });
                 });
 
-                // Load expression studies to index regulation target genes & auto-initialize enrichment
-                fetch(`expression_studies.json?v=${DB_VERSION}`)
-                    .then(r => r.json())
-                    .then(exprData => {
-                        exprData.forEach(r => {
-                            const change = r.expression_change;
-                            const m = cleanString(r.mature_mirna);
-                            const hp = cleanString(r.precursor_mirna);
-                            if (change === 'Upregulated') {
-                                const targets = getTargetsForMiRNA(m, hp);
-                                targets.forEach(t => { if (t.gene_symbol) upregulatedTargetGenes.add(t.gene_symbol.toUpperCase()); });
-                            } else if (change === 'Downregulated') {
-                                const targets = getTargetsForMiRNA(m, hp);
-                                targets.forEach(t => { if (t.gene_symbol) downregulatedTargetGenes.add(t.gene_symbol.toUpperCase()); });
-                            }
-                        });
-
-                        // Start with empty enrichment targets awaiting user miRNA selection
-                        setEnrichmentGenes([], 'Awaiting miRNA Selection');
-                    })
-                    .catch(err => console.error("Error loading expression studies for regulation index:", err));
+                // Start with empty enrichment targets awaiting user miRNA selection
+                setEnrichmentGenes([], 'Awaiting miRNA Selection');
 
                 // Apply initial miRTarBase default filter to targets table
                 applyAdvancedFilters();
@@ -3552,7 +3593,7 @@
         targetsTable.on('draw', updateFilteredCounts);
 
         // Target Gene Resolution Logic (Only resolves when miRNAs are provided)
-        function resolveTargetGenesFromMiRNAs(matureList, hairpinList, scope = 'all') {
+        function resolveTargetGenesFromMiRNAs(matureList, hairpinList) {
             const geneSet = new Set();
             const matchedInteractions = [];
 
@@ -3576,84 +3617,31 @@
             matchedInteractions.forEach(it => {
                 const gene = it.gene_symbol ? it.gene_symbol.toUpperCase() : null;
                 if (!gene) return;
-
-
-                if (scope === 'strong' && it.evidence_level !== 'Strong Evidence') return;
-                if (scope === 'sfari' && (!it.sfari_score || it.sfari_score === 'Non-SFARI')) return;
-                if (scope === 'sfari_cat1' && (!it.sfari_score || !it.sfari_score.includes('Category 1'))) return;
-                if (scope === 'brain' && (!it.tissue || !it.tissue.toLowerCase().includes('brain'))) return;
-                if (scope === 'upregulated' && !upregulatedTargetGenes.has(gene)) return;
-                if (scope === 'downregulated' && !downregulatedTargetGenes.has(gene)) return;
-
                 geneSet.add(gene);
             });
 
             return Array.from(geneSet).sort();
         }
 
-        // Non-destructive target scope filtering on base gene list
-        function applyTargetScope(genes, scope = 'all') {
-            if (!genes || genes.length === 0) return [];
-
-            return genes.filter(gene => {
-                const meta = geneMetaMap[gene];
-                if (!meta) {
-                    if (enrichmentOrigin && enrichmentOrigin.desc === 'Custom Gene List' && scope === 'all') {
-                        return true;
-                    }
-                    return false;
-                }
-
-                // 1. Database provenance filter (miRTarBase 10.0 default)
-
-                // 2. Evidence / Risk / Regulation Scope
-                if (scope === 'strong') {
-                    return meta.evidences && meta.evidences.has('Strong Evidence');
-                }
-                if (scope === 'sfari') {
-                    return meta.is_sfari;
-                }
-                if (scope === 'sfari_cat1') {
-                    return meta.sfari_score && meta.sfari_score.includes('Category 1');
-                }
-                if (scope === 'brain') {
-                    return meta.is_brain === true;
-                }
-                if (scope === 'upregulated') {
-                    return upregulatedTargetGenes.has(gene);
-                }
-                if (scope === 'downregulated') {
-                    return downregulatedTargetGenes.has(gene);
-                }
-                return true;
-            });
-        }
-
-        // Populate Gene List UI (Textarea, Chips, Stats)
+        // Populate the Gene List UI (Textarea, Chips, Stats) from a gene list.
+        // When the enrichment origin is a table-driven source, the active gene set is
+        // the union of the currently selected target rows; custom lists are kept verbatim.
         function setEnrichmentGenes(geneList, originDesc = null) {
             baseEnrichmentGenes = Array.from(new Set((geneList || []).map(g => (g || '').trim().toUpperCase()))).filter(Boolean).sort();
+            currentEnrichmentGenes = baseEnrichmentGenes.slice();
             if (originDesc) {
                 enrichmentOrigin.desc = originDesc;
                 $('#enrichment-source-desc').text(originDesc);
             }
-            refreshEnrichmentScopeAndUI();
+            syncEnrichmentGeneUI();
         }
 
-        function refreshEnrichmentScopeAndUI() {
-            const scope = $('input[name="target-scope"]:checked').val() || 'all';
-
+        // Re-derive the active enrichment gene set from the selected target rows
+        // (for table-driven origins) and refresh the textarea/chips/stats.
+        function syncEnrichmentGeneUI() {
             if (enrichmentOrigin && enrichmentOrigin.desc !== 'Custom Gene List') {
-                const matureList = Array.from(new Set([...selectedMiRNAs.values()].map(x => x.mature).filter(Boolean)));
-                const hairpinList = Array.from(new Set([...selectedMiRNAs.values()].map(x => x.hairpin).filter(Boolean)));
-                if (matureList.length > 0 || hairpinList.length > 0) {
-                    currentEnrichmentGenes = resolveTargetGenesFromMiRNAs(matureList, hairpinList, scope);
-                    $('#enrichment-gene-input').val(currentEnrichmentGenes.join(', '));
-                    renderGeneChips(currentEnrichmentGenes);
-                    return;
-                }
+                currentEnrichmentGenes = getSelectedTargetGenes();
             }
-
-            currentEnrichmentGenes = applyTargetScope(baseEnrichmentGenes, scope);
             $('#enrichment-gene-input').val(currentEnrichmentGenes.join(', '));
             renderGeneChips(currentEnrichmentGenes);
         }
@@ -3663,7 +3651,6 @@
             const healthBadge = $('#gene-set-health-badge');
 
             if (!baseEnrichmentGenes || baseEnrichmentGenes.length === 0) {
-                $('input[name="target-scope"]').prop('disabled', false);
                 $('#btn-run-enrichment').prop('disabled', true).addClass('disabled');
                 $('#btn-run-enrichment span').text('Select miRNAs to Run Functional Enrichment');
                 $('#gene-set-stats').text('0 Target Genes');
@@ -3692,14 +3679,13 @@
                 return;
             }
 
-            // Enable target filters and enrichment action
-            $('input[name="target-scope"]').prop('disabled', false);
+            // Enable enrichment action
             $('#btn-run-enrichment').prop('disabled', false).removeClass('disabled');
 
             if (!geneList || geneList.length === 0) {
-                container.html(`<div class="py-3 text-secondary small text-center"><i class="fa-solid fa-filter me-1 text-primary"></i>0 of ${baseEnrichmentGenes.length} target genes match the selected filter. <button type="button" class="btn btn-link btn-xs p-0 text-primary fw-semibold btn-reset-scope-to-all">Switch to All Sources & Targets</button> to view all ${baseEnrichmentGenes.length} genes.</div>`);
+                container.html(`<div class="py-3 text-secondary small text-center"><i class="fa-solid fa-filter me-1 text-primary"></i>0 of ${baseEnrichmentGenes.length} target genes selected. Check target rows in the Target Genes table to include them in the enrichment.</div>`);
                 $('#gene-set-stats').html(`<strong>0</strong> / <strong>${baseEnrichmentGenes.length}</strong> Target Genes`);
-                healthBadge.attr('class', 'badge bg-warning-subtle text-warning border rounded-pill').attr('style', '').text('0 Filtered');
+                healthBadge.attr('class', 'badge bg-warning-subtle text-warning border rounded-pill').attr('style', '').text('0 Selected');
                 $('#btn-run-enrichment span').text('Run g:Profiler Functional Enrichment (0 Genes)');
                 return;
             }
@@ -3760,52 +3746,12 @@
         const debouncedGeneInput = debounce(function() {
             const raw = $('#enrichment-gene-input').val();
             const genes = raw.split(/[\s,;\n\t]+/).map(g => g.trim().toUpperCase()).filter(g => g.length > 0);
-            baseEnrichmentGenes = Array.from(new Set(genes)).sort();
-            enrichmentOrigin.desc = 'Custom Gene List';
-            $('#enrichment-source-desc').text('Custom Gene List');
-            refreshEnrichmentScopeAndUI();
+            setEnrichmentGenes(genes, 'Custom Gene List');
         }, 250);
-
         $('#enrichment-gene-input').on('keyup input change', debouncedGeneInput);
 
-        // Non-destructive target scope controller with bidirectional sync and toggle-to-unset support
-        function setTargetScope(newScope, isToggle = false) {
-            const currentScope = $('input[name="target-scope"]:checked').val() || 'all';
-            let targetScope = newScope;
-
-            // If user clicked the already-active scope (and it's not 'all'), toggle it off to 'all' (unset)
-            if (isToggle && currentScope === newScope && newScope !== 'all') {
-                targetScope = 'all';
-            }
-
-            $(`input[name="target-scope"][value="${targetScope}"]`).prop('checked', true);
-
-            refreshEnrichmentScopeAndUI();
-            applyAdvancedFilters();
-        }
-
-        // Intercept click on scope labels (Enrichment tab) to enable toggle-unset
-        $('body').on('click', 'label[for^="scope-"]', function(e) {
-            e.preventDefault();
-            const forId = $(this).attr('for');
-            const input = document.getElementById(forId);
-            if (!input) return;
-            const val = input.value;
-            setTargetScope(val, true);
-        });
-
-        // Direct change handler for accessibility / keyboard navigation
-        $('input[name="target-scope"]').on('change', function() {
-            const val = $(this).val();
-            setTargetScope(val, false);
-        });
-
-        // Reset scope button in empty filter state (single-source DB: miRTarBase 10.0)
-        $('body').on('click', '.btn-reset-scope-to-all', function() {
-            setTargetScope('all', false);
-        });
-
-        // Quick Table Reload Handler
+        // Quick Table Reload Handler: rebuild the base gene pool from the selected miRNAs;
+        // the active set follows the selected target rows via syncEnrichmentGeneUI.
         function reloadTargetGenesFromCurrentTable() {
             const totalSelected = selectedMiRNAs.size;
             if (totalSelected === 0) {
@@ -3815,9 +3761,8 @@
 
             const matureList = Array.from(new Set([...selectedMiRNAs.values()].map(x => x.mature).filter(Boolean)));
             const hairpinList = Array.from(new Set([...selectedMiRNAs.values()].map(x => x.hairpin).filter(Boolean)));
-            const originDesc = `${totalSelected} Selected miRNAs`;
-
-            const resolved = resolveTargetGenesFromMiRNAs(matureList, hairpinList, 'all');
+            const originDesc = `${totalSelected} Selected miRNA${totalSelected === 1 ? '' : 's'}`;
+            const resolved = resolveTargetGenesFromMiRNAs(matureList, hairpinList);
             setEnrichmentGenes(resolved, originDesc);
         }
 
@@ -3893,12 +3838,12 @@
             if (typeof window.clearMiRNASelection === 'function') window.clearMiRNASelection();
         });
 
-        // Targets scope toggle: flip between the full interaction catalog and the selected miRNAs' scope.
-        $('#btn-toggle-targets-scope').on('click', function() {
-            if (selectedMiRNAs.size === 0) return;
-            targetsShowAllOverride = !targetsShowAllOverride;
-            refreshTargetsSelectionScope();
-            syncSelectionToggleButtons(selectedMiRNAs.size);
+        // Targets view mode buttons: switch between the full catalog, the selected
+        // miRNAs' targets, and the individually selected target rows.
+        $('.targets-view-btn').on('click', function() {
+            const mode = $(this).data('view-mode');
+            if (mode !== 'all' && selectedMiRNAs.size === 0) return;
+            setTargetsViewMode(mode);
         });
 
         // Per-table "selected only" toggles (Expression + Genetic).
@@ -3981,18 +3926,6 @@
             }
         });
 
-
-        $('body').on('click', '.btn-drop-scope-filter', function() {
-            setTargetScope('all', false);
-        });
-
-        $('body').on('click', '.btn-reset-all-pipeline', function() {
-            selectedMiRNAs.clear();
-            updateSelectionUI();
-            resetFiltersForScope('all');
-            setTargetScope('all', false);
-            reloadTargetGenesFromCurrentTable();
-        });
 
         // Source badge styling helper
         function getSourceBadge(source) {

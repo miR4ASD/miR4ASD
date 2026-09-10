@@ -141,50 +141,43 @@ def test_filter_cards_independent_per_tab(app_page: Page, base_url: str) -> None
     )
 
 
-def test_auto_scope_scopes_targets(app_page: Page, base_url: str) -> None:
-    """Selecting a miRNA auto-scopes targets; the scope toggle round-trips."""
+def test_selection_scopes_targets_view_modes(app_page: Page, base_url: str) -> None:
+    """Selecting a miRNA auto-scopes the targets table; view modes switch it."""
     expr_page = ExpressionPage(app_page, base_url)
     targets_page = TargetsPage(app_page, base_url)
     targets_page.navigate_to_targets()
     assert _digits(targets_page.get_active_count_text()) == FULL_INTERACTIONS
 
-    # Selecting a miRNA scopes the targets table and enables the scope toggle.
+    # Selecting a miRNA auto-scopes the targets table to its interactions.
     expr_page.navigate_to_expression()
     expr_page.select_row_by_index(0)
-
-    # Return to the targets tab (the auto-scope draw fired on selection).
     targets_page.navigate_to_targets()
     _wait_info_entries(app_page, "targets-table", "less", FULL_INTERACTIONS)
-    assert targets_page.is_targets_scope_enabled(), (
-        "Scope toggle must be enabled with a selection"
+    assert targets_page.get_active_view_mode() == "selected-mirna", (
+        "Selecting a miRNA should default the targets table to the "
+        "selected-miRNA view"
     )
     scoped = targets_page.get_filtered_total()
     assert 0 < scoped < FULL_INTERACTIONS, (
         f"Targets should be scoped to a subset ({scoped} < {FULL_INTERACTIONS})"
     )
-    assert not targets_page.is_targets_scoped_to_selected(), (
-        "Default scope is selected-only; the action label reads "
-        "'Show all interactions' (clicking it would show the full catalog)"
-    )
 
-    # First toggle reveals the full catalog (override on).
-    targets_page.toggle_targets_scope()
+    # The "All" view reveals the full interaction catalog.
+    targets_page.set_view_mode("all")
     _wait_info_entries(app_page, "targets-table", "equal", FULL_INTERACTIONS)
     assert targets_page.get_filtered_total() == FULL_INTERACTIONS, (
-        "Toggle 1 should reveal the full interaction catalog"
+        "The 'All' view should reveal the full interaction catalog"
     )
     assert _digits(targets_page.get_active_genes_count_text()) == 2995
-    assert targets_page.is_targets_scoped_to_selected(), (
-        "Action label should read 'Show selected miRNAs only' while full is shown"
-    )
+    assert targets_page.get_active_view_mode() == "all"
 
-    # Second toggle returns to the selected-miRNA scope (override off).
-    targets_page.toggle_targets_scope()
+    # Returning to "Selected miRNAs" restores the scoped subset.
+    targets_page.set_view_mode("selected-mirna")
     _wait_info_entries(app_page, "targets-table", "less", FULL_INTERACTIONS)
     assert targets_page.get_filtered_total() == scoped, (
-        "Toggle 2 should restore the selected-miRNA scope"
+        "The 'Selected miRNAs' view should restore the scoped subset"
     )
-    assert not targets_page.is_targets_scoped_to_selected()
+    assert targets_page.get_active_view_mode() == "selected-mirna"
 
 
 def test_selected_only_toggles_studies_tables(app_page: Page, base_url: str) -> None:
@@ -266,11 +259,12 @@ def test_paste_mirna_ids_into_field(app_page: Page, base_url: str) -> None:
         "Pasting a known miRNA id should add it to the selection"
     )
 
-    # The global selection now drives the targets scope toggle.
+    # The global selection now drives the targets view mode.
     targets_page = TargetsPage(app_page, base_url)
     targets_page.navigate_to_targets()
-    assert targets_page.is_targets_scope_enabled(), (
-        "Scope toggle must be enabled after a paste-driven selection"
+    assert targets_page.get_active_view_mode() == "selected-mirna", (
+        "The targets table should default to the selected-miRNA view "
+        "after a paste-driven selection"
     )
     assert targets_page.get_selected_mirna_count() >= 1
 

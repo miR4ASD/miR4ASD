@@ -12,7 +12,7 @@ class TargetsPage(BasePage):
     # Inline per-tab filter selectors (Target Genes Filters card)
     FILTER_GENE = "#filter-target-gene"
     FILTER_SFARI = "#sfari-checkboxes"
-    FILTER_EVIDENCE = "#filter-evidence-level"
+    FILTER_SUPPORT = "#filter-support-type"
     FILTER_METHOD = "#filter-target-method"
     FILTER_REGULATION = "#filter-target-regulation"
     FILTER_TISSUE = "#filter-target-tissue"
@@ -81,9 +81,9 @@ class TargetsPage(BasePage):
             self.page.locator(f'{self.FILTER_SFARI} input:checked').uncheck()
         self.page.wait_for_timeout(400)
 
-    def select_evidence_level(self, value: str) -> None:
-        """Select an evidence level option ('' for All)."""
-        self.select_filter_option(self.FILTER_EVIDENCE, value)
+    def select_support_type(self, value: str) -> None:
+        """Select a target support-type option ('' for All)."""
+        self.select_filter_option(self.FILTER_SUPPORT, value)
 
     def select_method(self, value: str) -> None:
         """Select an experimental technique option ('' for All)."""
@@ -103,29 +103,26 @@ class TargetsPage(BasePage):
         self.page.locator(sel).click()
         self.page.wait_for_timeout(500)
 
-    def get_scope_toggle_label(self) -> str:
-        """Return the targets scope toggle label (Show all / Show selected)."""
-        return (
-            self.page.locator("#btn-toggle-targets-scope .targets-scope-label")
-            .inner_text()
-            .strip()
-        )
+    # ---- Target table view modes (All / Selected miRNAs / Selected only) ----
+    VIEW_BTN = ".targets-view-btn"
 
-    def is_targets_scoped_to_selected(self) -> bool:
-        """Return True when targets show only the selected miRNAs' interactions."""
-        return "selected" in self.get_scope_toggle_label()
+    def get_view_mode_buttons(self) -> list:
+        """Return the three view-mode buttons in the targets toolbar."""
+        return self.page.locator(self.VIEW_BTN)
 
-    def toggle_targets_scope(self) -> None:
-        """Toggle the targets table between full catalog and selected scope."""
-        self.page.locator("#btn-toggle-targets-scope").click()
+    def set_view_mode(self, mode: str) -> None:
+        """
+        Switch the Target Genes table to a view mode.
+
+        Args:
+            mode: One of 'all', 'selected-mirna', 'selected-only'.
+        """
+        self.page.locator(f'{self.VIEW_BTN}[data-view-mode="{mode}"]').click()
         self.page.wait_for_timeout(600)
 
-    def is_targets_scope_enabled(self) -> bool:
-        """Return True when the scope toggle is enabled (a selection is active)."""
-        btn = self.page.locator("#btn-toggle-targets-scope")
-        return not btn.is_disabled() and "disabled" not in (
-            btn.get_attribute("class") or ""
-        )
+    def get_active_view_mode(self) -> str:
+        """Return the data-view-mode of the currently active view button."""
+        return self.page.locator(f'{self.VIEW_BTN}.btn-primary').get_attribute("data-view-mode")
 
     def get_selected_mirna_count(self) -> int:
         """Return the selected-miRNA count badge in the targets field."""
