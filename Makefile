@@ -1,48 +1,51 @@
-# Makefile for ClinVar VCF Download and Parsing
+# Makefile for miR4ASD Project
+# Tools: python3, uv, ruff, pytest
 
-# --- Variables ---
-# Tool Configuration
-PYTHON = python3 # Use python3 or python
-WGET = wget
-# CURL = curl -L # Uncomment if you prefer curl
+PYTHON = python3
+UV = uv
+PORT = 8000
 
-# File/URL Configuration
-# Use GRCh38 VCF URL from NCBI FTP
-VCF_URL = https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz
-VCF_GZ_FILE = clinvar_grch38.vcf.gz
-PARSER_SCRIPT = parse_clinvar_vcf.py
-OUTPUT_CSV = variants.csv
-OUTPUT_JSON = variants.json
+.PHONY: all data serve test lint format clean help
 
-# Default arguments for the parser script (can be overridden)
-# Example: ARGS="--limit 1000" make parse
-ARGS =
+all: data
 
-# --- Targets ---
+# Run data processing ETL pipeline
+data:
+	@echo "--- Processing Excel data and generating JSON feeds ---"
+	$(PYTHON) process_data.py
+	@echo "--- Data generation complete ---"
 
-# Default target: download and parse
-all: download parse
+# Start local HTTP preview server
+serve:
+	@echo "--- Starting local web server at http://localhost:$(PORT) ---"
+	$(PYTHON) -m http.server $(PORT)
 
-# Download the ClinVar VCF file
-download:
-	@echo "--- Downloading ClinVar VCF (GRCh38) from $(VCF_URL) ---"
-	@echo "    (This may take a while...)"
-	$(WGET) -O $(VCF_GZ_FILE) $(VCF_URL)
-# Alternative using curl:
-#	$(CURL) -o $(VCF_GZ_FILE) $(VCF_URL)
-	@echo "--- Download complete: $(VCF_GZ_FILE) ---"
+# Run test suite
+test:
+	@echo "--- Running test suite with pytest ---"
+	$(UV) run pytest
 
-# Parse the downloaded VCF file into CSV and JSON
-parse: $(VCF_GZ_FILE) $(PARSER_SCRIPT)
-	@echo "--- Parsing $(VCF_GZ_FILE) using $(PARSER_SCRIPT) ---"
-	$(PYTHON) $(PARSER_SCRIPT) $(VCF_GZ_FILE) --csv $(OUTPUT_CSV) --json $(OUTPUT_JSON) $(ARGS)
-	@echo "--- Parsing complete. Output: $(OUTPUT_CSV), $(OUTPUT_JSON) ---"
+# Lint code with ruff
+lint:
+	@echo "--- Checking code with ruff ---"
+	$(UV) run ruff check .
 
-# Clean up downloaded and generated files
+# Format code with ruff
+format:
+	@echo "--- Formatting code with ruff ---"
+	$(UV) run ruff format .
+
+# Clean generated feeds and cache directories
 clean:
-	@echo "--- Cleaning up generated files ---"
-	rm -f $(VCF_GZ_FILE) $(OUTPUT_CSV) $(OUTPUT_JSON)
-	@echo "--- Cleanup complete ---"
+	@echo "--- Cleaning build and test artifacts ---"
+	rm -rf .pytest_cache .ruff_cache __pycache__ tests/__pycache__
+	@echo "--- Clean complete ---"
 
-# Declare targets that are not files
-.PHONY: all download parse clean
+help:
+	@echo "miR4ASD Makefile Commands:"
+	@echo "  make data    - Run process_data.py to generate JSON feeds"
+	@echo "  make serve   - Start local preview web server at http://localhost:8000"
+	@echo "  make test    - Run automated test suite using pytest"
+	@echo "  make lint    - Run ruff linter checks"
+	@echo "  make format  - Format code using ruff"
+	@echo "  make clean   - Remove cache directories"

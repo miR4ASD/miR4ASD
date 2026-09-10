@@ -1,10 +1,21 @@
-# Excel file
-*.xlsx
-
-# Python cache
+.venv/
 __pycache__/
 *.pyc
-
-# OS generated files
+.pytest_cache/
+.ruff_cache/
 .DS_Store
-Thumbs.db
+wget-log
+target_genes_compact.json
+raw_data/*.tsv.gz
+raw_data/*.gz
+raw_data/*.html
+raw_data/hsa_MTI.csv
+
+# Spreadsheets, word docs, text files, and internal markdown
+*.xlsx
+*.docx
+*.txt
+*.pdf
+*.md
+!README.md
+!docs/data_dictionary.md

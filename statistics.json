@@ -1,0 +1,24 @@
+{
+    "total_studies": 59,
+    "total_mirna_genes": 407,
+    "total_mirna_mature": 385,
+    "alteration_counts": {
+        "upregulated": 579,
+        "downregulated": 498
+    },
+    "tissue_counts": {
+        "Blood": 321,
+        "Brain": 105,
+        "LCLs": 146,
+        "Saliva": 82,
+        "NSCs": 1,
+        "Umbilical cord": 2,
+        "OMSCs": 4
+    },
+    "target_stats": {
+        "total_target_genes": 2995,
+        "total_sfari_target_genes": 843,
+        "total_target_interactions": 17150,
+        "mirtarbase_interactions": 17150
+    }
+}
