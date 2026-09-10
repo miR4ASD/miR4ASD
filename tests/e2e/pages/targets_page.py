@@ -11,7 +11,7 @@ class TargetsPage(BasePage):
     DB_BADGE_ID = "#active-db-label"
     # Inline per-tab filter selectors (Target Genes Filters card)
     FILTER_GENE = "#filter-target-gene"
-    FILTER_SFARI = "#filter-sfari-category"
+    FILTER_SFARI = "#sfari-checkboxes"
     FILTER_EVIDENCE = "#filter-evidence-level"
     FILTER_METHOD = "#filter-target-method"
     FILTER_REGULATION = "#filter-target-regulation"
@@ -67,8 +67,19 @@ class TargetsPage(BasePage):
         self.page.wait_for_timeout(300)
 
     def select_sfari_category(self, value: str) -> None:
-        """Select an SFARI category option ('' for All Target Genes)."""
-        self.select_filter_option(self.FILTER_SFARI, value)
+        """
+        Toggle the SFARI susceptibility checkbox for ``value`` (multi-select).
+
+        Passing ``''`` unchecks every SFARI box (returns the table to all rows).
+        """
+        if value:
+            self.ensure_filter_card_expanded(self.FILTER_SFARI)
+            self.page.locator(
+                f'{self.FILTER_SFARI} input[value="{value}"]'
+            ).check()
+        else:
+            self.page.locator(f'{self.FILTER_SFARI} input:checked').uncheck()
+        self.page.wait_for_timeout(400)
 
     def select_evidence_level(self, value: str) -> None:
         """Select an evidence level option ('' for All)."""

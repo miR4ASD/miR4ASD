@@ -64,3 +64,31 @@ def test_cross_tab_single_source_synchronization(app_page: Page, base_url: str):
     enrichment_page.navigate_to_enrichment()
     assert enrichment_page.is_single_source_mirtarbase()
     assert enrichment_page.get_database_badge_text() == "miRTarBase 10.0"
+
+
+def test_sfari_susceptibility_multiselect_or_and_chips(app_page: Page, base_url: str):
+    """Verify ASD Susceptibility is a multi-select with OR semantics and chips."""
+    targets_page = TargetsPage(app_page, base_url)
+    targets_page.navigate_to_targets()
+    assert targets_page.get_filtered_total() == 17150
+
+    # Single value: Category 1 -> 2,567 interactions
+    targets_page.select_sfari_category("Category 1")
+    assert targets_page.get_filtered_total() == 2567
+
+    # Second value accumulates (multi-select) with OR semantics:
+    # Category 1 (2,567) union Syndromic (1,800); no "Category 1, Syndromic"
+    # score exists, so the sets are disjoint -> 4,367 interactions.
+    targets_page.select_sfari_category("Syndromic")
+    assert targets_page.get_filtered_total() == 4367
+    # Dismissing the Category 1 chip leaves only Syndromic active (1,800)
+    chip = app_page.locator(
+        ".target-active-chips .filter-chip", has_text="SFARI: Category 1"
+    ).first
+    chip.locator("i.chip-remove").click()
+    app_page.wait_for_timeout(400)
+    assert targets_page.get_filtered_total() == 1800
+
+    # Per-tab reset returns to the full set
+    targets_page.reset_target_filters()
+    assert targets_page.get_filtered_total() == 17150
