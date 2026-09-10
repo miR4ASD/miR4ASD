@@ -384,7 +384,7 @@ def test_user_story_7_data_dictionary_and_visualizations(
 
     # 2. Verify all 5 accordion specification items expand and contain exact headers
     expected_spec_headers: List[List[str]] = [
-        ["Number of studies (Upregulated)", "Number of studies (Downregulated)"],
+        ["# up", "# down"],
         ["Alteration", "Study description"],
         ["ASD Susceptibility (SFARI)", "PubMed Reference"],
         ["Tissue Type", "Tissue Subtype", "ASD Samples", "Control Samples"],

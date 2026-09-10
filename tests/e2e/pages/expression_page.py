@@ -36,7 +36,10 @@ class ExpressionPage(StudiesTablePage):
     FILTER_MATURE = "#filter-mature-id"
     FILTER_HAIRPIN = "#filter-mirna-id"
     FILTER_CHANGE = "#filter-expression-change"
-    FILTER_EVIDENCE = "#filter-overall-evidence"
+    EVIDENCE_CHECKBOXES = "#evidence-checkboxes"
+    FILTER_MIN_UP = "#filter-upregulation-studies"
+    FILTER_MIN_DOWN = "#filter-downregulation-studies"
+    FILTER_MIN_TOTAL = "#filter-total-studies"
     TISSUE_CHECKBOXES = "#tissue-checkboxes"
 
     def filter_mature(self, text: str) -> None:
@@ -52,8 +55,34 @@ class ExpressionPage(StudiesTablePage):
         self.select_filter_option(self.FILTER_CHANGE, value)
 
     def select_overall_evidence(self, value: str) -> None:
-        """Select overall evidence option ('' for All)."""
-        self.select_filter_option(self.FILTER_EVIDENCE, value)
+        """
+        Check the overall-evidence checkbox for ``value`` ('' to uncheck all).
+
+        The Overall Evidence filter is a multi-select checklist, so this toggles
+        the single matching box (used by tests that combine one evidence criterion).
+        """
+        if value:
+            self.ensure_filter_card_expanded(self.EVIDENCE_CHECKBOXES)
+            self.page.locator(
+                f'#evidence-checkboxes input[value="{value}"]'
+            ).check()
+        else:
+            self.page.locator(
+                f'{self.EVIDENCE_CHECKBOXES} input:checked'
+            ).uncheck()
+        self.page.wait_for_timeout(400)
+
+    def set_min_upregulation_studies(self, value: str) -> None:
+        """Set the minimum # up (upregulated studies) filter ('' to clear)."""
+        self.fill_filter_input(self.FILTER_MIN_UP, value)
+
+    def set_min_downregulation_studies(self, value: str) -> None:
+        """Set the minimum # down (downregulated studies) filter ('' to clear)."""
+        self.fill_filter_input(self.FILTER_MIN_DOWN, value)
+
+    def set_min_total_studies(self, value: str) -> None:
+        """Set the minimum Total studies filter ('' to clear)."""
+        self.fill_filter_input(self.FILTER_MIN_TOTAL, value)
 
     def get_active_indicator_text(self) -> str:
         """Return the per-tab active filter indicator badge text."""

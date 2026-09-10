@@ -105,3 +105,104 @@ def test_expression_reset_filters_button(app_page: Page, base_url: str):
     expr_page.click_clear_selection()
     assert expr_page.get_selected_count() == "0"
     assert expr_page.get_targets_count() == "0"
+
+
+def test_expression_evidence_multiselect_or_and_chips(app_page: Page, base_url: str):
+    """Verify Overall Evidence multi-select OR semantics and chip dismissal."""
+    expr_page = ExpressionPage(app_page, base_url)
+    expr_page.navigate_to_expression()
+
+    assert expr_page.get_filtered_total() == 524
+
+    # First value only: Consistent upregulation -> 42 rows
+    expr_page.select_overall_evidence("Consistent upregulation")
+    assert expr_page.get_filtered_total() == 42
+    assert expr_page.get_active_chips_count() == 1
+
+    # Second value accumulates (multi-select) OR semantics: 42 + 19 = 61
+    expr_page.select_overall_evidence("Consistent downregulation")
+    assert expr_page.get_filtered_total() == 61
+    assert expr_page.get_active_chips_count() == 2
+
+    # Dismissing the downregulation chip clears only that value, leaving
+    # Consistent upregulation active (42 rows, 1 chip)
+    down_chip_text = "Evidence: Consistent downregulation"
+    chip = app_page.locator(
+        '.expr-active-chips .filter-chip', has_text=down_chip_text
+    ).first
+    chip.locator("i.chip-remove").click()
+    app_page.wait_for_timeout(400)
+    assert expr_page.get_filtered_total() == 42
+    assert expr_page.get_active_chips_count() == 1
+
+    # Per-tab reset returns to the full set
+    expr_page.reset_expression_filters()
+    assert expr_page.get_filtered_total() == 524
+    assert expr_page.get_active_chips_count() == 0
+
+
+def test_expression_numeric_min_study_filters(app_page: Page, base_url: str):
+    """Verify Min # up / Min # down / Min total numeric filters AND-combine."""
+    expr_page = ExpressionPage(app_page, base_url)
+    expr_page.navigate_to_expression()
+
+    assert expr_page.get_filtered_total() == 524
+
+    # Min # up >= 3 -> 52 rows (1 chip)
+    expr_page.set_min_upregulation_studies("3")
+    assert expr_page.get_filtered_total() == 52
+    assert expr_page.get_active_chips_count() == 1
+
+    # Min # down >= 3 on top -> AND: 12 rows (2 chips)
+    expr_page.set_min_downregulation_studies("3")
+    assert expr_page.get_filtered_total() == 12
+    assert expr_page.get_active_chips_count() == 2
+
+    # Min total >= 5 on top -> AND: 12 rows (3 chips)
+    expr_page.set_min_total_studies("5")
+    assert expr_page.get_filtered_total() == 12
+    assert expr_page.get_active_chips_count() == 3
+
+    # Clearing one numeric input relaxes its criterion (back to 12, 2 chips)
+    expr_page.set_min_total_studies("")
+    assert expr_page.get_filtered_total() == 12
+    assert expr_page.get_active_chips_count() == 2
+
+    expr_page.reset_expression_filters()
+    assert expr_page.get_filtered_total() == 524
+    assert expr_page.get_active_chips_count() == 0
+
+
+def test_expression_evidence_and_numeric_min_combine(app_page: Page, base_url: str):
+    """Verify the evidence checklist and a numeric min filter AND-combine."""
+    expr_page = ExpressionPage(app_page, base_url)
+    expr_page.navigate_to_expression()
+
+    assert expr_page.get_filtered_total() == 524
+
+    # Evidence: Consistent upregulation -> 42 rows
+    expr_page.select_overall_evidence("Consistent upregulation")
+    assert expr_page.get_filtered_total() == 42
+
+    # + Min total >= 3 -> 12 rows (2 chips: 1 evidence + 1 numeric)
+    expr_page.set_min_total_studies("3")
+    assert expr_page.get_filtered_total() == 12
+    assert expr_page.get_active_chips_count() == 2
+
+    expr_page.reset_expression_filters()
+    assert expr_page.get_filtered_total() == 524
+
+
+def test_expression_headers_renamed_up_down(app_page: Page, base_url: str):
+    """Verify the expression table headers show the short # up / # down labels."""
+    expr_page = ExpressionPage(app_page, base_url)
+    expr_page.navigate_to_expression()
+
+    th_selector = "#expression-table thead th"
+    js = "Array.from(document.querySelectorAll('" + th_selector + "'))"
+    js += ".map(th => th.textContent.trim())"
+    header_texts = app_page.evaluate(js)
+    assert "# up" in header_texts
+    assert "# down" in header_texts
+    # The verbose legacy labels are no longer used as headers
+    assert not any("number of studies" in h.lower() for h in header_texts)

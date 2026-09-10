@@ -50,7 +50,7 @@ def test_data_dictionary_accordion_expandable(app_page: Page, base_url: str):
     )
 
     expected_headers_per_section = [
-        ["Number of studies (Upregulated)", "Number of studies (Downregulated)"],
+        ["# up", "# down"],
         ["Alteration", "Study description"],
         ["ASD Susceptibility (SFARI)", "PubMed Reference"],
         ["Tissue Type", "Tissue Subtype", "ASD Samples", "Control Samples"],

@@ -1116,12 +1116,12 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Number of studies (Upregulated)</strong></td>
+                                                                <td><strong># up</strong></td>
                                                                 <td>Count of independent peer-reviewed publications reporting statistically significant upregulation in ASD cohorts.</td>
                                                                 <td>Non-negative integers (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3+</code>)</td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Number of studies (Downregulated)</strong></td>
+                                                                <td><strong># down</strong></td>
                                                                 <td>Count of independent peer-reviewed publications reporting statistically significant downregulation in ASD cohorts.</td>
                                                                 <td>Non-negative integers (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3+</code>)</td>
                                                             </tr>
@@ -1470,18 +1470,29 @@
                                 </select>
                             </div>
                             <div class="col-lg-3 col-md-4 col-12">
-                                <label for="filter-overall-evidence" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Overall Evidence</label>
-                                <select id="filter-overall-evidence" class="form-select form-select-sm" aria-label="Filter by Overall Evidence">
-                                    <option value="">All Evidence Types</option>
-                                    <option value="Consistent upregulation">Consistent upregulation</option>
-                                    <option value="Consistent downregulation">Consistent downregulation</option>
-                                    <option value="Conflicting evidence">Conflicting evidence</option>
-                                    <option value="Single-study evidence">Single-study evidence</option>
-                                </select>
+                                <label class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Overall Evidence</label>
+                                <div class="tissue-checklist" id="evidence-checkboxes" style="max-height: 120px; overflow-y: auto;" aria-label="Overall evidence filter (multi-select)">
+                                    <div class="checklist-item"><label for="evidence-consistent-up"><input type="checkbox" id="evidence-consistent-up" value="Consistent upregulation" class="form-check-input" aria-label="Filter by evidence: Consistent upregulation"><span>Consistent upregulation</span></label></div>
+                                    <div class="checklist-item"><label for="evidence-consistent-down"><input type="checkbox" id="evidence-consistent-down" value="Consistent downregulation" class="form-check-input" aria-label="Filter by evidence: Consistent downregulation"><span>Consistent downregulation</span></label></div>
+                                    <div class="checklist-item"><label for="evidence-conflicting"><input type="checkbox" id="evidence-conflicting" value="Conflicting evidence" class="form-check-input" aria-label="Filter by evidence: Conflicting evidence"><span>Conflicting evidence</span></label></div>
+                                    <div class="checklist-item"><label for="evidence-single-study"><input type="checkbox" id="evidence-single-study" value="Single-study evidence" class="form-check-input" aria-label="Filter by evidence: Single-study evidence"><span>Single-study evidence</span></label></div>
+                                </div>
                             </div>
                             <div class="col-lg-6 col-md-8 col-12">
                                 <label class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Tissue Type</label>
                                 <div class="tissue-checklist" id="tissue-checkboxes" style="max-height: 120px; overflow-y: auto;"></div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-12">
+                                <label for="filter-upregulation-studies" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Min # up</label>
+                                <input type="number" id="filter-upregulation-studies" class="form-control form-control-sm" min="0" step="1" placeholder="Any" aria-label="Filter by minimum number of upregulated studies" data-bs-toggle="tooltip" title="Show only miRNAs reported in at least this many upregulated studies">
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-12">
+                                <label for="filter-downregulation-studies" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Min # down</label>
+                                <input type="number" id="filter-downregulation-studies" class="form-control form-control-sm" min="0" step="1" placeholder="Any" aria-label="Filter by minimum number of downregulated studies" data-bs-toggle="tooltip" title="Show only miRNAs reported in at least this many downregulated studies">
+                            </div>
+                            <div class="col-lg-3 col-12">
+                                <label for="filter-total-studies" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Min total</label>
+                                <input type="number" id="filter-total-studies" class="form-control form-control-sm" min="0" step="1" placeholder="Any" aria-label="Filter by minimum total studies" data-bs-toggle="tooltip" title="Show only miRNAs with at least this many total studies">
                             </div>
                         </div>
                         </div>
@@ -1498,8 +1509,8 @@
                                 <th scope="col" data-bs-toggle="tooltip" title="Reported direction of expression alteration in ASD cases versus neurotypical controls.">Expression change (ASD vs. controls)</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Biological tissue, cell type, or bodily fluid analyzed in the study cohort.">Tissue</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Multi-study consistency synthesis: Consistent (≥2 studies same direction), Conflicting (divergent), or Single-study.">Overall evidence</th>
-                                <th scope="col" data-bs-toggle="tooltip" title="Count of independent publications reporting statistically significant upregulation in ASD.">Number of studies (Upregulated)</th>
-                                <th scope="col" data-bs-toggle="tooltip" title="Count of independent publications reporting statistically significant downregulation in ASD.">Number of studies (Downregulated)</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Count of independent publications reporting statistically significant upregulation in ASD."># up</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Count of independent publications reporting statistically significant downregulation in ASD."># down</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Total independent expression profiling studies evaluating this miRNA in ASD cohorts.">Total studies</th>
                             </tr>
                         </thead>
@@ -2764,6 +2775,35 @@
             });
         }
 
+        // Numeric minimum-study filters for the Expression table (# up / # down /
+        // Total studies). Enforced via a global ext.search guard keyed by table id,
+        // reading the raw row fields (column search can't compare against a minimum).
+        let exprMinUpStudies = NaN;
+        let exprMinDownStudies = NaN;
+        let exprMinTotalStudies = NaN;
+
+        function updateExpressionNumericLimits() {
+            exprMinUpStudies = parseInt($('#filter-upregulation-studies').val(), 10);
+            exprMinDownStudies = parseInt($('#filter-downregulation-studies').val(), 10);
+            exprMinTotalStudies = parseInt($('#filter-total-studies').val(), 10);
+        }
+
+        function installExpressionNumericFilters() {
+            if (window.__exprNumericFilterInstalled) return;
+            window.__exprNumericFilterInstalled = true;
+            $.fn.dataTable.ext.search.push(function(settings, searchData, index, rowData) {
+                if (!rowData) return true;
+                const id = (settings.nTableId !== undefined)
+                    ? settings.nTableId
+                    : (settings.nTable ? settings.nTable.id : '');
+                if (id !== 'expression-table') return true;
+                if (!isNaN(exprMinUpStudies) && exprMinUpStudies > 0 && (parseInt(rowData.upregulation_studies, 10) || 0) < exprMinUpStudies) return false;
+                if (!isNaN(exprMinDownStudies) && exprMinDownStudies > 0 && (parseInt(rowData.downregulation_studies, 10) || 0) < exprMinDownStudies) return false;
+                if (!isNaN(exprMinTotalStudies) && exprMinTotalStudies > 0 && (parseInt(rowData.total_studies, 10) || 0) < exprMinTotalStudies) return false;
+                return true;
+            });
+        }
+
         // Refresh the Targets interaction/gene count badges to reflect the current
         // applied (column-search AND selection-scope) row set.
         function updateTargetScopeBadges() {
@@ -2988,6 +3028,8 @@
                     applyAdvancedFilters();
                 }
                 return;
+            } else if (field === 'filter-evidence') {
+                $(`#evidence-checkboxes input[value="${val}"]`).prop('checked', false);
             } else if (field && $(`#${field}`).length) {
                 $(`#${field}`).val('');
             }
@@ -3004,7 +3046,17 @@
             const exprHairpinTokens = parseTokens($('#filter-mirna-id').val().trim());
             const exprMatureTokens = parseTokens($('#filter-mature-id').val().trim());
             const exprChange = $('#filter-expression-change').val();
-            const overallEvidence = $('#filter-overall-evidence').val();
+            const selectedEvidence = [];
+            $('#evidence-checkboxes input:checked').each(function() { selectedEvidence.push($(this).val()); });
+            const minUpStudies = parseInt($('#filter-upregulation-studies').val(), 10);
+            const minDownStudies = parseInt($('#filter-downregulation-studies').val(), 10);
+            const minTotalStudies = parseInt($('#filter-total-studies').val(), 10);
+            // Keep the ext.search guard's cached limits in sync with the DOM so that
+            // programmatic clears (per-tab reset, chip dismissal) — which do not fire
+            // the 'input' event — do not leave stale min filters applied.
+            exprMinUpStudies = minUpStudies;
+            exprMinDownStudies = minDownStudies;
+            exprMinTotalStudies = minTotalStudies;
             const selectedTissues = [];
             $('#tissue-checkboxes input:checked').each(function() { selectedTissues.push($(this).val()); });
 
@@ -3028,7 +3080,9 @@
             if (exprHairpinTokens.length > 0) exprCount++;
             if (exprMatureTokens.length > 0) exprCount++;
             if (exprChange) exprCount++;
-            if (overallEvidence) exprCount++;
+            if (selectedEvidence.length > 0) exprCount++;
+            const exprNumericCount = [minUpStudies, minDownStudies, minTotalStudies].filter(n => !isNaN(n) && n > 0).length;
+            exprCount += exprNumericCount;
             exprCount += selectedTissues.length;
 
             let genCount = 0;
@@ -3049,7 +3103,8 @@
             const exprSummary = buildSummary([
                 exprHairpinTokens.length > 0 ? `${exprHairpinTokens.length} Hairpins` : '',
                 exprMatureTokens.length > 0 ? `${exprMatureTokens.length} Mature` : '',
-                exprChange, overallEvidence,
+                exprChange,
+                selectedEvidence.length > 0 ? `${selectedEvidence.length} Evidence` : '',
                 selectedTissues.length > 0 ? `${selectedTissues.length} Tissues` : ''
             ]);
             const genSummary = buildSummary([
@@ -3065,7 +3120,10 @@
                 exprHairpinTokens.length > 0 ? { label: `Hairpins: ${exprHairpinTokens.length > 2 ? `${exprHairpinTokens.length} IDs` : exprHairpinTokens.join(', ')}`, field: 'filter-mirna-id', val: '' } : null,
                 exprMatureTokens.length > 0 ? { label: `Mature: ${exprMatureTokens.length > 2 ? `${exprMatureTokens.length} IDs` : exprMatureTokens.join(', ')}`, field: 'filter-mature-id', val: '' } : null,
                 exprChange ? { label: `Expression: ${exprChange}`, field: 'filter-expression-change', val: '' } : null,
-                overallEvidence ? { label: `Evidence: ${overallEvidence}`, field: 'filter-overall-evidence', val: '' } : null,
+                ...selectedEvidence.map(v => ({ label: `Evidence: ${v}`, field: 'filter-evidence', val: v })),
+                (!isNaN(minUpStudies) && minUpStudies > 0) ? { label: `Min # up: ${minUpStudies}`, field: 'filter-upregulation-studies', val: '' } : null,
+                (!isNaN(minDownStudies) && minDownStudies > 0) ? { label: `Min # down: ${minDownStudies}`, field: 'filter-downregulation-studies', val: '' } : null,
+                (!isNaN(minTotalStudies) && minTotalStudies > 0) ? { label: `Min total: ${minTotalStudies}`, field: 'filter-total-studies', val: '' } : null,
                 ...selectedTissues.map(t => ({ label: `Tissue: ${t}`, field: 'tissue', val: t }))
             ].filter(Boolean));
 
@@ -3097,7 +3155,13 @@
             } else {
                 expressionTable.column(5).search('');
             }
-            expressionTable.column(6).search(overallEvidence);
+            if (selectedEvidence.length > 0) {
+                expressionTable.column(6).search(selectedEvidence.map(escapeRegex).join('|'), true, false);
+            } else {
+                expressionTable.column(6).search('');
+            }
+            // Numeric minimum-study filters (# up / # down / Total) are enforced by the
+            // installExpressionNumericFilters ext.search guard on these columns.
             expressionTable.draw();
 
             // ---- Apply filters to Genetic & Other Studies Table ----
@@ -3149,8 +3213,15 @@
 
         // Event listeners for real-time filtering (per-tab inputs)
         $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-study-desc, #filter-target-tissue').on('keyup input', debouncedFilter);
-        $('#filter-expression-change, #filter-overall-evidence, #filter-genetic-alteration, #filter-sfari-category, #filter-evidence-level, #filter-target-method, #filter-target-regulation').on('change', applyAdvancedFilters);
-        $('body').on('change', '#tissue-checkboxes input', applyAdvancedFilters);
+        $('#filter-expression-change, #filter-genetic-alteration, #filter-sfari-category, #filter-evidence-level, #filter-target-method, #filter-target-regulation').on('change', applyAdvancedFilters);
+        $('#filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies').on('input', function() {
+            updateExpressionNumericLimits();
+            debouncedFilter();
+        });
+        $('body').on('change', '#tissue-checkboxes input, #evidence-checkboxes input', applyAdvancedFilters);
+
+        installExpressionNumericFilters();
+        updateExpressionNumericLimits();
 
         // Per-tab filter reset. Resets only the inputs that live on the given tab.
         function resetFiltersForScope(scope) {
@@ -3161,7 +3232,8 @@
                 $('#filter-mirna-id').val('');
                 $('#filter-mature-id').val('');
                 $('#filter-expression-change').val('');
-                $('#filter-overall-evidence').val('');
+                $('#evidence-checkboxes input:checked').prop('checked', false);
+                $('#filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies').val('');
                 $('#tissue-checkboxes input:checked').prop('checked', false);
             } else if (scope === 'genetic') {
                 clearSearch(otherTable);
@@ -3186,8 +3258,8 @@
                 clearSearch(expressionTable);
                 clearSearch(otherTable);
                 clearSearch(targetsTable);
-                $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-expression-change, #filter-overall-evidence, #filter-genetic-alteration, #filter-study-desc, #filter-sfari-category, #filter-evidence-level, #filter-target-method, #filter-target-regulation, #filter-target-tissue').val('');
-                $('#tissue-checkboxes input:checked').prop('checked', false);
+                $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-expression-change, #filter-genetic-alteration, #filter-study-desc, #filter-sfari-category, #filter-evidence-level, #filter-target-method, #filter-target-regulation, #filter-target-tissue, #filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies').val('');
+                $('#tissue-checkboxes input:checked, #evidence-checkboxes input:checked').prop('checked', false);
                 setTargetScope('all', false);
             }
             applyAdvancedFilters();
