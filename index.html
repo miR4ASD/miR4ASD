@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="miR4ASD: an interactive database of microRNAs associated with Autism Spectrum Disorder — expression and genetic study catalogs, validated target genes with SFARI risk tiers, and g:Profiler functional enrichment analysis.">
     <title>miR4ASD: A Database of microRNAs associated in Autism Spectrum Disorder</title>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-EW31T0H5KX"></script>
@@ -303,9 +303,29 @@
 
         td.details-control {
             text-align: center;
-            cursor: pointer;
+            padding: 0.15rem 0.25rem;
+        }
+
+        td.details-control .details-toggle-btn {
+            background: none;
+            border: none;
+            padding: 0.2rem 0.45rem;
+            margin: 0;
+            line-height: 1;
             color: var(--primary-color);
             font-size: 1.1rem;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.15s ease, opacity 0.15s ease;
+        }
+
+        td.details-control .details-toggle-btn:hover {
+            background-color: rgba(11, 45, 72, 0.08);
+        }
+
+        td.details-control .details-toggle-btn:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(11, 45, 72, 0.35);
         }
 
         /* Align CSV button, page length, and search box on the same line */
@@ -684,11 +704,15 @@
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
         }
-        .action-gateway-card:hover, .action-gateway-card:focus {
+        .action-gateway-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
             border-color: #3182CE !important;
+        }
+        .action-gateway-card:focus-visible {
             outline: none;
+            box-shadow: 0 0 0 3px rgba(11, 45, 72, 0.4), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+            border-color: #3182CE !important;
         }
         .figure-filter-btn {
             font-size: 0.8rem !important;
@@ -728,6 +752,24 @@
                 padding-bottom: 4px !important;
                 scrollbar-width: thin;
             }
+            .nav-tabs-scroll-wrapper {
+                position: relative;
+            }
+            .nav-tabs-scroll-wrapper::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                width: 34px;
+                pointer-events: none;
+                background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.95));
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+            .nav-tabs-scroll-wrapper[data-scroll-hint="true"]::after {
+                opacity: 1;
+            }
             .nav-tabs .nav-link {
                 padding: 8px 14px !important;
                 font-size: 0.85rem !important;
@@ -749,6 +791,19 @@
                 min-width: 180px !important;
                 width: 100% !important;
             }
+            /* Sticky table header with internal vertical scroll: the responsive
+               wrapper becomes the scroll container (max-height 70vh) so the
+               thead can be pinned to its top while rows scroll beneath it. */
+            .table-responsive {
+                max-height: 70vh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .table-responsive .dataTable thead th {
+                position: sticky;
+                top: 0;
+                z-index: 10;
+            }
         }
     </style>
 </head>
@@ -760,6 +815,7 @@
     <main id="main-content" class="container-fluid" role="main">
         <div class="card">
             <div class="d-flex justify-content-between align-items-center flex-wrap border-bottom pe-3 overflow-hidden">
+                <div class="nav-tabs-scroll-wrapper w-100">
                 <nav aria-label="Database sections" class="w-100 overflow-x-auto d-flex justify-content-between align-items-center" style="-webkit-overflow-scrolling: touch;">
                     <ul class="nav nav-tabs border-0 flex-nowrap align-items-center w-100" id="myTab" role="tablist" style="margin-bottom: -1px;">
                         <li class="nav-item" role="presentation">
@@ -777,6 +833,9 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="enrichment-tab" data-bs-toggle="tab" data-bs-target="#enrichment" type="button" role="tab" aria-controls="enrichment" aria-selected="false">Functional Enrichment</button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="help-tab" data-bs-toggle="tab" data-bs-target="#help" type="button" role="tab" aria-controls="help" aria-selected="false"><i class="fa-solid fa-circle-question me-1"></i>Help</button>
+                        </li>
                         <li class="nav-item ms-auto pe-2 d-none d-md-flex align-items-center" role="presentation">
                             <button type="button" class="btn btn-xs py-1 px-2 rounded-pill global-nav-selection-btn btn-outline-secondary d-inline-flex align-items-center" id="global-nav-selection-pill" style="font-size: 0.76rem;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Global miRNA Selection: click to explore Target Genes">
                                 <i class="fa-solid fa-check-square text-primary me-1"></i><span id="global-nav-selected-text">0 Selected miRNAs</span>
@@ -785,6 +844,7 @@
                         </li>
                     </ul>
                 </nav>
+                </div>
             </div>
             <div class="tab-content p-3" id="myTabContent">
                 <!-- About Tab Pane (Active by Default) -->
@@ -877,7 +937,7 @@
                                         </span>
                                         <div>
                                             <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">Integrated Data</h4>
-                                            <span style="font-size: 0.9rem; color: #718096;">Integrates gene expression and miRNA profiling data from ASD-control studies.</span>
+                                            <span style="font-size: 0.9rem; color: #4A5568;">Integrates gene expression and miRNA profiling data from ASD-control studies.</span>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-start">
@@ -886,7 +946,7 @@
                                         </span>
                                         <div>
                                             <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">Validated Target Genes</h4>
-                                            <span style="font-size: 0.9rem; color: #718096;">Incorporates miRTarBase 10.0 experimentally validated targets, cross-referenced with SFARI Gene ASD scores.</span>
+                                            <span style="font-size: 0.9rem; color: #4A5568;">Incorporates miRTarBase 10.0 experimentally validated targets, cross-referenced with SFARI Gene ASD scores.</span>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-start">
@@ -895,7 +955,7 @@
                                         </span>
                                         <div>
                                             <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">Tissue-Specific Patterns</h4>
-                                            <span style="font-size: 0.9rem; color: #718096;">Highlights tissue-specific expression patterns across brain and peripheral samples.</span>
+                                            <span style="font-size: 0.9rem; color: #4A5568;">Highlights tissue-specific expression patterns across brain and peripheral samples.</span>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-start">
@@ -904,7 +964,7 @@
                                         </span>
                                         <div>
                                             <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">Genetic Variants</h4>
-                                            <span style="font-size: 0.9rem; color: #718096;">Includes miRNAs with reported genetic variants — an underexplored area in ASD research.</span>
+                                            <span style="font-size: 0.9rem; color: #4A5568;">Includes miRNAs with reported genetic variants — an underexplored area in ASD research.</span>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-start">
@@ -913,7 +973,7 @@
                                         </span>
                                         <div>
                                             <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">Research Enabler</h4>
-                                            <span style="font-size: 0.9rem; color: #718096;">Supports biomarker discovery, functional studies, and genetic research in ASD.</span>
+                                            <span style="font-size: 0.9rem; color: #4A5568;">Supports biomarker discovery, functional studies, and genetic research in ASD.</span>
                                         </div>
                                     </div>
                                 </div>
@@ -927,7 +987,7 @@
                                     <i class="fa-solid fa-diagram-project me-2 text-primary"></i>Curation & Processing Workflow
                                 </h2>
                                 <div class="text-center figure-img-container p-2 mb-2 bg-white border-0" style="min-height: auto;">
-                                    <img class="img-fluid figure-img" src="images/Workflow.png" alt="Curation & Processing Workflow" style="max-height: 460px; border-radius: 8px;">
+                                    <img class="img-fluid figure-img" src="images/Workflow.png" alt="Curation & Processing Workflow" width="562" height="1209" loading="eager" style="max-height: 460px; border-radius: 8px;">
                                 </div>
                                 <p class="text-muted mt-2 mb-0" style="font-size: 0.85rem; line-height: 1.4;">
                                     <strong>Figure 1:</strong> Overview of the curation, standardization, and processing workflow implemented in the miR4ASD database.
@@ -962,7 +1022,7 @@
                         <div class="col figure-gallery-item" data-category="curation">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
-                                    <img class="img-fluid figure-img" src="images/Eligible_studies.jpg" alt="Eligible Studies Distribution">
+                                    <img class="img-fluid figure-img" src="images/Eligible_studies.jpg" alt="Eligible Studies Distribution" width="893" height="731" loading="lazy" decoding="async">
                                 </div>
                                 <div class="figure-caption">
                                     <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1.05rem;">Eligible Studies</h3>
@@ -974,7 +1034,7 @@
                         <div class="col figure-gallery-item" data-category="expression">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
-                                    <img class="img-fluid figure-img" src="images/Expression_Studies_by_tissue_type.jpg" alt="Expression Studies by Tissue">
+                                    <img class="img-fluid figure-img" src="images/Expression_Studies_by_tissue_type.jpg" alt="Expression Studies by Tissue" width="1425" height="765" loading="lazy" decoding="async">
                                 </div>
                                 <div class="figure-caption">
                                     <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1.05rem;">Expression Studies by Tissue</h3>
@@ -986,7 +1046,7 @@
                         <div class="col figure-gallery-item" data-category="genetic">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
-                                    <img class="img-fluid figure-img" src="images/Genetic_Studies_by_variant_type.jpg" alt="Genetic Studies by Variant">
+                                    <img class="img-fluid figure-img" src="images/Genetic_Studies_by_variant_type.jpg" alt="Genetic Studies by Variant" width="1357" height="736" loading="lazy" decoding="async">
                                 </div>
                                 <div class="figure-caption">
                                     <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1.05rem;">Genetic Studies by Variant</h3>
@@ -998,7 +1058,7 @@
                         <div class="col figure-gallery-item" data-category="expression">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
-                                    <img class="img-fluid figure-img" src="images/Top_10_miRNAs.jpg" alt="Top 10 Associated miRNAs">
+                                    <img class="img-fluid figure-img" src="images/Top_10_miRNAs.jpg" alt="Top 10 Associated miRNAs" width="1381" height="741" loading="lazy" decoding="async">
                                 </div>
                                 <div class="figure-caption">
                                     <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1.05rem;">Top 10 Associated miRNAs</h3>
@@ -1010,7 +1070,7 @@
                         <div class="col figure-gallery-item" data-category="overlap">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
-                                    <img class="img-fluid figure-img" src="images/12_miRNAs_in_common.jpg" alt="miRNAs in Common">
+                                    <img class="img-fluid figure-img" src="images/12_miRNAs_in_common.jpg" alt="miRNAs in Common" width="1469" height="774" loading="lazy" decoding="async">
                                 </div>
                                 <div class="figure-caption">
                                     <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1.05rem;">miRNAs in Common</h3>
@@ -1022,7 +1082,7 @@
                         <div class="col figure-gallery-item" data-category="expression">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
-                                    <img class="img-fluid figure-img" src="images/miRNAs_expression_studies.png" alt="Expression Studies Summary">
+                                    <img class="img-fluid figure-img" src="images/miRNAs_expression_studies.png" alt="Expression Studies Summary" width="1114" height="759" loading="lazy" decoding="async">
                                 </div>
                                 <div class="figure-caption">
                                     <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1.05rem;">Expression Studies Summary</h3>
@@ -1034,7 +1094,7 @@
                         <div class="col figure-gallery-item" data-category="genetic">
                             <div class="figure-card card h-100 border shadow-sm" style="border-color: #E5E7EB !important; box-shadow: none !important;">
                                 <div class="figure-img-container bg-white border-0 text-center">
-                                    <img class="img-fluid figure-img" src="images/miRNAs_genetic_and_other_studies.png" alt="Genetic Studies Summary">
+                                    <img class="img-fluid figure-img" src="images/miRNAs_genetic_and_other_studies.png" alt="Genetic Studies Summary" width="1040" height="751" loading="lazy" decoding="async">
                                 </div>
                                 <div class="figure-caption">
                                     <h3 class="figure-title fw-bold mb-1" style="color: var(--primary-color); font-size: 1.05rem;">Genetic Studies Summary</h3>
@@ -1043,6 +1103,11 @@
                             </div>
                         </div>
                     </div>
+
+                </div>
+
+                <!-- Help Tab Pane -->
+                <div class="tab-pane fade" id="help" role="tabpanel" aria-labelledby="help-tab">
 
                     <!-- Data Dictionary & Column Reference Section -->
                     <div class="row g-4 mt-2">
@@ -1179,6 +1244,11 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
+                                                                <td><strong>Study Type</strong></td>
+                                                                <td>Category of the research investigation reported for this miRNA.</td>
+                                                                <td><code>Genetics</code>, <code>Bioinformatics</code> (or both).</td>
+                                                            </tr>
+                                                            <tr>
                                                                 <td><strong>Study description</strong></td>
                                                                 <td>Methodological summary describing the experimental technique and genomic region investigated.</td>
                                                                 <td>Free text summarizing sequencing platforms, microarray CGH, cytogenetics, or target locus details.</td>
@@ -1261,7 +1331,7 @@
                                                             <tr>
                                                                 <td><strong>Experiments</strong></td>
                                                                 <td>Exact laboratory techniques used to confirm the miRNA-target interaction.</td>
-                                                                <td>Semicolon-separated methods (e.g. <code>Luciferase reporter assay</code>, <code>Western blot</code>, <code>HITS-CLIP</code>, <code>qRT-PCR</code>).</td>
+                                                                <td>Semicolon-separated methods (e.g. <code>Luciferase reporter assay</code>, <code>Western blot</code>, <code>HITS-CLIP</code>, <code>RT-qPCR</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Regulation</strong> <span class="badge bg-light text-secondary border ms-1" style="font-size: 0.7rem;">Extended Details</span></td>
@@ -1423,6 +1493,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="tab-pane fade" id="expression" role="tabpanel" aria-labelledby="expression-tab">
@@ -1496,6 +1567,7 @@
                         </div>
                         </div>
                     </div>
+                    <div class="table-responsive">
                     <table id="expression-table" class="display" style="width:100%">
                         <thead>
                             <tr>
@@ -1503,17 +1575,18 @@
                                     <input type="checkbox" class="select-all-expr form-check-input" style="position: relative; z-index: 5; cursor: pointer;" title="Select / deselect all visible miRNAs" aria-label="Select all visible miRNAs">
                                 </th>
                                 <th scope="col" style="width: 24px;" aria-label="Row details"><span class="visually-hidden">Details</span></th>
-                                <th scope="col" data-bs-toggle="tooltip" title="Stem-loop precursor microRNA identifier according to miRBase v22.1.">Precursor miRNA (hairpin)</th>
-                                <th scope="col" data-bs-toggle="tooltip" title="Functional mature microRNA single-strand identifier (miRBase v22.1).">Mature miRNA</th>
-                                <th scope="col" data-bs-toggle="tooltip" title="Reported direction of expression alteration in ASD cases versus neurotypical controls.">Expression change (ASD vs. controls)</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Stem-loop precursor microRNA identifier according to miRBase v22.1.">Precursor miRNA<br>(hairpin)</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Functional mature microRNA single-strand identifier (miRBase v22.1).">Mature<br>miRNA</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Reported direction of expression alteration in ASD cases versus neurotypical controls.">Expression change<br>(ASD vs. controls)</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Biological tissue, cell type, or bodily fluid analyzed in the study cohort.">Tissue</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Multi-study consistency synthesis: Consistent (≥2 studies same direction), Conflicting (divergent), or Single-study.">Overall evidence</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Count of independent publications reporting statistically significant upregulation in ASD."># up</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Count of independent publications reporting statistically significant downregulation in ASD."># down</th>
-                                <th scope="col" data-bs-toggle="tooltip" title="Total independent expression profiling studies evaluating this miRNA in ASD cohorts.">Total studies</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Total independent expression profiling studies evaluating this miRNA in ASD cohorts.">Total<br>studies</th>
                             </tr>
                         </thead>
                     </table>
+                    </div>
                 </div>
                 <div class="tab-pane fade" id="genetic" role="tabpanel" aria-labelledby="genetic-tab">
                     <h2 class="visually-hidden">Genetic & Other ASD Studies</h2>
@@ -1570,6 +1643,7 @@
                         </div>
                         </div>
                     </div>
+                    <div class="table-responsive">
                     <table id="other-table" class="display" style="width:100%">
                         <thead>
                             <tr>
@@ -1577,13 +1651,15 @@
                                     <input type="checkbox" class="select-all-other form-check-input" style="position: relative; z-index: 5; cursor: pointer;" title="Select / deselect all visible miRNAs" aria-label="Select all visible miRNAs">
                                 </th>
                                 <th scope="col" style="width: 24px;" aria-label="Row details"><span class="visually-hidden">Details</span></th>
-                                <th scope="col" data-bs-toggle="tooltip" title="Stem-loop precursor microRNA identifier (miRBase v22.1).">Precursor miRNA (hairpin)</th>
-                                <th scope="col" data-bs-toggle="tooltip" title="Functional mature microRNA identifier (miRBase v22.1).">Mature miRNA</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Stem-loop precursor microRNA identifier (miRBase v22.1).">Precursor miRNA<br>(hairpin)</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Functional mature microRNA identifier (miRBase v22.1).">Mature<br>miRNA</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Genomic or functional alteration category (CNV, SNV, SNP, or targeted miRNA expression).">Alteration</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Category of the research investigation reported for this miRNA.">Study Type</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Methodological description, sequencing platform, and genetic cohort summary.">Study description</th>
                             </tr>
                         </thead>
                     </table>
+                    </div>
                 </div>
                 <div class="tab-pane fade" id="targets" role="tabpanel" aria-labelledby="targets-tab">
                     <h2 class="visually-hidden">Target Genes & Experimental Validation</h2>
@@ -1668,6 +1744,8 @@
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
                             <h6 class="mb-0"><i class="fa-solid fa-sliders text-warning me-2"></i>Target Genes Filters</h6>
                             <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <span class="badge bg-white text-secondary border py-1 px-2 rounded-pill target-active-filter-indicator" style="font-size: 0.75rem;">No Filters Active</span>
+                                <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-danger btn-reset-table-filters" data-reset-scope="targets" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset all search keywords, column filters, and dropdowns to default"><i class="fa-solid fa-rotate-left me-1"></i>Reset Filters</button>
                                 <span class="text-muted small">Gene search &amp; annotation filters</span>
                                 <button type="button" class="btn btn-link btn-xs p-0 text-decoration-none text-primary fw-semibold" data-bs-toggle="collapse" data-bs-target="#targetsFiltersCollapse" aria-expanded="false" aria-controls="targetsFiltersCollapse" title="Show or hide the filter inputs"><i class="fa-solid fa-sliders me-1"></i>Filters ▾</button>
                             </div>
@@ -1696,23 +1774,136 @@
                                     <option value="Weak Support">Weak Support</option>
                                 </select>
                             </div>
-                            <div class="col-lg-3 col-md-6 col-12">
-                                <label for="filter-target-method" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Experiments</label>
-                                <select id="filter-target-method" class="form-select form-select-sm" aria-label="Filter by Experiments">
-                                    <option value="">All Experimental Methods</option>
-                                    <option value="Luciferase Reporter Assay">Luciferase Reporter Assay</option>
-                                    <option value="Western Blot">Western Blot</option>
-                                    <option value="qPCR">qPCR</option>
-                                    <option value="HITS-CLIP">HITS-CLIP</option>
-                                    <option value="PAR-CLIP">PAR-CLIP</option>
-                                    <option value="CLASH">CLASH</option>
-                                    <option value="RIP-Seq">RIP-Seq</option>
-                                    <option value="RNA-Seq">RNA-Seq</option>
-                                    <option value="Microarrays">Microarrays</option>
-                                    <option value="Northern Blot">Northern Blot</option>
-                                    <option value="Biotin-qPCR">Biotin-qPCR</option>
-                                    <option value="ELISA">ELISA</option>
-                                </select>
+                            <div class="col-lg-6 col-md-8 col-12">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <label class="form-label fw-bold text-secondary mb-0" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Experiments</label>
+                                    <input type="text" id="filter-method-search" class="form-control form-control-xs py-0 px-2" placeholder="Search experiments..." style="font-size: 0.75rem; width: 150px; height: 24px;" aria-label="Search experimental methods">
+                                </div>
+                                <div class="tissue-checklist" id="method-checkboxes" style="max-height: 120px; overflow-y: auto;" aria-label="Filter Target Genes by Experiments (multi-select)">
+                                    <div class="checklist-item" data-method-label="2-d gel electrophoresis (2dge)"><label for="method-2_D_Gel_Electrophoresis__2DGE_"><input type="checkbox" id="method-2_D_Gel_Electrophoresis__2DGE_" value="2-D Gel Electrophoresis (2DGE)" class="form-check-input" aria-label="Filter by experiment 2-D Gel Electrophoresis (2DGE)"><span>2-D Gel Electrophoresis (2DGE) <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="3&#x27;life"><label for="method-3_LIFE"><input type="checkbox" id="method-3_LIFE" value="3&#x27;LIFE" class="form-check-input" aria-label="Filter by experiment 3&#x27;LIFE"><span>3&#x27;LIFE <small class="text-muted">(4)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="5&#x27;race"><label for="method-5_RACE"><input type="checkbox" id="method-5_RACE" value="5&#x27;RACE" class="form-check-input" aria-label="Filter by experiment 5&#x27;RACE"><span>5&#x27;RACE <small class="text-muted">(3)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="5.0"><label for="method-5_0"><input type="checkbox" id="method-5_0" value="5.0" class="form-check-input" aria-label="Filter by experiment 5.0"><span>5.0 <small class="text-muted">(4)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="5race"><label for="method-5RACE"><input type="checkbox" id="method-5RACE" value="5RACE" class="form-check-input" aria-label="Filter by experiment 5RACE"><span>5RACE <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="ago2 binding rna immunoprecipitation rt-qpcr"><label for="method-AGO2_binding_RNA_immunoprecipitation_RT_qPCR"><input type="checkbox" id="method-AGO2_binding_RNA_immunoprecipitation_RT_qPCR" value="AGO2 binding RNA immunoprecipitation RT-qPCR" class="form-check-input" aria-label="Filter by experiment AGO2 binding RNA immunoprecipitation RT-qPCR"><span>AGO2 binding RNA immunoprecipitation RT-qPCR <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="alizarin red s staining"><label for="method-Alizarin_red_S_staining"><input type="checkbox" id="method-Alizarin_red_S_staining" value="Alizarin red S staining" class="form-check-input" aria-label="Filter by experiment Alizarin red S staining"><span>Alizarin red S staining <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="annexin v-fitc"><label for="method-Annexin_V_FITC"><input type="checkbox" id="method-Annexin_V_FITC" value="Annexin V-FITC" class="form-check-input" aria-label="Filter by experiment Annexin V-FITC"><span>Annexin V-FITC <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="apoptosis"><label for="method-apoptosis"><input type="checkbox" id="method-apoptosis" value="apoptosis" class="form-check-input" aria-label="Filter by experiment apoptosis"><span>apoptosis <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="aso assay"><label for="method-ASO_assay"><input type="checkbox" id="method-ASO_assay" value="ASO assay" class="form-check-input" aria-label="Filter by experiment ASO assay"><span>ASO assay <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="b-globin reporter assay"><label for="method-B_globin_reporter_assay"><input type="checkbox" id="method-B_globin_reporter_assay" value="B-globin reporter assay" class="form-check-input" aria-label="Filter by experiment B-globin reporter assay"><span>B-globin reporter assay <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="cam assay"><label for="method-CAM_assay"><input type="checkbox" id="method-CAM_assay" value="CAM assay" class="form-check-input" aria-label="Filter by experiment CAM assay"><span>CAM assay <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="cell cycle assays"><label for="method-cell_cycle_assays"><input type="checkbox" id="method-cell_cycle_assays" value="cell cycle assays" class="form-check-input" aria-label="Filter by experiment cell cycle assays"><span>cell cycle assays <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="cell proliferation"><label for="method-Cell_proliferation"><input type="checkbox" id="method-Cell_proliferation" value="Cell proliferation" class="form-check-input" aria-label="Filter by experiment Cell proliferation"><span>Cell proliferation <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="chip"><label for="method-ChIP"><input type="checkbox" id="method-ChIP" value="ChIP" class="form-check-input" aria-label="Filter by experiment ChIP"><span>ChIP <small class="text-muted">(9)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="chip"><label for="method-Chip"><input type="checkbox" id="method-Chip" value="Chip" class="form-check-input" aria-label="Filter by experiment Chip"><span>Chip <small class="text-muted">(5)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="chip immunoprecipitation"><label for="method-ChIP_immunoprecipitation"><input type="checkbox" id="method-ChIP_immunoprecipitation" value="ChIP immunoprecipitation" class="form-check-input" aria-label="Filter by experiment ChIP immunoprecipitation"><span>ChIP immunoprecipitation <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="chip-pcr"><label for="method-ChIP_PCR"><input type="checkbox" id="method-ChIP_PCR" value="ChIP-PCR" class="form-check-input" aria-label="Filter by experiment ChIP-PCR"><span>ChIP-PCR <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="chip-seq"><label for="method-ChIP_seq"><input type="checkbox" id="method-ChIP_seq" value="ChIP-seq" class="form-check-input" aria-label="Filter by experiment ChIP-seq"><span>ChIP-seq <small class="text-muted">(129)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="chromatin immunoprecipitation"><label for="method-Chromatin_immunoprecipitation"><input type="checkbox" id="method-Chromatin_immunoprecipitation" value="Chromatin immunoprecipitation" class="form-check-input" aria-label="Filter by experiment Chromatin immunoprecipitation"><span>Chromatin immunoprecipitation <small class="text-muted">(5)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="clash"><label for="method-CLASH"><input type="checkbox" id="method-CLASH" value="CLASH" class="form-check-input" aria-label="Filter by experiment CLASH"><span>CLASH <small class="text-muted">(764)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="clip-seq"><label for="method-CLIP_seq"><input type="checkbox" id="method-CLIP_seq" value="CLIP-seq" class="form-check-input" aria-label="Filter by experiment CLIP-seq"><span>CLIP-seq <small class="text-muted">(6,949)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="coimmunoprecipitation"><label for="method-Coimmunoprecipitation"><input type="checkbox" id="method-Coimmunoprecipitation" value="Coimmunoprecipitation" class="form-check-input" aria-label="Filter by experiment Coimmunoprecipitation"><span>Coimmunoprecipitation <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="colony formation"><label for="method-colony_formation"><input type="checkbox" id="method-colony_formation" value="colony formation" class="form-check-input" aria-label="Filter by experiment colony formation"><span>colony formation <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="colony formation assay"><label for="method-Colony_formation_assay"><input type="checkbox" id="method-Colony_formation_assay" value="Colony formation assay" class="form-check-input" aria-label="Filter by experiment Colony formation assay"><span>Colony formation assay <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="communoprecipitaion"><label for="method-Communoprecipitaion"><input type="checkbox" id="method-Communoprecipitaion" value="Communoprecipitaion" class="form-check-input" aria-label="Filter by experiment Communoprecipitaion"><span>Communoprecipitaion <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="elisa"><label for="method-ELISA"><input type="checkbox" id="method-ELISA" value="ELISA" class="form-check-input" aria-label="Filter by experiment ELISA"><span>ELISA <small class="text-muted">(265)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="emsa"><label for="method-EMSA"><input type="checkbox" id="method-EMSA" value="EMSA" class="form-check-input" aria-label="Filter by experiment EMSA"><span>EMSA <small class="text-muted">(12)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="facs"><label for="method-FACS"><input type="checkbox" id="method-FACS" value="FACS" class="form-check-input" aria-label="Filter by experiment FACS"><span>FACS <small class="text-muted">(30)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="flow"><label for="method-Flow"><input type="checkbox" id="method-Flow" value="Flow" class="form-check-input" aria-label="Filter by experiment Flow"><span>Flow <small class="text-muted">(213)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="flow"><label for="method-flow"><input type="checkbox" id="method-flow" value="flow" class="form-check-input" aria-label="Filter by experiment flow"><span>flow <small class="text-muted">(12)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="flow cytometry"><label for="method-Flow_cytometry"><input type="checkbox" id="method-Flow_cytometry" value="Flow cytometry" class="form-check-input" aria-label="Filter by experiment Flow cytometry"><span>Flow cytometry <small class="text-muted">(256)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="gfp reporter"><label for="method-GFP_reporter"><input type="checkbox" id="method-GFP_reporter" value="GFP reporter" class="form-check-input" aria-label="Filter by experiment GFP reporter"><span>GFP reporter <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="gfp reporter assay"><label for="method-GFP_reporter_assay"><input type="checkbox" id="method-GFP_reporter_assay" value="GFP reporter assay" class="form-check-input" aria-label="Filter by experiment GFP reporter assay"><span>GFP reporter assay <small class="text-muted">(68)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="h157"><label for="method-H157"><input type="checkbox" id="method-H157" value="H157" class="form-check-input" aria-label="Filter by experiment H157"><span>H157 <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="hits-clip"><label for="method-HITS_CLIP"><input type="checkbox" id="method-HITS_CLIP" value="HITS-CLIP" class="form-check-input" aria-label="Filter by experiment HITS-CLIP"><span>HITS-CLIP <small class="text-muted">(1,484)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunoblot"><label for="method-Immunoblot"><input type="checkbox" id="method-Immunoblot" value="Immunoblot" class="form-check-input" aria-label="Filter by experiment Immunoblot"><span>Immunoblot <small class="text-muted">(176)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunoblot"><label for="method-immunoblot"><input type="checkbox" id="method-immunoblot" value="immunoblot" class="form-check-input" aria-label="Filter by experiment immunoblot"><span>immunoblot <small class="text-muted">(4)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunocytochemistry"><label for="method-Immunocytochemistry"><input type="checkbox" id="method-Immunocytochemistry" value="Immunocytochemistry" class="form-check-input" aria-label="Filter by experiment Immunocytochemistry"><span>Immunocytochemistry <small class="text-muted">(54)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunocytochemistry (icc)"><label for="method-Immunocytochemistry__ICC_"><input type="checkbox" id="method-Immunocytochemistry__ICC_" value="Immunocytochemistry (ICC)" class="form-check-input" aria-label="Filter by experiment Immunocytochemistry (ICC)"><span>Immunocytochemistry (ICC) <small class="text-muted">(27)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunoflourescence"><label for="method-Immunoflourescence"><input type="checkbox" id="method-Immunoflourescence" value="Immunoflourescence" class="form-check-input" aria-label="Filter by experiment Immunoflourescence"><span>Immunoflourescence <small class="text-muted">(3)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunofluorescence"><label for="method-Immunofluorescence"><input type="checkbox" id="method-Immunofluorescence" value="Immunofluorescence" class="form-check-input" aria-label="Filter by experiment Immunofluorescence"><span>Immunofluorescence <small class="text-muted">(467)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunofluorescence assays"><label for="method-immunofluorescence_assays"><input type="checkbox" id="method-immunofluorescence_assays" value="immunofluorescence assays" class="form-check-input" aria-label="Filter by experiment immunofluorescence assays"><span>immunofluorescence assays <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunofluorescence microscopy"><label for="method-Immunofluorescence_microscopy"><input type="checkbox" id="method-Immunofluorescence_microscopy" value="Immunofluorescence microscopy" class="form-check-input" aria-label="Filter by experiment Immunofluorescence microscopy"><span>Immunofluorescence microscopy <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunohistochemical (ihc) staining"><label for="method-Immunohistochemical__IHC__staining"><input type="checkbox" id="method-Immunohistochemical__IHC__staining" value="Immunohistochemical (IHC) staining" class="form-check-input" aria-label="Filter by experiment Immunohistochemical (IHC) staining"><span>Immunohistochemical (IHC) staining <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunohistochemistry"><label for="method-Immunohistochemistry"><input type="checkbox" id="method-Immunohistochemistry" value="Immunohistochemistry" class="form-check-input" aria-label="Filter by experiment Immunohistochemistry"><span>Immunohistochemistry <small class="text-muted">(446)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunohistochemistry"><label for="method-immunohistochemistry"><input type="checkbox" id="method-immunohistochemistry" value="immunohistochemistry" class="form-check-input" aria-label="Filter by experiment immunohistochemistry"><span>immunohistochemistry <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunohistochemistry (ihc)"><label for="method-Immunohistochemistry__IHC_"><input type="checkbox" id="method-Immunohistochemistry__IHC_" value="Immunohistochemistry (IHC)" class="form-check-input" aria-label="Filter by experiment Immunohistochemistry (IHC)"><span>Immunohistochemistry (IHC) <small class="text-muted">(294)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunohistochemistry analysis"><label for="method-Immunohistochemistry_analysis"><input type="checkbox" id="method-Immunohistochemistry_analysis" value="Immunohistochemistry analysis" class="form-check-input" aria-label="Filter by experiment Immunohistochemistry analysis"><span>Immunohistochemistry analysis <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunoprecipitaion"><label for="method-Immunoprecipitaion"><input type="checkbox" id="method-Immunoprecipitaion" value="Immunoprecipitaion" class="form-check-input" aria-label="Filter by experiment Immunoprecipitaion"><span>Immunoprecipitaion <small class="text-muted">(103)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunoprecipitaion (ip)"><label for="method-Immunoprecipitaion__IP_"><input type="checkbox" id="method-Immunoprecipitaion__IP_" value="Immunoprecipitaion (IP)" class="form-check-input" aria-label="Filter by experiment Immunoprecipitaion (IP)"><span>Immunoprecipitaion (IP) <small class="text-muted">(259)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunoprecipitation"><label for="method-Immunoprecipitation"><input type="checkbox" id="method-Immunoprecipitation" value="Immunoprecipitation" class="form-check-input" aria-label="Filter by experiment Immunoprecipitation"><span>Immunoprecipitation <small class="text-muted">(17)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immunostaining"><label for="method-immunostaining"><input type="checkbox" id="method-immunostaining" value="immunostaining" class="form-check-input" aria-label="Filter by experiment immunostaining"><span>immunostaining <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="immuohistochemistry"><label for="method-Immuohistochemistry"><input type="checkbox" id="method-Immuohistochemistry" value="Immuohistochemistry" class="form-check-input" aria-label="Filter by experiment Immuohistochemistry"><span>Immuohistochemistry <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="in situ hybridization"><label for="method-In_situ_hybridization"><input type="checkbox" id="method-In_situ_hybridization" value="In situ hybridization" class="form-check-input" aria-label="Filter by experiment In situ hybridization"><span>In situ hybridization <small class="text-muted">(266)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="in vitro cullelar assays"><label for="method-in_vitro_cullelar_assays"><input type="checkbox" id="method-in_vitro_cullelar_assays" value="in vitro cullelar assays" class="form-check-input" aria-label="Filter by experiment in vitro cullelar assays"><span>in vitro cullelar assays <small class="text-muted">(40)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="in vivo gain/loss-of-function experiments"><label for="method-in_vivo_gain_loss_of_function_experiments"><input type="checkbox" id="method-in_vivo_gain_loss_of_function_experiments" value="in vivo gain/loss-of-function experiments" class="form-check-input" aria-label="Filter by experiment in vivo gain/loss-of-function experiments"><span>in vivo gain/loss-of-function experiments <small class="text-muted">(14)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="lacz reporter assay"><label for="method-LacZ_reporter_assay"><input type="checkbox" id="method-LacZ_reporter_assay" value="LacZ reporter assay" class="form-check-input" aria-label="Filter by experiment LacZ reporter assay"><span>LacZ reporter assay <small class="text-muted">(4)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="luciferase assay"><label for="method-Luciferase_assay"><input type="checkbox" id="method-Luciferase_assay" value="Luciferase assay" class="form-check-input" aria-label="Filter by experiment Luciferase assay"><span>Luciferase assay <small class="text-muted">(14)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="luciferase assay/rt-pcr"><label for="method-Luciferase_assay_RT_PCR"><input type="checkbox" id="method-Luciferase_assay_RT_PCR" value="Luciferase assay/RT-PCR" class="form-check-input" aria-label="Filter by experiment Luciferase assay/RT-PCR"><span>Luciferase assay/RT-PCR <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="luciferase reporter assay"><label for="method-Luciferase_reporter_assay"><input type="checkbox" id="method-Luciferase_reporter_assay" value="Luciferase reporter assay" data-canonical="Luciferase reporter assay" class="form-check-input" aria-label="Filter by experiment Luciferase reporter assay"><span>Luciferase reporter assay <small class="text-muted">(5,047)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="luciferase reporter assay/rt-qpcr"><label for="method-Luciferase_reporter_assay_RT_qPCR"><input type="checkbox" id="method-Luciferase_reporter_assay_RT_qPCR" value="Luciferase reporter assay/RT-qPCR" class="form-check-input" aria-label="Filter by experiment Luciferase reporter assay/RT-qPCR"><span>Luciferase reporter assay/RT-qPCR <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="mass spectrometry"><label for="method-Mass_spectrometry"><input type="checkbox" id="method-Mass_spectrometry" value="Mass spectrometry" class="form-check-input" aria-label="Filter by experiment Mass spectrometry"><span>Mass spectrometry <small class="text-muted">(5)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="mcf-7"><label for="method-MCF_7"><input type="checkbox" id="method-MCF_7" value="MCF-7" class="form-check-input" aria-label="Filter by experiment MCF-7"><span>MCF-7 <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="mcf-7/vp-16"><label for="method-MCF_7_VP_16"><input type="checkbox" id="method-MCF_7_VP_16" value="MCF-7/VP-16" class="form-check-input" aria-label="Filter by experiment MCF-7/VP-16"><span>MCF-7/VP-16 <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="mice xenograft"><label for="method-mice_xenograft"><input type="checkbox" id="method-mice_xenograft" value="mice xenograft" class="form-check-input" aria-label="Filter by experiment mice xenograft"><span>mice xenograft <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="micorarray"><label for="method-Micorarray"><input type="checkbox" id="method-Micorarray" value="Micorarray" class="form-check-input" aria-label="Filter by experiment Micorarray"><span>Micorarray <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="microarray"><label for="method-Microarray"><input type="checkbox" id="method-Microarray" value="Microarray" class="form-check-input" aria-label="Filter by experiment Microarray"><span>Microarray <small class="text-muted">(1,402)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="microarray"><label for="method-microarray"><input type="checkbox" id="method-microarray" value="microarray" class="form-check-input" aria-label="Filter by experiment microarray"><span>microarray <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="microarray/in situ hybridization"><label for="method-Microarray_In_situ_hybridization"><input type="checkbox" id="method-Microarray_In_situ_hybridization" value="Microarray/In situ hybridization" class="form-check-input" aria-label="Filter by experiment Microarray/In situ hybridization"><span>Microarray/In situ hybridization <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="motility assay"><label for="method-Motility_assay"><input type="checkbox" id="method-Motility_assay" value="Motility assay" class="form-check-input" aria-label="Filter by experiment Motility assay"><span>Motility assay <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="mrna decay"><label for="method-mRNA_decay"><input type="checkbox" id="method-mRNA_decay" value="mRNA decay" class="form-check-input" aria-label="Filter by experiment mRNA decay"><span>mRNA decay <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="mtt"><label for="method-MTT"><input type="checkbox" id="method-MTT" value="MTT" class="form-check-input" aria-label="Filter by experiment MTT"><span>MTT <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="mtt assay"><label for="method-MTT_assay"><input type="checkbox" id="method-MTT_assay" value="MTT assay" class="form-check-input" aria-label="Filter by experiment MTT assay"><span>MTT assay <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="next generation sequencing (ngs)"><label for="method-Next_Generation_Sequencing__NGS_"><input type="checkbox" id="method-Next_Generation_Sequencing__NGS_" value="Next Generation Sequencing (NGS)" class="form-check-input" aria-label="Filter by experiment Next Generation Sequencing (NGS)"><span>Next Generation Sequencing (NGS) <small class="text-muted">(26)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="northern blot"><label for="method-Northern_blot"><input type="checkbox" id="method-Northern_blot" value="Northern blot" class="form-check-input" aria-label="Filter by experiment Northern blot"><span>Northern blot <small class="text-muted">(210)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="northern blotting"><label for="method-Northern_blotting"><input type="checkbox" id="method-Northern_blotting" value="Northern blotting" class="form-check-input" aria-label="Filter by experiment Northern blotting"><span>Northern blotting <small class="text-muted">(8)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="or brrs&quot;"><label for="method-or_BRRS_"><input type="checkbox" id="method-or_BRRS_" value="or BRRS&quot;" class="form-check-input" aria-label="Filter by experiment or BRRS&quot;"><span>or BRRS&quot; <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="other"><label for="method-Other"><input type="checkbox" id="method-Other" value="Other" class="form-check-input" aria-label="Filter by experiment Other"><span>Other <small class="text-muted">(112)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="par-clip"><label for="method-PAR_CLIP"><input type="checkbox" id="method-PAR_CLIP" value="PAR-CLIP" class="form-check-input" aria-label="Filter by experiment PAR-CLIP"><span>PAR-CLIP <small class="text-muted">(1,804)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="pcr array"><label for="method-PCR_array"><input type="checkbox" id="method-PCR_array" value="PCR array" class="form-check-input" aria-label="Filter by experiment PCR array"><span>PCR array <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="proteomics"><label for="method-Proteomics"><input type="checkbox" id="method-Proteomics" value="Proteomics" class="form-check-input" aria-label="Filter by experiment Proteomics"><span>Proteomics <small class="text-muted">(139)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="psilac"><label for="method-pSILAC"><input type="checkbox" id="method-pSILAC" value="pSILAC" class="form-check-input" aria-label="Filter by experiment pSILAC"><span>pSILAC <small class="text-muted">(29)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="qpcr"><label for="method-qPCR"><input type="checkbox" id="method-qPCR" value="qPCR" class="form-check-input" aria-label="Filter by experiment qPCR"><span>qPCR <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="qrtpcr"><label for="method-QRTPCR"><input type="checkbox" id="method-QRTPCR" value="QRTPCR" class="form-check-input" aria-label="Filter by experiment QRTPCR"><span>QRTPCR <small class="text-muted">(56)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="qrtpcrwestern blot"><label for="method-QRTPCRWestern_blot"><input type="checkbox" id="method-QRTPCRWestern_blot" value="QRTPCRWestern blot" class="form-check-input" aria-label="Filter by experiment QRTPCRWestern blot"><span>QRTPCRWestern blot <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="quantitative proteomic approach"><label for="method-Quantitative_proteomic_approach"><input type="checkbox" id="method-Quantitative_proteomic_approach" value="Quantitative proteomic approach" class="form-check-input" aria-label="Filter by experiment Quantitative proteomic approach"><span>Quantitative proteomic approach <small class="text-muted">(23)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="real time pcr"><label for="method-Real_time_PCR"><input type="checkbox" id="method-Real_time_PCR" value="Real time PCR" class="form-check-input" aria-label="Filter by experiment Real time PCR"><span>Real time PCR <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="real time rt-pcr"><label for="method-Real_time_RT_PCR"><input type="checkbox" id="method-Real_time_RT_PCR" value="Real time RT-PCR" class="form-check-input" aria-label="Filter by experiment Real time RT-PCR"><span>Real time RT-PCR <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="real time rt-qpcr"><label for="method-real_time_RT_qPCR"><input type="checkbox" id="method-real_time_RT_qPCR" value="real time RT-qPCR" class="form-check-input" aria-label="Filter by experiment real time RT-qPCR"><span>real time RT-qPCR <small class="text-muted">(3)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="real-time rt-pcr"><label for="method-real_time_RT_PCR"><input type="checkbox" id="method-real_time_RT_PCR" value="real-time RT-PCR" class="form-check-input" aria-label="Filter by experiment real-time RT-PCR"><span>real-time RT-PCR <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="reporter assay"><label for="method-Reporter_assay"><input type="checkbox" id="method-Reporter_assay" value="Reporter assay" class="form-check-input" aria-label="Filter by experiment Reporter assay"><span>Reporter assay <small class="text-muted">(153)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="reverse-phase protein array"><label for="method-Reverse_phase_protein_array"><input type="checkbox" id="method-Reverse_phase_protein_array" value="Reverse-phase protein array" class="form-check-input" aria-label="Filter by experiment Reverse-phase protein array"><span>Reverse-phase protein array <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="review"><label for="method-Review"><input type="checkbox" id="method-Review" value="Review" class="form-check-input" aria-label="Filter by experiment Review"><span>Review <small class="text-muted">(46)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="risc-ip"><label for="method-RISC_IP"><input type="checkbox" id="method-RISC_IP" value="RISC-IP" class="form-check-input" aria-label="Filter by experiment RISC-IP"><span>RISC-IP <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="rmug-s&quot;"><label for="method-RMUG_S_"><input type="checkbox" id="method-RMUG_S_" value="RMUG-S&quot;" class="form-check-input" aria-label="Filter by experiment RMUG-S&quot;"><span>RMUG-S&quot; <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="rna pull down assay"><label for="method-RNA_pull_down_assay"><input type="checkbox" id="method-RNA_pull_down_assay" value="RNA pull down assay" class="form-check-input" aria-label="Filter by experiment RNA pull down assay"><span>RNA pull down assay <small class="text-muted">(35)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="rna-binding protein immunoprecipitation"><label for="method-RNA_binding_protein_immunoprecipitation"><input type="checkbox" id="method-RNA_binding_protein_immunoprecipitation" value="RNA-binding protein immunoprecipitation" class="form-check-input" aria-label="Filter by experiment RNA-binding protein immunoprecipitation"><span>RNA-binding protein immunoprecipitation <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="rna-seq"><label for="method-RNA_seq"><input type="checkbox" id="method-RNA_seq" value="RNA-seq" class="form-check-input" aria-label="Filter by experiment RNA-seq"><span>RNA-seq <small class="text-muted">(176)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="rt-pcr"><label for="method-RT_PCR"><input type="checkbox" id="method-RT_PCR" value="RT-PCR" class="form-check-input" aria-label="Filter by experiment RT-PCR"><span>RT-PCR <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="rt-qpcr"><label for="method-RT_qPCR"><input type="checkbox" id="method-RT_qPCR" value="RT-qPCR" class="form-check-input" aria-label="Filter by experiment RT-qPCR"><span>RT-qPCR <small class="text-muted">(4,164)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="rt-qpcr/luciferase reporter assay"><label for="method-RT_qPCR_Luciferase_reporter_assay"><input type="checkbox" id="method-RT_qPCR_Luciferase_reporter_assay" value="RT-qPCR/Luciferase reporter assay" class="form-check-input" aria-label="Filter by experiment RT-qPCR/Luciferase reporter assay"><span>RT-qPCR/Luciferase reporter assay <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="rtpcr"><label for="method-RTPCR"><input type="checkbox" id="method-RTPCR" value="RTPCR" class="form-check-input" aria-label="Filter by experiment RTPCR"><span>RTPCR <small class="text-muted">(7)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="safranin o staining/gags contents assay"><label for="method-safranin_o_staining_GAGs_contents_assay"><input type="checkbox" id="method-safranin_o_staining_GAGs_contents_assay" value="safranin o staining/GAGs contents assay" class="form-check-input" aria-label="Filter by experiment safranin o staining/GAGs contents assay"><span>safranin o staining/GAGs contents assay <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="semi-rt-qpcr"><label for="method-semi_RT_qPCR"><input type="checkbox" id="method-semi_RT_qPCR" value="semi-RT-qPCR" class="form-check-input" aria-label="Filter by experiment semi-RT-qPCR"><span>semi-RT-qPCR <small class="text-muted">(3)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="sequencing"><label for="method-Sequencing"><input type="checkbox" id="method-Sequencing" value="Sequencing" class="form-check-input" aria-label="Filter by experiment Sequencing"><span>Sequencing <small class="text-muted">(170)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="silac (stable isotope labeling of amino acids in culture)"><label for="method-SILAC__Stable_Isotope_Labeling_of_Amino_acids_in_Culture_"><input type="checkbox" id="method-SILAC__Stable_Isotope_Labeling_of_Amino_acids_in_Culture_" value="SILAC (Stable Isotope Labeling of Amino acids in Culture)" class="form-check-input" aria-label="Filter by experiment SILAC (Stable Isotope Labeling of Amino acids in Culture)"><span>SILAC (Stable Isotope Labeling of Amino acids in Culture) <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="silico analysis"><label for="method-silico_analysis"><input type="checkbox" id="method-silico_analysis" value="silico analysis" class="form-check-input" aria-label="Filter by experiment silico analysis"><span>silico analysis <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="sw1990"><label for="method-sw1990"><input type="checkbox" id="method-sw1990" value="sw1990" class="form-check-input" aria-label="Filter by experiment sw1990"><span>sw1990 <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="t cell&quot;"><label for="method-T_cell_"><input type="checkbox" id="method-T_cell_" value="T cell&quot;" class="form-check-input" aria-label="Filter by experiment T cell&quot;"><span>T cell&quot; <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="top茂卢鈥歛sh/fop茂卢鈥歛sh reporter assay"><label for="method-TOP茂卢鈥歛sh_FOP茂卢鈥歛sh_reporter_assay"><input type="checkbox" id="method-TOP茂卢鈥歛sh_FOP茂卢鈥歛sh_reporter_assay" value="TOP茂卢鈥歛sh/FOP茂卢鈥歛sh reporter assay" class="form-check-input" aria-label="Filter by experiment TOP茂卢鈥歛sh/FOP茂卢鈥歛sh reporter assay"><span>TOP茂卢鈥歛sh/FOP茂卢鈥歛sh reporter assay <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="weastern blot"><label for="method-Weastern_blot"><input type="checkbox" id="method-Weastern_blot" value="Weastern blot" class="form-check-input" aria-label="Filter by experiment Weastern blot"><span>Weastern blot <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="western blo"><label for="method-Western_blo"><input type="checkbox" id="method-Western_blo" value="Western blo" class="form-check-input" aria-label="Filter by experiment Western blo"><span>Western blo <small class="text-muted">(2)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="western blot"><label for="method-Western_blot"><input type="checkbox" id="method-Western_blot" value="Western blot" class="form-check-input" aria-label="Filter by experiment Western blot"><span>Western blot <small class="text-muted">(3,000)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="western blot"><label for="method-western_blot"><input type="checkbox" id="method-western_blot" value="western blot" class="form-check-input" aria-label="Filter by experiment western blot"><span>western blot <small class="text-muted">(3)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="western blot"><label for="method-Western_Blot"><input type="checkbox" id="method-Western_Blot" value="Western Blot" class="form-check-input" aria-label="Filter by experiment Western Blot"><span>Western Blot <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="western blotting"><label for="method-Western_blotting"><input type="checkbox" id="method-Western_blotting" value="Western blotting" class="form-check-input" aria-label="Filter by experiment Western blotting"><span>Western blotting <small class="text-muted">(1,667)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="western blotting"><label for="method-Western_Blotting"><input type="checkbox" id="method-Western_Blotting" value="Western Blotting" class="form-check-input" aria-label="Filter by experiment Western Blotting"><span>Western Blotting <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="westren blot"><label for="method-Westren_Blot"><input type="checkbox" id="method-Westren_Blot" value="Westren Blot" class="form-check-input" aria-label="Filter by experiment Westren Blot"><span>Westren Blot <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="westren blot"><label for="method-Westren_blot"><input type="checkbox" id="method-Westren_blot" value="Westren blot" class="form-check-input" aria-label="Filter by experiment Westren blot"><span>Westren blot <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="wetsern blot"><label for="method-Wetsern_blot"><input type="checkbox" id="method-Wetsern_blot" value="Wetsern blot" class="form-check-input" aria-label="Filter by experiment Wetsern blot"><span>Wetsern blot <small class="text-muted">(4)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="yfp expression"><label for="method-YFP_expression"><input type="checkbox" id="method-YFP_expression" value="YFP expression" class="form-check-input" aria-label="Filter by experiment YFP expression"><span>YFP expression <small class="text-muted">(1)</small></span></label></div>
+                                    <div class="checklist-item" data-method-label="zymography"><label for="method-Zymography"><input type="checkbox" id="method-Zymography" value="Zymography" class="form-check-input" aria-label="Filter by experiment Zymography"><span>Zymography <small class="text-muted">(1)</small></span></label></div>
+                                </div>
                             </div>
                             <div class="col-lg-3 col-md-6 col-12">
                                 <label for="filter-target-regulation" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Target Regulation</label>
@@ -1732,6 +1923,7 @@
                         </div>
                         </div>
                     </div>
+                    <div class="table-responsive">
                     <table id="targets-table" class="display" style="width:100%">
                         <thead>
                             <tr>
@@ -1740,7 +1932,7 @@
                                 </th>
                                 <th scope="col" style="width: 24px;" aria-label="Row details"><span class="visually-hidden">Details</span></th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Stem-loop precursor miRNA(s) encoding this mature regulatory RNA.">Precursor miRNA</th>
-                                <th scope="col" data-bs-toggle="tooltip" title="Mature microRNA identifier with direct experimental validation for this target gene.">Mature miRNA</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Mature microRNA identifier with direct experimental validation for this target gene.">Mature<br>miRNA</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Official HGNC gene symbol (hyperlinked directly to GeneCards human gene catalog).">Target Gene</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Full protein-coding gene name and biological function description.">Gene Description</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="SFARI Gene autism susceptibility tier: Category 1 (High Confidence), Cat 2 (Candidate), Cat 3 (Suggestive), or Syndromic.">ASD Susceptibility (SFARI)</th>
@@ -1752,6 +1944,7 @@
                             </tr>
                         </thead>
                     </table>
+                    </div>
                 </div>
 
                 <!-- 5. Functional Enrichment Tab Pane -->
@@ -1961,6 +2154,7 @@
                         <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
+                        <button type="button" class="btn btn-outline-secondary btn-sm mt-2" id="enrichment-cancel-btn" aria-label="Cancel enrichment query"><i class="fa-solid fa-xmark me-1"></i>Cancel</button>
                         <h5 class="fw-bold" style="color: var(--primary-color);">Querying g:Profiler REST API...</h5>
                         <p class="text-muted small">Computing overrepresentation statistics across biological pathways and ontologies.</p>
                     </div>
@@ -2062,10 +2256,9 @@
             </div>
         </div>
     </main>
-
     <footer class="footer mt-auto py-3" role="contentinfo">
         <div class="container text-center">
-            <span class="text-white-50">© 2025 miR4ASD | <a href="https://github.com/miR4ASD/miR4ASD" class="text-white text-decoration-underline" target="_blank" rel="noopener noreferrer">GitHub Repository</a> | This work is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="text-white text-decoration-underline" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span>
+            <span class="text-white-50">© <span id="footer-year">2026</span> miR4ASD | <a href="https://github.com/miR4ASD/miR4ASD" class="text-white text-decoration-underline" target="_blank" rel="noopener noreferrer">GitHub Repository</a> | This work is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="text-white text-decoration-underline" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span>
         </div>
     </footer>
 
@@ -2245,11 +2438,12 @@
     }
 
     $(document).ready(function() {
-        const DB_VERSION = '4.0';
+        const DB_VERSION = '4.1';
 
         // Centralized Application Configuration
         const APP_CONFIG = Object.freeze({
             GPROFILER_API_URL: 'https://biit.cs.ut.ee/gprofiler/api/gost/profile/',
+            GP_TIMEOUT_MS: 60000,
             DEFAULT_TABLE_PAGE_LEN: 10,
             DEFAULT_TOAST_DELAY: 6000
         });
@@ -2326,6 +2520,28 @@
         }
         initGlobalTooltips();
 
+        // Dynamic footer copyright year (always the current year).
+        (function() {
+            const yearEl = document.getElementById('footer-year');
+            if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
+        })();
+
+        // Mobile nav scroll affordance: show a fade at the right edge of the
+        // tab bar while more tabs are scrollable off-screen to the right.
+        (function() {
+            const nav = document.querySelector('.nav-tabs-scroll-wrapper nav');
+            const wrapper = document.querySelector('.nav-tabs-scroll-wrapper');
+            if (!nav || !wrapper) return;
+            function updateScrollHint() {
+                const canScrollRight = (nav.scrollLeft + nav.clientWidth) < (nav.scrollWidth - 2);
+                wrapper.setAttribute('data-scroll-hint', canScrollRight ? 'true' : 'false');
+            }
+            nav.addEventListener('scroll', updateScrollHint, { passive: true });
+            window.addEventListener('resize', updateScrollHint);
+            window.addEventListener('load', updateScrollHint);
+            updateScrollHint();
+        })();
+
         // Debounce helper for high-frequency text input filtering
         function debounce(func, wait) {
             let timeout;
@@ -2338,105 +2554,171 @@
             };
         }
 
-        // Fetch and display statistics
-        fetch(`statistics.json?v=${DB_VERSION}`)
-            .then(response => response.json())
-            .then(data => {
-                const statsContainer = document.getElementById('statistics-container');
-                const targetGenes = data.target_stats ? data.target_stats.total_target_genes : 3281;
-                const sfariGenes = data.target_stats ? data.target_stats.total_sfari_target_genes : 901;
-                const targetInteractions = data.target_stats ? data.target_stats.total_target_interactions : 78153;
-
-                statsContainer.innerHTML = `
-                    <div class="col-xl col-md-4 col-sm-6">
-                        <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
-                            <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Total studies</h5>
-                            <p class="fs-3 fw-bold mb-0" style="color: var(--primary-color);">${data.total_studies}</p>
-                        </div>
-                    </div>
-                    <div class="col-xl col-md-4 col-sm-6">
-                        <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
-                            <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">miRNA genes</h5>
-                            <p class="fs-3 fw-bold mb-0" style="color: var(--primary-color);">${data.total_mirna_genes}</p>
-                        </div>
-                    </div>
-                    <div class="col-xl col-md-4 col-sm-6">
-                        <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
-                            <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Mature miRNA</h5>
-                            <p class="fs-3 fw-bold mb-0" style="color: var(--primary-color);">${data.total_mirna_mature}</p>
-                        </div>
-                    </div>
-                    <div class="col-xl col-md-6 col-sm-6">
-                        <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
-                            <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Alterations</h5>
-                            <div class="d-flex justify-content-center align-items-center gap-2 mt-1">
-                                <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill" style="font-size: 0.8rem; font-weight: 700;">
-                                    <i class="fa-solid fa-arrow-up me-1"></i>Up: ${data.alteration_counts.upregulated || 0}
-                                </span>
-                                <span class="badge bg-danger-subtle text-danger px-2 py-1 rounded-pill" style="font-size: 0.8rem; font-weight: 700;">
-                                    <i class="fa-solid fa-arrow-down me-1"></i>Down: ${data.alteration_counts.downregulated || 0}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl col-md-6 col-sm-12">
-                        <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
-                            <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Validated Targets</h5>
-                            <div class="d-flex justify-content-center align-items-center gap-2 mt-1 flex-wrap">
-                                <span class="fs-4 fw-bold" style="color: var(--primary-color);">${formatCount(targetGenes)}</span>
-                                <span class="badge bg-danger-subtle text-danger border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: 700;">
-                                    <i class="fa-solid fa-dna me-1"></i>${sfariGenes} SFARI
-                                </span>
-                            </div>
-                        </div>
+        // Fetch and display statistics. Failures surface a retryable alert
+        // instead of failing silently, and the tissue filter falls back to a
+        // known tissue list so filtering stays usable.
+        const FALLBACK_TISSUES = { 'Blood': 321, 'Brain': 105, 'LCLs': 146, 'Saliva': 82, 'NSCs': 1, 'Umbilical cord': 2, 'OMSCs': 4 };
+        function populateTissueFilter(counts) {
+            const tissueCheckboxes = document.getElementById('tissue-checkboxes');
+            if (!tissueCheckboxes || !counts) return;
+            const sortedTissues = Object.keys(counts).sort();
+            tissueCheckboxes.innerHTML = sortedTissues.map(tissue => {
+                return `
+                    <div class="checklist-item">
+                        <label for="tissue-${tissue.replace(/[^a-zA-Z0-9]/g, '_')}">
+                            <input type="checkbox" id="tissue-${tissue.replace(/[^a-zA-Z0-9]/g, '_')}" value="${tissue}" class="form-check-input" aria-label="Filter by tissue ${tissue}">
+                            <span>${tissue} <small class="text-muted">(${counts[tissue]})</small></span>
+                        </label>
                     </div>
                 `;
+            }).join('');
+        }
+        function populateExperimentsFilter(data) {
+            const container = document.getElementById('method-checkboxes');
+            if (!container || !data || !data.length) return;
+            const checked = new Set();
+            container.querySelectorAll('input:checked').forEach(cb => checked.add(cb.value.toLowerCase()));
 
-                // Re-typeset MathJax formulas on accordion and tab expansion
-                $('#dictionaryAccordion').on('shown.bs.collapse', function () {
-                    if (window.MathJax && window.MathJax.typesetPromise) {
-                        window.MathJax.typesetPromise();
-                    }
-                });
-                $('#myTab button[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
-                    if (window.MathJax && window.MathJax.typesetPromise) {
-                        window.MathJax.typesetPromise();
-                    }
-                });
-
-                // Populate tissue filter checkboxes dynamically
-                const tissueCheckboxes = document.getElementById('tissue-checkboxes');
-                if (tissueCheckboxes && data.tissue_counts) {
-                    const sortedTissues = Object.keys(data.tissue_counts).sort();
-                    tissueCheckboxes.innerHTML = sortedTissues.map(tissue => {
-                        return `
-                            <div class="checklist-item">
-                                <label for="tissue-${tissue.replace(/[^a-zA-Z0-9]/g, '_')}">
-                                    <input type="checkbox" id="tissue-${tissue.replace(/[^a-zA-Z0-9]/g, '_')}" value="${tissue}" class="form-check-input" aria-label="Filter by tissue ${tissue}">
-                                    <span>${tissue} <small class="text-muted">(${data.tissue_counts[tissue]})</small></span>
-                                </label>
-                            </div>
-                        `;
-                    }).join('');
+            // Standardize, split, and count individual experiments from the targets table
+            const expCounts = {};
+            data.forEach(row => {
+                const raw = row.experimental_methods;
+                if (raw && raw !== '—') {
+                    raw.split(';').forEach(part => {
+                        const exp = part.trim();
+                        if (exp) {
+                            expCounts[exp] = (expCounts[exp] || 0) + 1;
+                        }
+                    });
                 }
-            })
-            .catch(error => console.error('Error fetching statistics:', error));
+            });
+
+            const sortedExps = Object.keys(expCounts).sort((a, b) =>
+                a.localeCompare(b, undefined, { sensitivity: 'base' })
+            );
+
+            container.innerHTML = sortedExps.map(exp => {
+                const safeId = 'method-' + exp.replace(/[^a-zA-Z0-9]/g, '_');
+                const isChecked = checked.has(exp.toLowerCase()) ? 'checked' : '';
+                return `
+                    <div class="checklist-item" data-method-label="${escapeHtml(exp.toLowerCase())}">
+                        <label for="${safeId}">
+                            <input type="checkbox" id="${safeId}" value="${escapeHtml(exp)}" class="form-check-input" ${isChecked} aria-label="Filter by experiment ${escapeHtml(exp)}">
+                            <span>${escapeHtml(exp)} <small class="text-muted">(${expCounts[exp].toLocaleString()})</small></span>
+                        </label>
+                    </div>
+                `;
+            }).join('');
+        }
+        function renderStatsCards(data) {
+            const targetGenes = data.target_stats ? data.target_stats.total_target_genes : 3281;
+            const sfariGenes = data.target_stats ? data.target_stats.total_sfari_target_genes : 901;
+
+            const statsContainer = document.getElementById('statistics-container');
+            statsContainer.innerHTML = `
+                <div class="col-xl col-md-4 col-sm-6">
+                    <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
+                        <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Total studies</h5>
+                        <p class="fs-3 fw-bold mb-0" style="color: var(--primary-color);">${data.total_studies}</p>
+                    </div>
+                </div>
+                <div class="col-xl col-md-4 col-sm-6">
+                    <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
+                        <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">miRNA genes</h5>
+                        <p class="fs-3 fw-bold mb-0" style="color: var(--primary-color);">${data.total_mirna_genes}</p>
+                    </div>
+                </div>
+                <div class="col-xl col-md-4 col-sm-6">
+                    <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
+                        <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Mature miRNA</h5>
+                        <p class="fs-3 fw-bold mb-0" style="color: var(--primary-color);">${data.total_mirna_mature}</p>
+                    </div>
+                </div>
+                <div class="col-xl col-md-6 col-sm-6">
+                    <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
+                        <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Alterations</h5>
+                        <div class="d-flex justify-content-center align-items-center gap-2 mt-1">
+                            <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill" style="font-size: 0.8rem; font-weight: 700;">
+                                <i class="fa-solid fa-arrow-up me-1"></i>Up: ${data.alteration_counts.upregulated || 0}
+                            </span>
+                            <span class="badge bg-danger-subtle text-danger px-2 py-1 rounded-pill" style="font-size: 0.8rem; font-weight: 700;">
+                                <i class="fa-solid fa-arrow-down me-1"></i>Down: ${data.alteration_counts.downregulated || 0}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl col-md-6 col-sm-12">
+                    <div class="card shadow-sm border p-3 h-100 text-center" style="border-radius: 12px; background: #ffffff; border-color: #E2E8F0 !important;">
+                        <h5 class="text-muted mb-2" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif;">Validated Targets</h5>
+                        <div class="d-flex justify-content-center align-items-center gap-2 mt-1 flex-wrap">
+                            <span class="fs-4 fw-bold" style="color: var(--primary-color);">${formatCount(targetGenes)}</span>
+                            <span class="badge bg-danger-subtle text-danger border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: 700;">
+                                <i class="fa-solid fa-dna me-1"></i>${sfariGenes} SFARI
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            populateTissueFilter(data.tissue_counts || FALLBACK_TISSUES);
+        }
+        function showStatisticsError() {
+            const statsContainer = document.getElementById('statistics-container');
+            statsContainer.innerHTML = `
+                <div class="col-12">
+                    <div class="alert alert-warning d-flex align-items-center flex-wrap gap-2 mb-0" role="alert">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                        <span class="flex-grow-1">Couldn't load database statistics &mdash; some filters unavailable.</span>
+                        <button type="button" class="btn btn-sm btn-outline-warning" id="statistics-retry-btn" aria-label="Retry loading database statistics"><i class="fa-solid fa-rotate-left me-1"></i>Retry</button>
+                    </div>
+                </div>
+            `;
+            populateTissueFilter(FALLBACK_TISSUES);
+            $('#statistics-retry-btn').on('click', loadStatistics);
+        }
+        function loadStatistics() {
+            fetch(`statistics.json?v=${DB_VERSION}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('HTTP ' + response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    renderStatsCards(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching statistics:', error);
+                    showStatisticsError();
+                });
+        }
+        loadStatistics();
+
+        // Re-typeset MathJax formulas on accordion and tab expansion (bound
+        // unconditionally at ready; the stats fetch no longer gates this).
+        $('#dictionaryAccordion').on('shown.bs.collapse', function () {
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise();
+            }
+        });
+        $('#myTab button[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise();
+            }
+        });
 
 
         // Per-tab advanced filters are rendered inline on the Expression, Genetic,
         // and Target Genes tabs (the slide-over filter drawer was removed).
 
 
-        function initializeDataTable(tableId, ajaxUrl, columnsConfig) {
-            var table = $(tableId).DataTable({
-                "ajax": {
-                    "url": ajaxUrl,
-                    "dataSrc": ""
-                },
+        function initializeDataTable(tableId, ajaxUrl, columnsConfig, dataArray) {
+            var dataTableOptions = {
                 "deferRender": true,
                 "columns": columnsConfig,
                 "orderCellsTop": true,
-                "fixedHeader": true,
+                "language": {
+                    "processing": "Loading study records…",
+                    "emptyTable": "No records found in the database",
+                    "zeroRecords": "No matching records — try clearing search or filters"
+                },
                 "dom": 'Bfrt<"bottom-controls"i<"bottom-right"lp>>',
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "pageLength": 10,
@@ -2465,18 +2747,55 @@
                     // Enhanced search input placeholder
                     const searchInput = $(tableId + '_filter input');
                     searchInput.attr('placeholder', 'Search miRNA, Gene, Tissue, DOI...');
-                    
+
                     // Initialize Bootstrap tooltips on headers and buttons
                     initGlobalTooltips(document.querySelector(tableId)?.closest('.tab-pane') || document);
-
-                    // When targets table loads its dataset, immediately apply default database filter
-                    if (tableId === '#targets-table') {
-                        applyAdvancedFilters();
-                        updateFilteredCounts();
-                    }
                 }
-            });
+            };
+            if (dataArray !== undefined && dataArray !== null) {
+                // Client-side data already fetched via the shared single-fetch promise.
+                dataTableOptions.data = dataArray;
+            } else {
+                dataTableOptions.ajax = {
+                    "url": ajaxUrl,
+                    "dataSrc": "",
+                    "error": function (jqXHR) {
+                        const status = jqXHR && jqXHR.status ? jqXHR.status : 'error';
+                        const name = ajaxUrl ? ajaxUrl.split('?')[0] : 'table data';
+                        showTableError(tableId,
+                            'Could not load ' + name + ' (HTTP ' + status + '). Check your connection and retry.',
+                            function () {
+                                if (table) { table.ajax.reload(null, false); }
+                            });
+                    }
+                };
+            }
+            var table = $(tableId).DataTable(dataTableOptions);
             return table;
+        }
+
+        // Surface a per-table load failure: hide the (empty) table and show an
+        // alert panel with a Retry button. Used by ajax error callbacks and the
+        // shared target_genes.json fetch.
+        function showTableError(tableId, message, retryFn) {
+            $(tableId + '_processing').hide();
+            $(tableId).closest('.dt-container').css('visibility', 'hidden');
+            let $panel = $(tableId + ' + .table-load-error');
+            if ($panel.length === 0) {
+                $panel = $(`<div class="table-load-error alert alert-danger d-flex align-items-center flex-wrap gap-3" role="alert"></div>`);
+                $(tableId).after($panel);
+            }
+            $panel.html(
+                '<i class="fa-solid fa-triangle-exclamation me-2"></i>' +
+                '<span class="flex-grow-1">' + escapeHtml(message) + '</span>' +
+                '<button type="button" class="btn btn-sm btn-outline-danger ms-auto" aria-label="Retry loading table data"><i class="fa-solid fa-rotate-left me-1"></i>Retry</button>'
+            );
+            $panel.show();
+            $panel.find('button').off('click').on('click', function() {
+                $panel.hide();
+                $(tableId).closest('.dt-container').css('visibility', '');
+                if (typeof retryFn === 'function') retryFn();
+            });
         }
 
         // Helper to strip HTML and whitespace
@@ -2534,7 +2853,10 @@
                     "orderable":      false,
                     "searchable":     false,
                     "data":           null,
-                    "defaultContent": '<i class="fa-solid fa-plus-circle"></i>'
+                    "render": function(data, type, row) {
+                        const label = cleanString(row.mature_mirna) || cleanString(row.precursor_mirna) || 'this record';
+                        return '<button type="button" class="details-toggle-btn" aria-expanded="false" aria-label="Expand details for ' + escapeHtml(label) + '"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>';
+                    }
                 },
                 { "data": "precursor_mirna" },
                 {
@@ -2576,7 +2898,10 @@
                     "orderable":      false,
                     "searchable":     false,
                     "data":           null,
-                    "defaultContent": '<i class="fa-solid fa-plus-circle"></i>'
+                    "render": function(data, type, row) {
+                        const label = cleanString(row.mature_mirna) || cleanString(row.precursor_mirna) || 'this record';
+                        return '<button type="button" class="details-toggle-btn" aria-expanded="false" aria-label="Expand details for ' + escapeHtml(label) + '"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>';
+                    }
                 },
                 { "data": "precursor_mirna" },
                 {
@@ -2587,94 +2912,153 @@
                     }
                 },
                 { "data": "alteration" },
+                {
+                    "data": "study_type",
+                    "render": function(data, type, row) {
+                        // study_type exists in regenerated feeds; older feeds derive
+                        // it from the per-study StudyDetails records already in the row.
+                        let types = (typeof data === 'string' && data) ? [data] : [];
+                        if (!types.length && row.StudyDetails) {
+                            const set = new Set();
+                            row.StudyDetails.forEach(s => {
+                                if (s && s['Study Type']) set.add(String(s['Study Type']).trim());
+                            });
+                            types = Array.from(set);
+                        }
+                        if (!types.length) return '<span class="text-muted">—</span>';
+                        return types.map(t => `<span class="badge bg-light text-secondary border me-1" style="font-size: 0.78rem;">${escapeHtml(t)}</span>`).join('');
+                    }
+                },
                 { "data": "study_description" }
             ]
         );
 
-        // Target Genes Table with High-Performance Dynamic Rendering
-        var targetsTable = initializeDataTable(
-            '#targets-table',
-            `target_genes.json?v=${DB_VERSION}`,
-            [
-                {
-                    "orderable": false,
-                    "searchable": false,
-                    "className": 'select-checkbox-cell',
-                    "data": null,
-                    "render": function(data, type, row) {
-                        const mature = cleanString(row.mature_mirna);
-                        const gene = row.gene_symbol ? cleanString(row.gene_symbol).toUpperCase() : '';
-                        const key = mature + '|' + gene;
-                        const isChecked = selectedTargetKeys.has(key) ? 'checked' : '';
-                        return `<input type="checkbox" class="form-check-input target-row-check" data-key="${key}" data-mature="${mature}" data-gene="${gene}" value="${key}" ${isChecked} aria-label="Select target ${gene}">`;
-                    }
-                },
-                {
-                    "className":      'details-control',
-                    "orderable":      false,
-                    "searchable":     false,
-                    "data":           null,
-                    "defaultContent": '<i class="fa-solid fa-plus-circle"></i>'
-                },
-                {
-                    "data": "precursor_mirna",
-                    "render": function(data) {
-                        if (!data) return '<span class="text-muted">—</span>';
-                        return data.split('; ').map(p => {
-                            return `<a href="https://www.mirbase.org/hairpin/${p}" target="_blank" rel="noopener noreferrer" class="badge bg-light text-dark border text-decoration-none me-1 mb-1" style="font-size: 0.78rem;">${p}</a>`;
-                        }).join('');
-                    }
-                },
-                {
-                    "data": "mature_mirna",
-                    "render": function(data) {
-                        if (!data) return '<span class="text-muted">—</span>';
-                        return `<a href="https://www.mirbase.org/mature/${data}" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none font-monospace" style="color: var(--primary-color);">${data}</a>`;
-                    }
-                },
-                {
-                    "data": "gene_symbol",
-                    "render": function(data) {
-                        if (!data) return '';
-                        return `<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${data}" target="_blank" rel="noopener noreferrer" class="fw-semibold text-decoration-none" title="View ${data} on GeneCards">${data}</a>`;
-                    }
-                },
-                {
-                    "data": "gene_name",
-                    "visible": false
-                },
-                {
-                    "data": "sfari_score",
-                    "render": function(data) {
-                        return renderSfariTableBadge(data);
-                    }
-                },
-                {
-                    "data": "support_type",
-                    "render": function(data) {
-                        if (data === 'Functional MTI') {
-                            return '<span class="badge bg-success-subtle text-success border px-2 py-1 rounded-pill" style="font-size: 0.75rem;"><i class="fa-solid fa-check-double me-1"></i>Functional MTI</span>';
+        // Target Genes Table with High-Performance Dynamic Rendering.
+        // The 6.3 MB dataset is fetched exactly once (shared promise) and feeds
+        // both this table (client-side) and the enrichment gene index, so the
+        // browser downloads it a single time.
+        let targetGenesPromise = null;
+        function loadTargetGenes() {
+            if (!targetGenesPromise) {
+                targetGenesPromise = fetch(`target_genes.json?v=${DB_VERSION}`)
+                    .then(res => {
+                        if (!res.ok) throw new Error('HTTP ' + res.status);
+                        return res.json();
+                    });
+            }
+            return targetGenesPromise;
+        }
+        var targetsTable = null;
+        function initTargetsTable(data) {
+            targetsTable = initializeDataTable(
+                '#targets-table',
+                `target_genes.json?v=${DB_VERSION}`,
+                [
+                    {
+                        "orderable": false,
+                        "searchable": false,
+                        "className": 'select-checkbox-cell',
+                        "data": null,
+                        "render": function(data, type, row) {
+                            const mature = cleanString(row.mature_mirna);
+                            const gene = row.gene_symbol ? cleanString(row.gene_symbol).toUpperCase() : '';
+                            const key = mature + '|' + gene;
+                            const isChecked = selectedTargetKeys.has(key) ? 'checked' : '';
+                            return `<input type="checkbox" class="form-check-input target-row-check" data-key="${key}" data-mature="${mature}" data-gene="${gene}" value="${key}" ${isChecked} aria-label="Select target ${gene}">`;
                         }
-                        return '<span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded-pill" style="font-size: 0.75rem;"><i class="fa-solid fa-minus-circle me-1"></i>Weak Support</span>';
-                    }
-                },
-                {
-                    "data": "pmids",
-                    "render": function(data) {
-                        if (!data) return '<span class="text-muted">—</span>';
-                        const list = data.split('; ').filter(p => p);
-                        let html = list.slice(0, 4).map(p => `<a href="https://pubmed.ncbi.nlm.nih.gov/${p}/" target="_blank" rel="noopener noreferrer" class="badge bg-secondary-subtle text-secondary border text-decoration-none me-1 mb-1" style="font-size: 0.75rem;">${p}</a>`).join('');
-                        if (list.length > 4) {
-                            html += `<span class="badge bg-light text-muted border" style="font-size: 0.75rem;">+${list.length - 4} more</span>`;
+                    },
+                    {
+                        "className":      'details-control',
+                        "orderable":      false,
+                        "searchable":     false,
+                        "data":           null,
+                        "render": function(data, type, row) {
+                            const label = cleanString(row.mature_mirna) + ' → ' + (cleanString(row.gene_symbol) || 'unknown gene');
+                            return '<button type="button" class="details-toggle-btn" aria-expanded="false" aria-label="Expand details for ' + escapeHtml(label) + '"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>';
                         }
-                        return html;
-                    }
-                },
-                { "data": "experimental_methods" },
-                { "data": "regulation", "visible": false },
-                { "data": "tissue", "visible": false }
-            ]
-        );
+                    },
+                    {
+                        "data": "precursor_mirna",
+                        "render": function(data) {
+                            if (!data) return '<span class="text-muted">—</span>';
+                            return data.split('; ').map(p => {
+                                return `<a href="https://www.mirbase.org/hairpin/${p}" target="_blank" rel="noopener noreferrer" class="badge bg-light text-dark border text-decoration-none me-1 mb-1" style="font-size: 0.78rem;">${p}</a>`;
+                            }).join('');
+                        }
+                    },
+                    {
+                        "data": "mature_mirna",
+                        "render": function(data) {
+                            if (!data) return '<span class="text-muted">—</span>';
+                            return `<a href="https://www.mirbase.org/mature/${data}" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none font-monospace" style="color: var(--primary-color);">${data}</a>`;
+                        }
+                    },
+                    {
+                        "data": "gene_symbol",
+                        "render": function(data) {
+                            if (!data) return '';
+                            return `<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=${data}" target="_blank" rel="noopener noreferrer" class="fw-semibold text-decoration-none" title="View ${data} on GeneCards">${data}</a>`;
+                        }
+                    },
+                    {
+                        "data": "gene_name",
+                        "visible": false
+                    },
+                    {
+                        "data": "sfari_score",
+                        "render": function(data) {
+                            return renderSfariTableBadge(data);
+                        }
+                    },
+                    {
+                        "data": "support_type",
+                        "render": function(data) {
+                            if (data === 'Functional MTI') {
+                                return '<span class="badge bg-success-subtle text-success border px-2 py-1 rounded-pill" style="font-size: 0.75rem;"><i class="fa-solid fa-check-double me-1"></i>Functional MTI</span>';
+                            }
+                            return '<span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded-pill" style="font-size: 0.75rem;"><i class="fa-solid fa-minus-circle me-1"></i>Weak Support</span>';
+                        }
+                    },
+                    {
+                        "data": "pmids",
+                        "render": function(data) {
+                            if (!data) return '<span class="text-muted">—</span>';
+                            const list = data.split('; ').filter(p => p);
+                            let html = list.slice(0, 4).map(p => `<a href="https://pubmed.ncbi.nlm.nih.gov/${p}/" target="_blank" rel="noopener noreferrer" class="badge bg-secondary-subtle text-secondary border text-decoration-none me-1 mb-1" style="font-size: 0.75rem;">${p}</a>`).join('');
+                            if (list.length > 4) {
+                                html += `<span class="badge bg-light text-muted border" style="font-size: 0.75rem;">+${list.length - 4} more</span>`;
+                            }
+                            return html;
+                        }
+                    },
+                    { "data": "experimental_methods" },
+                    { "data": "regulation", "visible": false },
+                    { "data": "tissue", "visible": false }
+                ],
+                data
+            );
+        }
+        function setupTargetsTable(data) {
+            if (targetsTable) { try { targetsTable.destroy(); } catch (e) {} }
+            populateExperimentsFilter(data);
+            initTargetsTable(data);
+            bindTableSelection(targetsTable, '#targets-table', 'target-row-check', '.select-all-targets', 'target');
+            targetsTable.on('draw', updateFilteredCounts);
+            applyAdvancedFilters();
+            updateFilteredCounts();
+            updateSelectionUI();
+        }
+        loadTargetGenes()
+            .then(setupTargetsTable)
+            .catch(function handleTargetsLoadError(err) {
+                console.error("Error loading target interactions:", err);
+                targetGenesPromise = null;
+                showTableError('#targets-table', 'Could not load the target gene interactions (target_genes.json). Check your connection and retry.', function() {
+                    loadTargetGenes()
+                        .then(setupTargetsTable)
+                        .catch(handleTargetsLoadError);
+                });
+            });
 
         // ============================================================
         // Selection-driven scoping: the global miRNA selection is the
@@ -2693,6 +3077,24 @@
         let deselectedTargetKeys = new Set(); // target keys the user explicitly unchecked
         let lastTargetsScopeSig = '0|selected-mirna|0'; // guards the targets re-draw (prevents draw loops)
         let lastMiRNAFieldSig = '';           // guards the miRNA chip/textarea re-render
+
+        // Restore the persisted miRNA selection (raw map repopulation only — no
+        // updateSelectionUI() here: the enrichment `let`s are still in their TDZ
+        // during this synchronous ready pass; the UI syncs itself via the
+        // ajax-table draw events and setupTargetsTable once those are initialized).
+        (function() {
+            try {
+                const rawSel = sessionStorage.getItem('mir4asd-mirna-selection');
+                if (!rawSel) return;
+                const arr = JSON.parse(rawSel);
+                if (!Array.isArray(arr)) return;
+                arr.forEach(item => {
+                    if (item && item[0] && item[1]) {
+                        selectedMiRNAs.set(item[0], { mature: item[1].mature || '', hairpin: item[1].hairpin || '' });
+                    }
+                });
+            } catch (e) { /* corrupt or unavailable sessionStorage */ }
+        })();
 
         function recomputeSelectedVariantSet() {
             selectedVariantSet = new Set();
@@ -2786,6 +3188,7 @@
         // Refresh the Targets interaction/gene count badges to reflect the current
         // applied (column-search AND selection-scope) row set.
         function updateTargetScopeBadges() {
+            if (!targetsTable) return;
             const appliedRows = targetsTable.rows({ search: 'applied' });
             const totalInteractions = appliedRows.count();
             const uniqueGenes = new Set(appliedRows.data().toArray().map(r => r && r.gene_symbol ? cleanString(r.gene_symbol).toUpperCase() : '').filter(Boolean)).size;
@@ -2832,6 +3235,7 @@
         // Re-draw the Targets table only when the selection-scope signature actually
         // changed, so the draw -> updateFilteredCounts -> updateSelectionUI path never loops.
         function refreshTargetsSelectionScope() {
+            if (!targetsTable) return;
             const sig = selectedMiRNAs.size + '|' + targetsViewMode + '|' + selectedTargetKeys.size;
             if (sig === lastTargetsScopeSig) return;
             lastTargetsScopeSig = sig;
@@ -2934,17 +3338,23 @@
 
         installMiRNASelectionFilters();
 
-        // Add event listener for opening and closing details
-        $('tbody').on('click', 'td.details-control', function () {
+        // Add event listener for opening and closing details. Delegation stays
+        // on td.details-control (e2e clicks the td); the visual state is driven
+        // by the inner .details-toggle-btn (aria-expanded + plus/minus icon).
+        // Bound on document: the targets table initializes lazily after its
+        // fetch resolves, so a ready-time $('tbody') bind would miss it.
+        $(document).on('click', 'table.dataTable tbody td.details-control', function () {
             var tr = $(this).closest('tr');
-            var icon = $(this).find('i');
+            var btn = $(this).find('.details-toggle-btn');
+            var icon = btn.find('i');
             var table = $(this).closest('table').DataTable();
             var row = table.row( tr );
 
             if ( row.child.isShown() ) {
                 row.child.hide();
                 tr.removeClass('details');
-                icon.removeClass('fa-minus-circle').addClass('fa-plus-circle');
+                btn.attr('aria-expanded', 'false');
+                icon.removeClass('fa-minus').addClass('fa-plus');
             }
             else {
                 var rowData = row.data();
@@ -2954,7 +3364,8 @@
                     row.child( formatTargetDetails(rowData) ).show();
                 }
                 tr.addClass('details');
-                icon.removeClass('fa-plus-circle').addClass('fa-minus-circle');
+                btn.attr('aria-expanded', 'true');
+                icon.removeClass('fa-plus').addClass('fa-minus');
             }
         } );
 
@@ -2970,6 +3381,9 @@
                 }
             }
             initGlobalTooltips();
+            // Persist the active tab in the URL hash (e.g. #targets) so it
+            // survives a reload; only our own tab ids, never a query string.
+            history.replaceState(null, '', '#' + e.target.id.replace(/-tab$/, ''));
         });
 
         // Floating Back-to-Top scroll listener
@@ -3013,7 +3427,7 @@
 
         // Update a per-tab active-filter indicator badge (expression / genetic)
         function setFilterIndicator(selector, count, summary) {
-            const suffix = (selector === '.gen-active-filter-indicator') ? 'gen-active-filter-indicator' : 'expr-active-filter-indicator';
+            const suffix = selector.slice(1);
             $(selector).each(function() {
                 if (count > 0) {
                     $(this).html(`<i class="fa-solid fa-filter text-primary me-1"></i>${count} Active: <strong>${summary}</strong>`);
@@ -3050,6 +3464,8 @@
                 $(`#evidence-checkboxes input[value="${val}"]`).prop('checked', false);
             } else if (field === 'filter-sfari') {
                 $(`#sfari-checkboxes input[value="${val}"]`).prop('checked', false);
+            } else if (field === 'filter-method') {
+                $('#method-checkboxes input').filter(function() { return $(this).val() === val; }).prop('checked', false);
             } else if (field && $(`#${field}`).length) {
                 $(`#${field}`).val('');
             }
@@ -3091,7 +3507,8 @@
             const selectedSfari = [];
             $('#sfari-checkboxes input:checked').each(function() { selectedSfari.push($(this).val()); });
             const supportType = $('#filter-support-type').val();
-            const targetMethod = $('#filter-target-method').val();
+            const selectedMethods = [];
+            $('#method-checkboxes input:checked').each(function() { selectedMethods.push($(this).val()); });
             const targetRegulation = $('#filter-target-regulation').val();
             const targetTissue = $('#filter-target-tissue').val().trim();
 
@@ -3115,7 +3532,7 @@
             if (geneTokens.length > 0) targetCount++;
             targetCount += selectedSfari.length;
             if (supportType) targetCount++;
-            if (targetMethod) targetCount++;
+            targetCount += selectedMethods.length;
             if (targetRegulation) targetCount++;
             if (targetTissue) targetCount++;
 
@@ -3133,6 +3550,15 @@
             ]);
             setFilterIndicator('.expr-active-filter-indicator', exprCount, exprSummary);
             setFilterIndicator('.gen-active-filter-indicator', genCount, genSummary);
+            const targetSummary = buildSummary([
+                geneTokens.length > 0 ? `${geneTokens.length} Genes` : '',
+                selectedSfari.length > 0 ? `${selectedSfari.length} SFARI` : '',
+                supportType,
+                selectedMethods.length > 0 ? `${selectedMethods.length} Methods` : '',
+                targetRegulation ? 'Regulation' : '',
+                targetTissue ? 'Tissue' : ''
+            ]);
+            setFilterIndicator('.target-active-filter-indicator', targetCount, targetSummary);
 
             // ---- Render per-tab active-filter chips ----
             renderChipsInto('.expr-active-chips', [
@@ -3156,7 +3582,7 @@
                 geneTokens.length > 0 ? { label: `Genes: ${geneTokens.length > 2 ? `${geneTokens.length} symbols` : geneTokens.join(', ')}`, field: 'filter-target-gene', val: '' } : null,
                 ...selectedSfari.map(v => ({ label: `SFARI: ${v}`, field: 'filter-sfari', val: v })),
                 supportType ? { label: `Support Type: ${supportType}`, field: 'filter-support-type', val: '' } : null,
-                targetMethod ? { label: `Method: ${targetMethod}`, field: 'filter-target-method', val: '' } : null,
+                ...selectedMethods.map(m => ({ label: `Experiment: ${m}`, field: 'filter-method', val: m })),
                 targetRegulation ? { label: `Regulation: ${targetRegulation}`, field: 'filter-target-regulation', val: '' } : null,
                 targetTissue ? { label: `Tissue: ${targetTissue}`, field: 'filter-target-tissue', val: '' } : null
             ].filter(Boolean));
@@ -3181,11 +3607,11 @@
             expressionTable.draw();
 
             // ---- Apply filters to Genetic & Other Studies Table ----
-            // Col 2: Precursor, Col 3: Mature, Col 4: Alteration, Col 5: Study description
+            // Col 2: Precursor, Col 3: Mature, Col 4: Alteration, Col 5: Study Type, Col 6: Study description
             otherTable.column(2).search(buildTokenRegex(genHairpinTokens), genHairpinTokens.length > 0, false);
             otherTable.column(3).search(buildTokenRegex(genMatureTokens), genMatureTokens.length > 0, false);
             otherTable.column(4).search(geneticAlteration);
-            otherTable.column(5).search(studyDesc);
+            otherTable.column(6).search(studyDesc);
             otherTable.draw();
 
             // ---- Apply filters to Target Genes Table ----
@@ -3206,7 +3632,11 @@
                 targetsTable.column(7).search(supportType);
 
 
-                targetsTable.column(9).search(targetMethod);
+                if (selectedMethods.length > 0) {
+                    targetsTable.column(9).search(selectedMethods.map(escapeRegex).join('|'), true, false);
+                } else {
+                    targetsTable.column(9).search('');
+                }
                 targetsTable.column(10).search(targetRegulation);
                 targetsTable.column(11).search(targetTissue);
                 targetsTable.draw();
@@ -3225,12 +3655,25 @@
 
         // Event listeners for real-time filtering (per-tab inputs)
         $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-study-desc, #filter-target-tissue').on('keyup input', debouncedFilter);
-        $('#filter-expression-change, #filter-genetic-alteration, #filter-support-type, #filter-target-method, #filter-target-regulation').on('change', applyAdvancedFilters);
+        $('#filter-expression-change, #filter-genetic-alteration, #filter-support-type, #filter-target-regulation').on('change', applyAdvancedFilters);
         $('#filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies').on('input', function() {
             updateExpressionNumericLimits();
             debouncedFilter();
         });
-        $('body').on('change', '#tissue-checkboxes input, #evidence-checkboxes input, #sfari-checkboxes input', applyAdvancedFilters);
+        $('body').on('change', '#tissue-checkboxes input, #evidence-checkboxes input, #sfari-checkboxes input, #method-checkboxes input', applyAdvancedFilters);
+
+        // Quick search for experiments checklist
+        $('#filter-method-search').on('input', function() {
+            const q = $(this).val().toLowerCase().trim();
+            $('#method-checkboxes .checklist-item').each(function() {
+                const label = $(this).data('method-label') || '';
+                if (!q || label.includes(q)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
 
         installExpressionNumericFilters();
         updateExpressionNumericLimits();
@@ -3258,7 +3701,9 @@
                 $('#filter-target-gene').val('');
                 $('#sfari-checkboxes input:checked').prop('checked', false);
                 $('#filter-support-type').val('');
-                $('#filter-target-method').val('');
+                $('#method-checkboxes input:checked').prop('checked', false);
+                $('#filter-method-search').val('');
+                $('#method-checkboxes .checklist-item').show();
                 $('#filter-target-regulation').val('');
                 $('#filter-target-tissue').val('');
             } else {
@@ -3266,8 +3711,9 @@
                 clearSearch(expressionTable);
                 clearSearch(otherTable);
                 clearSearch(targetsTable);
-                $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-expression-change, #filter-genetic-alteration, #filter-study-desc, #filter-support-type, #filter-target-method, #filter-target-regulation, #filter-target-tissue, #filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies').val('');
-                $('#tissue-checkboxes input:checked, #evidence-checkboxes input:checked, #sfari-checkboxes input:checked').prop('checked', false);
+                $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-expression-change, #filter-genetic-alteration, #filter-study-desc, #filter-support-type, #filter-target-regulation, #filter-target-tissue, #filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies, #filter-method-search').val('');
+                $('#tissue-checkboxes input:checked, #evidence-checkboxes input:checked, #sfari-checkboxes input:checked, #method-checkboxes input:checked').prop('checked', false);
+                $('#method-checkboxes .checklist-item').show();
             }
             applyAdvancedFilters();
         }
@@ -3346,7 +3792,6 @@
 
         bindTableSelection(expressionTable, '#expression-table', 'expr-row-check', '.select-all-expr', 'mirna');
         bindTableSelection(otherTable, '#other-table', 'gen-row-check', '.select-all-other', 'mirna');
-        bindTableSelection(targetsTable, '#targets-table', 'target-row-check', '.select-all-targets', 'target');
 
         function showSelectionWarning(msg) {
             if (msg) {
@@ -3458,6 +3903,11 @@
             if (typeof reloadTargetGenesFromCurrentTable === 'function' && typeof enrichmentOrigin !== 'undefined' && enrichmentOrigin && enrichmentOrigin.desc !== 'Custom Gene List') {
                 reloadTargetGenesFromCurrentTable();
             }
+
+            // 7. Persist the miRNA selection across reloads (sessionStorage).
+            try {
+                sessionStorage.setItem('mir4asd-mirna-selection', JSON.stringify(Array.from(selectedMiRNAs.entries())));
+            } catch (e) { /* sessionStorage unavailable (private mode) */ }
         }
 
         // Global Nav Selection Pill Click Handler (Navigate to Targets if selected, else Expression)
@@ -3486,6 +3936,9 @@
         let enrichmentOrigin = { type: 'table', desc: 'All Filtered miRNAs' };
         let enrichmentChartInstance = null;
         let enrichmentResultsDataTable = null;
+        let enrichmentAbort = null;      // AbortController for the in-flight g:Profiler query
+        let enrichmentTimer = null;      // timeout handle that aborts on GP_TIMEOUT_MS
+        let enrichmentTimedOut = false;  // distinguishes timeout from user cancel in .catch
         let lastGProfilerResults = [];
 
         function getTargetsForMiRNA(mature, hairpin) {
@@ -3511,9 +3964,10 @@
             return list;
         }
 
-        // Load and index target interactions dataset
-        fetch(`target_genes.json?v=${DB_VERSION}`)
-            .then(res => res.json())
+        // Index the shared target interactions dataset (fetched once, also used by
+        // the Target Genes table) for enrichment gene resolution. Error-tolerant:
+        // the targets table panel surfaces the user-facing load error.
+        loadTargetGenes()
             .then(data => {
                 allTargetInteractions = data;
                 data.forEach(item => {
@@ -3570,12 +4024,8 @@
 
                 // Start with empty enrichment targets awaiting user miRNA selection
                 setEnrichmentGenes([], 'Awaiting miRNA Selection');
-
-                // Apply initial miRTarBase default filter to targets table
-                applyAdvancedFilters();
-                updateFilteredCounts();
             })
-            .catch(err => console.error("Error loading target interactions for enrichment:", err));
+            .catch(err => console.error("Error indexing target interactions for enrichment:", err));
 
         // Update counts of visible/filtered miRNAs across tables
         function updateFilteredCounts() {
@@ -3588,9 +4038,10 @@
         }
 
         // Attach draw event listeners to update dynamic count labels
+        // (the targets-table listener is wired in setupTargetsTable, once its
+        // async single-fetch data has loaded).
         expressionTable.on('draw', updateFilteredCounts);
         otherTable.on('draw', updateFilteredCounts);
-        targetsTable.on('draw', updateFilteredCounts);
 
         // Target Gene Resolution Logic (Only resolves when miRNAs are provided)
         function resolveTargetGenesFromMiRNAs(matureList, hairpinList) {
@@ -3952,6 +4403,12 @@
             return `https://biit.cs.ut.ee/gprofiler/page/terms?term=${termId}`;
         }
 
+
+        // Cancel button for an in-flight g:Profiler query.
+        $('#enrichment-cancel-btn').on('click', function() {
+            if (enrichmentAbort) { enrichmentAbort.abort(); }
+        });
+
         // Run g:Profiler Enrichment API Call
         $('#btn-run-enrichment').on('click', function() {
             // Strictly send currentEnrichmentGenes (the filtered targets of the selected miRNAs)
@@ -3984,6 +4441,14 @@
             // Show loading spinner
             $('#enrichment-loading').removeClass('d-none');
             $('#enrichment-error').addClass('d-none');
+            // Reset abort/timer state for this query; arm the timeout.
+            if (enrichmentTimer) { clearTimeout(enrichmentTimer); }
+            enrichmentAbort = new AbortController();
+            enrichmentTimedOut = false;
+            enrichmentTimer = setTimeout(() => {
+                enrichmentTimedOut = true;
+                enrichmentAbort.abort();
+            }, APP_CONFIG.GP_TIMEOUT_MS);
             $('#enrichment-results-container').addClass('d-none');
 
             // g:Profiler REST API payload
@@ -4000,13 +4465,15 @@
             fetch(APP_CONFIG.GPROFILER_API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
+                signal: enrichmentAbort.signal
             })
             .then(res => {
                 if (!res.ok) throw new Error(`g:Profiler API responded with HTTP status ${res.status}`);
                 return res.json();
             })
             .then(data => {
+                if (enrichmentTimer) { clearTimeout(enrichmentTimer); enrichmentTimer = null; }
                 $('#enrichment-loading').addClass('d-none');
                 const results = data.result || [];
                 lastGProfilerResults = results;
@@ -4303,12 +4770,36 @@
                 });
             })
             .catch(err => {
+                if (enrichmentTimer) { clearTimeout(enrichmentTimer); enrichmentTimer = null; }
                 $('#enrichment-loading').addClass('d-none');
                 $('#enrichment-error').removeClass('d-none');
-                $('#enrichment-error-msg').text(`Network/API error communicating with g:Profiler: ${err.message}. Please check your internet connection.`);
+                let message;
+                if (err && err.name === 'AbortError') {
+                    message = enrichmentTimedOut
+                        ? 'The g:Profiler request timed out after 60 seconds. Please try again or reduce the gene list size.'
+                        : 'The g:Profiler request was cancelled. You can re-run the enrichment when ready.';
+                } else {
+                    message = `Network/API error communicating with g:Profiler: ${err.message}. Please check your internet connection.`;
+                }
+                $('#enrichment-error-msg').text(message);
                 console.error("g:Profiler enrichment error:", err);
             });
         });
+
+        // Restore the active tab from the URL hash (e.g. #targets). Placed at the
+        // end of the ready handler so the enrichment `let`s (enrichmentOrigin,
+        // enrichmentChartInstance) are already initialized for the shown.bs.tab
+        // handler this triggers.
+        (function() {
+            const ids = ['about', 'expression', 'genetic', 'targets', 'enrichment', 'help'];
+            const id = (location.hash || '').slice(1);
+            if (ids.indexOf(id) !== -1) {
+                const btn = document.getElementById(id + '-tab');
+                if (btn) {
+                    try { new bootstrap.Tab(btn).show(); } catch (e) { /* bootstrap not ready */ }
+                }
+            }
+        })();
 
     });
     </script>

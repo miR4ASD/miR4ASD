@@ -36,7 +36,7 @@ def test_inline_filter_counts(app_page: Page, base_url: str):
         ),
         (
             lambda: targets_page.select_method("Luciferase Reporter Assay"),
-            "5,051",
+            "5,050",
             "2,204",
         ),
     ]

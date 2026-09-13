@@ -16,6 +16,12 @@ class FiguresPage(BasePage):
         heading = self.page.locator("h2:has-text('Database Statistics')")
         heading.scroll_into_view_if_needed()
 
+    def navigate_to_dictionary(self) -> None:
+        """Navigate to the Help tab and scroll to the data dictionary card."""
+        self.switch_tab("help")
+        heading = self.page.locator("h2:has-text('Data Dictionary')")
+        heading.scroll_into_view_if_needed()
+
     def get_figure_images(self) -> List[Locator]:
         """Return list of all figure image locators on page."""
         return self.page.locator(".figure-img").all()
@@ -30,6 +36,9 @@ class FiguresPage(BasePage):
         Returns:
             Tuple of (naturalWidth, naturalHeight).
         """
+        # Lazy-loaded images only decode once scrolled into view.
+        locator.scroll_into_view_if_needed()
+        self.page.wait_for_timeout(200)
         w = locator.evaluate("el => el.naturalWidth")
         h = locator.evaluate("el => el.naturalHeight")
         return int(w), int(h)

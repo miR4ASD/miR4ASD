@@ -376,7 +376,7 @@ def process_target_genes(
         "Luciferase reporter assay",
         "Western blot",
         "Western blotting",
-        "qRT-PCR",
+        "RT-qPCR",
         "Northern blot",
     }
     clip_methods = {
@@ -468,7 +468,9 @@ def process_target_genes(
 
             experiments_raw = row.get("Experiments") or ""
             for exp in experiments_raw.split("//"):
-                exp_clean = exp.strip()
+                # Standardize method naming (miRTarBase "qRT-PCR" -> "RT-qPCR")
+                # before any evidence-tier matching.
+                exp_clean = exp.strip().replace("qRT-PCR", "RT-qPCR")
                 if exp_clean:
                     entry["methods"].add(exp_clean)
                     if exp_clean in strong_methods:

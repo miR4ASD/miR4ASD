@@ -13,7 +13,7 @@ class TargetsPage(BasePage):
     FILTER_GENE = "#filter-target-gene"
     FILTER_SFARI = "#sfari-checkboxes"
     FILTER_SUPPORT = "#filter-support-type"
-    FILTER_METHOD = "#filter-target-method"
+    FILTER_METHOD = "#method-checkboxes"
     FILTER_REGULATION = "#filter-target-regulation"
     FILTER_TISSUE = "#filter-target-tissue"
 
@@ -86,8 +86,23 @@ class TargetsPage(BasePage):
         self.select_filter_option(self.FILTER_SUPPORT, value)
 
     def select_method(self, value: str) -> None:
-        """Select an experimental technique option ('' for All)."""
-        self.select_filter_option(self.FILTER_METHOD, value)
+        """
+        Toggle the experimental technique checkbox for ``value`` (multi-select).
+
+        Passing ``''`` unchecks every experiment box (returns the table to all rows).
+        """
+        if value:
+            self.ensure_filter_card_expanded(self.FILTER_METHOD)
+            cb = self.page.locator(f'{self.FILTER_METHOD} input[value="{value}"]')
+            if cb.count() == 0:
+                for inp in self.page.locator(f'{self.FILTER_METHOD} input').all():
+                    if (inp.get_attribute("value") or "").lower() == value.lower():
+                        cb = inp
+                        break
+            cb.check()
+        else:
+            self.page.locator(f'{self.FILTER_METHOD} input:checked').uncheck()
+        self.page.wait_for_timeout(400)
 
     def select_regulation(self, value: str) -> None:
         """Select a target regulation option ('' for All)."""

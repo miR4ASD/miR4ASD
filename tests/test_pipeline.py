@@ -546,3 +546,40 @@ def test_resolve_study_details():
     # None and empty handling
     assert resolve_study_details(None, study_map) == []
     assert resolve_study_details("", study_map) == []
+
+
+def test_experiments_filter_contains_all_target_methods():
+    """Verify all individual experiments from target_genes.json appear in method-checkboxes."""
+    import html
+    import re
+
+    with open("target_genes.json", "r", encoding="utf-8") as f:
+        targets = json.load(f)
+
+    unique_methods = set()
+    for item in targets:
+        raw = item.get("experimental_methods", "")
+        if raw and raw != "—":
+            for part in raw.split(";"):
+                clean = part.strip()
+                if clean:
+                    unique_methods.add(clean)
+
+    with open("index.html", "r", encoding="utf-8") as f:
+        html_content = f.read()
+
+    checklist_match = re.search(
+        r'<div[^>]*id="method-checkboxes"[^>]*>(.*?)</div>\s*</div>',
+        html_content,
+        re.DOTALL,
+    )
+    assert checklist_match, "method-checkboxes checklist not found in index.html"
+
+    cb_values = set(
+        re.findall(r'<input [^>]*value=["\']([^"\']+)["\']', checklist_match.group(1))
+    )
+    cb_values = {html.unescape(v) for v in cb_values if v}
+
+    missing = unique_methods - cb_values
+    assert not missing, f"Missing experiments in method-checkboxes: {missing}"
+

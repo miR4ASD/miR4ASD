@@ -12,6 +12,7 @@ class BasePage:
         "genetic": "#genetic-tab",
         "targets": "#targets-tab",
         "enrichment": "#enrichment-tab",
+        "help": "#help-tab",
     }
 
     def __init__(self, page: Page, base_url: str):
@@ -35,7 +36,7 @@ class BasePage:
         Switch to a designated navbar tab.
 
         Args:
-            tab_name: One of 'about', 'expression', 'genetic', 'targets', 'enrichment'.
+            tab_name: One of 'about', 'expression', 'genetic', 'targets', 'enrichment', 'help'.
         """
         selector = self.TAB_SELECTORS.get(tab_name)
         if not selector:

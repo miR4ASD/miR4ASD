@@ -370,7 +370,7 @@ def test_user_story_7_data_dictionary_and_visualizations(
     schema definitions, and publication figure card loading with positive dimensions.
     """
     figures_page = FiguresPage(app_page, base_url)
-    figures_page.navigate_to_figures()
+    figures_page.navigate_to_dictionary()
 
     # 1. Verify 5 Table Specifications badge
     badge = app_page.locator("span:has-text('Table Specifications')").first
@@ -379,7 +379,7 @@ def test_user_story_7_data_dictionary_and_visualizations(
     # 2. Verify all 5 accordion specification items expand and contain exact headers
     expected_spec_headers: List[List[str]] = [
         ["# up", "# down"],
-        ["Alteration", "Study description"],
+        ["Alteration", "Study Type", "Study description"],
         ["ASD Susceptibility (SFARI)", "PubMed Reference"],
         ["Tissue Type", "Tissue Subtype", "ASD Samples", "Control Samples"],
         ["Term ID", "Term Name", "Adjusted P-Value", "Overlap (k/N)", "Term Size"],
@@ -403,6 +403,7 @@ def test_user_story_7_data_dictionary_and_visualizations(
                 f"Missing header '{header}' in accordion specification {idx + 1}"
             )
 
+    figures_page.navigate_to_figures()
     # 3. Verify publication figure cards render with positive dimensions
     images = figures_page.get_figure_images()
     assert len(images) >= 8

@@ -38,7 +38,7 @@ def test_figure_cards_do_not_open_modal_on_click(app_page: Page, base_url: str):
 def test_data_dictionary_accordion_expandable(app_page: Page, base_url: str):
     """Verify that all 5 data dictionary accordion sections expand and display specs."""
     figures_page = FiguresPage(app_page, base_url)
-    figures_page.navigate_to_figures()
+    figures_page.navigate_to_dictionary()
 
     # Verify 5 specifications badge
     badge = app_page.locator("span:has-text('Table Specifications')").first
@@ -51,7 +51,7 @@ def test_data_dictionary_accordion_expandable(app_page: Page, base_url: str):
 
     expected_headers_per_section = [
         ["# up", "# down"],
-        ["Alteration", "Study description"],
+        ["Alteration", "Study Type", "Study description"],
         ["ASD Susceptibility (SFARI)", "PubMed Reference"],
         ["Tissue Type", "Tissue Subtype", "ASD Samples", "Control Samples"],
         ["Term ID", "Term Name", "Adjusted P-Value", "Overlap (k/N)", "Term Size"],
