@@ -41,6 +41,7 @@ class ExpressionPage(StudiesTablePage):
     FILTER_MIN_DOWN = "#filter-downregulation-studies"
     FILTER_MIN_TOTAL = "#filter-total-studies"
     TISSUE_CHECKBOXES = "#tissue-checkboxes"
+    OTHER_EVIDENCE_CHECKBOXES = "#other-evidence-checkboxes"
 
     def filter_mature(self, text: str) -> None:
         """Set the miRNA mature ID filter ('' to clear)."""
@@ -69,6 +70,23 @@ class ExpressionPage(StudiesTablePage):
         else:
             self.page.locator(
                 f'{self.EVIDENCE_CHECKBOXES} input:checked'
+            ).uncheck()
+        self.page.wait_for_timeout(400)
+
+    def select_other_evidence(self, value: str) -> None:
+        """
+        Check the other-evidence checkbox for ``value`` ('' to uncheck all).
+
+        The Evidence from other studies filter is a multi-select checklist.
+        """
+        if value:
+            self.ensure_filter_card_expanded(self.OTHER_EVIDENCE_CHECKBOXES)
+            self.page.locator(
+                f'#other-evidence-checkboxes input[value="{value}"]'
+            ).check()
+        else:
+            self.page.locator(
+                f'{self.OTHER_EVIDENCE_CHECKBOXES} input:checked'
             ).uncheck()
         self.page.wait_for_timeout(400)
 

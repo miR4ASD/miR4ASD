@@ -1558,7 +1558,7 @@
                                 <label for="filter-mirna-id" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">miRNA Precursor / Hairpin ID(s)</label>
                                 <textarea id="filter-mirna-id" class="form-control font-monospace" rows="2" placeholder="Paste precursor IDs (e.g. hsa-let-7a-1, hsa-mir-132...)" style="font-size: 0.8rem;" aria-label="Filter Expression Studies by miRNA Hairpin ID(s)"></textarea>
                             </div>
-                            <div class="col-lg-3 col-md-4 col-12">
+                            <div class="col-lg-3 col-md-6 col-12">
                                 <label for="filter-expression-change" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Expression Change</label>
                                 <select id="filter-expression-change" class="form-select form-select-sm" aria-label="Filter by Expression Change">
                                     <option value="">All Expression Changes</option>
@@ -1566,7 +1566,7 @@
                                     <option value="Downregulated">Downregulated</option>
                                 </select>
                             </div>
-                            <div class="col-lg-3 col-md-4 col-12">
+                            <div class="col-lg-3 col-md-6 col-12">
                                 <label class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Overall Evidence</label>
                                 <div class="tissue-checklist" id="evidence-checkboxes" style="max-height: 120px; overflow-y: auto;" aria-label="Overall evidence filter (multi-select)">
                                     <div class="checklist-item"><label for="evidence-consistent-up"><input type="checkbox" id="evidence-consistent-up" value="Consistent upregulation" class="form-check-input" aria-label="Filter by evidence: Consistent upregulation"><span>Consistent upregulation</span></label></div>
@@ -1575,32 +1575,30 @@
                                     <div class="checklist-item"><label for="evidence-single-study"><input type="checkbox" id="evidence-single-study" value="Single-study evidence" class="form-check-input" aria-label="Filter by evidence: Single-study evidence"><span>Single-study evidence</span></label></div>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-8 col-12">
+                            <div class="col-lg-3 col-md-6 col-12">
+                                <label class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Evidence from other studies</label>
+                                <div class="tissue-checklist" id="other-evidence-checkboxes" style="max-height: 120px; overflow-y: auto;" aria-label="Evidence from other studies filter (multi-select)">
+                                    <div class="checklist-item"><label for="other-ev-genetics"><input type="checkbox" id="other-ev-genetics" value="Genetics" class="form-check-input" aria-label="Filter by other evidence: Genetics (Any)"><span>Genetics (Any)</span></label></div>
+                                    <div class="checklist-item"><label for="other-ev-cnv"><input type="checkbox" id="other-ev-cnv" value="CNV" class="form-check-input" aria-label="Filter by other evidence: Genetics CNV"><span>Genetics: CNV</span></label></div>
+                                    <div class="checklist-item"><label for="other-ev-snv"><input type="checkbox" id="other-ev-snv" value="SNV" class="form-check-input" aria-label="Filter by other evidence: Genetics SNV"><span>Genetics: SNV</span></label></div>
+                                    <div class="checklist-item"><label for="other-ev-snp"><input type="checkbox" id="other-ev-snp" value="SNP" class="form-check-input" aria-label="Filter by other evidence: Genetics SNP"><span>Genetics: SNP</span></label></div>
+                                    <div class="checklist-item"><label for="other-ev-bioinfo"><input type="checkbox" id="other-ev-bioinfo" value="Bioinformatics" class="form-check-input" aria-label="Filter by other evidence: Bioinformatics"><span>Bioinformatics</span></label></div>
+                                    <div class="checklist-item"><label for="other-ev-none"><input type="checkbox" id="other-ev-none" value="no" class="form-check-input" aria-label="Filter by other evidence: No other studies"><span>No other studies (None)</span></label></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-12">
                                 <label class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Tissue Type</label>
                                 <div class="tissue-checklist" id="tissue-checkboxes" style="max-height: 120px; overflow-y: auto;"></div>
                             </div>
-                            <div class="col-lg-3 col-md-4 col-12">
-                                <label for="filter-expression-other-evidence" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Evidence from other studies</label>
-                                <select id="filter-expression-other-evidence" class="form-select form-select-sm" aria-label="Filter by Evidence from other studies">
-                                    <option value="">All (Any / None)</option>
-                                    <option value="has_other_evidence">Any evidence from other studies</option>
-                                    <option value="Genetics">Any Genetics</option>
-                                    <option value="CNV">Genetics: CNV</option>
-                                    <option value="SNV">Genetics: SNV</option>
-                                    <option value="SNP">Genetics: SNP</option>
-                                    <option value="Bioinformatics">Bioinformatics</option>
-                                    <option value="^no$">No other studies</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-3 col-md-4 col-12">
+                            <div class="col-lg-4 col-md-4 col-12">
                                 <label for="filter-upregulation-studies" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Min # up</label>
                                 <input type="number" id="filter-upregulation-studies" class="form-control form-control-sm" min="0" step="1" placeholder="Any" aria-label="Filter by minimum number of upregulated studies" data-bs-toggle="tooltip" title="Show only miRNAs reported in at least this many upregulated studies">
                             </div>
-                            <div class="col-lg-3 col-md-4 col-12">
+                            <div class="col-lg-4 col-md-4 col-12">
                                 <label for="filter-downregulation-studies" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Min # down</label>
                                 <input type="number" id="filter-downregulation-studies" class="form-control form-control-sm" min="0" step="1" placeholder="Any" aria-label="Filter by minimum number of downregulated studies" data-bs-toggle="tooltip" title="Show only miRNAs reported in at least this many downregulated studies">
                             </div>
-                            <div class="col-lg-3 col-12">
+                            <div class="col-lg-4 col-md-4 col-12">
                                 <label for="filter-total-studies" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Min total</label>
                                 <input type="number" id="filter-total-studies" class="form-control form-control-sm" min="0" step="1" placeholder="Any" aria-label="Filter by minimum total studies" data-bs-toggle="tooltip" title="Show only miRNAs with at least this many total studies">
                             </div>
@@ -2940,7 +2938,9 @@
                 { "data": "overall_evidence" },
                 {
                     "data": "evidence_from_other_studies",
-                    "render": function(data) {
+                    "render": function(data, type, row) {
+                        const val = data || 'no';
+                        if (type === 'filter' || type === 'sort') return val;
                         if (!data || data === 'no' || data === '—') return '<span class="badge bg-light text-muted border" style="font-size: 0.75rem;">None</span>';
                         let cls = 'bg-primary-subtle text-primary border';
                         if (data.includes('Bioinformatics') && !data.includes('Genetics')) {
@@ -3587,6 +3587,8 @@
                 $(`#tissue-checkboxes input[value="${val}"]`).prop('checked', false);
             } else if (field === 'filter-evidence') {
                 $(`#evidence-checkboxes input[value="${val}"]`).prop('checked', false);
+            } else if (field === 'other-evidence') {
+                $(`#other-evidence-checkboxes input[value="${val}"]`).prop('checked', false);
             } else if (field === 'filter-sfari') {
                 $(`#sfari-checkboxes input[value="${val}"]`).prop('checked', false);
             } else if (field === 'filter-method') {
@@ -3609,7 +3611,8 @@
             const exprChange = $('#filter-expression-change').val() || '';
             const selectedEvidence = [];
             $('#evidence-checkboxes input:checked').each(function() { selectedEvidence.push($(this).val()); });
-            const exprOtherEvidence = $('#filter-expression-other-evidence').val() || '';
+            const selectedOtherEvidence = [];
+            $('#other-evidence-checkboxes input:checked').each(function() { selectedOtherEvidence.push($(this).val()); });
             const minUpStudies = parseInt($('#filter-upregulation-studies').val(), 10);
             const minDownStudies = parseInt($('#filter-downregulation-studies').val(), 10);
             const minTotalStudies = parseInt($('#filter-total-studies').val(), 10);
@@ -3646,7 +3649,7 @@
             if (exprMatureTokens.length > 0) exprCount++;
             if (exprChange) exprCount++;
             if (selectedEvidence.length > 0) exprCount++;
-            if (exprOtherEvidence) exprCount++;
+            if (selectedOtherEvidence.length > 0) exprCount++;
             const exprNumericCount = [minUpStudies, minDownStudies, minTotalStudies].filter(n => !isNaN(n) && n > 0).length;
             exprCount += exprNumericCount;
             exprCount += selectedTissues.length;
@@ -3672,7 +3675,7 @@
                 exprMatureTokens.length > 0 ? `${exprMatureTokens.length} Mature` : '',
                 exprChange,
                 selectedEvidence.length > 0 ? `${selectedEvidence.length} Evidence` : '',
-                exprOtherEvidence ? (exprOtherEvidence === 'has_other_evidence' ? 'Other' : exprOtherEvidence) : '',
+                selectedOtherEvidence.length > 0 ? `${selectedOtherEvidence.length} Other Ev.` : '',
                 selectedTissues.length > 0 ? `${selectedTissues.length} Tissues` : ''
             ]);
             const genSummary = buildSummary([
@@ -3701,7 +3704,17 @@
                 exprMatureTokens.length > 0 ? { label: `Mature: ${exprMatureTokens.length > 2 ? `${exprMatureTokens.length} IDs` : exprMatureTokens.join(', ')}`, field: 'filter-mature-id', val: '' } : null,
                 exprChange ? { label: `Expression: ${exprChange}`, field: 'filter-expression-change', val: '' } : null,
                 ...selectedEvidence.map(v => ({ label: `Evidence: ${v}`, field: 'filter-evidence', val: v })),
-                exprOtherEvidence ? { label: `Other: ${exprOtherEvidence === 'has_other_evidence' ? 'Any' : exprOtherEvidence}`, field: 'filter-expression-other-evidence', val: '' } : null,
+                ...selectedOtherEvidence.map(v => {
+                    const labelMap = {
+                        'Genetics': 'Other: Genetics (Any)',
+                        'CNV': 'Other: Genetics CNV',
+                        'SNV': 'Other: Genetics SNV',
+                        'SNP': 'Other: Genetics SNP',
+                        'Bioinformatics': 'Other: Bioinformatics',
+                        'no': 'Other: None'
+                    };
+                    return { label: labelMap[v] || `Other: ${v}`, field: 'other-evidence', val: v };
+                }),
                 (!isNaN(minUpStudies) && minUpStudies > 0) ? { label: `Min # up: ${minUpStudies}`, field: 'filter-upregulation-studies', val: '' } : null,
                 (!isNaN(minDownStudies) && minDownStudies > 0) ? { label: `Min # down: ${minDownStudies}`, field: 'filter-downregulation-studies', val: '' } : null,
                 (!isNaN(minTotalStudies) && minTotalStudies > 0) ? { label: `Min total: ${minTotalStudies}`, field: 'filter-total-studies', val: '' } : null,
@@ -3740,10 +3753,9 @@
             } else {
                 expressionTable.column(6).search('');
             }
-            if (exprOtherEvidence === 'has_other_evidence') {
-                expressionTable.column(7).search('^(?!no$|—$).+', true, false);
-            } else if (exprOtherEvidence) {
-                expressionTable.column(7).search(exprOtherEvidence, true, false);
+            if (selectedOtherEvidence.length > 0) {
+                const patterns = selectedOtherEvidence.map(val => val === 'no' ? '^no$' : escapeRegex(val));
+                expressionTable.column(7).search(patterns.join('|'), true, false);
             } else {
                 expressionTable.column(7).search('');
             }
@@ -3808,12 +3820,12 @@
 
         // Event listeners for real-time filtering (per-tab inputs)
         $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-study-desc, #filter-target-tissue').on('keyup input', debouncedFilter);
-        $('#filter-expression-change, #filter-expression-other-evidence, #filter-genetic-study-type, #filter-genetic-alteration, #filter-genetic-expr-evidence, #filter-support-type, #filter-target-regulation').on('change', applyAdvancedFilters);
+        $('#filter-expression-change, #filter-genetic-study-type, #filter-genetic-alteration, #filter-genetic-expr-evidence, #filter-support-type, #filter-target-regulation').on('change', applyAdvancedFilters);
         $('#filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies').on('input', function() {
             updateExpressionNumericLimits();
             debouncedFilter();
         });
-        $('body').on('change', '#tissue-checkboxes input, #evidence-checkboxes input, #sfari-checkboxes input, #method-checkboxes input', applyAdvancedFilters);
+        $('body').on('change', '#tissue-checkboxes input, #evidence-checkboxes input, #other-evidence-checkboxes input, #sfari-checkboxes input, #method-checkboxes input', applyAdvancedFilters);
 
         // Quick search for experiments checklist
         $('#filter-method-search').on('input', function() {
@@ -3837,8 +3849,8 @@
             const clearSearch = (t) => { if (t) { t.search(''); t.draw(); } };
             if (scope === 'expression') {
                 clearSearch(expressionTable);
-                $('#filter-mirna-id, #filter-mature-id, #filter-expression-change, #filter-expression-other-evidence').val('');
-                $('#evidence-checkboxes input:checked, #tissue-checkboxes input:checked').prop('checked', false);
+                $('#filter-mirna-id, #filter-mature-id, #filter-expression-change').val('');
+                $('#evidence-checkboxes input:checked, #tissue-checkboxes input:checked, #other-evidence-checkboxes input:checked').prop('checked', false);
                 $('#filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies').val('');
             } else if (scope === 'genetic') {
                 clearSearch(otherTable);
@@ -3858,8 +3870,8 @@
                 clearSearch(expressionTable);
                 clearSearch(otherTable);
                 clearSearch(targetsTable);
-                $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-expression-change, #filter-expression-other-evidence, #filter-genetic-study-type, #filter-genetic-alteration, #filter-genetic-expr-evidence, #filter-study-desc, #filter-support-type, #filter-target-regulation, #filter-target-tissue, #filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies, #filter-method-search').val('');
-                $('#tissue-checkboxes input:checked, #evidence-checkboxes input:checked, #sfari-checkboxes input:checked, #method-checkboxes input:checked').prop('checked', false);
+                $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-expression-change, #filter-genetic-study-type, #filter-genetic-alteration, #filter-genetic-expr-evidence, #filter-study-desc, #filter-support-type, #filter-target-regulation, #filter-target-tissue, #filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies, #filter-method-search').val('');
+                $('#tissue-checkboxes input:checked, #evidence-checkboxes input:checked, #other-evidence-checkboxes input:checked, #sfari-checkboxes input:checked, #method-checkboxes input:checked').prop('checked', false);
                 $('#method-checkboxes .checklist-item').show();
             }
             applyAdvancedFilters();

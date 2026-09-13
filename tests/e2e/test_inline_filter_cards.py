@@ -90,6 +90,40 @@ def test_expression_card_categorical_and_combined_filters(
     assert expr_page.get_filtered_total() == 3
     assert expr_page.get_active_chips_count() == 3
 
+
+def test_expression_card_other_evidence_filter(app_page: Page, base_url: str):
+    """Verify Expression inline card 'Evidence from other studies' multi-select filter."""
+    expr_page = ExpressionPage(app_page, base_url)
+    expr_page.navigate_to_expression()
+
+    # Total unfiltered
+    assert expr_page.get_filtered_total() == 524
+
+    # Select CNV
+    expr_page.select_other_evidence("CNV")
+    assert expr_page.get_filtered_total() == 33
+    assert expr_page.get_active_chips_count() == 1
+    assert "1 Other Ev." in expr_page.get_active_indicator_text()
+    chip_text = expr_page.page.locator(".expr-active-chips .filter-chip").first.inner_text().strip()
+    assert "CNV" in chip_text
+
+    # Multi-select: also select Bioinformatics
+    expr_page.select_other_evidence("Bioinformatics")
+    assert expr_page.get_filtered_total() == 68
+    assert expr_page.get_active_chips_count() == 2
+
+    # Reset
+    expr_page.reset_expression_filters()
+    assert expr_page.get_filtered_total() == 524
+    assert expr_page.get_active_chips_count() == 0
+
+    # Select No other studies (None)
+    expr_page.select_other_evidence("no")
+    assert expr_page.get_filtered_total() == 451
+    expr_page.reset_expression_filters()
+    assert expr_page.get_filtered_total() == 524
+
+
 def test_genetic_card_mirna_filter_and_reset(app_page: Page, base_url: str):
     """Verify the Genetic & Other Studies inline card miRNA filter and reset."""
     gen_page = GeneticPage(app_page, base_url)
