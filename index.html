@@ -1728,29 +1728,28 @@
                             <i class="fa-solid fa-bullseye text-warning me-2 fs-6"></i>
                             <span>Explore experimentally validated target genes and their SFARI ASD susceptibility tiers. Expand <i class="fa-solid fa-plus-circle text-primary mx-1"></i> for full gene descriptions.</span>
                         </div>
-                        <div class="small text-muted"><i class="fa-solid fa-database me-1 text-primary"></i>miRTarBase 10.0</div>
+                        <span id="active-db-label" class="badge bg-success-subtle text-success border px-2 py-1" style="font-size: 0.82rem;">
+                            <i class="fa-solid fa-database me-1"></i>miRTarBase 10.0
+                        </span>
                     </div>
                     <!-- Unified Target Controls & Metadata Toolbar -->
                     <div class="card border p-3 mb-3 shadow-sm" style="background-color: #f8fafc; border-color: #e2e8f0 !important; border-radius: 10px;">
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
                             <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <span id="active-db-label" class="badge bg-success-subtle text-success border px-2 py-1" style="font-size: 0.82rem;">
-                                    <i class="fa-solid fa-database me-1"></i>miRTarBase 10.0
-                                </span>
-                                <span class="badge bg-white text-secondary border">
+                                <span class="badge bg-white text-secondary border py-2 px-2" style="font-size: 0.82rem;">
                                     <span id="db-active-count" class="fw-bold text-primary">17,150</span> Target Interactions (<span id="db-active-genes-count" class="fw-bold text-success">2,995</span> Target Genes)
                                 </span>
                             </div>
                             <div class="d-flex align-items-center gap-2 flex-wrap">
                                 <div class="btn-group" role="group" aria-label="Targets view mode">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary fw-bold targets-view-btn" data-view-mode="all" data-bs-toggle="tooltip" data-bs-placement="top" title="Show the full miRTarBase interaction catalog">
-                                        <i class="fa-solid fa-table me-1"></i> All interactions
+                                    <button type="button" class="btn btn-sm btn-outline-primary fw-bold targets-view-btn" data-view-mode="all" data-bs-toggle="tooltip" data-bs-placement="top" title="Show all interactions in the database">
+                                        <i class="fa-solid fa-table me-1"></i> Show all interactions
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary fw-bold targets-view-btn" data-view-mode="selected-mirna" data-bs-toggle="tooltip" data-bs-placement="top" title="Show only the interactions of the selected miRNAs">
-                                        <i class="fa-solid fa-bullseye me-1"></i> Selected miRNAs
+                                    <button type="button" class="btn btn-sm btn-outline-primary fw-bold targets-view-btn" data-view-mode="selected-mirna" data-bs-toggle="tooltip" data-bs-placement="top" title="Show only interactions for the selected miRNAs">
+                                        <i class="fa-solid fa-bullseye me-1"></i> Show selected miRNAs
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary fw-bold targets-view-btn" data-view-mode="selected-only" data-bs-toggle="tooltip" data-bs-placement="top" title="Show only the individually selected target rows">
-                                        <i class="fa-solid fa-check-double me-1"></i> Selected targets
+                                    <button type="button" class="btn btn-sm btn-outline-primary fw-bold targets-view-btn" data-view-mode="selected-only" data-bs-toggle="tooltip" data-bs-placement="top" title="Show only individually selected target interaction rows">
+                                        <i class="fa-solid fa-check-double me-1"></i> Show selected targets
                                     </button>
                                 </div>
                                 <button type="button" class="btn btn-sm btn-secondary opacity-75 fw-bold btn-analyze-filtered shadow-sm" data-source-table="targets" data-bs-toggle="tooltip" data-bs-placement="top" title="Transfer selected candidate miRNAs and open the Functional Enrichment tab" disabled>
@@ -3168,7 +3167,18 @@
             populateExperimentsFilter(data);
             initTargetsTable(data);
             bindTableSelection(targetsTable, '#targets-table', 'target-row-check', '.select-all-targets', 'target');
-            targetsTable.on('draw', updateFilteredCounts);
+            targetsTable.on('draw', function() {
+                updateFilteredCounts();
+                if (targetsTable.rows({ search: 'applied' }).count() === 0) {
+                    let msg = 'No matching records — try clearing search or filters';
+                    if (targetsViewMode === 'selected-mirna' && selectedMiRNAs.size === 0) {
+                        msg = 'No miRNAs currently selected. Select miRNAs in the Expression or Genetic Studies tables, or paste miRNA IDs above.';
+                    } else if (targetsViewMode === 'selected-only' && selectedTargetKeys.size === 0) {
+                        msg = 'No target rows currently selected. Use the checkboxes in the table to select target interactions.';
+                    }
+                    $('#targets-table tbody .dt-empty, #targets-table tbody .dataTables_empty').text(msg);
+                }
+            });
             applyAdvancedFilters();
             updateFilteredCounts();
             updateSelectionUI();
@@ -3192,15 +3202,18 @@
         // "selected only" toggles mirror that selection per table.
         // ============================================================
         // Targets view mode: 'all' (full catalog), 'selected-mirna' (targets of the
-        // selected miRNAs — the default, auto-scopes as the selection changes), or
+        // Target table view mode: 'all' (entire interaction database), 'selected-mirna' (only
+        // selected miRNAs — auto-scopes as selection changes), or
         // 'selected-only' (only the individually checkbox-selected target rows).
-        let targetsViewMode = 'selected-mirna';
+        let targetsViewMode = 'all';
         let exprShowSelectedOnly = false;     // Expression: show only selected rows
         let genShowSelectedOnly = false;      // Genetic: show only selected rows
         let selectedVariantSet = new Set();   // cached lowercase variant set of all selected miRNAs
         let selectedTargetKeys = new Set();   // keys ("mature|GENE") of selected target rows
         let deselectedTargetKeys = new Set(); // target keys the user explicitly unchecked
-        let lastTargetsScopeSig = '0|selected-mirna|0'; // guards the targets re-draw (prevents draw loops)
+        let manualSelectedTargetKeys = new Set(); // target keys the user explicitly checked
+        let lastTotalSelected = 0;            // tracks selection transitions to auto-scope targets
+        let lastTargetsScopeSig = '0|all|0';  // guards the targets re-draw (prevents draw loops)
         let lastMiRNAFieldSig = '';           // guards the miRNA chip/textarea re-render
 
         // Restore the persisted miRNA selection (raw map repopulation only — no
@@ -3265,9 +3278,10 @@
                     : (settings.nTable ? settings.nTable.id : '');
                 if (id === 'targets-table') {
                     if (targetsViewMode === 'all') return true;
-                    if (selectedMiRNAs.size === 0 || selectedTargetKeys.size === 0) return true;
-                    if (targetsViewMode === 'selected-only') return selectedTargetKeys.has(targetRowKey(rowData));
-                    return rowMatchesSelection(rowData);
+                    if (targetsViewMode === 'selected-only') {
+                        return selectedTargetKeys.size > 0 && selectedTargetKeys.has(targetRowKey(rowData));
+                    }
+                    return selectedMiRNAs.size > 0 && rowMatchesSelection(rowData);
                 }
                 if (id === 'expression-table') {
                     if (!exprShowSelectedOnly || selectedMiRNAs.size === 0) return true;
@@ -3323,8 +3337,7 @@
 
         // Derive the auto-selected target rows from the current miRNA selection:
         // every target interaction belonging to a selected miRNA is selected, minus any
-        // rows the user explicitly deselected. Pure function of (selection, deselected),
-        // so it is idempotent and draw-loop safe.
+        // rows the user explicitly deselected. Also includes any manually checked target rows.
         function recomputeSelectedTargetKeys() {
             const next = new Set();
             if (selectedMiRNAs.size > 0) {
@@ -3334,6 +3347,9 @@
                     if (!k || deselectedTargetKeys.has(k)) continue;
                     if (rowMatchesSelection(row)) next.add(k);
                 }
+            }
+            for (const k of manualSelectedTargetKeys) {
+                if (!deselectedTargetKeys.has(k)) next.add(k);
             }
             selectedTargetKeys = next;
         }
@@ -3368,15 +3384,14 @@
             updateTargetScopeBadges();
         }
 
-        // Keep the three targets view-mode buttons' active styling and enabled state
+        // Keep the three targets view-mode buttons' active styling
         // in sync with the current selection + view mode.
         function syncSelectionToggleButtons(totalSelected) {
             $('.targets-view-btn').each(function() {
                 const mode = $(this).data('view-mode');
                 $(this).toggleClass('active', mode === targetsViewMode)
                     .toggleClass('btn-primary', mode === targetsViewMode)
-                    .toggleClass('btn-outline-primary', mode !== targetsViewMode)
-                    .prop('disabled', totalSelected === 0 && mode !== 'all');
+                    .toggleClass('btn-outline-primary', mode !== targetsViewMode);
             });
             $('#expr-show-selected-btn').prop('disabled', totalSelected === 0).toggleClass('active', exprShowSelectedOnly);
             $('#gen-show-selected-btn').prop('disabled', totalSelected === 0).toggleClass('active', genShowSelectedOnly);
@@ -3888,9 +3903,13 @@
                 const key = $(this).data('key') || $(this).val();
                 if (!key) return;
                 if (isTarget) {
-                    // Uncheck records an explicit deselection; re-check lifts it.
-                    if ($(this).is(':checked')) deselectedTargetKeys.delete(key);
-                    else deselectedTargetKeys.add(key);
+                    if ($(this).is(':checked')) {
+                        deselectedTargetKeys.delete(key);
+                        manualSelectedTargetKeys.add(key);
+                    } else {
+                        deselectedTargetKeys.add(key);
+                        manualSelectedTargetKeys.delete(key);
+                    }
                 } else {
                     const mature = $(this).data('mature') || '';
                     const hairpin = $(this).data('hairpin') || '';
@@ -3908,8 +3927,13 @@
                     applied.forEach(r => {
                         const k = targetRowKey(r);
                         if (!k) return;
-                        if (isChecked) deselectedTargetKeys.delete(k);
-                        else deselectedTargetKeys.add(k);
+                        if (isChecked) {
+                            deselectedTargetKeys.delete(k);
+                            manualSelectedTargetKeys.add(k);
+                        } else {
+                            deselectedTargetKeys.add(k);
+                            manualSelectedTargetKeys.delete(k);
+                        }
                     });
                 } else {
                     applied.forEach(r => {
@@ -3967,6 +3991,11 @@
         // Expose a test/automation handle to clear the global miRNA selection
         window.clearMiRNASelection = function() {
             selectedMiRNAs.clear();
+            manualSelectedTargetKeys.clear();
+            deselectedTargetKeys.clear();
+            selectedTargetKeys.clear();
+            targetsViewMode = 'all';
+            lastTotalSelected = 0;
             updateSelectionUI();
             if (typeof reloadTargetGenesFromCurrentTable === 'function') {
                 reloadTargetGenesFromCurrentTable();
@@ -3976,6 +4005,13 @@
         function updateSelectionUI() {
             const totalSelected = selectedMiRNAs.size;
 
+            if (totalSelected > 0 && lastTotalSelected === 0) {
+                targetsViewMode = 'selected-mirna';
+            } else if (totalSelected === 0 && lastTotalSelected > 0 && targetsViewMode === 'selected-mirna') {
+                targetsViewMode = 'all';
+            }
+            lastTotalSelected = totalSelected;
+
             // Recompute the normalized variant set (drives the ext.search scope) and
             // derive the auto-selected target rows from the current miRNA selection
             // (minus any the user explicitly deselected).
@@ -3983,7 +4019,7 @@
             recomputeSelectedTargetKeys();
             const totalTargets = getSelectedTargetGenes().length;
 
-            if (totalSelected === 0) {
+            if (totalSelected === 0 && manualSelectedTargetKeys.size === 0) {
                 // No selection: clear the individual target selection + deselections.
                 selectedTargetKeys = new Set();
                 deselectedTargetKeys = new Set();
@@ -4452,7 +4488,6 @@
         // miRNAs' targets, and the individually selected target rows.
         $('.targets-view-btn').on('click', function() {
             const mode = $(this).data('view-mode');
-            if (mode !== 'all' && selectedMiRNAs.size === 0) return;
             setTargetsViewMode(mode);
         });
 

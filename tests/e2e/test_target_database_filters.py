@@ -92,3 +92,61 @@ def test_sfari_susceptibility_multiselect_or_and_chips(app_page: Page, base_url:
     # Per-tab reset returns to the full set
     targets_page.reset_target_filters()
     assert targets_page.get_filtered_total() == 17150
+
+
+def test_targets_view_mode_buttons_always_accessible_and_explicit_labels(
+    app_page: Page, base_url: str
+):
+    """Verify Targets view-mode buttons are always enabled, explicitly labeled, and non-blocking."""
+    targets_page = TargetsPage(app_page, base_url)
+    targets_page.navigate_to_targets()
+
+    # 1. Check explicit button labels
+    btn_all = app_page.locator('.targets-view-btn[data-view-mode="all"]')
+    btn_mirna = app_page.locator('.targets-view-btn[data-view-mode="selected-mirna"]')
+    btn_target = app_page.locator('.targets-view-btn[data-view-mode="selected-only"]')
+
+    assert "Show all interactions" in btn_all.inner_text()
+    assert "Show selected miRNAs" in btn_mirna.inner_text()
+    assert "Show selected targets" in btn_target.inner_text()
+
+    # 2. Verify no duplicated miRTarBase in the toolbar card line
+    # The badge is only in the top alert
+    toolbar_card = app_page.locator("#targets .card").first
+    assert toolbar_card.locator("#active-db-label").count() == 0
+    assert app_page.locator("#active-db-label").count() == 1
+    assert "miRTarBase 10.0" in app_page.locator("#active-db-label").inner_text()
+
+    # 3. Initially in 'all' view mode when no miRNAs are selected
+    assert targets_page.get_active_view_mode() == "all"
+    assert targets_page.get_filtered_total() == 17150
+
+    # 4. Click 'Show selected miRNAs' without prior selection -> switches cleanly, shows 0 rows with helpful message
+    targets_page.set_view_mode("selected-mirna")
+    assert targets_page.get_active_view_mode() == "selected-mirna"
+    assert targets_page.get_filtered_total() == 0
+    empty_text = app_page.locator("#targets-table tbody td.dt-empty, #targets-table tbody td.dataTables_empty").first.inner_text()
+    assert "No miRNAs currently selected" in empty_text
+
+    # 5. Click 'Show all interactions' -> returns to all 17,150
+    targets_page.set_view_mode("all")
+    assert targets_page.get_active_view_mode() == "all"
+    assert targets_page.get_filtered_total() == 17150
+
+    # 6. Check individual target row checkboxes in 'all' mode
+    first_row_check = app_page.locator("#targets-table tbody .target-row-check").first
+    first_row_check.check()
+    app_page.wait_for_timeout(300)
+    assert first_row_check.is_checked()
+
+    # 7. Switch to 'Show selected targets' -> shows the individually selected target
+    targets_page.set_view_mode("selected-only")
+    assert targets_page.get_active_view_mode() == "selected-only"
+    assert targets_page.get_filtered_total() == 1
+
+    # 8. Switch back to 'all' -> returns to full catalog and checkbox remains checked
+    targets_page.set_view_mode("all")
+    assert targets_page.get_active_view_mode() == "all"
+    assert targets_page.get_filtered_total() == 17150
+    assert first_row_check.is_checked()
+
