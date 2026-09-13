@@ -1,4 +1,5 @@
 import csv
+import glob
 import json
 import os
 from typing import Any, Dict, List, Optional, Set, Tuple
@@ -648,7 +649,7 @@ def calculate_and_save_statistics(
 
 
 def main(
-    excel_path: str = "Tabelas_miR4ASD.xlsx",
+    excel_path: str = "Tabelas_miR4ASD(site)_11.09.2026.xlsx",
     gff_path: str = "hsa.gff3",
     output_dir: str = ".",
 ) -> None:
@@ -666,6 +667,11 @@ def main(
     """
     # Ensure GFF maps are cached
     get_gff_maps(gff_path)
+
+    if not os.path.exists(excel_path):
+        candidates = sorted(glob.glob("Tabelas_miR4ASD*.xlsx"))
+        if candidates:
+            excel_path = candidates[-1]
 
     if os.path.exists(excel_path):
         # Read the Excel file
@@ -698,33 +704,56 @@ def main(
         df_expression["StudyDetails"] = df_expression["Study"].apply(
             lambda s: resolve_study_details(s, study_details_map)
         )
-        df_expression = df_expression.drop(columns=["Study", "Study Type"])
+        if "Study Type" in df_expression.columns:
+            df_expression = df_expression.drop(columns=["Study Type"])
+        if "Study" in df_expression.columns:
+            df_expression = df_expression.drop(columns=["Study"])
         df_expression = df_expression.rename(
             columns={
+                "Precursor miRNA (hairpin)": "precursor_mirna",
                 "miRNA ID": "precursor_mirna",
+                "Mature miRNA": "mature_mirna",
                 "miRNA mature ID": "mature_mirna",
+                "Expression change (ASD vs. controls)": "expression_change",
                 "Expression Change": "expression_change",
                 "Study description": "study_description",
                 "Tissue": "tissue",
                 "Expression": "expression",
+                "Overall evidence": "overall_evidence",
+                "Number of studies (Upregulated)": "upregulation_studies",
                 "Upregulation studies": "upregulation_studies",
+                "Number of studies (Downregulated)": "downregulation_studies",
                 "Downregulation studies": "downregulation_studies",
+                "Total studies": "total_studies",
+                "Evidence from other studies": "evidence_from_other_studies",
             }
         )
+        if "evidence_from_other_studies" in df_expression.columns:
+            df_expression["evidence_from_other_studies"] = df_expression["evidence_from_other_studies"].fillna("no")
 
-        df_other = standardize_delimiters(df_other, ["Study", "Study description"])
+        df_other = standardize_delimiters(df_other, ["Study"])
         df_other["StudyDetails"] = df_other["Study"].apply(
             lambda s: resolve_study_details(s, study_details_map)
         )
-        df_other = df_other.drop(columns=["Study", "Study Type"])
+        if "Study" in df_other.columns:
+            df_other = df_other.drop(columns=["Study"])
         df_other = df_other.rename(
             columns={
                 "miRNA ID": "precursor_mirna",
                 "miRNA mature ID": "mature_mirna",
-                "Alteration": "alteration",
-                "Study description": "study_description",
+                "Study Type": "study_type",
+                "Variant type": "variant_type",
+                "Evidence from expression studies": "evidence_from_expression_studies",
+                "Total expression studies": "total_expression_studies",
+                "Description of expression evidence": "description_of_expression_evidence",
             }
         )
+        if "total_expression_studies" in df_other.columns:
+            df_other["total_expression_studies"] = pd.to_numeric(
+                df_other["total_expression_studies"], errors="coerce"
+            ).astype("Int64")
+        if "variant_type" in df_other.columns:
+            df_other["alteration"] = df_other["variant_type"].fillna("")
 
         # Build mature -> precursors mapping
         mature_to_precursors = {}

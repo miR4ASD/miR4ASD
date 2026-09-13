@@ -343,7 +343,7 @@ def test_user_story_6_per_tab_multi_parameter_query(
     # Genetic: alteration + study description combined on one tab
     gen_page.navigate_to_genetic()
     gen_page.select_genetic_alteration("CNV")
-    gen_page.filter_study_desc("sequencing")
+    gen_page.filter_study_desc("Saliva")
     assert gen_page.get_active_indicator_text() == "2 Active: CNV, Desc"
     assert gen_page.get_active_chips_count() == 2
 
@@ -379,7 +379,7 @@ def test_user_story_7_data_dictionary_and_visualizations(
     # 2. Verify all 5 accordion specification items expand and contain exact headers
     expected_spec_headers: List[List[str]] = [
         ["# up", "# down"],
-        ["Alteration", "Study Type", "Study description"],
+        ["Study Type", "Variant Type", "Evidence from expression studies"],
         ["ASD Susceptibility (SFARI)", "PubMed Reference"],
         ["Tissue Type", "Tissue Subtype", "ASD Samples", "Control Samples"],
         ["Term ID", "Term Name", "Adjusted P-Value", "Overlap (k/N)", "Term Size"],

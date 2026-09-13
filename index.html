@@ -1181,6 +1181,11 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
+                                                                <td><strong>Evidence from other studies</strong></td>
+                                                                <td>Cross-study validation evidence indicating whether this miRNA also has support from genetic or bioinformatics investigations.</td>
+                                                                <td><code>no</code> (None), <code>Genetics: CNV</code>, <code>Bioinformatics</code>, etc.</td>
+                                                            </tr>
+                                                            <tr>
                                                                 <td><strong># up</strong></td>
                                                                 <td>Count of independent peer-reviewed publications reporting statistically significant upregulation in ASD cohorts.</td>
                                                                 <td>Non-negative integers (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3+</code>)</td>
@@ -1232,26 +1237,43 @@
                                                                 <td>Standardized to miRBase v22.1.</td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Alteration</strong></td>
-                                                                <td>Categorical classification of the genetic variation or analysis type.</td>
-                                                                <td>
-                                                                    <ul class="mb-0 ps-3" style="font-size: 0.85rem;">
-                                                                        <li><strong>CNV:</strong> Copy Number Variation (microdeletions, microduplications altering miRNA loci).</li>
-                                                                        <li><strong>SNV:</strong> Single Nucleotide Variant identified via whole-exome or whole-genome sequencing.</li>
-                                                                        <li><strong>SNP:</strong> Single Nucleotide Polymorphism identified in association or candidate-gene studies.</li>
-                                                                        <li><strong>miRNA expression:</strong> Secondary targeted expression analysis in genetic variant cohorts.</li>
-                                                                    </ul>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
                                                                 <td><strong>Study Type</strong></td>
                                                                 <td>Category of the research investigation reported for this miRNA.</td>
                                                                 <td><code>Genetics</code>, <code>Bioinformatics</code> (or both).</td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Study description</strong></td>
-                                                                <td>Methodological summary describing the experimental technique and genomic region investigated.</td>
-                                                                <td>Free text summarizing sequencing platforms, microarray CGH, cytogenetics, or target locus details.</td>
+                                                                <td><strong>Variant Type</strong></td>
+                                                                <td>Categorical classification of the genetic variation identified in the study.</td>
+                                                                <td>
+                                                                    <ul class="mb-0 ps-3" style="font-size: 0.85rem;">
+                                                                        <li><strong>CNV:</strong> Copy Number Variation (microdeletions, microduplications altering miRNA loci).</li>
+                                                                        <li><strong>SNV:</strong> Single Nucleotide Variant identified via whole-exome or whole-genome sequencing.</li>
+                                                                        <li><strong>SNP:</strong> Single Nucleotide Polymorphism identified in association or candidate-gene studies.</li>
+                                                                    </ul>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Evidence from expression studies</strong></td>
+                                                                <td>Cross-reference indicator showing whether the miRNA also demonstrates differential expression in ASD expression cohorts.</td>
+                                                                <td>
+                                                                    <ul class="mb-0 ps-3" style="font-size: 0.85rem;">
+                                                                        <li><strong>Consistent upregulation:</strong> Supported by multiple upregulated expression studies.</li>
+                                                                        <li><strong>Consistent downregulation:</strong> Supported by multiple downregulated expression studies.</li>
+                                                                        <li><strong>Conflicting evidence:</strong> Supported by contradictory expression studies.</li>
+                                                                        <li><strong>Single-study evidence:</strong> Supported by exactly 1 expression study.</li>
+                                                                        <li><strong>no:</strong> No reported expression evidence.</li>
+                                                                    </ul>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Total expression studies</strong></td>
+                                                                <td>Count of independent expression studies evaluating differential expression for this miRNA in ASD.</td>
+                                                                <td>Non-negative integer (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>7</code>).</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Description of expression evidence</strong></td>
+                                                                <td>Detailed summary describing the expression findings, tissue contexts, or deregulation patterns across expression studies for this miRNA.</td>
+                                                                <td>Free text detailing direction of change, tissues (Blood, Brain, LCLs, Saliva), and study counts.</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -1371,18 +1393,13 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td><strong>Study</strong></td>
-                                                                <td><strong>Description</strong></td>
+                                                                <td>Short citation identifier linking to primary publication.</td>
                                                                 <td><code>Seno (2011)</code>, <code>Vasu (2014)</code>, <code>Mundalil (2014)</code></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Description / Title</strong></td>
                                                                 <td>Full peer-reviewed publication title and methodological summary.</td>
                                                                 <td>e.g. <em>Serum microRNA expression in children with autism spectrum disorder</em></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Study Type</strong></td>
-                                                                <td>Broad category of research investigation.</td>
-                                                                <td><code>Expression</code>, <code>Genetic</code>, <code>Sequencing</code>, <code>Candidate Gene</code></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Tissue Type</strong></td>
@@ -1393,6 +1410,16 @@
                                                                 <td><strong>Tissue Subtype</strong></td>
                                                                 <td>Specific anatomical brain subregion or refined cellular fraction.</td>
                                                                 <td><code>Cerebellum</code>, <code>Frontal cortex</code>, <code>PBMCs</code>, <code>Vermis</code></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Methodology</strong></td>
+                                                                <td>Experimental platform or molecular technique used for profiling or quantification.</td>
+                                                                <td><code>RT-qPCR</code>, <code>Small RNA-seq</code>, <code>miRNA microarray</code>, <code>WES</code>, <code>WGS</code>, <code>SNP array</code>, <code>aCGH</code></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Diagnostic Tools</strong></td>
+                                                                <td>Clinical diagnostic criteria or behavioral instruments used to characterize the ASD cohort.</td>
+                                                                <td><code>DSM-5</code>, <code>ADOS</code>, <code>ADI-R</code>, <code>CARS</code>, <code>DSM-IV-TR</code>, <code>GARS</code>, <code>ABC</code></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>ASD Samples</strong></td>
@@ -1553,6 +1580,19 @@
                                 <div class="tissue-checklist" id="tissue-checkboxes" style="max-height: 120px; overflow-y: auto;"></div>
                             </div>
                             <div class="col-lg-3 col-md-4 col-12">
+                                <label for="filter-expression-other-evidence" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Evidence from other studies</label>
+                                <select id="filter-expression-other-evidence" class="form-select form-select-sm" aria-label="Filter by Evidence from other studies">
+                                    <option value="">All (Any / None)</option>
+                                    <option value="has_other_evidence">Any evidence from other studies</option>
+                                    <option value="Genetics">Any Genetics</option>
+                                    <option value="CNV">Genetics: CNV</option>
+                                    <option value="SNV">Genetics: SNV</option>
+                                    <option value="SNP">Genetics: SNP</option>
+                                    <option value="Bioinformatics">Bioinformatics</option>
+                                    <option value="^no$">No other studies</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-12">
                                 <label for="filter-upregulation-studies" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Min # up</label>
                                 <input type="number" id="filter-upregulation-studies" class="form-control form-control-sm" min="0" step="1" placeholder="Any" aria-label="Filter by minimum number of upregulated studies" data-bs-toggle="tooltip" title="Show only miRNAs reported in at least this many upregulated studies">
                             </div>
@@ -1580,6 +1620,7 @@
                                 <th scope="col" data-bs-toggle="tooltip" title="Reported direction of expression alteration in ASD cases versus neurotypical controls.">Expression change<br>(ASD vs. controls)</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Biological tissue, cell type, or bodily fluid analyzed in the study cohort.">Tissue</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Multi-study consistency synthesis: Consistent (≥2 studies same direction), Conflicting (divergent), or Single-study.">Overall evidence</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Corroborating evidence reported for this microRNA from genetic variants or bioinformatics studies.">Evidence from<br>other studies</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Count of independent publications reporting statistically significant upregulation in ASD."># up</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Count of independent publications reporting statistically significant downregulation in ASD."># down</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Total independent expression profiling studies evaluating this miRNA in ASD cohorts.">Total<br>studies</th>
@@ -1623,21 +1664,40 @@
                                 <label for="gen-filter-mirna-id" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">miRNA Precursor / Hairpin ID(s)</label>
                                 <textarea id="gen-filter-mirna-id" class="form-control font-monospace" rows="2" placeholder="Paste precursor IDs (e.g. hsa-let-7a-1, hsa-mir-132...)" style="font-size: 0.8rem;" aria-label="Filter Genetic Studies by miRNA Hairpin ID(s)"></textarea>
                             </div>
-                            <div class="col-lg-4 col-md-6 col-12">
-                                <label for="filter-genetic-alteration" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Variant / Alteration</label>
-                                <select id="filter-genetic-alteration" class="form-select form-select-sm" aria-label="Filter by Genetic Variant or Alteration">
-                                    <option value="">All Genetic Alterations</option>
+                            <div class="col-lg-3 col-md-6 col-12">
+                                <label for="filter-genetic-study-type" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Study Type</label>
+                                <select id="filter-genetic-study-type" class="form-select form-select-sm" aria-label="Filter by Study Type">
+                                    <option value="">All Study Types</option>
+                                    <option value="Genetics">Genetics</option>
+                                    <option value="Bioinformatics">Bioinformatics</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-12">
+                                <label for="filter-genetic-alteration" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Variant Type</label>
+                                <select id="filter-genetic-alteration" class="form-select form-select-sm" aria-label="Filter by Variant Type">
+                                    <option value="">All Variant Types</option>
                                     <option value="CNV">CNV</option>
                                     <option value="SNV">SNV</option>
                                     <option value="SNP">SNP</option>
-                                    <option value="miRNA expression">miRNA expression</option>
                                 </select>
                             </div>
-                            <div class="col-lg-8 col-md-6 col-12">
-                                <label for="filter-study-desc" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Study Description Keywords</label>
+                            <div class="col-lg-3 col-md-6 col-12">
+                                <label for="filter-genetic-expr-evidence" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Evidence from expression</label>
+                                <select id="filter-genetic-expr-evidence" class="form-select form-select-sm" aria-label="Filter by Evidence from expression studies">
+                                    <option value="">All</option>
+                                    <option value="has_expr_evidence">Has expression evidence</option>
+                                    <option value="Consistent upregulation">Consistent upregulation</option>
+                                    <option value="Consistent downregulation">Consistent downregulation</option>
+                                    <option value="Conflicting evidence">Conflicting evidence</option>
+                                    <option value="Single-study evidence">Single-study evidence</option>
+                                    <option value="^no$">No expression evidence</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-12">
+                                <label for="filter-study-desc" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Expression Evidence Keywords</label>
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                                    <input type="text" id="filter-study-desc" class="form-control border-start-0 ps-0" placeholder="e.g. sequencing, deletion..." aria-label="Filter by Study Description Keywords">
+                                    <input type="text" id="filter-study-desc" class="form-control border-start-0 ps-0" placeholder="e.g. Blood, Brain, upregulated..." aria-label="Filter by Expression Evidence Keywords">
                                 </div>
                             </div>
                         </div>
@@ -1653,9 +1713,11 @@
                                 <th scope="col" style="width: 24px;" aria-label="Row details"><span class="visually-hidden">Details</span></th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Stem-loop precursor microRNA identifier (miRBase v22.1).">Precursor miRNA<br>(hairpin)</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Functional mature microRNA identifier (miRBase v22.1).">Mature<br>miRNA</th>
-                                <th scope="col" data-bs-toggle="tooltip" title="Genomic or functional alteration category (CNV, SNV, SNP, or targeted miRNA expression).">Alteration</th>
-                                <th scope="col" data-bs-toggle="tooltip" title="Category of the research investigation reported for this miRNA.">Study Type</th>
-                                <th scope="col" data-bs-toggle="tooltip" title="Methodological description, sequencing platform, and genetic cohort summary.">Study description</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Category of research investigation: Genetics, Bioinformatics, or combined.">Study Type</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Genomic variant classification: CNV (Copy Number Variation), SNV (Single Nucleotide Variant), or SNP (Polymorphism).">Variant Type</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Consistency of evidence reported for this microRNA in expression profiling studies.">Evidence from<br>expression studies</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Total number of independent expression studies evaluating this microRNA.">Total expression<br>studies</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Detailed synthesis of expression findings and tissue origins reported for this miRNA.">Description of<br>expression evidence</th>
                             </tr>
                         </thead>
                     </table>
@@ -2316,7 +2378,8 @@
             '<thead style="background-color: #F8FAFC; border-bottom: 2px solid #E2E8F0;">' +
                 '<tr>' +
                     '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Study</th>' +
-                    '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Description</th>';
+                    '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Description</th>' +
+                    '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Methodology</th>';
         
         if (showTissue) {
             table += '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Tissue Type</th>' +
@@ -2325,31 +2388,36 @@
         
         table += '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">ASD Samples</th>' +
                  '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Control Samples</th>' +
+                 '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Diagnostic Tools</th>' +
                  '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Country / Pop.</th>' +
             '</tr></thead><tbody>';
 
         details.forEach(function(d) {
-            let studyLink = d.Study || '';
+            let studyLink = escapeHtml(d.Study || '');
             if (d.DOI) {
-                studyLink = `<a href="${d.DOI}" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none" style="color: var(--primary-color);"><i class="fa-solid fa-square-arrow-up-right me-1"></i>${d.Study}</a>`;
+                studyLink = `<a href="${d.DOI}" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none" style="color: var(--primary-color);"><i class="fa-solid fa-square-arrow-up-right me-1"></i>${escapeHtml(d.Study)}</a>`;
             }
 
             // Render sample counts in small badge-like pills if not empty
-            let asdSamples = d["ASD samples"] ? `<span class="badge bg-light text-dark border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: normal; border-color: #E2E8F0 !important;">${d["ASD samples"]}</span>` : '';
-            let controlSamples = d["Control samples"] ? `<span class="badge bg-light text-dark border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: normal; border-color: #E2E8F0 !important;">${d["Control samples"]}</span>` : '';
+            let asdSamples = d["ASD samples"] ? `<span class="badge bg-light text-dark border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: normal; border-color: #E2E8F0 !important;">${escapeHtml(String(d["ASD samples"]))}</span>` : '';
+            let controlSamples = d["Control samples"] ? `<span class="badge bg-light text-dark border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: normal; border-color: #E2E8F0 !important;">${escapeHtml(String(d["Control samples"]))}</span>` : '';
+            let methodology = d["Methodology"] ? `<span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 0.75rem;">${escapeHtml(String(d["Methodology"]))}</span>` : '<span class="text-muted">—</span>';
+            let diagnosticTools = d["Diagnostic tools"] ? `<span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 0.75rem;">${escapeHtml(String(d["Diagnostic tools"]))}</span>` : '<span class="text-muted">—</span>';
 
             table += '<tr>' +
                 '<td class="align-middle">' + studyLink + '</td>' +
-                '<td class="align-middle text-secondary" style="max-width: 320px; font-size: 0.8rem; line-height: 1.4;">' + (d["Description"] || '') + '</td>';
+                '<td class="align-middle text-secondary" style="max-width: 320px; font-size: 0.8rem; line-height: 1.4;">' + (escapeHtml(d["Description"] || '')) + '</td>' +
+                '<td class="align-middle">' + methodology + '</td>';
             
             if (showTissue) {
-                table += '<td class="align-middle">' + (d["Tissue type"] || '') + '</td>' +
-                         '<td class="align-middle text-muted" style="font-size: 0.8rem;">' + (d["Tissue - subtype"] || '') + '</td>';
+                table += '<td class="align-middle">' + (escapeHtml(d["Tissue type"] || '')) + '</td>' +
+                         '<td class="align-middle text-muted" style="font-size: 0.8rem;">' + (escapeHtml(d["Tissue - subtype"] || '')) + '</td>';
             }
             
             table += '<td class="align-middle">' + asdSamples + '</td>' +
                 '<td class="align-middle">' + controlSamples + '</td>' +
-                '<td class="align-middle text-muted" style="font-size: 0.8rem;">' + (d["Country"] || '') + '</td>' +
+                '<td class="align-middle">' + diagnosticTools + '</td>' +
+                '<td class="align-middle text-muted" style="font-size: 0.8rem;">' + (escapeHtml(d["Country"] || '')) + '</td>' +
             '</tr>';
         });
         table += '</tbody></table></div>';
@@ -2734,6 +2802,7 @@
                         },
                         exportOptions: {
                             rows: ':visible',
+                            columns: ':visible:not(.select-checkbox-cell):not(.details-control)',
                             format: {
                                 body: function ( data, row, column, node ) {
                                     // Strip HTML from the data
@@ -2869,6 +2938,19 @@
                 { "data": "expression_change" },
                 { "data": "tissue" },
                 { "data": "overall_evidence" },
+                {
+                    "data": "evidence_from_other_studies",
+                    "render": function(data) {
+                        if (!data || data === 'no' || data === '—') return '<span class="badge bg-light text-muted border" style="font-size: 0.75rem;">None</span>';
+                        let cls = 'bg-primary-subtle text-primary border';
+                        if (data.includes('Bioinformatics') && !data.includes('Genetics')) {
+                            cls = 'bg-info-subtle text-info-emphasis border';
+                        } else if (data.includes('CNV')) {
+                            cls = 'bg-warning-subtle text-warning-emphasis border';
+                        }
+                        return `<span class="badge ${cls} text-wrap" style="font-size: 0.75rem; max-width: 170px; line-height: 1.2;">${escapeHtml(data)}</span>`;
+                    }
+                },
                 { "data": "upregulation_studies" },
                 { "data": "downregulation_studies" },
                 { "data": "total_studies" }
@@ -2911,12 +2993,9 @@
                         return `<span class="fw-semibold text-dark font-monospace">${data}</span>`;
                     }
                 },
-                { "data": "alteration" },
                 {
                     "data": "study_type",
                     "render": function(data, type, row) {
-                        // study_type exists in regenerated feeds; older feeds derive
-                        // it from the per-study StudyDetails records already in the row.
                         let types = (typeof data === 'string' && data) ? [data] : [];
                         if (!types.length && row.StudyDetails) {
                             const set = new Set();
@@ -2925,11 +3004,57 @@
                             });
                             types = Array.from(set);
                         }
+                        if (type === 'filter' || type === 'sort') return types.join('; ');
                         if (!types.length) return '<span class="text-muted">—</span>';
                         return types.map(t => `<span class="badge bg-light text-secondary border me-1" style="font-size: 0.78rem;">${escapeHtml(t)}</span>`).join('');
                     }
                 },
-                { "data": "study_description" }
+                {
+                    "data": "variant_type",
+                    "render": function(data, type, row) {
+                        const val = data || row.alteration || '';
+                        if (type === 'filter' || type === 'sort') return val;
+                        if (!val || val === 'nan') return '<span class="text-muted">—</span>';
+                        return String(val).split('; ').map(v => {
+                            let badgeClass = 'bg-primary-subtle text-primary border';
+                            if (v === 'CNV') badgeClass = 'bg-warning-subtle text-warning-emphasis border';
+                            else if (v === 'SNV') badgeClass = 'bg-danger-subtle text-danger border';
+                            else if (v === 'SNP') badgeClass = 'bg-info-subtle text-info-emphasis border';
+                            return `<span class="badge ${badgeClass} me-1" style="font-size: 0.78rem;">${escapeHtml(v)}</span>`;
+                        }).join('');
+                    }
+                },
+                {
+                    "data": "evidence_from_expression_studies",
+                    "render": function(data, type, row) {
+                        if (type === 'filter' || type === 'sort') return data || 'no';
+                        if (!data || data === 'no') return '<span class="badge bg-light text-muted border" style="font-size: 0.75rem;">None</span>';
+                        return String(data).split('; ').map(e => {
+                            let cls = 'bg-secondary-subtle text-secondary border';
+                            if (e.includes('Consistent upregulation')) cls = 'bg-success-subtle text-success border';
+                            else if (e.includes('Consistent downregulation')) cls = 'bg-danger-subtle text-danger border';
+                            else if (e.includes('Conflicting')) cls = 'bg-warning-subtle text-warning-emphasis border';
+                            else if (e.includes('Single-study')) cls = 'bg-info-subtle text-info-emphasis border';
+                            return `<span class="badge ${cls} me-1 text-wrap" style="font-size: 0.75rem;">${escapeHtml(e)}</span>`;
+                        }).join('');
+                    }
+                },
+                {
+                    "data": "total_expression_studies",
+                    "render": function(data, type, row) {
+                        if (type === 'filter' || type === 'sort') return (data !== null && data !== undefined && !isNaN(data)) ? data : '';
+                        if (data === null || data === undefined || isNaN(data)) return '<span class="text-muted">—</span>';
+                        return `<span class="badge bg-light text-dark border px-2 py-1 rounded-pill fw-semibold" style="font-size: 0.78rem;">${data}</span>`;
+                    }
+                },
+                {
+                    "data": "description_of_expression_evidence",
+                    "render": function(data, type, row) {
+                        if (type === 'filter' || type === 'sort') return data || '';
+                        if (!data) return '<span class="text-muted">—</span>';
+                        return `<span class="small text-secondary" style="line-height: 1.4; display: block; max-width: 360px;">${escapeHtml(data)}</span>`;
+                    }
+                }
             ]
         );
 
@@ -3481,9 +3606,10 @@
             // ---- Expression Studies (own tab inputs) ----
             const exprHairpinTokens = parseTokens($('#filter-mirna-id').val().trim());
             const exprMatureTokens = parseTokens($('#filter-mature-id').val().trim());
-            const exprChange = $('#filter-expression-change').val();
+            const exprChange = $('#filter-expression-change').val() || '';
             const selectedEvidence = [];
             $('#evidence-checkboxes input:checked').each(function() { selectedEvidence.push($(this).val()); });
+            const exprOtherEvidence = $('#filter-expression-other-evidence').val() || '';
             const minUpStudies = parseInt($('#filter-upregulation-studies').val(), 10);
             const minDownStudies = parseInt($('#filter-downregulation-studies').val(), 10);
             const minTotalStudies = parseInt($('#filter-total-studies').val(), 10);
@@ -3499,8 +3625,10 @@
             // ---- Genetic & Other Studies (own tab inputs) ----
             const genHairpinTokens = parseTokens($('#gen-filter-mirna-id').val().trim());
             const genMatureTokens = parseTokens($('#gen-filter-mature-id').val().trim());
-            const geneticAlteration = $('#filter-genetic-alteration').val();
-            const studyDesc = $('#filter-study-desc').val().trim();
+            const genStudyType = $('#filter-genetic-study-type').val() || '';
+            const geneticAlteration = $('#filter-genetic-alteration').val() || '';
+            const genExprEvidence = $('#filter-genetic-expr-evidence').val() || '';
+            const studyDesc = ($('#filter-study-desc').val() || '').trim();
 
             // ---- Target Genes (own tab inputs) ----
             const geneTokens = parseTokens($('#filter-target-gene').val().trim()).map(g => g.toUpperCase());
@@ -3518,6 +3646,7 @@
             if (exprMatureTokens.length > 0) exprCount++;
             if (exprChange) exprCount++;
             if (selectedEvidence.length > 0) exprCount++;
+            if (exprOtherEvidence) exprCount++;
             const exprNumericCount = [minUpStudies, minDownStudies, minTotalStudies].filter(n => !isNaN(n) && n > 0).length;
             exprCount += exprNumericCount;
             exprCount += selectedTissues.length;
@@ -3525,7 +3654,9 @@
             let genCount = 0;
             if (genHairpinTokens.length > 0) genCount++;
             if (genMatureTokens.length > 0) genCount++;
+            if (genStudyType) genCount++;
             if (geneticAlteration) genCount++;
+            if (genExprEvidence) genCount++;
             if (studyDesc) genCount++;
 
             let targetCount = 0;
@@ -3541,12 +3672,16 @@
                 exprMatureTokens.length > 0 ? `${exprMatureTokens.length} Mature` : '',
                 exprChange,
                 selectedEvidence.length > 0 ? `${selectedEvidence.length} Evidence` : '',
+                exprOtherEvidence ? (exprOtherEvidence === 'has_other_evidence' ? 'Other' : exprOtherEvidence) : '',
                 selectedTissues.length > 0 ? `${selectedTissues.length} Tissues` : ''
             ]);
             const genSummary = buildSummary([
                 genHairpinTokens.length > 0 ? `${genHairpinTokens.length} Hairpins` : '',
                 genMatureTokens.length > 0 ? `${genMatureTokens.length} Mature` : '',
-                geneticAlteration, studyDesc ? 'Desc' : ''
+                genStudyType,
+                geneticAlteration,
+                genExprEvidence ? (genExprEvidence === 'has_expr_evidence' ? 'Expr Ev.' : genExprEvidence) : '',
+                studyDesc ? 'Desc' : ''
             ]);
             setFilterIndicator('.expr-active-filter-indicator', exprCount, exprSummary);
             setFilterIndicator('.gen-active-filter-indicator', genCount, genSummary);
@@ -3566,6 +3701,7 @@
                 exprMatureTokens.length > 0 ? { label: `Mature: ${exprMatureTokens.length > 2 ? `${exprMatureTokens.length} IDs` : exprMatureTokens.join(', ')}`, field: 'filter-mature-id', val: '' } : null,
                 exprChange ? { label: `Expression: ${exprChange}`, field: 'filter-expression-change', val: '' } : null,
                 ...selectedEvidence.map(v => ({ label: `Evidence: ${v}`, field: 'filter-evidence', val: v })),
+                exprOtherEvidence ? { label: `Other: ${exprOtherEvidence === 'has_other_evidence' ? 'Any' : exprOtherEvidence}`, field: 'filter-expression-other-evidence', val: '' } : null,
                 (!isNaN(minUpStudies) && minUpStudies > 0) ? { label: `Min # up: ${minUpStudies}`, field: 'filter-upregulation-studies', val: '' } : null,
                 (!isNaN(minDownStudies) && minDownStudies > 0) ? { label: `Min # down: ${minDownStudies}`, field: 'filter-downregulation-studies', val: '' } : null,
                 (!isNaN(minTotalStudies) && minTotalStudies > 0) ? { label: `Min total: ${minTotalStudies}`, field: 'filter-total-studies', val: '' } : null,
@@ -3575,7 +3711,9 @@
             renderChipsInto('.gen-active-chips', [
                 genHairpinTokens.length > 0 ? { label: `Hairpins: ${genHairpinTokens.length > 2 ? `${genHairpinTokens.length} IDs` : genHairpinTokens.join(', ')}`, field: 'gen-filter-mirna-id', val: '' } : null,
                 genMatureTokens.length > 0 ? { label: `Mature: ${genMatureTokens.length > 2 ? `${genMatureTokens.length} IDs` : genMatureTokens.join(', ')}`, field: 'gen-filter-mature-id', val: '' } : null,
+                genStudyType ? { label: `Study: ${genStudyType}`, field: 'filter-genetic-study-type', val: '' } : null,
                 geneticAlteration ? { label: `Variant: ${geneticAlteration}`, field: 'filter-genetic-alteration', val: '' } : null,
+                genExprEvidence ? { label: `Expr Ev.: ${genExprEvidence === 'has_expr_evidence' ? 'Any' : genExprEvidence}`, field: 'filter-genetic-expr-evidence', val: '' } : null,
                 studyDesc ? { label: `Desc: ${studyDesc}`, field: 'filter-study-desc', val: '' } : null
             ].filter(Boolean));
             renderChipsInto('.target-active-chips', [
@@ -3588,7 +3726,7 @@
             ].filter(Boolean));
 
             // ---- Apply filters to Expression Table ----
-            // Col 2: Precursor, Col 3: Mature, Col 4: Expr change, Col 5: Tissue, Col 6: Overall evidence
+            // Col 2: Precursor, Col 3: Mature, Col 4: Expr change, Col 5: Tissue, Col 6: Overall evidence, Col 7: Evidence from other studies
             expressionTable.column(2).search(buildTokenRegex(exprHairpinTokens), exprHairpinTokens.length > 0, false);
             expressionTable.column(3).search(buildTokenRegex(exprMatureTokens), exprMatureTokens.length > 0, false);
             expressionTable.column(4).search(exprChange);
@@ -3602,16 +3740,31 @@
             } else {
                 expressionTable.column(6).search('');
             }
+            if (exprOtherEvidence === 'has_other_evidence') {
+                expressionTable.column(7).search('^(?!no$|—$).+', true, false);
+            } else if (exprOtherEvidence) {
+                expressionTable.column(7).search(exprOtherEvidence, true, false);
+            } else {
+                expressionTable.column(7).search('');
+            }
             // Numeric minimum-study filters (# up / # down / Total) are enforced by the
             // installExpressionNumericFilters ext.search guard on these columns.
             expressionTable.draw();
 
             // ---- Apply filters to Genetic & Other Studies Table ----
-            // Col 2: Precursor, Col 3: Mature, Col 4: Alteration, Col 5: Study Type, Col 6: Study description
+            // Col 2: Precursor, Col 3: Mature, Col 4: Study Type, Col 5: Variant Type, Col 6: Evidence from expression studies, Col 7: Total expression studies, Col 8: Description of expression evidence
             otherTable.column(2).search(buildTokenRegex(genHairpinTokens), genHairpinTokens.length > 0, false);
             otherTable.column(3).search(buildTokenRegex(genMatureTokens), genMatureTokens.length > 0, false);
-            otherTable.column(4).search(geneticAlteration);
-            otherTable.column(6).search(studyDesc);
+            otherTable.column(4).search(genStudyType);
+            otherTable.column(5).search(geneticAlteration);
+            if (genExprEvidence === 'has_expr_evidence') {
+                otherTable.column(6).search('^(?!no$).+', true, false);
+            } else if (genExprEvidence) {
+                otherTable.column(6).search(genExprEvidence, true, false);
+            } else {
+                otherTable.column(6).search('');
+            }
+            otherTable.column(8).search(studyDesc);
             otherTable.draw();
 
             // ---- Apply filters to Target Genes Table ----
@@ -3655,7 +3808,7 @@
 
         // Event listeners for real-time filtering (per-tab inputs)
         $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-study-desc, #filter-target-tissue').on('keyup input', debouncedFilter);
-        $('#filter-expression-change, #filter-genetic-alteration, #filter-support-type, #filter-target-regulation').on('change', applyAdvancedFilters);
+        $('#filter-expression-change, #filter-expression-other-evidence, #filter-genetic-study-type, #filter-genetic-alteration, #filter-genetic-expr-evidence, #filter-support-type, #filter-target-regulation').on('change', applyAdvancedFilters);
         $('#filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies').on('input', function() {
             updateExpressionNumericLimits();
             debouncedFilter();
@@ -3684,18 +3837,12 @@
             const clearSearch = (t) => { if (t) { t.search(''); t.draw(); } };
             if (scope === 'expression') {
                 clearSearch(expressionTable);
-                $('#filter-mirna-id').val('');
-                $('#filter-mature-id').val('');
-                $('#filter-expression-change').val('');
-                $('#evidence-checkboxes input:checked').prop('checked', false);
+                $('#filter-mirna-id, #filter-mature-id, #filter-expression-change, #filter-expression-other-evidence').val('');
+                $('#evidence-checkboxes input:checked, #tissue-checkboxes input:checked').prop('checked', false);
                 $('#filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies').val('');
-                $('#tissue-checkboxes input:checked').prop('checked', false);
             } else if (scope === 'genetic') {
                 clearSearch(otherTable);
-                $('#gen-filter-mirna-id').val('');
-                $('#gen-filter-mature-id').val('');
-                $('#filter-genetic-alteration').val('');
-                $('#filter-study-desc').val('');
+                $('#gen-filter-mirna-id, #gen-filter-mature-id, #filter-genetic-study-type, #filter-genetic-alteration, #filter-genetic-expr-evidence, #filter-study-desc').val('');
             } else if (scope === 'targets') {
                 clearSearch(targetsTable);
                 $('#filter-target-gene').val('');
@@ -3711,7 +3858,7 @@
                 clearSearch(expressionTable);
                 clearSearch(otherTable);
                 clearSearch(targetsTable);
-                $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-expression-change, #filter-genetic-alteration, #filter-study-desc, #filter-support-type, #filter-target-regulation, #filter-target-tissue, #filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies, #filter-method-search').val('');
+                $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-expression-change, #filter-expression-other-evidence, #filter-genetic-study-type, #filter-genetic-alteration, #filter-genetic-expr-evidence, #filter-study-desc, #filter-support-type, #filter-target-regulation, #filter-target-tissue, #filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies, #filter-method-search').val('');
                 $('#tissue-checkboxes input:checked, #evidence-checkboxes input:checked, #sfari-checkboxes input:checked, #method-checkboxes input:checked').prop('checked', false);
                 $('#method-checkboxes .checklist-item').show();
             }

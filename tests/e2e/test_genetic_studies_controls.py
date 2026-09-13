@@ -68,8 +68,8 @@ def test_genetic_reset_filters_button(app_page: Page, base_url: str):
     assert gen_page.get_filtered_total() == 93
 
     # Apply a study description keyword filter
-    gen_page.filter_study_desc("sequencing")
-    assert gen_page.get_filtered_total() == 5
+    gen_page.filter_study_desc("Saliva")
+    assert gen_page.get_filtered_total() == 10
 
     gen_page.click_reset_filters()
     assert gen_page.get_filtered_total() == 93

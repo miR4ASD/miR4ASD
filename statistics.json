@@ -4,7 +4,7 @@
     "total_mirna_mature": 385,
     "alteration_counts": {
         "upregulated": 579,
-        "downregulated": 498
+        "downregulated": 499
     },
     "tissue_counts": {
         "Blood": 321,

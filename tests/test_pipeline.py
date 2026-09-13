@@ -583,3 +583,48 @@ def test_experiments_filter_contains_all_target_methods():
     missing = unique_methods - cb_values
     assert not missing, f"Missing experiments in method-checkboxes: {missing}"
 
+
+def test_new_excel_schema_fields_in_json_feeds():
+    """Verify newly introduced columns from updated Excel dataset are present in JSON feeds."""
+    # 1. Expression Studies: Evidence from other studies
+    with open("expression_studies.json", "r", encoding="utf-8") as f:
+        expr = json.load(f)
+    assert len(expr) > 0
+    assert all("evidence_from_other_studies" in r for r in expr), (
+        "Missing 'evidence_from_other_studies' in expression_studies.json records"
+    )
+    assert any(r["evidence_from_other_studies"] != "no" for r in expr), (
+        "Expected at least one non-'no' value in evidence_from_other_studies"
+    )
+
+    # 2. Genetic & Other Studies: Study Type, Variant Type, Evidence from expression, etc.
+    with open("other_studies.json", "r", encoding="utf-8") as f:
+        other = json.load(f)
+    assert len(other) > 0
+    required_other_keys = [
+        "study_type",
+        "variant_type",
+        "evidence_from_expression_studies",
+        "total_expression_studies",
+        "description_of_expression_evidence",
+    ]
+    for r in other:
+        for key in required_other_keys:
+            assert key in r, f"Missing '{key}' in other_studies.json record: {r}"
+        if r["total_expression_studies"] is not None:
+            assert isinstance(r["total_expression_studies"], int), (
+                f"total_expression_studies must be int or None, got {type(r['total_expression_studies'])}"
+            )
+
+    # 3. Study Details: Methodology and Diagnostic tools
+    with open("study_details.json", "r", encoding="utf-8") as f:
+        details = json.load(f)
+    assert len(details) > 0
+    assert any(d.get("Methodology") for d in details), (
+        "Expected populated 'Methodology' entries in study_details.json"
+    )
+    assert any(d.get("Diagnostic tools") for d in details), (
+        "Expected populated 'Diagnostic tools' entries in study_details.json"
+    )
+
+
