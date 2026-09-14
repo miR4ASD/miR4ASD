@@ -72,3 +72,45 @@ def test_data_dictionary_accordion_expandable(app_page: Page, base_url: str):
             assert header in collapse_text, (
                 f"Header '{header}' missing from section {i + 1}"
             )
+
+
+def test_help_tab_methodologies_and_diagnostic_tables(app_page: Page, base_url: str):
+    """Verify that Experimental Methodologies and Diagnostic Tools tables are rendered and filterable in the Help tab."""
+    figures_page = FiguresPage(app_page, base_url)
+    figures_page.navigate_to_dictionary()
+
+    app_page.wait_for_selector("#section-methods", state="visible")
+    app_page.wait_for_selector("#section-diagnostic-tools", state="visible")
+
+    # 1. Verify Methodologies table has 10 rows
+    method_rows = app_page.locator("#methods-help-table tbody tr")
+    assert method_rows.count() == 10
+
+    # Test live filter on Methodologies search
+    search_methods = app_page.locator("#methods-help-search")
+    search_methods.fill("sequencing")
+    app_page.wait_for_timeout(200)
+    visible_methods = app_page.locator("#methods-help-table tbody tr:visible")
+    assert 0 < visible_methods.count() < 10
+
+    # Clear search
+    search_methods.fill("")
+    app_page.wait_for_timeout(200)
+    assert app_page.locator("#methods-help-table tbody tr:visible").count() == 10
+
+    # 2. Verify Diagnostic Tools table has 9 rows
+    diag_rows = app_page.locator("#diagnostic-tools-help-table tbody tr")
+    assert diag_rows.count() == 9
+
+    # Test live filter on Diagnostic Tools search
+    search_diag = app_page.locator("#diagnostic-tools-help-search")
+    search_diag.fill("DSM")
+    app_page.wait_for_timeout(200)
+    visible_diag = app_page.locator("#diagnostic-tools-help-table tbody tr:visible")
+    assert visible_diag.count() == 3
+
+    # Clear search
+    search_diag.fill("")
+    app_page.wait_for_timeout(200)
+    assert app_page.locator("#diagnostic-tools-help-table tbody tr:visible").count() == 9
+

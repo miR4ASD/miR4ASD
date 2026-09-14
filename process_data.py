@@ -1,5 +1,6 @@
 import csv
 import glob
+import gzip
 import json
 import os
 from typing import Any, Dict, List, Optional, Set, Tuple
@@ -487,6 +488,36 @@ def process_target_genes(
             if pmid_val:
                 entry["pmids"].add(pmid_val)
 
+    # 3b. Enrich with Tissue, Cell Line, and Regulation from TarBase v9 (if available)
+    tarbase_path = os.path.join("raw_data", "Homo_sapiens_TarBase-v9.tsv.gz")
+    if os.path.exists(tarbase_path):
+        print(f"Enriching tissue and cell source from TarBase v9: {tarbase_path}")
+        gene_sym_lookup = {
+            (canon_mir, sym.upper()): sym for (canon_mir, sym) in interaction_map.keys()
+        }
+        with gzip.open(tarbase_path, "rt", encoding="utf-8", errors="ignore") as f:
+            reader = csv.DictReader(f, delimiter="\t")
+            for row in reader:
+                canonical_mir = get_canonical_mirna(row.get("mirna_name"))
+                if not canonical_mir:
+                    continue
+                raw_gene = (row.get("gene_name") or "").strip()
+                if not raw_gene:
+                    continue
+                exact_sym = gene_sym_lookup.get((canonical_mir, raw_gene.upper()))
+                if exact_sym:
+                    entry = interaction_map[(canonical_mir, exact_sym)]
+                    tissue = (row.get("tissue") or "").strip()
+                    cell_line = (row.get("cell_line") or "").strip()
+                    term = tissue if (tissue and tissue != "NA") else (
+                        cell_line if (cell_line and cell_line != "NA") else ""
+                    )
+                    if term:
+                        entry["tissues"].add(term)
+                    reg = (row.get("regulation") or "").strip()
+                    if reg and reg != "NA":
+                        entry["regulations"].add(reg)
+
     # 4. Structure Target Records with Provenance Annotation
     target_records = []
     unique_target_genes = set()
@@ -646,6 +677,77 @@ def calculate_and_save_statistics(
 
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(stats, f, indent=4, ensure_ascii=False)
+
+
+def process_help_tables(
+    excel_path: str = "Tables_for_help_tab.xlsx", output_dir: str = "."
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    """
+    Process the help tables Excel workbook (Methods and Diagnostic_tools sheets)
+    and export them to JSON feeds.
+
+    Parameters
+    ----------
+    excel_path : str
+        Path to the help tables Excel spreadsheet.
+    output_dir : str
+        Destination directory for generated help JSON feeds.
+
+    Returns
+    -------
+    Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]
+        (methods_records, diagnostic_tools_records)
+    """
+    if not os.path.exists(excel_path):
+        candidates = sorted(glob.glob("*help*.xlsx"))
+        if candidates:
+            excel_path = candidates[0]
+
+    if not os.path.exists(excel_path):
+        print(f"Warning: Help tables workbook '{excel_path}' not found.")
+        return [], []
+
+    xls = pd.ExcelFile(excel_path)
+    methods_records: List[Dict[str, Any]] = []
+    diag_records: List[Dict[str, Any]] = []
+
+    if "Methods" in xls.sheet_names:
+        df_m = pd.read_excel(xls, "Methods")
+        df_m.columns = [str(c).strip() for c in df_m.columns]
+        rename_m = {
+            "Method abbreviation": "method_abbreviation",
+            "Method": "method",
+            "Study Type": "study_type",
+            "Description": "description",
+        }
+        df_m = df_m.rename(columns=rename_m)
+        methods_records = df_m.dropna(how="all").to_dict(orient="records")
+        for r in methods_records:
+            for k, v in r.items():
+                r[k] = "" if pd.isna(v) else str(v).strip()
+
+    if "Diagnostic_tools" in xls.sheet_names:
+        df_d = pd.read_excel(xls, "Diagnostic_tools")
+        df_d.columns = [str(c).strip() for c in df_d.columns]
+        cols = list(df_d.columns)
+        if len(cols) >= 2:
+            df_d = df_d.rename(columns={cols[0]: "diagnostic_tool", cols[1]: "description"})
+        diag_records = df_d.dropna(how="all").to_dict(orient="records")
+        for r in diag_records:
+            for k, v in r.items():
+                r[k] = "" if pd.isna(v) else str(v).strip()
+
+    if methods_records:
+        methods_out = os.path.join(output_dir, "help_methods.json")
+        with open(methods_out, "w", encoding="utf-8") as f:
+            json.dump(methods_records, f, indent=2, ensure_ascii=False)
+
+    if diag_records:
+        diag_out = os.path.join(output_dir, "help_diagnostic_tools.json")
+        with open(diag_out, "w", encoding="utf-8") as f:
+            json.dump(diag_records, f, indent=2, ensure_ascii=False)
+
+    return methods_records, diag_records
 
 
 def main(
@@ -887,12 +989,20 @@ def main(
         output_file=os.path.join(output_dir, "statistics.json"),
     )
 
+    # Process and save help tables
+    help_methods, help_diagnostics = process_help_tables(output_dir=output_dir)
+
     print("Data processing complete. JSON files created.")
     print(f"Expression Studies count: {len(df_expression)}")
     print(f"Other Studies count: {len(df_other)}")
     print(f"Target Interactions count: {len(target_records)}")
     print(f"Target Statistics: {target_stats}")
+    if help_methods:
+        print(f"Help Methods count: {len(help_methods)}")
+    if help_diagnostics:
+        print(f"Help Diagnostic Tools count: {len(help_diagnostics)}")
 
 
 if __name__ == "__main__":
     main()
+

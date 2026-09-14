@@ -94,3 +94,41 @@ Specification of fields, statistical metrics, and parameters used in the **Funct
 | **Intersecting Target Genes** | miR4ASD + g:Profiler | Array of Badges | List of user's query target genes that overlap with the term, annotated with SFARI risk badges. | Direct links to GeneCards with color-coded SFARI ASD-risk tags (Category 1, 2, 3, Syndromic). |
 | **Significance Score** | miR4ASD Chart | Float | Scaled ranking metric computed as $-\log_{10}(p_{\text{adj}})$. | Higher scores denote greater statistical overrepresentation. |
 
+---
+
+## 6. Experimental Methodologies Reference Table (`help_methods.json`)
+
+Standardized molecular profiling assays, high-throughput sequencing technologies, and cytogenetic platforms used across the expression and genetic studies in miR4ASD.
+
+| Method Abbreviation | Method Name | Study Type | Description |
+| :--- | :--- | :--- | :--- |
+| **Gene expression microarray** | Gene expression microarray | Expression | Hybridization-based technology using predefined probes to measure the relative expression levels of mRNA transcripts/genes across multiple targets simultaneously. |
+| **miRNA microarray** | MicroRNA expression microarray | Expression | Hybridization-based technology using predefined probes specifically designed to detect and measure the relative expression levels of multiple mature miRNAs. |
+| **RT-qPCR** | Reverse transcription-quantitative PCR | Expression | PCR-based method in which RNA is reverse-transcribed into cDNA and specific miRNAs or transcripts are quantified through real-time amplification. Includes individual, multiplex, and array-based RT-qPCR assays such as TLDA/TaqMan miRNA arrays. |
+| **RNA-seq** | RNA sequencing | Expression | High-throughput sequencing of RNA-derived libraries used for transcriptome-wide characterization and quantification of RNA expression, particularly mRNA and other longer RNA transcripts. |
+| **Small RNA-seq** | Small RNA sequencing | Expression | High-throughput sequencing using libraries enriched for small RNA molecules, enabling detection and quantification of miRNAs and other small non-coding RNAs. |
+| **NanoString** | NanoString nCounter | Expression | Direct digital RNA detection and counting using sequence-specific barcoded probes, without enzymatic amplification. |
+| **SNP array** | Single nucleotide polymorphism array | Genetics | DNA hybridization-based technology using predefined probes to genotype large numbers of SNPs across the genome. Probe intensity and allelic signals can also be used to identify copy-number variants and regions of homozygosity. |
+| **WES** | Whole-exome sequencing | Genetics | High-throughput DNA sequencing targeting primarily the protein-coding regions (exons) of the genome, enabling detection of SNVs and small insertions/deletions and, depending on the analytical pipeline, other variant types. |
+| **WGS** | Whole-genome sequencing | Genetics | High-throughput sequencing of genomic DNA across coding and non-coding regions, enabling comprehensive detection of SNVs, insertions/deletions, and, depending on the analytical pipeline, structural and copy-number variants. |
+| **aCGH** | Array comparative genomic hybridization | Genetics | DNA hybridization-based technology comparing test and reference DNA across genomic probes to identify copy-number gains and losses, including genomic deletions and duplications. |
+
+---
+
+## 7. Clinical Diagnostic Tools Reference Table (`help_diagnostic_tools.json`)
+
+Standardized clinical diagnostic criteria, structured interview schedules, and behavioral rating scales reported across included publications to characterize ASD cohorts.
+
+| Diagnostic Tool / Abbreviation | Full Name & Description |
+| :--- | :--- |
+| **DSM-5** | Diagnostic and Statistical Manual of Mental Disorders 5th Edition |
+| **DSM-IV** | Diagnostic and Statistical Manual of Mental Disorders 4th Edition |
+| **DSM-IV-TR** | Diagnostic and Statistical Manual of Mental Disorders 4th Edition Text Revision |
+| **ADI-R** | Autism Diagnostic Interview-Revised |
+| **ADOS** | Autism Diagnostic Observation Schedule |
+| **CARS** | Childhood Autism Rating Scale |
+| **ABC** | Autism Behavior Scale |
+| **GARS** | Gilliam Autism Rating Scale |
+| **SRS** | Social Responsiveness Scale |
+
+

@@ -12,6 +12,7 @@ from process_data import (
     create_mirbase_mature_link,
     normalize_study_name,
     parse_pmid,
+    process_help_tables,
     resolve_study_details,
     standardize_delimiters,
 )
@@ -626,5 +627,60 @@ def test_new_excel_schema_fields_in_json_feeds():
     assert any(d.get("Diagnostic tools") for d in details), (
         "Expected populated 'Diagnostic tools' entries in study_details.json"
     )
+
+
+def test_help_tab_tables_data_integrity():
+    """Verify that help_methods.json and help_diagnostic_tools.json exist, are valid, and match source."""
+    methods, diag = process_help_tables()
+    assert len(methods) == 10, f"Expected 10 methods, found {len(methods)}"
+    assert len(diag) == 9, f"Expected 9 diagnostic tools, found {len(diag)}"
+
+    assert os.path.exists("help_methods.json"), "help_methods.json not found."
+    with open("help_methods.json", "r", encoding="utf-8") as f:
+        json_methods = json.load(f)
+    assert len(json_methods) == 10
+    for m in json_methods:
+        assert "method_abbreviation" in m and m["method_abbreviation"]
+        assert "method" in m and m["method"]
+        assert "study_type" in m and m["study_type"] in ["Expression", "Genetics"]
+        assert "description" in m and len(m["description"]) > 10
+
+    assert os.path.exists("help_diagnostic_tools.json"), "help_diagnostic_tools.json not found."
+    with open("help_diagnostic_tools.json", "r", encoding="utf-8") as f:
+        json_diag = json.load(f)
+    assert len(json_diag) == 9
+    for d in json_diag:
+        assert "diagnostic_tool" in d and d["diagnostic_tool"]
+        assert "description" in d and len(d["description"]) > 5
+
+
+def test_help_tab_tables_rendered_in_html():
+    """Verify that Experimental Methodologies and Diagnostic Tools tables are rendered in index.html."""
+    with open("index.html", "r", encoding="utf-8") as f:
+        html = f.read()
+
+    # Verify container IDs and quick navigation
+    assert 'id="section-methods"' in html
+    assert 'id="section-diagnostic-tools"' in html
+    assert 'id="methods-help-table"' in html
+    assert 'id="diagnostic-tools-help-table"' in html
+
+    # Verify search input IDs
+    assert 'id="methods-help-search"' in html
+    assert 'id="diagnostic-tools-help-search"' in html
+
+    # Verify representative entries from both tables
+    with open("help_methods.json", "r", encoding="utf-8") as f:
+        methods = json.load(f)
+    for m in methods:
+        assert m["method_abbreviation"] in html
+        assert m["method"] in html
+
+    with open("help_diagnostic_tools.json", "r", encoding="utf-8") as f:
+        diag = json.load(f)
+    for d in diag:
+        assert d["diagnostic_tool"] in html
+        assert d["description"] in html
+
 
 

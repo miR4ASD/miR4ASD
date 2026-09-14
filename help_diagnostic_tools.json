@@ -1,0 +1,38 @@
+[
+  {
+    "diagnostic_tool": "DSM-5",
+    "description": "Diagnostic and Statistical Manual of Mental Disorders 5th Edition"
+  },
+  {
+    "diagnostic_tool": "DSM-IV",
+    "description": "Diagnostic and Statistical Manual of Mental Disorders 4th Edition"
+  },
+  {
+    "diagnostic_tool": "DSM-IV-TR",
+    "description": "Diagnostic and Statistical Manual of Mental Disorders 4th Edition Text Revision"
+  },
+  {
+    "diagnostic_tool": "ADI-R",
+    "description": "Autism Diagnostic Interview-Revised"
+  },
+  {
+    "diagnostic_tool": "ADOS",
+    "description": "Autism Diagnostic Observation Schedule"
+  },
+  {
+    "diagnostic_tool": "CARS",
+    "description": "Childhood Autism Rating Scale"
+  },
+  {
+    "diagnostic_tool": "ABC",
+    "description": "Autism Behavior Scale"
+  },
+  {
+    "diagnostic_tool": "GARS",
+    "description": "Gilliam Autism Rating Scale"
+  },
+  {
+    "diagnostic_tool": "SRS",
+    "description": "Social Responsiveness Scale"
+  }
+]

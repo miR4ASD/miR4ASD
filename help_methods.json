@@ -1,0 +1,62 @@
+[
+  {
+    "method_abbreviation": "Gene expression microarray",
+    "method": "Gene expression microarray",
+    "study_type": "Expression",
+    "description": "Hybridization-based technology using predefined probes to measure the relative expression levels of mRNA transcripts/genes across multiple targets simultaneously."
+  },
+  {
+    "method_abbreviation": "miRNA microarray",
+    "method": "MicroRNA expression microarray",
+    "study_type": "Expression",
+    "description": "Hybridization-based technology using predefined probes specifically designed to detect and measure the relative expression levels of multiple mature miRNAs."
+  },
+  {
+    "method_abbreviation": "RT-qPCR",
+    "method": "Reverse transcription-quantitative PCR",
+    "study_type": "Expression",
+    "description": "PCR-based method in which RNA is reverse-transcribed into cDNA and specific miRNAs or transcripts are quantified through real-time amplification. Includes individual, multiplex, and array-based RT-qPCR assays such as TLDA/TaqMan miRNA arrays."
+  },
+  {
+    "method_abbreviation": "RNA-seq",
+    "method": "RNA sequencing",
+    "study_type": "Expression",
+    "description": "High-throughput sequencing of RNA-derived libraries used for transcriptome-wide characterization and quantification of RNA expression, particularly mRNA and other longer RNA transcripts."
+  },
+  {
+    "method_abbreviation": "Small RNA-seq",
+    "method": "Small RNA sequencing",
+    "study_type": "Expression",
+    "description": "High-throughput sequencing using libraries enriched for small RNA molecules, enabling detection and quantification of miRNAs and other small non-coding RNAs."
+  },
+  {
+    "method_abbreviation": "NanoString",
+    "method": "NanoString nCounter",
+    "study_type": "Expression",
+    "description": "Direct digital RNA detection and counting using sequence-specific barcoded probes, without enzymatic amplification"
+  },
+  {
+    "method_abbreviation": "SNP array",
+    "method": "Single nucleotide polymorphism array",
+    "study_type": "Genetics",
+    "description": "DNA hybridization-based technology using predefined probes to genotype large numbers of SNPs across the genome. Probe intensity and allelic signals can also be used to identify copy-number variants and regions of homozygosity."
+  },
+  {
+    "method_abbreviation": "WES",
+    "method": "Whole-exome sequencing",
+    "study_type": "Genetics",
+    "description": "High-throughput DNA sequencing targeting primarily the protein-coding regions (exons) of the genome, enabling detection of SNVs and small insertions/deletions and, depending on the analytical pipeline, other variant types."
+  },
+  {
+    "method_abbreviation": "WGS",
+    "method": "Whole-genome sequencing",
+    "study_type": "Genetics",
+    "description": "High-throughput sequencing of genomic DNA across coding and non-coding regions, enabling comprehensive detection of SNVs, insertions/deletions, and, depending on the analytical pipeline, structural and copy-number variants."
+  },
+  {
+    "method_abbreviation": "aCGH",
+    "method": "Array comparative genomic hybridization",
+    "study_type": "Genetics",
+    "description": "DNA hybridization-based technology comparing test and reference DNA across genomic probes to identify copy-number gains and losses, including genomic deletions and duplications."
+  }
+]

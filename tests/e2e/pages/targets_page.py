@@ -15,7 +15,8 @@ class TargetsPage(BasePage):
     FILTER_SUPPORT = "#filter-support-type"
     FILTER_METHOD = "#method-checkboxes"
     FILTER_REGULATION = "#filter-target-regulation"
-    FILTER_TISSUE = "#filter-target-tissue"
+    FILTER_TISSUE = "#target-tissue-checkboxes"
+    FILTER_TISSUE_SEARCH = "#filter-target-tissue-search"
 
     def navigate_to_targets(self) -> None:
         """Switch to Target Genes tab and wait for DataTables to render."""
@@ -110,7 +111,15 @@ class TargetsPage(BasePage):
 
     def filter_tissue(self, value: str) -> None:
         """Set the tissue / cell source filter ('' to clear)."""
-        self.fill_filter_input(self.FILTER_TISSUE, value)
+        if not value:
+            checked = self.page.locator(f"{self.FILTER_TISSUE} input:checked")
+            for i in range(checked.count()):
+                checked.nth(i).uncheck()
+        else:
+            cb = self.page.locator(f"{self.FILTER_TISSUE} input[value='{value}']")
+            if cb.count() > 0:
+                cb.check()
+        self.page.wait_for_timeout(400)
 
     def reset_target_filters(self) -> None:
         """Click the per-tab 'Clear All' (targets scope) filter reset button."""
