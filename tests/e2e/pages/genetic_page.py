@@ -37,6 +37,8 @@ class GeneticPage(StudiesTablePage):
     FILTER_HAIRPIN = "#gen-filter-mirna-id"
     FILTER_ALTERATION = "#filter-genetic-alteration"
     FILTER_STUDY_DESC = "#filter-study-desc"
+    METHODOLOGY_CHECKBOXES = "#gen-methodology-checkboxes"
+    DIAGNOSTIC_CHECKBOXES = "#gen-diagnostic-checkboxes"
 
     def filter_mature(self, text: str) -> None:
         """Set the genetic miRNA mature ID filter ('' to clear)."""
@@ -49,6 +51,32 @@ class GeneticPage(StudiesTablePage):
     def select_genetic_alteration(self, value: str) -> None:
         """Select genetic alteration option ('' for All, 'CNV', 'SNV', 'SNP')."""
         self.select_filter_option(self.FILTER_ALTERATION, value)
+
+    def select_methodology(self, value: str) -> None:
+        """Select a genetic methodology option (multi-select checklist)."""
+        if value:
+            self.ensure_filter_card_expanded(self.METHODOLOGY_CHECKBOXES)
+            self.page.locator(
+                f'#gen-methodology-checkboxes input[value="{value}"]'
+            ).check()
+        else:
+            self.page.locator(
+                f'{self.METHODOLOGY_CHECKBOXES} input:checked'
+            ).uncheck()
+        self.page.wait_for_timeout(400)
+
+    def select_diagnostic_tool(self, value: str) -> None:
+        """Select a genetic diagnostic tool option (multi-select checklist)."""
+        if value:
+            self.ensure_filter_card_expanded(self.DIAGNOSTIC_CHECKBOXES)
+            self.page.locator(
+                f'#gen-diagnostic-checkboxes input[value="{value}"]'
+            ).check()
+        else:
+            self.page.locator(
+                f'{self.DIAGNOSTIC_CHECKBOXES} input:checked'
+            ).uncheck()
+        self.page.wait_for_timeout(400)
 
     def filter_study_desc(self, text: str) -> None:
         """Set the study description keyword filter ('' to clear)."""

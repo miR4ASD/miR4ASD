@@ -37,6 +37,8 @@ class ExpressionPage(StudiesTablePage):
     FILTER_HAIRPIN = "#filter-mirna-id"
     FILTER_CHANGE = "#filter-expression-change"
     EVIDENCE_CHECKBOXES = "#evidence-checkboxes"
+    METHODOLOGY_CHECKBOXES = "#expr-methodology-checkboxes"
+    DIAGNOSTIC_CHECKBOXES = "#expr-diagnostic-checkboxes"
     FILTER_MIN_UP = "#filter-upregulation-studies"
     FILTER_MIN_DOWN = "#filter-downregulation-studies"
     FILTER_MIN_TOTAL = "#filter-total-studies"
@@ -87,6 +89,32 @@ class ExpressionPage(StudiesTablePage):
         else:
             self.page.locator(
                 f'{self.OTHER_EVIDENCE_CHECKBOXES} input:checked'
+            ).uncheck()
+        self.page.wait_for_timeout(400)
+
+    def select_methodology(self, value: str) -> None:
+        """Select a methodology option (multi-select checklist)."""
+        if value:
+            self.ensure_filter_card_expanded(self.METHODOLOGY_CHECKBOXES)
+            self.page.locator(
+                f'#expr-methodology-checkboxes input[value="{value}"]'
+            ).check()
+        else:
+            self.page.locator(
+                f'{self.METHODOLOGY_CHECKBOXES} input:checked'
+            ).uncheck()
+        self.page.wait_for_timeout(400)
+
+    def select_diagnostic_tool(self, value: str) -> None:
+        """Select a diagnostic tool option (multi-select checklist)."""
+        if value:
+            self.ensure_filter_card_expanded(self.DIAGNOSTIC_CHECKBOXES)
+            self.page.locator(
+                f'#expr-diagnostic-checkboxes input[value="{value}"]'
+            ).check()
+        else:
+            self.page.locator(
+                f'{self.DIAGNOSTIC_CHECKBOXES} input:checked'
             ).uncheck()
         self.page.wait_for_timeout(400)
 

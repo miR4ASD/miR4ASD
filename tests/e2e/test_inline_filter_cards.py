@@ -201,3 +201,72 @@ def test_targets_view_mode_round_trip(app_page: Page, base_url: str):
     targets_page.set_view_mode("selected-mirna")
     assert targets_page.get_active_view_mode() == "selected-mirna"
     assert targets_page.get_filtered_total() == scoped
+
+
+def test_expression_card_methodology_and_diagnostic_filters(
+    app_page: Page, base_url: str
+):
+    """Verify methodology and diagnostic tool multi-select filters on Expression Studies."""
+    expr_page = ExpressionPage(app_page, base_url)
+    expr_page.navigate_to_expression()
+
+    assert expr_page.get_filtered_total() == 524
+
+    # Select methodology RT-qPCR
+    expr_page.select_methodology("RT-qPCR")
+    assert expr_page.get_filtered_total() == 318
+    assert expr_page.get_active_chips_count() == 1
+    assert "1 Methods" in expr_page.get_active_indicator_text()
+    chip_text = expr_page.page.locator(".expr-active-chips .filter-chip").first.inner_text().strip()
+    assert "RT-qPCR" in chip_text
+
+    # Multi-select methodology: also select Small RNA-seq (OR logic: 496)
+    expr_page.select_methodology("Small RNA-seq")
+    assert expr_page.get_filtered_total() == 496
+    assert expr_page.get_active_chips_count() == 2
+
+    # Uncheck Small RNA-seq
+    expr_page.page.locator('#expr-methodology-checkboxes input[value="Small RNA-seq"]').uncheck()
+    expr_page.page.wait_for_timeout(400)
+    assert expr_page.get_filtered_total() == 318
+
+    # Select diagnostic tool DSM-5 (AND logic: RT-qPCR + DSM-5 -> 142)
+    expr_page.select_diagnostic_tool("DSM-5")
+    assert expr_page.get_filtered_total() == 142
+    assert expr_page.get_active_chips_count() == 2
+    indicator = expr_page.get_active_indicator_text()
+    assert "2 Active" in indicator
+
+    # Reset expression filters
+    expr_page.reset_expression_filters()
+    assert expr_page.get_filtered_total() == 524
+    assert expr_page.get_active_chips_count() == 0
+    assert expr_page.get_active_indicator_text() == "No Filters Active"
+
+
+def test_genetic_card_methodology_and_diagnostic_filters(
+    app_page: Page, base_url: str
+):
+    """Verify methodology and diagnostic tool multi-select filters on Genetic Studies."""
+    gen_page = GeneticPage(app_page, base_url)
+    gen_page.navigate_to_genetic()
+
+    assert gen_page.get_filtered_total() == 93
+
+    # Select methodology WGS
+    gen_page.select_methodology("WGS")
+    assert gen_page.get_filtered_total() == 5
+    assert gen_page.get_active_chips_count() == 1
+    assert "1 Methods" in gen_page.get_active_indicator_text()
+
+    # Select diagnostic tool DSM-5 (WGS + DSM-5 -> 5)
+    gen_page.select_diagnostic_tool("DSM-5")
+    assert gen_page.get_filtered_total() == 5
+    assert gen_page.get_active_chips_count() == 2
+
+    # Reset genetic filters
+    gen_page.click_reset_filters()
+    assert gen_page.get_filtered_total() == 93
+    assert gen_page.get_active_chips_count() == 0
+    assert gen_page.get_active_indicator_text() == "No Filters Active"
+

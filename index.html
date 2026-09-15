@@ -1745,14 +1745,6 @@
                                 <textarea id="filter-mirna-id" class="form-control font-monospace" rows="2" placeholder="Paste precursor IDs (e.g. hsa-let-7a-1, hsa-mir-132...)" style="font-size: 0.8rem;" aria-label="Filter Expression Studies by miRNA Hairpin ID(s)"></textarea>
                             </div>
                             <div class="col-lg-3 col-md-6 col-12">
-                                <label for="filter-expression-change" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Expression Change</label>
-                                <select id="filter-expression-change" class="form-select form-select-sm" aria-label="Filter by Expression Change">
-                                    <option value="">All Expression Changes</option>
-                                    <option value="Upregulated">Upregulated</option>
-                                    <option value="Downregulated">Downregulated</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-12">
                                 <label class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Overall Evidence</label>
                                 <div class="tissue-checklist" id="evidence-checkboxes" style="max-height: 120px; overflow-y: auto;" aria-label="Overall evidence filter (multi-select)">
                                     <div class="checklist-item"><label for="evidence-consistent-up"><input type="checkbox" id="evidence-consistent-up" value="Consistent upregulation" class="form-check-input" aria-label="Filter by evidence: Consistent upregulation"><span>Consistent upregulation</span></label></div>
@@ -1773,18 +1765,51 @@
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-6 col-12">
+                                <label class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Methodology</label>
+                                <div class="tissue-checklist" id="expr-methodology-checkboxes" style="max-height: 120px; overflow-y: auto;" aria-label="Methodology filter (multi-select)">
+                                    <div class="checklist-item"><label for="expr-meth-rtqpcr"><input type="checkbox" id="expr-meth-rtqpcr" value="RT-qPCR" class="form-check-input" aria-label="Filter by methodology: RT-qPCR"><span>RT-qPCR</span></label></div>
+                                    <div class="checklist-item"><label for="expr-meth-srnaseq"><input type="checkbox" id="expr-meth-srnaseq" value="Small RNA-seq" class="form-check-input" aria-label="Filter by methodology: Small RNA-seq"><span>Small RNA-seq</span></label></div>
+                                    <div class="checklist-item"><label for="expr-meth-rnaseq"><input type="checkbox" id="expr-meth-rnaseq" value="RNA-seq" class="form-check-input" aria-label="Filter by methodology: RNA-seq"><span>RNA-seq</span></label></div>
+                                    <div class="checklist-item"><label for="expr-meth-mirarray"><input type="checkbox" id="expr-meth-mirarray" value="miRNA microarray" class="form-check-input" aria-label="Filter by methodology: miRNA microarray"><span>miRNA microarray</span></label></div>
+                                    <div class="checklist-item"><label for="expr-meth-genearray"><input type="checkbox" id="expr-meth-genearray" value="Gene expression microarray" class="form-check-input" aria-label="Filter by methodology: Gene expression microarray"><span>Gene expression microarray</span></label></div>
+                                    <div class="checklist-item"><label for="expr-meth-nanostring"><input type="checkbox" id="expr-meth-nanostring" value="NanoString" class="form-check-input" aria-label="Filter by methodology: NanoString"><span>NanoString</span></label></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-12">
+                                <label class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Diagnostic Tool</label>
+                                <div class="tissue-checklist" id="expr-diagnostic-checkboxes" style="max-height: 120px; overflow-y: auto;" aria-label="Diagnostic tools filter (multi-select)">
+                                    <div class="checklist-item"><label for="expr-diag-dsm5"><input type="checkbox" id="expr-diag-dsm5" value="DSM-5" class="form-check-input" aria-label="Filter by diagnostic tool: DSM-5"><span>DSM-5</span></label></div>
+                                    <div class="checklist-item"><label for="expr-diag-ados"><input type="checkbox" id="expr-diag-ados" value="ADOS" class="form-check-input" aria-label="Filter by diagnostic tool: ADOS"><span>ADOS</span></label></div>
+                                    <div class="checklist-item"><label for="expr-diag-adir"><input type="checkbox" id="expr-diag-adir" value="ADI-R" class="form-check-input" aria-label="Filter by diagnostic tool: ADI-R"><span>ADI-R</span></label></div>
+                                    <div class="checklist-item"><label for="expr-diag-cars"><input type="checkbox" id="expr-diag-cars" value="CARS" class="form-check-input" aria-label="Filter by diagnostic tool: CARS"><span>CARS</span></label></div>
+                                    <div class="checklist-item"><label for="expr-diag-dsm4tr"><input type="checkbox" id="expr-diag-dsm4tr" value="DSM-IV-TR" class="form-check-input" aria-label="Filter by diagnostic tool: DSM-IV-TR"><span>DSM-IV-TR</span></label></div>
+                                    <div class="checklist-item"><label for="expr-diag-dsm4"><input type="checkbox" id="expr-diag-dsm4" value="DSM-IV" class="form-check-input" aria-label="Filter by diagnostic tool: DSM-IV"><span>DSM-IV</span></label></div>
+                                    <div class="checklist-item"><label for="expr-diag-abc"><input type="checkbox" id="expr-diag-abc" value="ABC" class="form-check-input" aria-label="Filter by diagnostic tool: ABC"><span>ABC</span></label></div>
+                                    <div class="checklist-item"><label for="expr-diag-gars"><input type="checkbox" id="expr-diag-gars" value="GARS" class="form-check-input" aria-label="Filter by diagnostic tool: GARS"><span>GARS</span></label></div>
+                                    <div class="checklist-item"><label for="expr-diag-srs"><input type="checkbox" id="expr-diag-srs" value="SRS" class="form-check-input" aria-label="Filter by diagnostic tool: SRS"><span>SRS</span></label></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-12">
                                 <label class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Tissue Type</label>
                                 <div class="tissue-checklist" id="tissue-checkboxes" style="max-height: 120px; overflow-y: auto;"></div>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-12">
+                            <div class="col-lg-2 col-md-6 col-12">
+                                <label for="filter-expression-change" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Expression Change</label>
+                                <select id="filter-expression-change" class="form-select form-select-sm" aria-label="Filter by Expression Change">
+                                    <option value="">All Expression Changes</option>
+                                    <option value="Upregulated">Upregulated</option>
+                                    <option value="Downregulated">Downregulated</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-12">
                                 <label for="filter-upregulation-studies" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Min # up</label>
                                 <input type="number" id="filter-upregulation-studies" class="form-control form-control-sm" min="0" step="1" placeholder="Any" aria-label="Filter by minimum number of upregulated studies" data-bs-toggle="tooltip" title="Show only miRNAs reported in at least this many upregulated studies">
                             </div>
-                            <div class="col-lg-4 col-md-4 col-12">
+                            <div class="col-lg-2 col-md-4 col-12">
                                 <label for="filter-downregulation-studies" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Min # down</label>
                                 <input type="number" id="filter-downregulation-studies" class="form-control form-control-sm" min="0" step="1" placeholder="Any" aria-label="Filter by minimum number of downregulated studies" data-bs-toggle="tooltip" title="Show only miRNAs reported in at least this many downregulated studies">
                             </div>
-                            <div class="col-lg-4 col-md-4 col-12">
+                            <div class="col-lg-2 col-md-4 col-12">
                                 <label for="filter-total-studies" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Min total</label>
                                 <input type="number" id="filter-total-studies" class="form-control form-control-sm" min="0" step="1" placeholder="Any" aria-label="Filter by minimum total studies" data-bs-toggle="tooltip" title="Show only miRNAs with at least this many total studies">
                             </div>
@@ -1882,6 +1907,31 @@
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
                                     <input type="text" id="filter-study-desc" class="form-control border-start-0 ps-0" placeholder="e.g. Blood, Brain, upregulated..." aria-label="Filter by Expression Evidence Keywords">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <label class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Methodology</label>
+                                <div class="tissue-checklist" id="gen-methodology-checkboxes" style="max-height: 120px; overflow-y: auto;" aria-label="Genetic studies methodology filter (multi-select)">
+                                    <div class="checklist-item"><label for="gen-meth-wgs"><input type="checkbox" id="gen-meth-wgs" value="WGS" class="form-check-input" aria-label="Filter by methodology: WGS"><span>WGS</span></label></div>
+                                    <div class="checklist-item"><label for="gen-meth-wes"><input type="checkbox" id="gen-meth-wes" value="WES" class="form-check-input" aria-label="Filter by methodology: WES"><span>WES</span></label></div>
+                                    <div class="checklist-item"><label for="gen-meth-snparray"><input type="checkbox" id="gen-meth-snparray" value="SNP array" class="form-check-input" aria-label="Filter by methodology: SNP array"><span>SNP array</span></label></div>
+                                    <div class="checklist-item"><label for="gen-meth-acgh"><input type="checkbox" id="gen-meth-acgh" value="aCGH" class="form-check-input" aria-label="Filter by methodology: aCGH"><span>aCGH</span></label></div>
+                                    <div class="checklist-item"><label for="gen-meth-srnaseq"><input type="checkbox" id="gen-meth-srnaseq" value="Small RNA-seq" class="form-check-input" aria-label="Filter by methodology: Small RNA-seq"><span>Small RNA-seq</span></label></div>
+                                    <div class="checklist-item"><label for="gen-meth-genearray"><input type="checkbox" id="gen-meth-genearray" value="Gene expression microarray" class="form-check-input" aria-label="Filter by methodology: Gene expression microarray"><span>Gene expression microarray</span></label></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <label class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Diagnostic Tool</label>
+                                <div class="tissue-checklist" id="gen-diagnostic-checkboxes" style="max-height: 120px; overflow-y: auto;" aria-label="Genetic studies diagnostic tools filter (multi-select)">
+                                    <div class="checklist-item"><label for="gen-diag-dsm5"><input type="checkbox" id="gen-diag-dsm5" value="DSM-5" class="form-check-input" aria-label="Filter by diagnostic tool: DSM-5"><span>DSM-5</span></label></div>
+                                    <div class="checklist-item"><label for="gen-diag-ados"><input type="checkbox" id="gen-diag-ados" value="ADOS" class="form-check-input" aria-label="Filter by diagnostic tool: ADOS"><span>ADOS</span></label></div>
+                                    <div class="checklist-item"><label for="gen-diag-adir"><input type="checkbox" id="gen-diag-adir" value="ADI-R" class="form-check-input" aria-label="Filter by diagnostic tool: ADI-R"><span>ADI-R</span></label></div>
+                                    <div class="checklist-item"><label for="gen-diag-dsm4"><input type="checkbox" id="gen-diag-dsm4" value="DSM-IV" class="form-check-input" aria-label="Filter by diagnostic tool: DSM-IV"><span>DSM-IV</span></label></div>
+                                    <div class="checklist-item"><label for="gen-diag-dsm4tr"><input type="checkbox" id="gen-diag-dsm4tr" value="DSM-IV-TR" class="form-check-input" aria-label="Filter by diagnostic tool: DSM-IV-TR"><span>DSM-IV-TR</span></label></div>
+                                    <div class="checklist-item"><label for="gen-diag-cars"><input type="checkbox" id="gen-diag-cars" value="CARS" class="form-check-input" aria-label="Filter by diagnostic tool: CARS"><span>CARS</span></label></div>
+                                    <div class="checklist-item"><label for="gen-diag-abc"><input type="checkbox" id="gen-diag-abc" value="ABC" class="form-check-input" aria-label="Filter by diagnostic tool: ABC"><span>ABC</span></label></div>
+                                    <div class="checklist-item"><label for="gen-diag-gars"><input type="checkbox" id="gen-diag-gars" value="GARS" class="form-check-input" aria-label="Filter by diagnostic tool: GARS"><span>GARS</span></label></div>
+                                    <div class="checklist-item"><label for="gen-diag-srs"><input type="checkbox" id="gen-diag-srs" value="SRS" class="form-check-input" aria-label="Filter by diagnostic tool: SRS"><span>SRS</span></label></div>
                                 </div>
                             </div>
                         </div>
@@ -2181,8 +2231,9 @@
                                 </div>
                             </div>
                         </div>
+                        </div>
                     </div>
-                                        <div class="table-responsive">
+                    <div class="table-responsive">
                     <table id="targets-table" class="display" style="width:100%">
                         <thead>
                             <tr>
@@ -3579,6 +3630,77 @@
             });
         }
 
+        // Methodology & Diagnostic Tool filters for Expression and Genetic tables.
+        // Enforced via a global ext.search guard inspecting rowData.StudyDetails.
+        let activeExprMethods = [];
+        let activeExprDiagTools = [];
+        let activeGenMethods = [];
+        let activeGenDiagTools = [];
+
+        const DIAG_TOOL_PATTERNS = {
+            'DSM-5': /\bDSM-5\b/i,
+            'ADOS': /\bADOS\b/i,
+            'ADI-R': /\bADI-R\b/i,
+            'CARS': /\bCARS\b/i,
+            'DSM-IV-TR': /\bDSM-IV-TR\b/i,
+            'DSM-IV': /\bDSM-IV\b(?!-TR)/i,
+            'ABC': /\bABC\b/i,
+            'GARS': /\bGARS\b/i,
+            'SRS': /\bSRS\b/i
+        };
+
+        function studyMatchesMethodology(study, selectedMethods) {
+            if (!selectedMethods || selectedMethods.length === 0) return true;
+            if (!study || !study.Methodology) return false;
+            const tokens = String(study.Methodology).split(/\s+and\s+|;\s*|,\s*/).map(t => t.trim()).filter(Boolean);
+            return selectedMethods.some(m => tokens.includes(m));
+        }
+
+        function studyMatchesDiagnostic(study, selectedDiagTools) {
+            if (!selectedDiagTools || selectedDiagTools.length === 0) return true;
+            if (!study || !study['Diagnostic tools']) return false;
+            const diagStr = String(study['Diagnostic tools']);
+            return selectedDiagTools.some(dt => {
+                const pat = DIAG_TOOL_PATTERNS[dt];
+                return pat ? pat.test(diagStr) : diagStr.includes(dt);
+            });
+        }
+
+        function installStudyDetailsFilters() {
+            if (window.__studyDetailsFiltersInstalled) return;
+            window.__studyDetailsFiltersInstalled = true;
+            $.fn.dataTable.ext.search.push(function(settings, searchData, index, rowData) {
+                if (!rowData) return true;
+                const id = (settings.nTableId !== undefined)
+                    ? settings.nTableId
+                    : (settings.nTable ? settings.nTable.id : '');
+
+                if (id === 'expression-table') {
+                    if (activeExprMethods.length === 0 && activeExprDiagTools.length === 0) return true;
+                    const studies = Array.isArray(rowData.StudyDetails) ? rowData.StudyDetails : [];
+                    if (studies.length === 0) return false;
+                    const hasMethodMatch = activeExprMethods.length === 0 || studies.some(s => studyMatchesMethodology(s, activeExprMethods));
+                    if (!hasMethodMatch) return false;
+                    const hasDiagMatch = activeExprDiagTools.length === 0 || studies.some(s => studyMatchesDiagnostic(s, activeExprDiagTools));
+                    if (!hasDiagMatch) return false;
+                    return true;
+                }
+
+                if (id === 'other-table') {
+                    if (activeGenMethods.length === 0 && activeGenDiagTools.length === 0) return true;
+                    const studies = Array.isArray(rowData.StudyDetails) ? rowData.StudyDetails : [];
+                    if (studies.length === 0) return false;
+                    const hasMethodMatch = activeGenMethods.length === 0 || studies.some(s => studyMatchesMethodology(s, activeGenMethods));
+                    if (!hasMethodMatch) return false;
+                    const hasDiagMatch = activeGenDiagTools.length === 0 || studies.some(s => studyMatchesDiagnostic(s, activeGenDiagTools));
+                    if (!hasDiagMatch) return false;
+                    return true;
+                }
+
+                return true;
+            });
+        }
+
         // Refresh the Targets interaction/gene count badges to reflect the current
         // applied (column-search AND selection-scope) row set.
         function updateTargetScopeBadges() {
@@ -3859,6 +3981,14 @@
                 $(`#evidence-checkboxes input[value="${val}"]`).prop('checked', false);
             } else if (field === 'other-evidence') {
                 $(`#other-evidence-checkboxes input[value="${val}"]`).prop('checked', false);
+            } else if (field === 'expr-methodology') {
+                $(`#expr-methodology-checkboxes input[value="${val}"]`).prop('checked', false);
+            } else if (field === 'expr-diagnostic') {
+                $(`#expr-diagnostic-checkboxes input[value="${val}"]`).prop('checked', false);
+            } else if (field === 'gen-methodology') {
+                $(`#gen-methodology-checkboxes input[value="${val}"]`).prop('checked', false);
+            } else if (field === 'gen-diagnostic') {
+                $(`#gen-diagnostic-checkboxes input[value="${val}"]`).prop('checked', false);
             } else if (field === 'filter-sfari') {
                 $(`#sfari-checkboxes input[value="${val}"]`).prop('checked', false);
             } else if (field === 'filter-method') {
@@ -3885,6 +4015,10 @@
             $('#evidence-checkboxes input:checked').each(function() { selectedEvidence.push($(this).val()); });
             const selectedOtherEvidence = [];
             $('#other-evidence-checkboxes input:checked').each(function() { selectedOtherEvidence.push($(this).val()); });
+            activeExprMethods = [];
+            $('#expr-methodology-checkboxes input:checked').each(function() { activeExprMethods.push($(this).val()); });
+            activeExprDiagTools = [];
+            $('#expr-diagnostic-checkboxes input:checked').each(function() { activeExprDiagTools.push($(this).val()); });
             const minUpStudies = parseInt($('#filter-upregulation-studies').val(), 10);
             const minDownStudies = parseInt($('#filter-downregulation-studies').val(), 10);
             const minTotalStudies = parseInt($('#filter-total-studies').val(), 10);
@@ -3904,6 +4038,10 @@
             const geneticAlteration = $('#filter-genetic-alteration').val() || '';
             const genExprEvidence = $('#filter-genetic-expr-evidence').val() || '';
             const studyDesc = ($('#filter-study-desc').val() || '').trim();
+            activeGenMethods = [];
+            $('#gen-methodology-checkboxes input:checked').each(function() { activeGenMethods.push($(this).val()); });
+            activeGenDiagTools = [];
+            $('#gen-diagnostic-checkboxes input:checked').each(function() { activeGenDiagTools.push($(this).val()); });
 
             // ---- Target Genes (own tab inputs) ----
             const geneTokens = parseTokens($('#filter-target-gene').val().trim()).map(g => g.toUpperCase());
@@ -3926,6 +4064,8 @@
             const exprNumericCount = [minUpStudies, minDownStudies, minTotalStudies].filter(n => !isNaN(n) && n > 0).length;
             exprCount += exprNumericCount;
             exprCount += selectedTissues.length;
+            exprCount += activeExprMethods.length;
+            exprCount += activeExprDiagTools.length;
 
             let genCount = 0;
             if (genHairpinTokens.length > 0) genCount++;
@@ -3934,6 +4074,8 @@
             if (geneticAlteration) genCount++;
             if (genExprEvidence) genCount++;
             if (studyDesc) genCount++;
+            genCount += activeGenMethods.length;
+            genCount += activeGenDiagTools.length;
 
             let targetCount = 0;
             if (geneTokens.length > 0) targetCount++;
@@ -3949,6 +4091,8 @@
                 exprChange,
                 selectedEvidence.length > 0 ? `${selectedEvidence.length} Evidence` : '',
                 selectedOtherEvidence.length > 0 ? `${selectedOtherEvidence.length} Other Ev.` : '',
+                activeExprMethods.length > 0 ? `${activeExprMethods.length} Methods` : '',
+                activeExprDiagTools.length > 0 ? `${activeExprDiagTools.length} Diag.` : '',
                 selectedTissues.length > 0 ? `${selectedTissues.length} Tissues` : ''
             ]);
             const genSummary = buildSummary([
@@ -3957,6 +4101,8 @@
                 genStudyType,
                 geneticAlteration,
                 genExprEvidence ? (genExprEvidence === 'has_expr_evidence' ? 'Expr Ev.' : genExprEvidence) : '',
+                activeGenMethods.length > 0 ? `${activeGenMethods.length} Methods` : '',
+                activeGenDiagTools.length > 0 ? `${activeGenDiagTools.length} Diag.` : '',
                 studyDesc ? 'Desc' : ''
             ]);
             setFilterIndicator('.expr-active-filter-indicator', exprCount, exprSummary);
@@ -3991,7 +4137,9 @@
                 (!isNaN(minUpStudies) && minUpStudies > 0) ? { label: `Min # up: ${minUpStudies}`, field: 'filter-upregulation-studies', val: '' } : null,
                 (!isNaN(minDownStudies) && minDownStudies > 0) ? { label: `Min # down: ${minDownStudies}`, field: 'filter-downregulation-studies', val: '' } : null,
                 (!isNaN(minTotalStudies) && minTotalStudies > 0) ? { label: `Min total: ${minTotalStudies}`, field: 'filter-total-studies', val: '' } : null,
-                ...selectedTissues.map(t => ({ label: `Tissue: ${t}`, field: 'tissue', val: t }))
+                ...selectedTissues.map(t => ({ label: `Tissue: ${t}`, field: 'tissue', val: t })),
+                ...activeExprMethods.map(m => ({ label: `Method: ${m}`, field: 'expr-methodology', val: m })),
+                ...activeExprDiagTools.map(d => ({ label: `Diag: ${d}`, field: 'expr-diagnostic', val: d }))
             ].filter(Boolean));
 
             renderChipsInto('.gen-active-chips', [
@@ -4000,7 +4148,9 @@
                 genStudyType ? { label: `Study: ${genStudyType}`, field: 'filter-genetic-study-type', val: '' } : null,
                 geneticAlteration ? { label: `Variant: ${geneticAlteration}`, field: 'filter-genetic-alteration', val: '' } : null,
                 genExprEvidence ? { label: `Expr Ev.: ${genExprEvidence === 'has_expr_evidence' ? 'Any' : genExprEvidence}`, field: 'filter-genetic-expr-evidence', val: '' } : null,
-                studyDesc ? { label: `Desc: ${studyDesc}`, field: 'filter-study-desc', val: '' } : null
+                studyDesc ? { label: `Desc: ${studyDesc}`, field: 'filter-study-desc', val: '' } : null,
+                ...activeGenMethods.map(m => ({ label: `Method: ${m}`, field: 'gen-methodology', val: m })),
+                ...activeGenDiagTools.map(d => ({ label: `Diag: ${d}`, field: 'gen-diagnostic', val: d }))
             ].filter(Boolean));
             renderChipsInto('.target-active-chips', [
                 geneTokens.length > 0 ? { label: `Genes: ${geneTokens.length > 2 ? `${geneTokens.length} symbols` : geneTokens.join(', ')}`, field: 'filter-target-gene', val: '' } : null,
@@ -4102,7 +4252,7 @@
             updateExpressionNumericLimits();
             debouncedFilter();
         });
-        $('body').on('change', '#tissue-checkboxes input, #evidence-checkboxes input, #other-evidence-checkboxes input, #sfari-checkboxes input, #method-checkboxes input, #target-tissue-checkboxes input', applyAdvancedFilters);
+        $('body').on('change', '#tissue-checkboxes input, #evidence-checkboxes input, #other-evidence-checkboxes input, #sfari-checkboxes input, #method-checkboxes input, #target-tissue-checkboxes input, #expr-methodology-checkboxes input, #expr-diagnostic-checkboxes input, #gen-methodology-checkboxes input, #gen-diagnostic-checkboxes input', applyAdvancedFilters);
 
         // Quick search for experiments checklist
         $('#filter-method-search').on('input', function() {
@@ -4131,6 +4281,7 @@
         });
 
         installExpressionNumericFilters();
+        installStudyDetailsFilters();
         updateExpressionNumericLimits();
 
         // Per-tab filter reset. Resets only the inputs that live on the given tab.
@@ -4140,11 +4291,16 @@
             if (scope === 'expression') {
                 clearSearch(expressionTable);
                 $('#filter-mirna-id, #filter-mature-id, #filter-expression-change').val('');
-                $('#evidence-checkboxes input:checked, #tissue-checkboxes input:checked, #other-evidence-checkboxes input:checked').prop('checked', false);
+                $('#evidence-checkboxes input:checked, #tissue-checkboxes input:checked, #other-evidence-checkboxes input:checked, #expr-methodology-checkboxes input:checked, #expr-diagnostic-checkboxes input:checked').prop('checked', false);
                 $('#filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies').val('');
+                activeExprMethods = [];
+                activeExprDiagTools = [];
             } else if (scope === 'genetic') {
                 clearSearch(otherTable);
                 $('#gen-filter-mirna-id, #gen-filter-mature-id, #filter-genetic-study-type, #filter-genetic-alteration, #filter-genetic-expr-evidence, #filter-study-desc').val('');
+                $('#gen-methodology-checkboxes input:checked, #gen-diagnostic-checkboxes input:checked').prop('checked', false);
+                activeGenMethods = [];
+                activeGenDiagTools = [];
             } else if (scope === 'targets') {
                 clearSearch(targetsTable);
                 $('#filter-target-gene').val('');
@@ -4163,8 +4319,12 @@
                 clearSearch(otherTable);
                 clearSearch(targetsTable);
                 $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-expression-change, #filter-genetic-study-type, #filter-genetic-alteration, #filter-genetic-expr-evidence, #filter-study-desc, #filter-support-type, #filter-target-regulation, #filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies, #filter-method-search, #filter-target-tissue-search').val('');
-                $('#tissue-checkboxes input:checked, #evidence-checkboxes input:checked, #other-evidence-checkboxes input:checked, #sfari-checkboxes input:checked, #method-checkboxes input:checked, #target-tissue-checkboxes input:checked').prop('checked', false);
+                $('#tissue-checkboxes input:checked, #evidence-checkboxes input:checked, #other-evidence-checkboxes input:checked, #sfari-checkboxes input:checked, #method-checkboxes input:checked, #target-tissue-checkboxes input:checked, #expr-methodology-checkboxes input:checked, #expr-diagnostic-checkboxes input:checked, #gen-methodology-checkboxes input:checked, #gen-diagnostic-checkboxes input:checked').prop('checked', false);
                 $('#method-checkboxes .checklist-item, #target-tissue-checkboxes .checklist-item').show();
+                activeExprMethods = [];
+                activeExprDiagTools = [];
+                activeGenMethods = [];
+                activeGenDiagTools = [];
             }
             applyAdvancedFilters();
         }
