@@ -49,7 +49,6 @@ class EnrichmentPage(BasePage):
             btn.get_attribute("class") or ""
         )
 
-
     def toggle_gene_editor(self) -> None:
         """Toggle collapsible custom gene editor textarea."""
         self.page.locator("[data-bs-target='#geneEditorCollapse']").click()

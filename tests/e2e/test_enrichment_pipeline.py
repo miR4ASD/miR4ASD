@@ -22,9 +22,7 @@ def test_enrichment_awaiting_mirna_selection_state(app_page: Page, base_url: str
     )
 
 
-def test_enrichment_single_source_badge_before_selection(
-    app_page: Page, base_url: str
-):
+def test_enrichment_single_source_badge_before_selection(app_page: Page, base_url: str):
     """Verify the single-source badge is shown with 0 miRNAs selected."""
     enrichment_page = EnrichmentPage(app_page, base_url)
     enrichment_page.navigate_to_enrichment()

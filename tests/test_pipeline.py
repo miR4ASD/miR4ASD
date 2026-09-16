@@ -92,8 +92,6 @@ def test_target_genes_structure_and_sfari_matching():
         "sfari_score",
         "evidence_level",
         "experimental_methods",
-        "regulation",
-        "tissue",
         "pmids",
     ]
 
@@ -252,8 +250,6 @@ def test_target_genes_child_details_structure():
     # Sample verification for required child row fields
     for item in targets[:100]:
         assert "experimental_methods" in item
-        assert "regulation" in item
-        assert "tissue" in item
         assert "pmids" in item
         assert "database_source" in item
         assert item["database_source"] == "miRTarBase 10.0"
@@ -281,7 +277,6 @@ def test_non_destructive_gene_scope_filtering():
                     "is_sfari": item.get("is_sfari", False),
                     "sfari_score": item.get("sfari_score", ""),
                     "evidence_level": item.get("evidence_level", ""),
-                    "tissue": item.get("tissue", ""),
                 }
 
     # Selected miRNAs
@@ -645,7 +640,9 @@ def test_help_tab_tables_data_integrity():
         assert "study_type" in m and m["study_type"] in ["Expression", "Genetics"]
         assert "description" in m and len(m["description"]) > 10
 
-    assert os.path.exists("help_diagnostic_tools.json"), "help_diagnostic_tools.json not found."
+    assert os.path.exists("help_diagnostic_tools.json"), (
+        "help_diagnostic_tools.json not found."
+    )
     with open("help_diagnostic_tools.json", "r", encoding="utf-8") as f:
         json_diag = json.load(f)
     assert len(json_diag) == 9
@@ -681,6 +678,3 @@ def test_help_tab_tables_rendered_in_html():
     for d in diag:
         assert d["diagnostic_tool"] in html
         assert d["description"] in html
-
-
-

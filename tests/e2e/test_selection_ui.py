@@ -36,8 +36,7 @@ def _wait_info_entries(page: Page, table_id: str, mode: str, full: int = 0) -> N
         mode: 'less' waits for count < full; 'equal' waits for count == full.
         full: The full catalog count (for 'less').
     """
-    predicate = (
-        """(o) => {
+    predicate = """(o) => {
             const el = document.getElementById(o.table + '_info');
             if (!el) return false;
             const m = el.textContent.match(/of ([\\d,]+) entries/);
@@ -46,7 +45,6 @@ def _wait_info_entries(page: Page, table_id: str, mode: str, full: int = 0) -> N
             if (o.mode === 'equal') return c === o.full;
             return c < o.full;
         }"""
-    )
     arg = {"table": table_id, "mode": mode, "full": full}
     # Poll via evaluate rather than wait_for_function: its rAF/timer polling is
     # throttled in headless when the page isn't actively painting, which made it
@@ -105,9 +103,7 @@ def test_filter_cards_collapsed_by_default_and_toggle(
     )
 
 
-def test_filter_card_toggle_reveals_and_rehides(
-    app_page: Page, base_url: str
-) -> None:
+def test_filter_card_toggle_reveals_and_rehides(app_page: Page, base_url: str) -> None:
     """The header 'Filters' toggle expands the card, then collapses it again."""
     expr_page = ExpressionPage(app_page, base_url)
     expr_page.navigate_to_expression()
@@ -154,8 +150,7 @@ def test_selection_scopes_targets_view_modes(app_page: Page, base_url: str) -> N
     targets_page.navigate_to_targets()
     _wait_info_entries(app_page, "targets-table", "less", FULL_INTERACTIONS)
     assert targets_page.get_active_view_mode() == "selected-mirna", (
-        "Selecting a miRNA should default the targets table to the "
-        "selected-miRNA view"
+        "Selecting a miRNA should default the targets table to the selected-miRNA view"
     )
     scoped = targets_page.get_filtered_total()
     assert 0 < scoped < FULL_INTERACTIONS, (
@@ -287,9 +282,7 @@ def test_copy_and_clear_mirna_field(app_page: Page, base_url: str) -> None:
     enrichment_page.navigate_to_enrichment()
     enrichment_page.fill_enrichment_mirna_input(f"{a} {b}")
     n_selected = enrichment_page.get_selected_mirna_count()
-    assert n_selected == 2, (
-        f"Expected exactly 2 selected miRNAs, got {n_selected}"
-    )
+    assert n_selected == 2, f"Expected exactly 2 selected miRNAs, got {n_selected}"
 
     targets_page = TargetsPage(app_page, base_url)
     targets_page.navigate_to_targets()

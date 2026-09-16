@@ -104,7 +104,11 @@ def test_expression_card_other_evidence_filter(app_page: Page, base_url: str):
     assert expr_page.get_filtered_total() == 33
     assert expr_page.get_active_chips_count() == 1
     assert "1 Other Ev." in expr_page.get_active_indicator_text()
-    chip_text = expr_page.page.locator(".expr-active-chips .filter-chip").first.inner_text().strip()
+    chip_text = (
+        expr_page.page.locator(".expr-active-chips .filter-chip")
+        .first.inner_text()
+        .strip()
+    )
     assert "CNV" in chip_text
 
     # Multi-select: also select Bioinformatics
@@ -142,9 +146,7 @@ def test_genetic_card_mirna_filter_and_reset(app_page: Page, base_url: str):
     assert gen_page.get_active_indicator_text() == "No Filters Active"
 
 
-def test_genetic_card_combined_alteration_and_hairpin(
-    app_page: Page, base_url: str
-):
+def test_genetic_card_combined_alteration_and_hairpin(app_page: Page, base_url: str):
     """Verify Genetic alteration select and combined alteration + hairpin AND logic."""
     gen_page = GeneticPage(app_page, base_url)
     gen_page.navigate_to_genetic()
@@ -217,7 +219,11 @@ def test_expression_card_methodology_and_diagnostic_filters(
     assert expr_page.get_filtered_total() == 318
     assert expr_page.get_active_chips_count() == 1
     assert "1 Methods" in expr_page.get_active_indicator_text()
-    chip_text = expr_page.page.locator(".expr-active-chips .filter-chip").first.inner_text().strip()
+    chip_text = (
+        expr_page.page.locator(".expr-active-chips .filter-chip")
+        .first.inner_text()
+        .strip()
+    )
     assert "RT-qPCR" in chip_text
 
     # Multi-select methodology: also select Small RNA-seq (OR logic: 496)
@@ -226,7 +232,9 @@ def test_expression_card_methodology_and_diagnostic_filters(
     assert expr_page.get_active_chips_count() == 2
 
     # Uncheck Small RNA-seq
-    expr_page.page.locator('#expr-methodology-checkboxes input[value="Small RNA-seq"]').uncheck()
+    expr_page.page.locator(
+        '#expr-methodology-checkboxes input[value="Small RNA-seq"]'
+    ).uncheck()
     expr_page.page.wait_for_timeout(400)
     assert expr_page.get_filtered_total() == 318
 
@@ -252,9 +260,7 @@ def test_expression_card_methodology_and_diagnostic_filters(
     assert expr_page.get_active_indicator_text() == "No Filters Active"
 
 
-def test_genetic_card_methodology_and_diagnostic_filters(
-    app_page: Page, base_url: str
-):
+def test_genetic_card_methodology_and_diagnostic_filters(app_page: Page, base_url: str):
     """Verify methodology and diagnostic tool multi-select filters on Genetic Studies."""
     gen_page = GeneticPage(app_page, base_url)
     gen_page.navigate_to_genetic()
@@ -323,7 +329,11 @@ def test_expression_and_genetic_filters_independence_and_live_subtable_update(
     expr_page.navigate_to_expression()
     assert expr_page.get_filtered_total() == 312
     assert "1 Methods" in expr_page.get_active_indicator_text()
-    chip_text = expr_page.page.locator(".expr-active-chips .filter-chip").first.inner_text().strip()
+    chip_text = (
+        expr_page.page.locator(".expr-active-chips .filter-chip")
+        .first.inner_text()
+        .strip()
+    )
     assert "Small RNA-seq" in chip_text
 
     # 7. Reset filters on both tabs
@@ -332,4 +342,3 @@ def test_expression_and_genetic_filters_independence_and_live_subtable_update(
     gen_page.navigate_to_genetic()
     gen_page.click_reset_filters()
     assert gen_page.get_filtered_total() == 93
-

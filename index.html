@@ -1172,8 +1172,8 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Tissue</strong></td>
-                                                                <td>Biological specimen or anatomical brain region profiled in the primary research.</td>
+                                                                <td><strong>Sample Type / Tissue</strong></td>
+                                                                <td>Biological specimen or anatomical brain region profiled in the primary research (renamed from Tissue to Sample Type in dataset v15.09.2026).</td>
                                                                 <td><code>Blood</code>, <code>Brain</code>, <code>LCLs</code> (Lymphoblastoid Cell Lines), <code>Saliva</code>, <code>Serum</code>, <code>Plasma</code>, <code>Post-mortem brain (Cerebellum, Cortex, Temporal cortex, Frontal cortex, Superior temporal gyrus, Vermis)</code>, <code>Dental pulp stem cells</code>, <code>Umbilical cord blood</code>, <code>Olfactory mucosal cells</code>, <code>Whole blood</code>.</td>
                                                             </tr>
                                                             <tr>
@@ -1344,6 +1344,11 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
+                                                                <td><strong>Database Source</strong></td>
+                                                                <td>Curated database source for experimentally validated target interactions. In this version, all interactions are derived exclusively from miRTarBase 10.0 (DIANA-TarBase is no longer used).</td>
+                                                                <td><span class="badge bg-success-subtle text-success border px-2 py-1 rounded-pill"><i class="fa-solid fa-database me-1"></i>miRTarBase 10.0</span></td>
+                                                            </tr>
+                                                            <tr>
                                                                 <td><strong>Support Type</strong></td>
                                                                 <td>Experimental support classification of the miRNA-target interaction from miRTarBase 10.0.</td>
                                                                 <td>
@@ -1363,16 +1368,7 @@
                                                                 <td>Exact laboratory techniques used to confirm the miRNA-target interaction.</td>
                                                                 <td>Semicolon-separated methods (e.g. <code>Luciferase reporter assay</code>, <code>Western blot</code>, <code>HITS-CLIP</code>, <code>RT-qPCR</code>).</td>
                                                             </tr>
-                                                            <tr>
-                                                                <td><strong>Regulation</strong> <span class="badge bg-light text-secondary border ms-1" style="font-size: 0.7rem;">Extended Details</span></td>
-                                                                <td>Directional regulatory consequence on target mRNA / protein expression (viewable in row details &amp; Target Genes tab filters).</td>
-                                                                <td><code>Negative (Downregulation)</code>, <code>Positive (Upregulation)</code>, or <code>—</code> (Binding assay only).</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Tissue / Cell Source</strong> <span class="badge bg-light text-secondary border ms-1" style="font-size: 0.7rem;">Extended Details</span></td>
-                                                                <td>Biological tissue or cell line model used in the experiment (viewable in row details &amp; Target Genes tab filters).</td>
-                                                                <td>e.g. <code>Brain</code>, <code>Blood</code>, <code>HEK293</code>, <code>HeLa</code>, <code>Primary Neurons</code>, etc.</td>
-                                                            </tr>
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1410,19 +1406,19 @@
                                                                 <td>e.g. <em>Serum microRNA expression in children with autism spectrum disorder</em></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Tissue Type</strong></td>
-                                                                <td>Primary biological tissue or specimen analyzed in expression studies.</td>
+                                                                <td><strong>Sample Type</strong> <span class="text-muted" style="font-size: 0.8rem;">(Tissue Type)</span></td>
+                                                                <td>Primary biological tissue or specimen analyzed in expression studies (standardized to "Sample Type" in dataset v15.09.2026).</td>
                                                                 <td><code>Brain</code>, <code>Blood</code>, <code>Saliva</code>, <code>Serum</code>, <code>LCLs</code></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Tissue Subtype</strong></td>
+                                                                <td><strong>Sample Subtype</strong> <span class="text-muted" style="font-size: 0.8rem;">(Tissue Subtype)</span></td>
                                                                 <td>Specific anatomical brain subregion or refined cellular fraction.</td>
                                                                 <td><code>Cerebellum</code>, <code>Frontal cortex</code>, <code>PBMCs</code>, <code>Vermis</code></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Methodology</strong></td>
                                                                 <td>Experimental platform or molecular technique used for profiling or quantification.</td>
-                                                                <td><code>RT-qPCR</code>, <code>Small RNA-seq</code>, <code>miRNA microarray</code>, <code>WES</code>, <code>WGS</code>, <code>SNP array</code>, <code>aCGH</code></td>
+                                                                <td><code>RT-qPCR</code>, <code>Small RNA-seq</code>, <code>miRNA microarray</code>, <code>WES</code>, <code>WGS</code>, <code>SNP array</code>, <code>SNP array and WES</code>, <code>aCGH</code></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Diagnostic Tools</strong></td>
@@ -1431,13 +1427,13 @@
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>ASD Samples</strong></td>
-                                                                <td>Exact count of participants in the autism spectrum disorder cohort.</td>
-                                                                <td>e.g. <code>28</code>, <code>55</code>, <code>104</code></td>
+                                                                <td>Exact count of participants in the autism spectrum disorder cohort. When a study evaluated multiple independent cohorts (e.g. discovery vs. replication stages or different tissues), cohorts are separated by semicolons (<code>;</code>) and rendered as distinct badges/pills in the UI.</td>
+                                                                <td><code>ASD N = 12</code><br><code>Microarray ASD N = 5; RT-qPCR ASD N = 15</code></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Control Samples</strong></td>
-                                                                <td>Exact count of neurotypical participants in the control comparison cohort.</td>
-                                                                <td>e.g. <code>28</code>, <code>50</code>, <code>92</code></td>
+                                                                <td>Exact count of neurotypical participants in the control comparison cohort. Multiple cohorts separated by semicolons (<code>;</code>) are rendered as distinct badges/pills in the UI.</td>
+                                                                <td><code>Control N = 12</code><br><code>Microarray control N = 5; RT-qPCR control N = 15</code></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Country / Pop.</strong></td>
@@ -1790,7 +1786,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6 col-12">
-                                <label class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Tissue Type</label>
+                                <label class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Sample Type</label>
                                 <div class="tissue-checklist" id="tissue-checkboxes" style="max-height: 120px; overflow-y: auto;"></div>
                             </div>
                             <div class="col-lg-2 col-md-6 col-12">
@@ -1827,7 +1823,7 @@
                                 <th scope="col" data-bs-toggle="tooltip" title="Stem-loop precursor microRNA identifier according to miRBase v22.1.">Precursor miRNA<br>(hairpin)</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Functional mature microRNA single-strand identifier (miRBase v22.1).">Mature<br>miRNA</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Reported direction of expression alteration in ASD cases versus neurotypical controls.">Expression change<br>(ASD vs. controls)</th>
-                                <th scope="col" data-bs-toggle="tooltip" title="Biological tissue, cell type, or bodily fluid analyzed in the study cohort.">Tissue</th>
+                                <th scope="col" data-bs-toggle="tooltip" title="Biological sample type, tissue, cell type, or bodily fluid analyzed in the study cohort.">Sample Type</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Multi-study consistency synthesis: Consistent (≥2 studies same direction), Conflicting (divergent), or Single-study.">Overall evidence</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Corroborating evidence reported for this microRNA from genetic variants or bioinformatics studies.">Evidence from<br>other studies</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Count of independent publications reporting statistically significant upregulation in ASD."># up</th>
@@ -2065,30 +2061,18 @@
                                     </div>
                                 </div>
 
-                                <!-- Row 1, Col 3: Support Type & Target Regulation Stacked -->
+                                <!-- Row 1, Col 3: Support Type -->
                                 <div class="col-lg-4 col-md-12 col-12">
-                                    <div class="d-flex flex-column justify-content-between" style="height: 120px;">
-                                        <div>
-                                            <label for="filter-support-type" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Support Type</label>
-                                            <select id="filter-support-type" class="form-select form-select-sm" aria-label="Filter by Target Support Type">
-                                                <option value="">All Support Types</option>
-                                                <option value="Functional MTI">Functional MTI</option>
-                                                <option value="Weak Support">Weak Support</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label for="filter-target-regulation" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Target Regulation</label>
-                                            <select id="filter-target-regulation" class="form-select form-select-sm" aria-label="Filter by Target Regulation">
-                                                <option value="">All Regulations</option>
-                                                <option value="Downregulation">Downregulation (Negative)</option>
-                                                <option value="Upregulation">Upregulation (Positive)</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                    <label for="filter-support-type" class="form-label fw-bold text-secondary mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Support Type</label>
+                                    <select id="filter-support-type" class="form-select form-select-sm" aria-label="Filter by Target Support Type">
+                                        <option value="">All Support Types</option>
+                                        <option value="Functional MTI">Functional MTI</option>
+                                        <option value="Weak Support">Weak Support</option>
+                                    </select>
                                 </div>
 
-                                <!-- Row 2, Col 1: Experiments (Multi-select) -->
-                                <div class="col-lg-6 col-12">
+                                <!-- Row 2: Experiments (Multi-select) -->
+                                <div class="col-12">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
                                         <label class="form-label fw-bold text-secondary mb-0" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Experiments</label>
                                         <input type="text" id="filter-method-search" class="form-control form-control-xs py-0 px-2" placeholder="Search experiments..." style="font-size: 0.75rem; width: 150px; height: 24px;" aria-label="Search experimental methods">
@@ -2218,17 +2202,6 @@
                                     <div class="checklist-item" data-method-label="yfp expression"><label for="method-YFP_expression"><input type="checkbox" id="method-YFP_expression" value="YFP expression" class="form-check-input" aria-label="Filter by experiment YFP expression"><span>YFP expression <small class="text-muted">(1)</small></span></label></div>
                                     <div class="checklist-item" data-method-label="zymography"><label for="method-Zymography"><input type="checkbox" id="method-Zymography" value="Zymography" class="form-check-input" aria-label="Filter by experiment Zymography"><span>Zymography <small class="text-muted">(1)</small></span></label></div>
                                 </div>
-
-                                <!-- Row 2, Col 2: Tissue / Cell Source (Multi-select) -->
-                                <div class="col-lg-6 col-12">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <label class="form-label fw-bold text-secondary mb-0" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">Tissue / Cell Source</label>
-                                        <input type="text" id="filter-target-tissue-search" class="form-control form-control-xs py-0 px-2" placeholder="Search tissues..." style="font-size: 0.75rem; width: 150px; height: 24px;" aria-label="Search tissue and cell sources">
-                                    </div>
-                                    <div class="tissue-checklist" id="target-tissue-checkboxes" style="height: 120px; overflow-y: auto;" aria-label="Filter Target Genes by Tissue or Cell Source (multi-select)">
-                                        <!-- Dynamically populated by populateTargetTissueFilter -->
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         </div>
@@ -2249,8 +2222,6 @@
                                 <th scope="col" data-bs-toggle="tooltip" title="Experimental support classification: Functional MTI (at least one functional microRNA-target interaction) or Weak Support (weak-evidence only).">Support Type</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="PubMed Identifiers (PMIDs) of primary research articles supporting the interaction.">PubMed Reference</th>
                                 <th scope="col" data-bs-toggle="tooltip" title="Exact laboratory techniques used to validate the miRNA-target interaction.">Experiments</th>
-                                <th scope="col">Regulation</th>
-                                <th scope="col">Tissue / Cell Source</th>
                             </tr>
                         </thead>
                     </table>
@@ -2656,8 +2627,8 @@
         const activeDiagTools = (scope === 'genetic') ? activeGenDiagTools : activeExprDiagTools;
         const hasActiveFilter = (activeMethods && activeMethods.length > 0) || (activeDiagTools && activeDiagTools.length > 0);
 
-        // Determine if this is an expression study (has Tissue type / Tissue - subtype)
-        const hasTissueInfo = details.some(d => (d["Tissue type"] || d["Tissue - subtype"]));
+        // Determine if this is an expression study (has Sample type / Tissue type or Sample subtype / Tissue - subtype)
+        const hasTissueInfo = details.some(d => (d["Sample type"] || d["Tissue type"] || d["Sample subtype"] || d["Tissue - subtype"]));
         const showTissue = hasTissueInfo;
 
         let table = '<div class="table-responsive p-3" style="background-color: var(--secondary-color); border-radius: 8px;">';
@@ -2682,8 +2653,8 @@
                     '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Methodology</th>';
         
         if (showTissue) {
-            table += '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Tissue Type</th>' +
-                     '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Tissue Subtype</th>';
+            table += '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Sample Type</th>' +
+                     '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Sample Subtype</th>';
         }
         
         table += '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">ASD Samples</th>' +
@@ -2691,6 +2662,17 @@
                  '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Diagnostic Tools</th>' +
                  '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Country / Pop.</th>' +
             '</tr></thead><tbody>';
+
+        function formatSamplePills(val) {
+            if (!val) return '';
+            const str = String(val).trim();
+            if (!str) return '';
+            const parts = str.split(';').map(s => s.trim()).filter(Boolean);
+            if (parts.length === 0) return '';
+            return '<div class="d-flex flex-column gap-1 align-items-start">' + parts.map(p => 
+                `<span class="badge bg-light text-dark border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: normal; border-color: #CBD5E1 !important; white-space: normal; text-align: left;">${escapeHtml(p)}</span>`
+            ).join('') + '</div>';
+        }
 
         details.forEach(function(d) {
             const matchesMethod = !activeMethods || activeMethods.length === 0 || studyMatchesMethodology(d, activeMethods);
@@ -2706,9 +2688,9 @@
                 studyLink = `<span class="badge bg-success-subtle text-success border me-1" style="font-size: 0.7rem;"><i class="fa-solid fa-check me-1"></i>Match</span> ` + studyLink;
             }
 
-            // Render sample counts in small badge-like pills if not empty
-            let asdSamples = d["ASD samples"] ? `<span class="badge bg-light text-dark border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: normal; border-color: #E2E8F0 !important;">${escapeHtml(String(d["ASD samples"]))}</span>` : '';
-            let controlSamples = d["Control samples"] ? `<span class="badge bg-light text-dark border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: normal; border-color: #E2E8F0 !important;">${escapeHtml(String(d["Control samples"]))}</span>` : '';
+            // Render sample counts in small badge-like pills (split semicolon-separated multi-cohort entries)
+            let asdSamples = formatSamplePills(d["ASD samples"]);
+            let controlSamples = formatSamplePills(d["Control samples"]);
             
             let methodBadgeClass = (hasActiveFilter && matchesMethod && activeMethods && activeMethods.length > 0) ? 'bg-primary-subtle text-primary border-primary' : 'bg-light text-secondary border';
             let diagBadgeClass = (hasActiveFilter && matchesDiag && activeDiagTools && activeDiagTools.length > 0) ? 'bg-primary-subtle text-primary border-primary' : 'bg-light text-secondary border';
@@ -2724,8 +2706,10 @@
                 '<td class="align-middle">' + methodology + '</td>';
             
             if (showTissue) {
-                table += '<td class="align-middle">' + (escapeHtml(d["Tissue type"] || '')) + '</td>' +
-                         '<td class="align-middle text-muted" style="font-size: 0.8rem;">' + (escapeHtml(d["Tissue - subtype"] || '')) + '</td>';
+                const sampleType = d["Sample type"] || d["Tissue type"] || '';
+                const sampleSubtype = d["Sample subtype"] || d["Tissue - subtype"] || '';
+                table += '<td class="align-middle">' + (escapeHtml(sampleType)) + '</td>' +
+                         '<td class="align-middle text-muted" style="font-size: 0.8rem;">' + (escapeHtml(sampleSubtype)) + '</td>';
             }
             
             table += '<td class="align-middle">' + asdSamples + '</td>' +
@@ -2734,6 +2718,7 @@
                 '<td class="align-middle text-muted" style="font-size: 0.8rem;">' + (escapeHtml(d["Country"] || '')) + '</td>' +
             '</tr>';
         });
+
         table += '</tbody></table></div>';
         return table;
     }
@@ -2745,25 +2730,6 @@
         const methods = (d.experimental_methods || '').split('; ').filter(Boolean);
         const methodsHtml = methods.length > 0
             ? methods.map(m => `<span class="badge bg-light text-dark border me-1 mb-1 px-2 py-1" style="font-size: 0.78rem;"><i class="fa-solid fa-flask text-primary me-1"></i>${m}</span>`).join('')
-            : '<span class="text-muted">—</span>';
-
-        // Format regulation with intuitive styling
-        let regBadge = '<span class="text-muted">—</span>';
-        if (d.regulation) {
-            const regLower = d.regulation.toLowerCase();
-            if (regLower.includes('negative') || regLower.includes('down')) {
-                regBadge = `<span class="badge bg-danger-subtle text-danger border px-2 py-1" style="font-size: 0.8rem;"><i class="fa-solid fa-arrow-down me-1"></i>${d.regulation}</span>`;
-            } else if (regLower.includes('positive') || regLower.includes('up')) {
-                regBadge = `<span class="badge bg-success-subtle text-success border px-2 py-1" style="font-size: 0.8rem;"><i class="fa-solid fa-arrow-up me-1"></i>${d.regulation}</span>`;
-            } else {
-                regBadge = `<span class="badge bg-secondary-subtle text-secondary border px-2 py-1" style="font-size: 0.8rem;"><i class="fa-solid fa-link me-1"></i>${d.regulation}</span>`;
-            }
-        }
-
-        // Format tissues as pills with scrollable container if many
-        const tissues = (d.tissue || '').split('; ').filter(Boolean);
-        const tissuesHtml = tissues.length > 0
-            ? tissues.map(t => `<span class="badge bg-white text-secondary border me-1 mb-1 px-2 py-1" style="font-size: 0.75rem;"><i class="fa-solid fa-location-dot text-info me-1"></i>${t}</span>`).join('')
             : '<span class="text-muted">—</span>';
 
         // Database source badge (single source: miRTarBase 10.0)
@@ -2781,7 +2747,7 @@
                                 ${escapeHtml(d.gene_name || 'No detailed description available.')}
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-6">
+                        <div class="col-lg-3 col-md-4 col-12">
                             <div class="fw-bold text-secondary small text-uppercase mb-1" style="letter-spacing: 0.05em;">
                                 <i class="fa-solid fa-database text-primary me-1"></i>Database Source
                             </div>
@@ -2789,28 +2755,12 @@
                                 ${dbSourceBadge}
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-6">
+                        <div class="col-lg-9 col-md-8 col-12">
                             <div class="fw-bold text-secondary small text-uppercase mb-1" style="letter-spacing: 0.05em;">
                                 <i class="fa-solid fa-vial-circle-check text-primary me-1"></i>Experimental Methods
                             </div>
                             <div class="d-flex flex-wrap gap-1 mt-1">
                                 ${methodsHtml}
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-6">
-                            <div class="fw-bold text-secondary small text-uppercase mb-1" style="letter-spacing: 0.05em;">
-                                <i class="fa-solid fa-sliders text-primary me-1"></i>Observed Regulation
-                            </div>
-                            <div class="mt-1">
-                                ${regBadge}
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="fw-bold text-secondary small text-uppercase mb-1" style="letter-spacing: 0.05em;">
-                                <i class="fa-solid fa-dna text-primary me-1"></i>Tissue / Cell Source
-                            </div>
-                            <div class="d-flex flex-wrap gap-1 mt-1" style="max-height: 120px; overflow-y: auto;">
-                                ${tissuesHtml}
                             </div>
                         </div>
                     </div>
@@ -2987,48 +2937,6 @@
                         <label for="${safeId}">
                             <input type="checkbox" id="${safeId}" value="${escapeHtml(exp)}" class="form-check-input" ${isChecked} aria-label="Filter by experiment ${escapeHtml(exp)}">
                             <span>${escapeHtml(exp)} <small class="text-muted">(${expCounts[exp].toLocaleString()})</small></span>
-                        </label>
-                    </div>
-                `;
-            }).join('');
-        }
-        function populateTargetTissueFilter(data) {
-            const container = document.getElementById('target-tissue-checkboxes');
-            if (!container || !data || !data.length) return;
-            const checked = new Set();
-            container.querySelectorAll('input:checked').forEach(cb => checked.add(cb.value.toLowerCase()));
-
-            // Standardize, split, and count individual tissues from the targets table
-            const tissueCounts = {};
-            data.forEach(row => {
-                const raw = row.tissue;
-                if (raw && raw !== '—') {
-                    raw.split(';').forEach(part => {
-                        const tissue = part.trim();
-                        if (tissue && tissue !== '—') {
-                            tissueCounts[tissue] = (tissueCounts[tissue] || 0) + 1;
-                        }
-                    });
-                }
-            });
-
-            const sortedTissues = Object.keys(tissueCounts).sort((a, b) =>
-                a.localeCompare(b, undefined, { sensitivity: 'base' })
-            );
-
-            if (sortedTissues.length === 0) {
-                container.innerHTML = '<div class="p-2 text-muted small">No tissue annotations available.</div>';
-                return;
-            }
-
-            container.innerHTML = sortedTissues.map(tissue => {
-                const safeId = 'target-tissue-' + tissue.replace(/[^a-zA-Z0-9]/g, '_');
-                const isChecked = checked.has(tissue.toLowerCase()) ? 'checked' : '';
-                return `
-                    <div class="checklist-item" data-tissue-label="${escapeHtml(tissue.toLowerCase())}">
-                        <label for="${safeId}">
-                            <input type="checkbox" id="${safeId}" value="${escapeHtml(tissue)}" class="form-check-input" ${isChecked} aria-label="Filter by tissue ${escapeHtml(tissue)}">
-                            <span>${escapeHtml(tissue)} <small class="text-muted">(${tissueCounts[tissue].toLocaleString()})</small></span>
                         </label>
                     </div>
                 `;
@@ -3514,21 +3422,7 @@
                             return html;
                         }
                     },
-                    { "data": "experimental_methods" },
-                    { "data": "regulation", "visible": false },
-                    {
-                        "data": "tissue",
-                        "render": function(data, type, row) {
-                            if (type === 'filter' || type === 'sort') return data || '';
-                            if (!data || data === '—') return '<span class="text-muted">—</span>';
-                            const list = data.split('; ').filter(t => t);
-                            let html = list.slice(0, 2).map(t => `<span class="badge bg-light text-secondary border me-1 mb-1" style="font-size: 0.75rem;"><i class="fa-solid fa-location-dot text-info me-1"></i>${escapeHtml(t)}</span>`).join('');
-                            if (list.length > 2) {
-                                html += `<span class="badge bg-light text-muted border" style="font-size: 0.75rem;" title="${escapeHtml(list.slice(2).join(', '))}">+${list.length - 2} more</span>`;
-                            }
-                            return html;
-                        }
-                    }
+                    { "data": "experimental_methods" }
                 ],
                 data
             );
@@ -3536,7 +3430,6 @@
         function setupTargetsTable(data) {
             if (targetsTable) { try { targetsTable.destroy(); } catch (e) {} }
             populateExperimentsFilter(data);
-            populateTargetTissueFilter(data);
             initTargetsTable(data);
             bindTableSelection(targetsTable, '#targets-table', 'target-row-check', '.select-all-targets', 'target');
             targetsTable.on('draw', function() {
@@ -4042,8 +3935,6 @@
                 $(`#sfari-checkboxes input[value="${val}"]`).prop('checked', false);
             } else if (field === 'filter-method') {
                 $('#method-checkboxes input').filter(function() { return $(this).val() === val; }).prop('checked', false);
-            } else if (field === 'filter-target-tissue') {
-                $('#target-tissue-checkboxes input').filter(function() { return $(this).val() === val; }).prop('checked', false);
             } else if (field && $(`#${field}`).length) {
                 $(`#${field}`).val('');
             }
@@ -4099,9 +3990,6 @@
             const supportType = $('#filter-support-type').val();
             const selectedMethods = [];
             $('#method-checkboxes input:checked').each(function() { selectedMethods.push($(this).val()); });
-            const targetRegulation = $('#filter-target-regulation').val();
-            const selectedTargetTissues = [];
-            $('#target-tissue-checkboxes input:checked').each(function() { selectedTargetTissues.push($(this).val()); });
 
             // ---- Per-tab active-filter counts & indicators ----
             let exprCount = 0;
@@ -4131,8 +4019,6 @@
             targetCount += selectedSfari.length;
             if (supportType) targetCount++;
             targetCount += selectedMethods.length;
-            if (targetRegulation) targetCount++;
-            targetCount += selectedTargetTissues.length;
 
             const exprSummary = buildSummary([
                 exprHairpinTokens.length > 0 ? `${exprHairpinTokens.length} Hairpins` : '',
@@ -4160,9 +4046,7 @@
                 geneTokens.length > 0 ? `${geneTokens.length} Genes` : '',
                 selectedSfari.length > 0 ? `${selectedSfari.length} SFARI` : '',
                 supportType,
-                selectedMethods.length > 0 ? `${selectedMethods.length} Methods` : '',
-                targetRegulation ? 'Regulation' : '',
-                selectedTargetTissues.length > 0 ? `${selectedTargetTissues.length} Tissues` : ''
+                selectedMethods.length > 0 ? `${selectedMethods.length} Methods` : ''
             ]);
             setFilterIndicator('.target-active-filter-indicator', targetCount, targetSummary);
 
@@ -4205,9 +4089,7 @@
                 geneTokens.length > 0 ? { label: `Genes: ${geneTokens.length > 2 ? `${geneTokens.length} symbols` : geneTokens.join(', ')}`, field: 'filter-target-gene', val: '' } : null,
                 ...selectedSfari.map(v => ({ label: `SFARI: ${v}`, field: 'filter-sfari', val: v })),
                 supportType ? { label: `Support Type: ${supportType}`, field: 'filter-support-type', val: '' } : null,
-                ...selectedMethods.map(m => ({ label: `Experiment: ${m}`, field: 'filter-method', val: m })),
-                targetRegulation ? { label: `Regulation: ${targetRegulation}`, field: 'filter-target-regulation', val: '' } : null,
-                ...selectedTargetTissues.map(t => ({ label: `Tissue: ${t}`, field: 'filter-target-tissue', val: t }))
+                ...selectedMethods.map(m => ({ label: `Experiment: ${m}`, field: 'filter-method', val: m }))
             ].filter(Boolean));
 
             // ---- Apply filters to Expression Table ----
@@ -4254,7 +4136,7 @@
             refreshOpenChildRows(otherTable, 'genetic');
 
             // ---- Apply filters to Target Genes Table ----
-            // Col 1: Precursor, Col 2: Mature, Col 4: Target Gene, Col 6: SFARI, Col 7: Support Type, Col 9: Experiments, Col 10: Regulation, Col 11: Tissue (Col 0 = selection checkbox)
+            // Col 1: Precursor, Col 2: Mature, Col 4: Target Gene, Col 6: SFARI, Col 7: Support Type, Col 9: Experiments (Col 0 = selection checkbox)
             if (targetsTable) {
                 if (geneTokens.length > 0) {
                     targetsTable.column(4).search(buildTokenRegex(geneTokens, true), true, false);
@@ -4276,12 +4158,6 @@
                 } else {
                     targetsTable.column(9).search('');
                 }
-                targetsTable.column(10).search(targetRegulation);
-                if (selectedTargetTissues.length > 0) {
-                    targetsTable.column(11).search(selectedTargetTissues.map(escapeRegex).join('|'), true, false);
-                } else {
-                    targetsTable.column(11).search('');
-                }
                 targetsTable.draw();
 
                 const appliedRows = targetsTable.rows({ search: 'applied' });
@@ -4298,31 +4174,18 @@
 
         // Event listeners for real-time filtering (per-tab inputs)
         $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-study-desc').on('keyup input', debouncedFilter);
-        $('#filter-expression-change, #filter-genetic-study-type, #filter-genetic-alteration, #filter-genetic-expr-evidence, #filter-support-type, #filter-target-regulation').on('change', applyAdvancedFilters);
+        $('#filter-expression-change, #filter-genetic-study-type, #filter-genetic-alteration, #filter-genetic-expr-evidence, #filter-support-type').on('change', applyAdvancedFilters);
         $('#filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies').on('input', function() {
             updateExpressionNumericLimits();
             debouncedFilter();
         });
-        $('body').on('change', '#tissue-checkboxes input, #evidence-checkboxes input, #other-evidence-checkboxes input, #sfari-checkboxes input, #method-checkboxes input, #target-tissue-checkboxes input, #expr-methodology-checkboxes input, #expr-diagnostic-checkboxes input, #gen-methodology-checkboxes input, #gen-diagnostic-checkboxes input', applyAdvancedFilters);
+        $('body').on('change', '#tissue-checkboxes input, #evidence-checkboxes input, #other-evidence-checkboxes input, #sfari-checkboxes input, #method-checkboxes input, #expr-methodology-checkboxes input, #expr-diagnostic-checkboxes input, #gen-methodology-checkboxes input, #gen-diagnostic-checkboxes input', applyAdvancedFilters);
 
         // Quick search for experiments checklist
         $('#filter-method-search').on('input', function() {
             const q = $(this).val().toLowerCase().trim();
             $('#method-checkboxes .checklist-item').each(function() {
                 const label = $(this).data('method-label') || '';
-                if (!q || label.includes(q)) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        });
-
-        // Quick search for target tissue / cell source checklist
-        $('#filter-target-tissue-search').on('input', function() {
-            const q = $(this).val().toLowerCase().trim();
-            $('#target-tissue-checkboxes .checklist-item').each(function() {
-                const label = $(this).data('tissue-label') || '';
                 if (!q || label.includes(q)) {
                     $(this).show();
                 } else {
@@ -4360,18 +4223,14 @@
                 $('#method-checkboxes input:checked').prop('checked', false);
                 $('#filter-method-search').val('');
                 $('#method-checkboxes .checklist-item').show();
-                $('#target-tissue-checkboxes input:checked').prop('checked', false);
-                $('#filter-target-tissue-search').val('');
-                $('#target-tissue-checkboxes .checklist-item').show();
-                $('#filter-target-regulation').val('');
             } else {
                 // Fallback: reset everything
                 clearSearch(expressionTable);
                 clearSearch(otherTable);
                 clearSearch(targetsTable);
-                $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-expression-change, #filter-genetic-study-type, #filter-genetic-alteration, #filter-genetic-expr-evidence, #filter-study-desc, #filter-support-type, #filter-target-regulation, #filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies, #filter-method-search, #filter-target-tissue-search').val('');
-                $('#tissue-checkboxes input:checked, #evidence-checkboxes input:checked, #other-evidence-checkboxes input:checked, #sfari-checkboxes input:checked, #method-checkboxes input:checked, #target-tissue-checkboxes input:checked, #expr-methodology-checkboxes input:checked, #expr-diagnostic-checkboxes input:checked, #gen-methodology-checkboxes input:checked, #gen-diagnostic-checkboxes input:checked').prop('checked', false);
-                $('#method-checkboxes .checklist-item, #target-tissue-checkboxes .checklist-item').show();
+                $('#filter-mirna-id, #filter-mature-id, #gen-filter-mirna-id, #gen-filter-mature-id, #filter-target-gene, #filter-expression-change, #filter-genetic-study-type, #filter-genetic-alteration, #filter-genetic-expr-evidence, #filter-study-desc, #filter-support-type, #filter-upregulation-studies, #filter-downregulation-studies, #filter-total-studies, #filter-method-search').val('');
+                $('#tissue-checkboxes input:checked, #evidence-checkboxes input:checked, #other-evidence-checkboxes input:checked, #sfari-checkboxes input:checked, #method-checkboxes input:checked, #expr-methodology-checkboxes input:checked, #expr-diagnostic-checkboxes input:checked, #gen-methodology-checkboxes input:checked, #gen-diagnostic-checkboxes input:checked').prop('checked', false);
+                $('#method-checkboxes .checklist-item').show();
                 activeExprMethods = [];
                 activeExprDiagTools = [];
                 activeGenMethods = [];

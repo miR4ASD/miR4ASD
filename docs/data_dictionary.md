@@ -4,6 +4,30 @@ This document provides a comprehensive specification of all tables, columns, dat
 
 ---
 
+## Sources of Truth for the Data Dictionary
+
+The miR4ASD data dictionary is governed by a multi-tier hierarchy of authoritative sources:
+
+1. **Primary Curated Research Workbooks (Upstream Clinical & Experimental Curation)**
+   - **`raw_data/Tabelas_miR4ASD(site)_15.09.2026.xlsx`**: The definitive upstream workbook maintained by the research team containing three core sheets:
+     - `miRNA_expression_studies`: Curated microRNA differential expression findings in ASD versus neurotypical controls, standardized sample types, directional deregulation, and publication tallies.
+     - `miRNA_other_studies`: Curated genomic variants (CNVs, SNVs, SNPs) impacting microRNA loci, along with cross-study expression evidence.
+     - `miRNA_study_details`: Publication-level clinical and methodological metadata including cohort sizes (ASD and Control sample counts), diagnostic instruments (DSM-5, ADOS, ADI-R, CARS, etc.), experimental methods, sample types/subtypes, and DOI links.
+   - **`Tables_for_help_tab.xlsx`**: Authoritative definitions and standardized descriptions for molecular profiling methodologies (`help_methods.json`) and clinical diagnostic tools (`help_diagnostic_tools.json`).
+
+2. **External Curated Reference Databases (Target Validations & Biological Ontologies)**
+   - **miRTarBase 10.0 (`raw_data/hsa_MTI.csv`)**: Sole authoritative external reference database for experimentally validated miRNA-target interactions (functional reporter assays, Western blots, qPCR, CLIP-Seq). *Note: DIANA-TarBase is no longer used in this version.*
+   - **SFARI Gene (`raw_data/sfari_genes.csv`)**: Authoritative autism risk gene repository providing curated risk tiers (Category 1 High Confidence, Category 2 Strong Candidate, Category 3 Suggestive Evidence, and Syndromic).
+   - **miRBase v22.1 (`hsa.gff3`)**: Definitive genomic coordinates, accession IDs (MI / MIMAT), and stem-loop hairpin precursor / mature miRNA nomenclature.
+   - **g:Profiler REST API**: Live functional enrichment query engine computing corrected hypergeometric overrepresentation statistics across Gene Ontology (GO:BP, GO:MF, GO:CC), KEGG, Reactome, and Human Phenotype Ontology.
+
+3. **In-Repository Technical & Application Specifications (Operational Source of Truth)**
+   - **`docs/data_dictionary.md`**: This document—the comprehensive technical specification defining data models, JSON schemas, column headers, and value domains.
+   - **`process_data.py`**: The deterministic ETL pipeline that validates, harmonizes column names across Excel version revisions (e.g. `Sample Type` / `Tissue`, `Sample type` / `Tissue type`), verifies data integrity, and generates production JSON feeds.
+   - **In-App Data Dictionary (`index.html` `#dictionaryAccordion`)**: The interactive, user-facing specification embedded in the Help tab of the web application.
+
+---
+
 ## 1. Expression Studies Table (`expression_studies.json`)
 
 Primary catalog of human microRNAs evaluated in case-control gene expression profiling studies of Autism Spectrum Disorder (ASD).
@@ -13,7 +37,7 @@ Primary catalog of human microRNAs evaluated in case-control gene expression pro
 | **Precursor miRNA (hairpin)** | `precursor_mirna` | String (HTML Link) | Official miRBase stem-loop precursor RNA name (links to miRBase). | Standardized to miRBase v22.1 (e.g. `hsa-let-7a-1`, `hsa-mir-146a`). |
 | **Mature miRNA** | `mature_mirna` | String (HTML Link) | Fully processed, functional single-stranded mature miRNA identifier. | Standardized to miRBase v22.1 (e.g. `hsa-let-7a-5p`, `hsa-miR-146a-5p`). |
 | **Expression change (ASD vs. controls)** | `expression_change` | String | Reported direction of expression alteration in ASD patients compared to neurotypical controls. | <ul><li>`Upregulated`: Statistically significant increased expression in ASD cohort.</li><li>`Downregulated`: Statistically significant decreased expression in ASD cohort.</li></ul> |
-| **Tissue** | `tissue` | String (Semicolon-delimited) | Biological specimen or anatomical tissue source analyzed. | `Blood`, `Brain`, `LCLs` (Lymphoblastoid Cell Lines), `Saliva`, `Serum`, `Plasma`, `Post-mortem brain (Cerebellum, Cortex, Temporal cortex, Frontal cortex, Superior temporal gyrus, Vermis)`, `Dental pulp stem cells`, `Umbilical cord blood`, `Olfactory mucosal cells`, `Whole blood`. |
+| **Sample Type** | `tissue` / `sample_type` | String (Semicolon-delimited) | Biological specimen or anatomical tissue source analyzed (standardized as "Sample Type" in dataset v15.09.2026; mapped to `tissue` and `sample_type` in JSON). | `Blood`, `Brain`, `LCLs` (Lymphoblastoid Cell Lines), `Saliva`, `Serum`, `Plasma`, `Post-mortem brain (Cerebellum, Cortex, Temporal cortex, Frontal cortex, Superior temporal gyrus, Vermis)`, `Dental pulp stem cells`, `Umbilical cord blood`, `Olfactory mucosal cells`, `Whole blood`. |
 | **Overall evidence** | `overall_evidence` | String | Synthesis of consistency across independent published studies evaluating this miRNA. | <ul><li>`Consistent upregulation`: Two or more independent studies, all reporting upregulation.</li><li>`Consistent downregulation`: Two or more independent studies, all reporting downregulation.</li><li>`Conflicting evidence`: Multiple studies with divergent/opposing findings (both up- and downregulation reported).</li><li>`Single-study evidence`: Association identified in exactly one published study to date.</li></ul> |
 | **Evidence from other studies** | `evidence_from_other_studies` | String | Cross-study validation evidence indicating whether this miRNA also has support from genetic or bioinformatics investigations. | `no` (None), `Genetics: CNV`, `Bioinformatics`, etc. |
 | **Number of studies (Upregulated)** | `upregulation_studies` | Integer | Count of independent peer-reviewed studies reporting increased expression in ASD. | Non-negative integer (e.g. `0`, `1`, `2`, `3+`). |
@@ -32,7 +56,7 @@ Catalog of microRNAs associated with genomic structural variants, single nucleot
 | **Precursor miRNA (hairpin)** | `precursor_mirna` | String (HTML Link) | Official precursor stem-loop RNA name (links to miRBase). | Standardized to miRBase v22.1. |
 | **Mature miRNA** | `mature_mirna` | String (HTML Link) | Mature functional miRNA identifier (links to miRBase). | Standardized to miRBase v22.1. |
 | **Study Type** | `study_type` | String | Category of research investigation reported for this miRNA. | `Genetics`, `Bioinformatics` (or both). |
-| **Variant Type** | `variant_type` | String | Categorical genomic variant classification. | <ul><li>`CNV`: Copy Number Variation (microdeletions, microduplications altering miRNA loci).</li><li>`SNV`: Single Nucleotide Variant identified via whole-exome or whole-genome sequencing.</li><li>`SNP`: Single Nucleotide Polymorphism identified in association or candidate-gene studies.</li></ul> |
+| **Variant Type** | `variant_type` | String | Categorical genomic variant classification. In dataset v15.09.2026, comprises 55 CNVs, 12 SNVs, 5 SNPs, and 2 multi-variant records (`CNV; SNV`). Note: 5 entries previously cataloged as `SNP` were revised to `SNV` in v15.09.2026. | <ul><li>`CNV`: Copy Number Variation (microdeletions, microduplications altering miRNA loci).</li><li>`SNV`: Single Nucleotide Variant identified via whole-exome or whole-genome sequencing.</li><li>`SNP`: Single Nucleotide Polymorphism identified in association or candidate-gene studies.</li></ul> |
 | **Evidence from expression studies** | `evidence_from_expression_studies` | String | Cross-reference indicator showing whether the miRNA also demonstrates differential expression in ASD expression cohorts. | <ul><li>`Consistent upregulation`: Supported by multiple upregulated expression studies.</li><li>`Consistent downregulation`: Supported by multiple downregulated expression studies.</li><li>`Conflicting evidence`: Supported by contradictory expression studies.</li><li>`Single-study evidence`: Supported by exactly 1 expression study.</li><li>`no`: No reported expression evidence.</li></ul> |
 | **Total expression studies** | `total_expression_studies` | Integer | Count of independent expression studies evaluating differential expression for this miRNA in ASD. | Non-negative integer (e.g. `0`, `1`, `2`, `7`). |
 | **Description of expression evidence** | `description_of_expression_evidence` | String | Detailed summary describing the expression findings, tissue contexts, or deregulation patterns across expression studies for this miRNA. | Free text detailing direction of change, tissues (Blood, Brain, LCLs, Saliva), and study counts. |
@@ -42,7 +66,7 @@ Catalog of microRNAs associated with genomic structural variants, single nucleot
 
 ## 3. Validated Target Genes Table (`target_genes.json`)
 
-Experimentally supported human mRNA targets of ASD-associated microRNAs, sourced from **miRTarBase 10.0** and **DIANA-TarBase v9.0**, cross-referenced with **SFARI Gene** ASD-risk susceptibility scores.
+Experimentally supported human mRNA targets of ASD-associated microRNAs, sourced exclusively from **miRTarBase 10.0**, cross-referenced with **SFARI Gene** ASD-risk susceptibility scores. *(Note: DIANA-TarBase is no longer used in this version).*
 
 | Column Header | JSON Key | Data Type | Description | Allowed / Categorical Values |
 | :--- | :--- | :--- | :--- | :--- |
@@ -52,10 +76,8 @@ Experimentally supported human mRNA targets of ASD-associated microRNAs, sourced
 | **Gene Description** | `gene_name` | String | Full descriptive name of the target protein-coding gene. | Descriptive text (e.g. `phosphatase and tensin homolog`, `SH3 and multiple ankyrin repeat domains 3`). |
 | **ASD Susceptibility (SFARI)** | `sfari_score` | String | Curated autism risk tier from the SFARI Gene database. | <ul><li>`Category 1`: **High Confidence** risk genes (supported by rigorous statistical significance, typically ≥3 de novo likely gene-disrupting mutations in ASD cases).</li><li>`Category 2`: **Strong Candidate** genes (supported by 2 de novo LGD mutations or genome-wide significance).</li><li>`Category 3`: **Suggestive Evidence** genes (supported by suggestive single-study findings).</li><li>`Syndromic`: Genes associated with established genetic syndromes exhibiting high ASD penetrance (e.g. *Rett syndrome, Fragile X, Tuberous Sclerosis*).</li><li>`Non-SFARI`: Target genes not currently cataloged as primary ASD risk candidates in SFARI.</li></ul> |
 | **Support Type** | `support_type` | String | Experimental support classification of the miRNA-target interaction from miRTarBase 10.0. | <ul><li>`Functional MTI`: Backed by at least one functional microRNA-target interaction (Luciferase Reporter, Western Blot, qPCR, Northern Blot, ELISA, etc.).</li><li>`Weak Support`: Backed only by weak-evidence functional interactions.</li></ul> |
-| **Database Source** | `database_source` | String | Curated database origin establishing experimental validation. | <ul><li>`miRTarBase 10.0`: Validated interaction curated from miRTarBase 10.0.</li><li>`DIANA-TarBase v9.0`: Experimentally supported interaction from DIANA-TarBase v9.0.</li><li>`TarBase & miRTarBase (Consensus)`: High-confidence interaction cross-validated independently in *both* databases.</li></ul> |
+| **Database Source** | `database_source` | String | Curated database origin establishing experimental validation. | `miRTarBase 10.0` (Sole validated target interaction source in this version; DIANA-TarBase is no longer used). |
 | **Experiments** | `experimental_methods` | String (Semicolon-delimited) | Exact laboratory techniques used to validate the miRNA-target interaction. | Semicolon-delimited list (e.g. `Luciferase reporter assay; Western blot; HITS-CLIP`). |
-| **Regulation** | `regulation` | String | Observed functional regulatory effect of miRNA on target expression. | <ul><li>`Negative (Downregulation)`: miRNA represses mRNA or protein expression.</li><li>`Positive (Upregulation)`: miRNA enhances target expression or stability.</li><li>`—`: Unspecified / binding-only assay.</li></ul> |
-| **Tissue / Cell Source** | `tissue` | String (Semicolon-delimited) | Biological tissue or cell line model where interaction was validated. | E.g. `Brain`, `Blood`, `HEK293`, `HeLa`, `Neural Progenitor Cells`, etc. |
 | **PubMed Reference** | `pmids` | String (Semicolon-delimited) | PubMed Identifiers (PMIDs) of primary research publications (links to PubMed). | Semicolon-separated numerical PMIDs (e.g. `24312487; 20144220`). |
 
 ---
@@ -69,12 +91,12 @@ Metadata describing the primary research publications linked to rows in the Expr
 | **Study** | `Study` | String | Short reference citation identifier (Author and Year). | `Seno (2011)`, `Vasu (2014)`, `Mundalil (2014)` |
 | **Description** | `Description` | String | Full title of the published article or experimental methodology. | `Gene Expression Profiling of microRNAs in Autism Spectrum Disorder...` |
 | **DOI** | `DOI` | String (URL) | Digital Object Identifier URL for direct publication access. | `https://doi.org/10.1016/j.gene.2011.06.017` |
-| **Tissue type** | `Tissue type` | String | Primary biological tissue category. | `Brain`, `Blood`, `Saliva`, `LCLs` |
-| **Tissue - subtype** | `Tissue - subtype` | String | Specific anatomical brain subregion or cell lineage. | `Cerebellum`, `Frontal Cortex`, `Peripheral Mononuclear Cells` |
-| **Methodology** | `Methodology` | String | Experimental platform or molecular assay used for profiling or quantification. | `RT-qPCR`, `Small RNA-seq`, `miRNA microarray`, `WES`, `WGS`, `SNP array`, `aCGH` |
-| **Diagnostic tools** | `Diagnostic tools` | String | Diagnostic criteria or clinical behavioral instruments used for cohort diagnosis. | `DSM-5`, `ADOS`, `ADI-R`, `CARS`, `DSM-IV-TR`, `GARS`, `ABC` |
-| **ASD Samples** | `ASD samples` | Integer / String | Number of ASD subjects in the experimental cohort. | `28`, `55`, `120` |
-| **Control Samples** | `Control samples` | Integer / String | Number of neurotypical control subjects in the comparison cohort. | `28`, `50`, `115` |
+| **Sample type** | `Sample type` / `Tissue type` | String | Primary biological specimen or tissue analyzed (standardized as "Sample type" in v15.09.2026; mapped to both keys in JSON). | `Brain`, `Blood`, `Saliva`, `LCLs` |
+| **Sample subtype** | `Sample subtype` / `Tissue - subtype` | String | Specific anatomical brain subregion or refined cellular fraction (standardized as "Sample subtype" in v15.09.2026; mapped to both keys in JSON). | `Cerebellum`, `Frontal Cortex`, `Peripheral Mononuclear Cells`, `Whole Blood`, `Plasma` |
+| **Methodology** | `Methodology` | String | Experimental platform or molecular assay used for profiling or quantification. Includes multi-assay platforms. | `RT-qPCR`, `Small RNA-seq`, `miRNA microarray`, `WES`, `WGS`, `SNP array`, `SNP array and WES`, `miRNA microarray and RT-qPCR`, `aCGH` |
+| **Diagnostic tools** | `Diagnostic tools` | String | Diagnostic criteria or clinical behavioral instruments used for cohort diagnosis. | `DSM-5`, `ADOS`, `ADI-R`, `CARS`, `DSM-IV-TR`, `GARS`, `ABC`, `SRS` |
+| **ASD Samples** | `ASD samples` | Integer / String | Number of ASD subjects in the experimental cohort. In multi-cohort studies (e.g. discovery vs. replication cohorts, or distinct tissues), values are separated by semicolons (`;`) and rendered as distinct badges/pills in the UI. | `ASD N = 12`, `Microarray ASD N = 5; RT-qPCR ASD N = 15`, `Training set ASD N = 188; Test set ASD N = 50`, `GWAS ASD N = 7387; meta-analysis replication set 1 ASD N = 7783; meta-analysis replication set 2 ASD N = 1369` |
+| **Control Samples** | `Control samples` | Integer / String | Number of neurotypical control subjects in the comparison cohort. In multi-cohort studies, values are separated by semicolons (`;`) and rendered as distinct badges/pills in the UI. | `Control N = 12`, `Microarray control N = 5; RT-qPCR control N = 15`, `Training set control N = 113; Test set control N = 21` |
 | **Country** | `Country` | String | Country of origin of the study cohort. | `USA`, `Brazil`, `China`, `Italy`, `Japan` |
 
 ---

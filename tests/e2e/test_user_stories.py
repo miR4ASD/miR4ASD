@@ -100,7 +100,6 @@ def test_user_story_1_expression_discovery_and_selection(
     assert not expr_page.is_run_enrichment_button_enabled()
 
 
-
 def test_user_story_2_genetic_studies_cross_selection(
     app_page: Page, base_url: str
 ) -> None:
@@ -119,9 +118,9 @@ def test_user_story_2_genetic_studies_cross_selection(
     initial_rows = genetic_page.get_row_count()
     assert initial_rows > 0
 
-    # Filter by SNV alteration type
+    # Filter by SNV alteration type (14 records match SNV in v15.09.2026 dataset)
     genetic_page.select_genetic_alteration("SNV")
-    assert genetic_page.get_filtered_total() == 9
+    assert genetic_page.get_filtered_total() == 14
 
     # Expand child row details to verify genomic coordinates / methodology
     genetic_page.expand_row_details(0)

@@ -125,7 +125,9 @@ def test_targets_view_mode_buttons_always_accessible_and_explicit_labels(
     targets_page.set_view_mode("selected-mirna")
     assert targets_page.get_active_view_mode() == "selected-mirna"
     assert targets_page.get_filtered_total() == 0
-    empty_text = app_page.locator("#targets-table tbody td.dt-empty, #targets-table tbody td.dataTables_empty").first.inner_text()
+    empty_text = app_page.locator(
+        "#targets-table tbody td.dt-empty, #targets-table tbody td.dataTables_empty"
+    ).first.inner_text()
     assert "No miRNAs currently selected" in empty_text
 
     # 5. Click 'Show all interactions' -> returns to all 17,150
@@ -149,57 +151,3 @@ def test_targets_view_mode_buttons_always_accessible_and_explicit_labels(
     assert targets_page.get_active_view_mode() == "all"
     assert targets_page.get_filtered_total() == 17150
     assert first_row_check.is_checked()
-
-
-def test_targets_tissue_multi_select_and_search(app_page: Page, base_url: str):
-    """Verify Target Genes Tissue / Cell Source multi-select checklist, quick-search, and chips."""
-    targets_page = TargetsPage(app_page, base_url)
-    targets_page.navigate_to_targets()
-
-    # Open the filters collapse if not already expanded
-    collapse = app_page.locator("#targetsFiltersCollapse")
-    if not collapse.is_visible():
-        app_page.locator("#targets button[data-bs-target='#targetsFiltersCollapse']").click()
-        app_page.wait_for_timeout(400)
-
-    # 1. Verify tissue checkboxes container exists and is populated
-    tissue_cbs = app_page.locator("#target-tissue-checkboxes input[type='checkbox']")
-    assert tissue_cbs.count() > 20, f"Expected >20 tissue options, found {tissue_cbs.count()}"
-
-    # 2. Quick search in tissue filter
-    search_input = app_page.locator("#filter-target-tissue-search")
-    search_input.fill("brain")
-    app_page.wait_for_timeout(300)
-
-    # Verify visible items match search
-    visible_items = app_page.locator("#target-tissue-checkboxes .checklist-item:visible")
-    assert visible_items.count() > 0
-    for i in range(visible_items.count()):
-        assert "brain" in visible_items.nth(i).inner_text().lower()
-
-    # Clear search
-    search_input.fill("")
-    app_page.wait_for_timeout(200)
-
-    # 3. Select a specific tissue (e.g. Kidney)
-    kidney_cb = app_page.locator("#target-tissue-checkboxes input[value='Kidney']")
-    assert kidney_cb.count() == 1
-    kidney_cb.check()
-    app_page.wait_for_timeout(400)
-
-    # 4. Verify active count and filter chips
-    filtered_count = targets_page.get_filtered_total()
-    assert 0 < filtered_count < 17150, f"Expected filtered count between 0 and 17150, got {filtered_count}"
-
-    chip = app_page.locator(".target-active-chips .filter-chip").first
-    assert "Tissue: Kidney" in chip.inner_text()
-
-    # 5. Dismiss chip and verify reset
-    chip.locator(".chip-remove").click()
-    app_page.wait_for_timeout(400)
-
-    assert not kidney_cb.is_checked()
-    assert targets_page.get_filtered_total() == 17150
-    assert app_page.locator(".target-active-chips .filter-chip").count() == 0
-
-

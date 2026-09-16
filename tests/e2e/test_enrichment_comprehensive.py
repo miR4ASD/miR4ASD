@@ -199,9 +199,7 @@ def test_enrichment_api_error_notice(app_page: Page, base_url: str):
     assert "error" in enrichment_page.get_error_alert_message().lower()
 
 
-def test_enrichment_single_source_badge_and_gene_count(
-    app_page: Page, base_url: str
-):
+def test_enrichment_single_source_badge_and_gene_count(app_page: Page, base_url: str):
     """Verify the enrichment tab reflects the single miRTarBase 10.0 source."""
     expr_page = ExpressionPage(app_page, base_url)
     enrichment_page = EnrichmentPage(app_page, base_url)

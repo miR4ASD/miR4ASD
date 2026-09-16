@@ -107,11 +107,8 @@ class StudiesTablePage(BasePage):
 
     def get_run_enrichment_button_text(self) -> str:
         """Return the full text of the Target Genes Run Enrichment CTA."""
-        btn = self.page.locator(
-            ".btn-analyze-filtered[data-source-table='targets']"
-        )
+        btn = self.page.locator(".btn-analyze-filtered[data-source-table='targets']")
         return btn.inner_text().strip()
-
 
     def click_clear_selection(self) -> None:
         """Clear the global miRNA selection across all tables and tabs."""
@@ -135,9 +132,7 @@ class StudiesTablePage(BasePage):
     def click_run_target_enrichment_button(self) -> None:
         """Click the Target Genes tab 'Run Target Enrichment' CTA."""
         self.switch_tab("targets")
-        btn = self.page.locator(
-            ".btn-analyze-filtered[data-source-table='targets']"
-        )
+        btn = self.page.locator(".btn-analyze-filtered[data-source-table='targets']")
         btn.click()
         self.page.wait_for_timeout(600)
 
@@ -147,13 +142,10 @@ class StudiesTablePage(BasePage):
 
     def is_run_enrichment_button_enabled(self) -> bool:
         """Check if the Target Genes Run Enrichment CTA is enabled."""
-        btn = self.page.locator(
-            ".btn-analyze-filtered[data-source-table='targets']"
-        )
+        btn = self.page.locator(".btn-analyze-filtered[data-source-table='targets']")
         return not btn.is_disabled() and "disabled" not in (
             btn.get_attribute("class") or ""
         )
-
 
     def get_row_count(self) -> int:
         """Return the number of visible rows on the current table page."""

@@ -60,9 +60,7 @@ class GeneticPage(StudiesTablePage):
                 f'#gen-methodology-checkboxes input[value="{value}"]'
             ).check()
         else:
-            self.page.locator(
-                f'{self.METHODOLOGY_CHECKBOXES} input:checked'
-            ).uncheck()
+            self.page.locator(f"{self.METHODOLOGY_CHECKBOXES} input:checked").uncheck()
         self.page.wait_for_timeout(400)
 
     def select_diagnostic_tool(self, value: str) -> None:
@@ -73,9 +71,7 @@ class GeneticPage(StudiesTablePage):
                 f'#gen-diagnostic-checkboxes input[value="{value}"]'
             ).check()
         else:
-            self.page.locator(
-                f'{self.DIAGNOSTIC_CHECKBOXES} input:checked'
-            ).uncheck()
+            self.page.locator(f"{self.DIAGNOSTIC_CHECKBOXES} input:checked").uncheck()
         self.page.wait_for_timeout(400)
 
     def filter_study_desc(self, text: str) -> None:

@@ -14,9 +14,6 @@ class TargetsPage(BasePage):
     FILTER_SFARI = "#sfari-checkboxes"
     FILTER_SUPPORT = "#filter-support-type"
     FILTER_METHOD = "#method-checkboxes"
-    FILTER_REGULATION = "#filter-target-regulation"
-    FILTER_TISSUE = "#target-tissue-checkboxes"
-    FILTER_TISSUE_SEARCH = "#filter-target-tissue-search"
 
     def navigate_to_targets(self) -> None:
         """Switch to Target Genes tab and wait for DataTables to render."""
@@ -51,8 +48,6 @@ class TargetsPage(BasePage):
         digits = re.sub(r"\D", "", self.get_active_count_text())
         return int(digits) if digits else 0
 
-
-
     def get_table_body_text(self) -> str:
         """Return text content of current visible rows in the targets table."""
         return self.page.locator("#targets-table tbody").inner_text()
@@ -75,11 +70,9 @@ class TargetsPage(BasePage):
         """
         if value:
             self.ensure_filter_card_expanded(self.FILTER_SFARI)
-            self.page.locator(
-                f'{self.FILTER_SFARI} input[value="{value}"]'
-            ).check()
+            self.page.locator(f'{self.FILTER_SFARI} input[value="{value}"]').check()
         else:
-            self.page.locator(f'{self.FILTER_SFARI} input:checked').uncheck()
+            self.page.locator(f"{self.FILTER_SFARI} input:checked").uncheck()
         self.page.wait_for_timeout(400)
 
     def select_support_type(self, value: str) -> None:
@@ -96,30 +89,15 @@ class TargetsPage(BasePage):
             self.ensure_filter_card_expanded(self.FILTER_METHOD)
             cb = self.page.locator(f'{self.FILTER_METHOD} input[value="{value}"]')
             if cb.count() == 0:
-                for inp in self.page.locator(f'{self.FILTER_METHOD} input').all():
+                for inp in self.page.locator(f"{self.FILTER_METHOD} input").all():
                     if (inp.get_attribute("value") or "").lower() == value.lower():
                         cb = inp
                         break
             cb.check()
         else:
-            self.page.locator(f'{self.FILTER_METHOD} input:checked').uncheck()
+            self.page.locator(f"{self.FILTER_METHOD} input:checked").uncheck()
         self.page.wait_for_timeout(400)
 
-    def select_regulation(self, value: str) -> None:
-        """Select a target regulation option ('' for All)."""
-        self.select_filter_option(self.FILTER_REGULATION, value)
-
-    def filter_tissue(self, value: str) -> None:
-        """Set the tissue / cell source filter ('' to clear)."""
-        if not value:
-            checked = self.page.locator(f"{self.FILTER_TISSUE} input:checked")
-            for i in range(checked.count()):
-                checked.nth(i).uncheck()
-        else:
-            cb = self.page.locator(f"{self.FILTER_TISSUE} input[value='{value}']")
-            if cb.count() > 0:
-                cb.check()
-        self.page.wait_for_timeout(400)
 
     def reset_target_filters(self) -> None:
         """Click the per-tab 'Clear All' (targets scope) filter reset button."""
@@ -146,7 +124,9 @@ class TargetsPage(BasePage):
 
     def get_active_view_mode(self) -> str:
         """Return the data-view-mode of the currently active view button."""
-        return self.page.locator(f'{self.VIEW_BTN}.btn-primary').get_attribute("data-view-mode")
+        return self.page.locator(f"{self.VIEW_BTN}.btn-primary").get_attribute(
+            "data-view-mode"
+        )
 
     def get_selected_mirna_count(self) -> int:
         """Return the selected-miRNA count badge in the targets field."""
@@ -165,9 +145,7 @@ class TargetsPage(BasePage):
         """Type miRNA IDs into the targets miRNA field textarea."""
         editor = self.page.locator("#targets-mirna-input")
         if not editor.is_visible():
-            self.page.locator(
-                "[data-bs-target='#targetsMirnaEditorCollapse']"
-            ).click()
+            self.page.locator("[data-bs-target='#targetsMirnaEditorCollapse']").click()
             self.page.wait_for_timeout(400)
         editor.fill(text)
         self.page.wait_for_timeout(700)

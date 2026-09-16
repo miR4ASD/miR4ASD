@@ -128,7 +128,7 @@ def test_expression_evidence_multiselect_or_and_chips(app_page: Page, base_url: 
     # Consistent upregulation active (42 rows, 1 chip)
     down_chip_text = "Evidence: Consistent downregulation"
     chip = app_page.locator(
-        '.expr-active-chips .filter-chip', has_text=down_chip_text
+        ".expr-active-chips .filter-chip", has_text=down_chip_text
     ).first
     chip.locator("i.chip-remove").click()
     app_page.wait_for_timeout(400)
@@ -206,3 +206,28 @@ def test_expression_headers_renamed_up_down(app_page: Page, base_url: str):
     assert "# down" in header_texts
     # The verbose legacy labels are no longer used as headers
     assert not any("number of studies" in h.lower() for h in header_texts)
+
+
+def test_expression_subtable_sample_badges_and_headers(app_page: Page, base_url: str):
+    """Verify subtable headers show Sample Type/Subtype and multi-cohort samples render as distinct badges."""
+    expr_page = ExpressionPage(app_page, base_url)
+    expr_page.navigate_to_expression()
+
+    # Expand details for first row (contains Huang 2015 with multi-cohort sample counts)
+    expr_page.expand_row_details(0)
+    assert expr_page.is_child_row_visible()
+
+    child = app_page.locator(
+        "#expression-table tbody tr.child, #expression-table tbody tr.details + tr"
+    ).first
+    child_text = child.inner_text().lower()
+    assert "sample type" in child_text
+    assert "sample subtype" in child_text
+
+    # Verify separate pill badges are rendered for semicolon-separated sample counts
+    sample_badges = child.locator("td span.badge.rounded-pill")
+    badge_texts = sample_badges.all_inner_texts()
+    assert any("Microarray ASD N = 5" in b for b in badge_texts)
+    assert any("RT-qPCR ASD N = 15" in b for b in badge_texts)
+    assert any("Microarray control N = 5" in b for b in badge_texts)
+    assert any("RT-qPCR control N = 15" in b for b in badge_texts)

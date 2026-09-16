@@ -31,6 +31,7 @@ ignore = [
     "D407",  # Missing dashed underline after section
     "D413",  # Missing blank line after last section
     "D415",  # First line should end with a period, question mark, or exclamation point
+    "E501",  # Line too long
 ]
 
 [tool.ruff.format]

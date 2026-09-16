@@ -66,13 +66,9 @@ class ExpressionPage(StudiesTablePage):
         """
         if value:
             self.ensure_filter_card_expanded(self.EVIDENCE_CHECKBOXES)
-            self.page.locator(
-                f'#evidence-checkboxes input[value="{value}"]'
-            ).check()
+            self.page.locator(f'#evidence-checkboxes input[value="{value}"]').check()
         else:
-            self.page.locator(
-                f'{self.EVIDENCE_CHECKBOXES} input:checked'
-            ).uncheck()
+            self.page.locator(f"{self.EVIDENCE_CHECKBOXES} input:checked").uncheck()
         self.page.wait_for_timeout(400)
 
     def select_other_evidence(self, value: str) -> None:
@@ -88,7 +84,7 @@ class ExpressionPage(StudiesTablePage):
             ).check()
         else:
             self.page.locator(
-                f'{self.OTHER_EVIDENCE_CHECKBOXES} input:checked'
+                f"{self.OTHER_EVIDENCE_CHECKBOXES} input:checked"
             ).uncheck()
         self.page.wait_for_timeout(400)
 
@@ -100,9 +96,7 @@ class ExpressionPage(StudiesTablePage):
                 f'#expr-methodology-checkboxes input[value="{value}"]'
             ).check()
         else:
-            self.page.locator(
-                f'{self.METHODOLOGY_CHECKBOXES} input:checked'
-            ).uncheck()
+            self.page.locator(f"{self.METHODOLOGY_CHECKBOXES} input:checked").uncheck()
         self.page.wait_for_timeout(400)
 
     def select_diagnostic_tool(self, value: str) -> None:
@@ -113,9 +107,7 @@ class ExpressionPage(StudiesTablePage):
                 f'#expr-diagnostic-checkboxes input[value="{value}"]'
             ).check()
         else:
-            self.page.locator(
-                f'{self.DIAGNOSTIC_CHECKBOXES} input:checked'
-            ).uncheck()
+            self.page.locator(f"{self.DIAGNOSTIC_CHECKBOXES} input:checked").uncheck()
         self.page.wait_for_timeout(400)
 
     def set_min_upregulation_studies(self, value: str) -> None:

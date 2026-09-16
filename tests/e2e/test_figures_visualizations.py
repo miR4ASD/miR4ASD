@@ -112,5 +112,6 @@ def test_help_tab_methodologies_and_diagnostic_tables(app_page: Page, base_url: 
     # Clear search
     search_diag.fill("")
     app_page.wait_for_timeout(200)
-    assert app_page.locator("#diagnostic-tools-help-table tbody tr:visible").count() == 9
-
+    assert (
+        app_page.locator("#diagnostic-tools-help-table tbody tr:visible").count() == 9
+    )

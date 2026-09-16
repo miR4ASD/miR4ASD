@@ -1,6 +1,5 @@
 import csv
 import glob
-import gzip
 import json
 import os
 from typing import Any, Dict, List, Optional, Set, Tuple
@@ -447,14 +446,9 @@ def process_target_genes(
                 interaction_map[pair_key] = {
                     "canonical_mir": canonical_mir,
                     "gene_symbol": gene_sym,
-                    "gene_id": (
-                        str(row.get("Target Gene (Entrez ID)", "")).strip()
-                    ),
+                    "gene_id": (str(row.get("Target Gene (Entrez ID)", "")).strip()),
                     "sources": set(),
                     "methods": set(),
-                    "regulations": set(),
-                    "tissues": set(),
-                    "cell_lines": set(),
                     "pmids": set(),
                     "has_strong": False,
                     "has_clip": False,
@@ -488,37 +482,7 @@ def process_target_genes(
             if pmid_val:
                 entry["pmids"].add(pmid_val)
 
-    # 3b. Enrich with Tissue, Cell Line, and Regulation from TarBase v9 (if available)
-    tarbase_path = os.path.join("raw_data", "Homo_sapiens_TarBase-v9.tsv.gz")
-    if os.path.exists(tarbase_path):
-        print(f"Enriching tissue and cell source from TarBase v9: {tarbase_path}")
-        gene_sym_lookup = {
-            (canon_mir, sym.upper()): sym for (canon_mir, sym) in interaction_map.keys()
-        }
-        with gzip.open(tarbase_path, "rt", encoding="utf-8", errors="ignore") as f:
-            reader = csv.DictReader(f, delimiter="\t")
-            for row in reader:
-                canonical_mir = get_canonical_mirna(row.get("mirna_name"))
-                if not canonical_mir:
-                    continue
-                raw_gene = (row.get("gene_name") or "").strip()
-                if not raw_gene:
-                    continue
-                exact_sym = gene_sym_lookup.get((canonical_mir, raw_gene.upper()))
-                if exact_sym:
-                    entry = interaction_map[(canonical_mir, exact_sym)]
-                    tissue = (row.get("tissue") or "").strip()
-                    cell_line = (row.get("cell_line") or "").strip()
-                    term = tissue if (tissue and tissue != "NA") else (
-                        cell_line if (cell_line and cell_line != "NA") else ""
-                    )
-                    if term:
-                        entry["tissues"].add(term)
-                    reg = (row.get("regulation") or "").strip()
-                    if reg and reg != "NA":
-                        entry["regulations"].add(reg)
-
-    # 4. Structure Target Records with Provenance Annotation
+    # 4. Structure Target Records with Provenance Annotation (Sole Source: miRTarBase 10.0)
     target_records = []
     unique_target_genes = set()
     unique_sfari_genes = set()
@@ -569,12 +533,6 @@ def process_target_genes(
         methods_str = (
             "; ".join(sorted(list(data["methods"]))) if data["methods"] else "—"
         )
-        regs_str = (
-            "; ".join(sorted(list(data["regulations"]))) if data["regulations"] else "—"
-        )
-        tissue_str = (
-            "; ".join(sorted(list(data["tissues"]))) if data["tissues"] else "—"
-        )
 
         target_records.append(
             {
@@ -590,8 +548,6 @@ def process_target_genes(
                 ),
                 "database_source": db_source,
                 "experimental_methods": methods_str,
-                "regulation": regs_str,
-                "tissue": tissue_str,
                 "pmids": pmids_str,
             }
         )
@@ -683,8 +639,7 @@ def process_help_tables(
     excel_path: str = "Tables_for_help_tab.xlsx", output_dir: str = "."
 ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     """
-    Process the help tables Excel workbook (Methods and Diagnostic_tools sheets)
-    and export them to JSON feeds.
+    Process the help tables Excel workbook and export them to JSON feeds.
 
     Parameters
     ----------
@@ -731,7 +686,9 @@ def process_help_tables(
         df_d.columns = [str(c).strip() for c in df_d.columns]
         cols = list(df_d.columns)
         if len(cols) >= 2:
-            df_d = df_d.rename(columns={cols[0]: "diagnostic_tool", cols[1]: "description"})
+            df_d = df_d.rename(
+                columns={cols[0]: "diagnostic_tool", cols[1]: "description"}
+            )
         diag_records = df_d.dropna(how="all").to_dict(orient="records")
         for r in diag_records:
             for k, v in r.items():
@@ -751,7 +708,7 @@ def process_help_tables(
 
 
 def main(
-    excel_path: str = "Tabelas_miR4ASD(site)_11.09.2026.xlsx",
+    excel_path: str = "raw_data/Tabelas_miR4ASD(site)_15.09.2026.xlsx",
     gff_path: str = "hsa.gff3",
     output_dir: str = ".",
 ) -> None:
@@ -771,7 +728,10 @@ def main(
     get_gff_maps(gff_path)
 
     if not os.path.exists(excel_path):
-        candidates = sorted(glob.glob("Tabelas_miR4ASD*.xlsx"))
+        candidates = sorted(
+            glob.glob("raw_data/Tabelas_miR4ASD*.xlsx")
+            + glob.glob("Tabelas_miR4ASD*.xlsx")
+        )
         if candidates:
             excel_path = candidates[-1]
 
@@ -798,11 +758,36 @@ def main(
         df_details = df_details.rename(columns=details_rename_map)
         df_details["Study"] = df_details["Study"].astype(str).str.strip()
 
+        # Support both new 'Sample type'/'Sample subtype' and 'Tissue type'/'Tissue - subtype'
+        if (
+            "Sample type" in df_details.columns
+            and "Tissue type" not in df_details.columns
+        ):
+            df_details["Tissue type"] = df_details["Sample type"]
+        elif (
+            "Tissue type" in df_details.columns
+            and "Sample type" not in df_details.columns
+        ):
+            df_details["Sample type"] = df_details["Tissue type"]
+
+        if (
+            "Sample subtype" in df_details.columns
+            and "Tissue - subtype" not in df_details.columns
+        ):
+            df_details["Tissue - subtype"] = df_details["Sample subtype"]
+        elif (
+            "Tissue - subtype" in df_details.columns
+            and "Sample subtype" not in df_details.columns
+        ):
+            df_details["Sample subtype"] = df_details["Tissue - subtype"]
+
         study_details_records = df_details.to_dict(orient="records")
         study_details_map = {study["Study"]: study for study in study_details_records}
 
         # Standardize delimiters and resolve study details
-        df_expression = standardize_delimiters(df_expression, ["Study", "Tissue"])
+        df_expression = standardize_delimiters(
+            df_expression, ["Study", "Tissue", "Sample Type", "Sample type"]
+        )
         df_expression["StudyDetails"] = df_expression["Study"].apply(
             lambda s: resolve_study_details(s, study_details_map)
         )
@@ -819,6 +804,8 @@ def main(
                 "Expression change (ASD vs. controls)": "expression_change",
                 "Expression Change": "expression_change",
                 "Study description": "study_description",
+                "Sample Type": "tissue",
+                "Sample type": "tissue",
                 "Tissue": "tissue",
                 "Expression": "expression",
                 "Overall evidence": "overall_evidence",
@@ -830,8 +817,12 @@ def main(
                 "Evidence from other studies": "evidence_from_other_studies",
             }
         )
+        if "tissue" in df_expression.columns:
+            df_expression["sample_type"] = df_expression["tissue"]
         if "evidence_from_other_studies" in df_expression.columns:
-            df_expression["evidence_from_other_studies"] = df_expression["evidence_from_other_studies"].fillna("no")
+            df_expression["evidence_from_other_studies"] = df_expression[
+                "evidence_from_other_studies"
+            ].fillna("no")
 
         df_other = standardize_delimiters(df_other, ["Study"])
         df_other["StudyDetails"] = df_other["Study"].apply(
@@ -1005,4 +996,3 @@ def main(
 
 if __name__ == "__main__":
     main()
-
