@@ -2612,17 +2612,69 @@
     }
     window.escapeHtml = escapeHtml;
 
-    function format ( details ) {
+    // Methodology & Diagnostic Tool filter state & pattern matching
+    let activeExprMethods = [];
+    let activeExprDiagTools = [];
+    let activeGenMethods = [];
+    let activeGenDiagTools = [];
+
+    const DIAG_TOOL_PATTERNS = {
+        'DSM-5': /\bDSM-5\b/i,
+        'ADOS': /\bADOS\b/i,
+        'ADI-R': /\bADI-R\b/i,
+        'CARS': /\bCARS\b/i,
+        'DSM-IV-TR': /\bDSM-IV-TR\b/i,
+        'DSM-IV': /\bDSM-IV\b(?!-TR)/i,
+        'ABC': /\bABC\b/i,
+        'GARS': /\bGARS\b/i,
+        'SRS': /\bSRS\b/i
+    };
+
+    function studyMatchesMethodology(study, selectedMethods) {
+        if (!selectedMethods || selectedMethods.length === 0) return true;
+        if (!study || !study.Methodology) return false;
+        const tokens = String(study.Methodology).split(/\s+and\s+|;\s*|,\s*/).map(t => t.trim()).filter(Boolean);
+        return selectedMethods.some(m => tokens.includes(m));
+    }
+
+    function studyMatchesDiagnostic(study, selectedDiagTools) {
+        if (!selectedDiagTools || selectedDiagTools.length === 0) return true;
+        if (!study || !study['Diagnostic tools']) return false;
+        const diagStr = String(study['Diagnostic tools']);
+        return selectedDiagTools.some(dt => {
+            const pat = DIAG_TOOL_PATTERNS[dt];
+            return pat ? pat.test(diagStr) : diagStr.includes(dt);
+        });
+    }
+
+    function format ( details, scope ) {
         if (!details || details.length === 0) {
             return '<div class="p-3 text-muted">No additional study details available.</div>';
         }
+
+        const activeMethods = (scope === 'genetic') ? activeGenMethods : activeExprMethods;
+        const activeDiagTools = (scope === 'genetic') ? activeGenDiagTools : activeExprDiagTools;
+        const hasActiveFilter = (activeMethods && activeMethods.length > 0) || (activeDiagTools && activeDiagTools.length > 0);
 
         // Determine if this is an expression study (has Tissue type / Tissue - subtype)
         const hasTissueInfo = details.some(d => (d["Tissue type"] || d["Tissue - subtype"]));
         const showTissue = hasTissueInfo;
 
-        let table = '<div class="table-responsive p-3" style="background-color: var(--secondary-color); border-radius: 8px;">' +
-            '<table class="table table-sm table-hover mb-0" style="background-color: #ffffff; border-radius: 6px; overflow: hidden; border: 1px solid #E2E8F0;">' +
+        let table = '<div class="table-responsive p-3" style="background-color: var(--secondary-color); border-radius: 8px;">';
+
+        if (hasActiveFilter) {
+            const matchCount = details.filter(d => 
+                (!activeMethods || activeMethods.length === 0 || studyMatchesMethodology(d, activeMethods)) &&
+                (!activeDiagTools || activeDiagTools.length === 0 || studyMatchesDiagnostic(d, activeDiagTools))
+            ).length;
+            table += `<div class="d-flex align-items-center justify-content-between mb-2 px-1">
+                <span class="badge bg-primary-subtle text-primary border" style="font-size: 0.78rem;">
+                    <i class="fa-solid fa-filter me-1"></i>Showing ${matchCount} of ${details.length} ${details.length === 1 ? 'study' : 'studies'} matching active filter(s)
+                </span>
+            </div>`;
+        }
+
+        table += '<table class="table table-sm table-hover mb-0" style="background-color: #ffffff; border-radius: 6px; overflow: hidden; border: 1px solid #E2E8F0;">' +
             '<thead style="background-color: #F8FAFC; border-bottom: 2px solid #E2E8F0;">' +
                 '<tr>' +
                     '<th style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Study</th>' +
@@ -2641,18 +2693,32 @@
             '</tr></thead><tbody>';
 
         details.forEach(function(d) {
+            const matchesMethod = !activeMethods || activeMethods.length === 0 || studyMatchesMethodology(d, activeMethods);
+            const matchesDiag = !activeDiagTools || activeDiagTools.length === 0 || studyMatchesDiagnostic(d, activeDiagTools);
+            const isMatch = matchesMethod && matchesDiag;
+
             let studyLink = escapeHtml(d.Study || '');
             if (d.DOI) {
                 studyLink = `<a href="${d.DOI}" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none" style="color: var(--primary-color);"><i class="fa-solid fa-square-arrow-up-right me-1"></i>${escapeHtml(d.Study)}</a>`;
             }
 
+            if (hasActiveFilter && isMatch) {
+                studyLink = `<span class="badge bg-success-subtle text-success border me-1" style="font-size: 0.7rem;"><i class="fa-solid fa-check me-1"></i>Match</span> ` + studyLink;
+            }
+
             // Render sample counts in small badge-like pills if not empty
             let asdSamples = d["ASD samples"] ? `<span class="badge bg-light text-dark border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: normal; border-color: #E2E8F0 !important;">${escapeHtml(String(d["ASD samples"]))}</span>` : '';
             let controlSamples = d["Control samples"] ? `<span class="badge bg-light text-dark border px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: normal; border-color: #E2E8F0 !important;">${escapeHtml(String(d["Control samples"]))}</span>` : '';
-            let methodology = d["Methodology"] ? `<span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 0.75rem;">${escapeHtml(String(d["Methodology"]))}</span>` : '<span class="text-muted">—</span>';
-            let diagnosticTools = d["Diagnostic tools"] ? `<span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 0.75rem;">${escapeHtml(String(d["Diagnostic tools"]))}</span>` : '<span class="text-muted">—</span>';
+            
+            let methodBadgeClass = (hasActiveFilter && matchesMethod && activeMethods && activeMethods.length > 0) ? 'bg-primary-subtle text-primary border-primary' : 'bg-light text-secondary border';
+            let diagBadgeClass = (hasActiveFilter && matchesDiag && activeDiagTools && activeDiagTools.length > 0) ? 'bg-primary-subtle text-primary border-primary' : 'bg-light text-secondary border';
 
-            table += '<tr>' +
+            let methodology = d["Methodology"] ? `<span class="badge ${methodBadgeClass} px-2 py-1" style="font-size: 0.75rem;">${escapeHtml(String(d["Methodology"]))}</span>` : '<span class="text-muted">—</span>';
+            let diagnosticTools = d["Diagnostic tools"] ? `<span class="badge ${diagBadgeClass} px-2 py-1" style="font-size: 0.75rem;">${escapeHtml(String(d["Diagnostic tools"]))}</span>` : '<span class="text-muted">—</span>';
+
+            const rowStyle = (hasActiveFilter && !isMatch) ? 'opacity: 0.65; background-color: #FAFAFA;' : '';
+
+            table += `<tr style="${rowStyle}">` +
                 '<td class="align-middle">' + studyLink + '</td>' +
                 '<td class="align-middle text-secondary" style="max-width: 320px; font-size: 0.8rem; line-height: 1.4;">' + (escapeHtml(d["Description"] || '')) + '</td>' +
                 '<td class="align-middle">' + methodology + '</td>';
@@ -3631,41 +3697,8 @@
         }
 
         // Methodology & Diagnostic Tool filters for Expression and Genetic tables.
-        // Enforced via a global ext.search guard inspecting rowData.StudyDetails.
-        let activeExprMethods = [];
-        let activeExprDiagTools = [];
-        let activeGenMethods = [];
-        let activeGenDiagTools = [];
-
-        const DIAG_TOOL_PATTERNS = {
-            'DSM-5': /\bDSM-5\b/i,
-            'ADOS': /\bADOS\b/i,
-            'ADI-R': /\bADI-R\b/i,
-            'CARS': /\bCARS\b/i,
-            'DSM-IV-TR': /\bDSM-IV-TR\b/i,
-            'DSM-IV': /\bDSM-IV\b(?!-TR)/i,
-            'ABC': /\bABC\b/i,
-            'GARS': /\bGARS\b/i,
-            'SRS': /\bSRS\b/i
-        };
-
-        function studyMatchesMethodology(study, selectedMethods) {
-            if (!selectedMethods || selectedMethods.length === 0) return true;
-            if (!study || !study.Methodology) return false;
-            const tokens = String(study.Methodology).split(/\s+and\s+|;\s*|,\s*/).map(t => t.trim()).filter(Boolean);
-            return selectedMethods.some(m => tokens.includes(m));
-        }
-
-        function studyMatchesDiagnostic(study, selectedDiagTools) {
-            if (!selectedDiagTools || selectedDiagTools.length === 0) return true;
-            if (!study || !study['Diagnostic tools']) return false;
-            const diagStr = String(study['Diagnostic tools']);
-            return selectedDiagTools.some(dt => {
-                const pat = DIAG_TOOL_PATTERNS[dt];
-                return pat ? pat.test(diagStr) : diagStr.includes(dt);
-            });
-        }
-
+        // Enforced via a global ext.search guard inspecting rowData.StudyDetails:
+        // a main table row appears if any study in its subtable matches the active filter(s).
         function installStudyDetailsFilters() {
             if (window.__studyDetailsFiltersInstalled) return;
             window.__studyDetailsFiltersInstalled = true;
@@ -3679,10 +3712,11 @@
                     if (activeExprMethods.length === 0 && activeExprDiagTools.length === 0) return true;
                     const studies = Array.isArray(rowData.StudyDetails) ? rowData.StudyDetails : [];
                     if (studies.length === 0) return false;
-                    const hasMethodMatch = activeExprMethods.length === 0 || studies.some(s => studyMatchesMethodology(s, activeExprMethods));
-                    if (!hasMethodMatch) return false;
-                    const hasDiagMatch = activeExprDiagTools.length === 0 || studies.some(s => studyMatchesDiagnostic(s, activeExprDiagTools));
-                    if (!hasDiagMatch) return false;
+                    const hasMatch = studies.some(s => 
+                        (activeExprMethods.length === 0 || studyMatchesMethodology(s, activeExprMethods)) &&
+                        (activeExprDiagTools.length === 0 || studyMatchesDiagnostic(s, activeExprDiagTools))
+                    );
+                    if (!hasMatch) return false;
                     return true;
                 }
 
@@ -3690,10 +3724,11 @@
                     if (activeGenMethods.length === 0 && activeGenDiagTools.length === 0) return true;
                     const studies = Array.isArray(rowData.StudyDetails) ? rowData.StudyDetails : [];
                     if (studies.length === 0) return false;
-                    const hasMethodMatch = activeGenMethods.length === 0 || studies.some(s => studyMatchesMethodology(s, activeGenMethods));
-                    if (!hasMethodMatch) return false;
-                    const hasDiagMatch = activeGenDiagTools.length === 0 || studies.some(s => studyMatchesDiagnostic(s, activeGenDiagTools));
-                    if (!hasDiagMatch) return false;
+                    const hasMatch = studies.some(s => 
+                        (activeGenMethods.length === 0 || studyMatchesMethodology(s, activeGenMethods)) &&
+                        (activeGenDiagTools.length === 0 || studyMatchesDiagnostic(s, activeGenDiagTools))
+                    );
+                    if (!hasMatch) return false;
                     return true;
                 }
 
@@ -3855,6 +3890,18 @@
 
         installMiRNASelectionFilters();
 
+        function refreshOpenChildRows(tableInstance, scope) {
+            if (!tableInstance) return;
+            tableInstance.rows().every(function() {
+                if (this.child.isShown()) {
+                    const data = this.data();
+                    if (data && data.StudyDetails) {
+                        this.child( format(data.StudyDetails, scope) ).show();
+                    }
+                }
+            });
+        }
+
         // Add event listener for opening and closing details. Delegation stays
         // on td.details-control (e2e clicks the td); the visual state is driven
         // by the inner .details-toggle-btn (aria-expanded + plus/minus icon).
@@ -3876,7 +3923,9 @@
             else {
                 var rowData = row.data();
                 if (rowData && rowData.StudyDetails) {
-                    row.child( format(rowData.StudyDetails) ).show();
+                    var tableId = $(this).closest('table').attr('id');
+                    var scope = (tableId === 'other-table') ? 'genetic' : 'expression';
+                    row.child( format(rowData.StudyDetails, scope) ).show();
                 } else if (rowData) {
                     row.child( formatTargetDetails(rowData) ).show();
                 }
@@ -4185,6 +4234,7 @@
             // Numeric minimum-study filters (# up / # down / Total) are enforced by the
             // installExpressionNumericFilters ext.search guard on these columns.
             expressionTable.draw();
+            refreshOpenChildRows(expressionTable, 'expression');
 
             // ---- Apply filters to Genetic & Other Studies Table ----
             // Col 2: Precursor, Col 3: Mature, Col 4: Study Type, Col 5: Variant Type, Col 6: Evidence from expression studies, Col 7: Total expression studies, Col 8: Description of expression evidence
@@ -4201,6 +4251,7 @@
             }
             otherTable.column(8).search(studyDesc);
             otherTable.draw();
+            refreshOpenChildRows(otherTable, 'genetic');
 
             // ---- Apply filters to Target Genes Table ----
             // Col 1: Precursor, Col 2: Mature, Col 4: Target Gene, Col 6: SFARI, Col 7: Support Type, Col 9: Experiments, Col 10: Regulation, Col 11: Tissue (Col 0 = selection checkbox)

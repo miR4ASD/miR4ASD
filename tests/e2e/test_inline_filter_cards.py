@@ -230,12 +230,20 @@ def test_expression_card_methodology_and_diagnostic_filters(
     expr_page.page.wait_for_timeout(400)
     assert expr_page.get_filtered_total() == 318
 
-    # Select diagnostic tool DSM-5 (AND logic: RT-qPCR + DSM-5 -> 142)
+    # Select diagnostic tool DSM-5 (AND logic: study matches RT-qPCR + DSM-5 -> 111)
     expr_page.select_diagnostic_tool("DSM-5")
-    assert expr_page.get_filtered_total() == 142
+    assert expr_page.get_filtered_total() == 111
     assert expr_page.get_active_chips_count() == 2
     indicator = expr_page.get_active_indicator_text()
     assert "2 Active" in indicator
+
+    # Expand child row to verify matching studies are identified
+    expr_page.expand_row_details(0)
+    assert expr_page.is_child_row_visible()
+    child_text = expr_page.get_child_row_text()
+    assert "matching active filter" in child_text
+    assert "Match" in child_text
+    expr_page.expand_row_details(0)
 
     # Reset expression filters
     expr_page.reset_expression_filters()
@@ -264,9 +272,64 @@ def test_genetic_card_methodology_and_diagnostic_filters(
     assert gen_page.get_filtered_total() == 5
     assert gen_page.get_active_chips_count() == 2
 
+    # Expand child row to verify matching studies are identified
+    gen_page.expand_row_details(0)
+    assert gen_page.is_child_row_visible()
+    child_text = gen_page.get_child_row_text()
+    assert "matching active filter" in child_text
+    assert "Match" in child_text
+    gen_page.expand_row_details(0)
+
     # Reset genetic filters
     gen_page.click_reset_filters()
     assert gen_page.get_filtered_total() == 93
     assert gen_page.get_active_chips_count() == 0
     assert gen_page.get_active_indicator_text() == "No Filters Active"
+
+
+def test_expression_and_genetic_filters_independence_and_live_subtable_update(
+    app_page: Page, base_url: str
+):
+    """Verify live subtable refresh on filter change and independence across tables."""
+    expr_page = ExpressionPage(app_page, base_url)
+    gen_page = GeneticPage(app_page, base_url)
+
+    # 1. Start on Expression tab and expand first row (hsa-let-7a-5p)
+    expr_page.navigate_to_expression()
+    expr_page.expand_row_details(0)
+    assert expr_page.is_child_row_visible()
+    initial_child = expr_page.get_child_row_text()
+    assert "matching active filter" not in initial_child
+
+    # 2. Select Small RNA-seq filter while child row is OPEN
+    expr_page.select_methodology("Small RNA-seq")
+    assert expr_page.get_filtered_total() == 312
+
+    # 3. Verify open child row automatically refreshed without user toggling
+    updated_child = expr_page.get_child_row_text()
+    assert "Showing 1 of 3 studies matching active filter" in updated_child
+    assert "Match" in updated_child
+
+    # 4. Switch to Genetic tab and verify it remains completely unaffected
+    gen_page.navigate_to_genetic()
+    assert gen_page.get_filtered_total() == 93
+    assert gen_page.get_active_indicator_text() == "No Filters Active"
+
+    # 5. Apply genetic filter
+    gen_page.select_methodology("WGS")
+    assert gen_page.get_filtered_total() == 5
+
+    # 6. Switch back to Expression tab and verify Expression state is preserved
+    expr_page.navigate_to_expression()
+    assert expr_page.get_filtered_total() == 312
+    assert "1 Methods" in expr_page.get_active_indicator_text()
+    chip_text = expr_page.page.locator(".expr-active-chips .filter-chip").first.inner_text().strip()
+    assert "Small RNA-seq" in chip_text
+
+    # 7. Reset filters on both tabs
+    expr_page.reset_expression_filters()
+    assert expr_page.get_filtered_total() == 524
+    gen_page.navigate_to_genetic()
+    gen_page.click_reset_filters()
+    assert gen_page.get_filtered_total() == 93
 
