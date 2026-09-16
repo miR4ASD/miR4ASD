@@ -64,25 +64,7 @@ Catalog of microRNAs associated with genomic structural variants, single nucleot
 
 ---
 
-## 3. Validated Target Genes Table (`target_genes.json`)
-
-Experimentally supported human mRNA targets of ASD-associated microRNAs, sourced exclusively from **miRTarBase 10.0**, cross-referenced with **SFARI Gene** ASD-risk susceptibility scores. *(Note: DIANA-TarBase is no longer used in this version).*
-
-| Column Header | JSON Key | Data Type | Description | Allowed / Categorical Values |
-| :--- | :--- | :--- | :--- | :--- |
-| **Precursor miRNA** | `precursor_mirna` | String (Semicolon-delimited) | Genomic precursor hairpin(s) generating this mature miRNA (links to miRBase). | Semicolon-separated list of hairpins (e.g. `hsa-let-7a-1; hsa-let-7a-2`). |
-| **Mature miRNA** | `mature_mirna` | String (HTML Link) | Mature microRNA targeting the gene (links to miRBase). | Standardized to miRBase v22.1. |
-| **Target Gene** | `gene_symbol` | String (HTML Link) | Official HGNC gene symbol (links to GeneCards). | Standardized gene symbol (e.g. `PTEN`, `SHANK3`, `MECP2`, `AGO1`). |
-| **Gene Description** | `gene_name` | String | Full descriptive name of the target protein-coding gene. | Descriptive text (e.g. `phosphatase and tensin homolog`, `SH3 and multiple ankyrin repeat domains 3`). |
-| **ASD Susceptibility (SFARI)** | `sfari_score` | String | Curated autism risk tier from the SFARI Gene database. | <ul><li>`Category 1`: **High Confidence** risk genes (supported by rigorous statistical significance, typically ≥3 de novo likely gene-disrupting mutations in ASD cases).</li><li>`Category 2`: **Strong Candidate** genes (supported by 2 de novo LGD mutations or genome-wide significance).</li><li>`Category 3`: **Suggestive Evidence** genes (supported by suggestive single-study findings).</li><li>`Syndromic`: Genes associated with established genetic syndromes exhibiting high ASD penetrance (e.g. *Rett syndrome, Fragile X, Tuberous Sclerosis*).</li><li>`Non-SFARI`: Target genes not currently cataloged as primary ASD risk candidates in SFARI.</li></ul> |
-| **Support Type** | `support_type` | String | Experimental support classification of the miRNA-target interaction from miRTarBase 10.0. | <ul><li>`Functional MTI`: Backed by at least one functional microRNA-target interaction (Luciferase Reporter, Western Blot, qPCR, Northern Blot, ELISA, etc.).</li><li>`Weak Support`: Backed only by weak-evidence functional interactions.</li></ul> |
-| **Database Source** | `database_source` | String | Curated database origin establishing experimental validation. | `miRTarBase 10.0` (Sole validated target interaction source in this version; DIANA-TarBase is no longer used). |
-| **Experiments** | `experimental_methods` | String (Semicolon-delimited) | Exact laboratory techniques used to validate the miRNA-target interaction. | Semicolon-delimited list (e.g. `Luciferase reporter assay; Western blot; HITS-CLIP`). |
-| **PubMed Reference** | `pmids` | String (Semicolon-delimited) | PubMed Identifiers (PMIDs) of primary research publications (links to PubMed). | Semicolon-separated numerical PMIDs (e.g. `24312487; 20144220`). |
-
----
-
-## 4. Nested Study Details Metadata (`study_details.json`)
+## 3. Nested Study Details Metadata (`study_details.json`)
 
 Metadata describing the primary research publications linked to rows in the Expression and Genetic tables.
 
@@ -98,6 +80,24 @@ Metadata describing the primary research publications linked to rows in the Expr
 | **ASD Samples** | `ASD samples` | Integer / String | Number of ASD subjects in the experimental cohort. In multi-cohort studies (e.g. discovery vs. replication cohorts, or distinct tissues), values are separated by semicolons (`;`) and rendered as distinct badges/pills in the UI. | `ASD N = 12`, `Microarray ASD N = 5; RT-qPCR ASD N = 15`, `Training set ASD N = 188; Test set ASD N = 50`, `GWAS ASD N = 7387; meta-analysis replication set 1 ASD N = 7783; meta-analysis replication set 2 ASD N = 1369` |
 | **Control Samples** | `Control samples` | Integer / String | Number of neurotypical control subjects in the comparison cohort. In multi-cohort studies, values are separated by semicolons (`;`) and rendered as distinct badges/pills in the UI. | `Control N = 12`, `Microarray control N = 5; RT-qPCR control N = 15`, `Training set control N = 113; Test set control N = 21` |
 | **Country** | `Country` | String | Country of origin of the study cohort. | `USA`, `Brazil`, `China`, `Italy`, `Japan` |
+
+---
+
+## 4. Validated Target Genes Table (`target_genes.json`)
+
+Experimentally supported human mRNA targets of ASD-associated microRNAs, sourced exclusively from **miRTarBase 10.0**, cross-referenced with **SFARI Gene** ASD-risk susceptibility scores. *(Note: DIANA-TarBase is no longer used in this version).*
+
+| Column Header | JSON Key | Data Type | Description | Allowed / Categorical Values |
+| :--- | :--- | :--- | :--- | :--- |
+| **Precursor miRNA** | `precursor_mirna` | String (Semicolon-delimited) | Genomic precursor hairpin(s) generating this mature miRNA (links to miRBase). | Semicolon-separated list of hairpins (e.g. `hsa-let-7a-1; hsa-let-7a-2`). |
+| **Mature miRNA** | `mature_mirna` | String (HTML Link) | Mature microRNA targeting the gene (links to miRBase). | Standardized to miRBase v22.1. |
+| **Target Gene** | `gene_symbol` | String (HTML Link) | Official HGNC gene symbol (links to GeneCards). | Standardized gene symbol (e.g. `PTEN`, `SHANK3`, `MECP2`, `AGO1`). |
+| **Gene Description** | `gene_name` | String | Full descriptive name of the target protein-coding gene. | Descriptive text (e.g. `phosphatase and tensin homolog`, `SH3 and multiple ankyrin repeat domains 3`). |
+| **ASD Susceptibility (SFARI)** | `sfari_score` | String | Curated autism risk tier from the SFARI Gene database. | <ul><li>`Category 1`: **High Confidence** risk genes (supported by rigorous statistical significance, typically ≥3 de novo likely gene-disrupting mutations in ASD cases).</li><li>`Category 2`: **Strong Candidate** genes (supported by 2 de novo LGD mutations or genome-wide significance).</li><li>`Category 3`: **Suggestive Evidence** genes (supported by suggestive single-study findings).</li><li>`Syndromic`: Genes associated with established genetic syndromes exhibiting high ASD penetrance (e.g. *Rett syndrome, Fragile X, Tuberous Sclerosis*).</li><li>`Non-SFARI`: Target genes not currently cataloged as primary ASD risk candidates in SFARI.</li></ul> |
+| **Support Type** | `support_type` | String | Experimental support classification of the miRNA-target interaction from miRTarBase 10.0. | <ul><li>`Functional MTI`: Backed by at least one functional microRNA-target interaction (Luciferase Reporter, Western Blot, qPCR, Northern Blot, ELISA, etc.).</li><li>`Weak Support`: Backed only by weak-evidence functional interactions.</li></ul> |
+| **Database Source** | `database_source` | String | Curated database origin establishing experimental validation. | `miRTarBase 10.0` (Sole validated target interaction source in this version; DIANA-TarBase is no longer used). |
+| **Experiments** | `experimental_methods` | String (Semicolon-delimited) | Exact laboratory techniques used to validate the miRNA-target interaction. | Semicolon-delimited list (e.g. `Luciferase reporter assay; Western blot; HITS-CLIP`). |
+| **PubMed Reference** | `pmids` | String (Semicolon-delimited) | PubMed Identifiers (PMIDs) of primary research publications (links to PubMed). | Semicolon-separated numerical PMIDs (e.g. `24312487; 20144220`). |
 
 ---
 
