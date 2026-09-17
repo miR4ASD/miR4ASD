@@ -1148,7 +1148,8 @@
                                                     This section provides information on human miRNAs identified in case-control expression studies of Autism Spectrum Disorder (ASD), including their expression patterns, sample types, and supporting evidence.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0">
+                                                    <table class="table table-sm table-bordered align-middle mb-0"
+                                                        style="font-size: 0.9rem;">
                                                         <thead class="table-light">
                                                             <tr>
                                                                 <th style="width: 25%;">Column name</th>
@@ -1178,13 +1179,13 @@
                                                             <tr>
                                                                 <td><strong>Sample Type</strong></td>
                                                                 <td>Biological tissue, fluid, or cell type used for miRNA analysis (e.g., saliva, blood, post-mortem brain tissue [brain], neural stem cells [NSCs], olfactory mucosal stem cells [OMSCs], lymphoblastoid cell lines [LCLs], and umbilical cord).</td>
-                                                                <td><code>Blood</code>, <code>Brain</code>, <code>Saliva</code>, <code>LCLs</code>, <code>NSCs</code>, <code>OMSCs</code>, <code>Umbilical cord</code>.</td>
+                                                                <td>e.g.<code>Blood</code>, <code>Brain</code>, <code>Saliva</code>, <code>LCLs</code>, <code>NSCs</code>, <code>OMSCs</code>, <code>Umbilical cord</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Overall evidence</strong></td>
                                                                 <td>Classification of expression evidence based on the direction and consistency of miRNA dysregulation across independent ASD studies included in <em>miR4ASD</em>.</td>
                                                                 <td>
-                                                                    <ul class="mb-0 ps-3" style="font-size: 0.9rem;">
+                                                                    <ul class="mb-0 ps-3">
                                                                         <li class="mb-1"><strong>Consistent upregulation:</strong> Reported in &ge;2 independent studies, with all studies showing increased expression of the miRNA.</li>
                                                                         <li class="mb-1"><strong>Consistent downregulation:</strong> Reported in &ge;2 independent studies, with all studies showing decreased expression of the miRNA.</li>
                                                                         <li class="mb-1"><strong>Conflicting evidence:</strong> Reported in &ge;2 independent studies, with opposing directions of differential expression (both increased and decreased expression of the miRNA).</li>
@@ -1196,7 +1197,7 @@
                                                                 <td><strong>Evidence from other studies</strong></td>
                                                                 <td>Additional evidence linking the miRNA to ASD from bioinformatics or genetic studies.</td>
                                                                 <td>
-                                                                    <ul class="mb-0 ps-3" style="font-size: 0.9rem;">
+                                                                    <ul class="mb-0 ps-3">
                                                                         <li class="mb-1"><strong>Bioinformatics:</strong> Evidence from bioinformatics studies.</li>
                                                                         <li class="mb-1"><strong>Genetics: SNP:</strong> Evidence from genetic association studies evaluating SNPs associated with ASD.</li>
                                                                         <li class="mb-1"><strong>Genetics: SNV:</strong> Evidence from sequencing studies (WES or WGS) reporting SNVs involving miRNA genes.</li>
@@ -1207,12 +1208,12 @@
                                                             <tr>
                                                                 <td><strong># up</strong></td>
                                                                 <td>Number of independent peer-reviewed studies reporting upregulation of the miRNA in individuals with ASD compared with controls.</td>
-                                                                <td>Non-negative integers (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3+</code>)</td>
+                                                                <td>Positive integer (&ge;1)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong># down</strong></td>
                                                                 <td>Number of independent peer-reviewed studies reporting downregulation of the miRNA in individuals with ASD compared with controls.</td>
-                                                                <td>Non-negative integers (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3+</code>)</td>
+                                                                <td>Positive integer (&ge;1)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Total studies</strong></td>
@@ -1295,7 +1296,7 @@
                                                             <tr>
                                                                 <td><strong>Total expression studies</strong></td>
                                                                 <td>Number of independent ASD expression studies included in the database reporting differential expression of the miRNA.</td>
-                                                                <td>Non-negative integer (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3</code>).</td>
+                                                                <td>Positive integer (&ge;1)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Description of expression evidence</strong></td>
