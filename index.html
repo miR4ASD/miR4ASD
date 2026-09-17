@@ -1135,7 +1135,7 @@
                                 </p>
 
                                 <div class="accordion" id="dictionaryAccordion">
-                                    <!-- Accordion Item 1: Expression Studies -->
+                                    <!-- Accordion Item: 1. Expression Studies -->
                                     <div class="accordion-item border rounded mb-3 overflow-hidden">
                                         <h3 class="accordion-header" id="headingExpr">
                                             <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExpr" aria-expanded="false" aria-controls="collapseExpr" style="background-color: #F8FAFC; color: var(--primary-color);">
@@ -1148,77 +1148,86 @@
                                                     This section provides information on human miRNAs identified in case-control expression studies of Autism Spectrum Disorder (ASD), including their expression patterns, sample types, and supporting evidence.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0"
-                                                        style="font-size: 0.9rem;">
+                                                    <table class="table table-sm table-bordered align-middle mb-0">
                                                         <thead class="table-light">
                                                             <tr>
-                                                                <th style="width: 25%;">Column name</th>
-                                                                <th style="width: 35%;">Definition & Purpose</th>
-                                                                <th style="width: 40%;">Allowed Values & Formats</th>
+                                                                <th>Column Header</th>
+                                                                <th>JSON Key</th>
+                                                                <th>Data Type</th>
+                                                                <th>Description</th>
+                                                                <th>Allowed / Categorical Values</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             <tr>
                                                                 <td><strong>Precursor miRNA (hairpin)</strong></td>
-                                                                <td>Name of the stem-loop precursor miRNA (hairpin), according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.</td>
-                                                                <td>e.g. <code>hsa-let-7a-1</code>, <code>hsa-mir-146a</code>, <code>hsa-mir-155</code></td>
+                                                                <td><code>precursor_mirna</code></td>
+                                                                <td>String (HTML Link)</td>
+                                                                <td>Official miRBase stem-loop precursor RNA name (links to miRBase).</td>
+                                                                <td>Standardized to miRBase v22.1 (e.g. <code>hsa-let-7a-1</code>, <code>hsa-mir-146a</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Mature miRNA</strong></td>
-                                                                <td>Name of the functional, single-stranded mature miRNA derived from a precursor miRNA, according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.</td>
-                                                                <td>e.g. <code>hsa-let-7a-5p</code>, <code>hsa-miR-146a-5p</code>, <code>hsa-miR-155-5p</code></td>
+                                                                <td><code>mature_mirna</code></td>
+                                                                <td>String (HTML Link)</td>
+                                                                <td>Fully processed, functional single-stranded mature miRNA identifier.</td>
+                                                                <td>Standardized to miRBase v22.1 (e.g. <code>hsa-let-7a-5p</code>, <code>hsa-miR-146a-5p</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Expression change (ASD vs. controls)</strong></td>
-                                                                <td>Direction of differential expression statistically reported in the ASD cohort versus neurotypical controls.</td>
-                                                                <td>
-                                                                    <span class="badge bg-success-subtle text-success border me-1"><i class="fa-solid fa-arrow-up me-1"></i>Upregulated</span> (Increased expression in ASD)<br>
-                                                                    <span class="badge bg-danger-subtle text-danger border mt-1"><i class="fa-solid fa-arrow-down me-1"></i>Downregulated</span> (Decreased expression in ASD)
-                                                                </td>
+                                                                <td><code>expression_change</code></td>
+                                                                <td>String</td>
+                                                                <td>Reported direction of expression alteration in ASD patients compared to neurotypical controls.</td>
+                                                                <td><ul><li><code>Upregulated</code>: Statistically significant increased expression in ASD cohort.</li><li><code>Downregulated</code>: Statistically significant decreased expression in ASD cohort.</li></ul></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Sample Type</strong></td>
-                                                                <td>Biological tissue, fluid, or cell type used for miRNA analysis (e.g., saliva, blood, post-mortem brain tissue [brain], neural stem cells [NSCs], olfactory mucosal stem cells [OMSCs], lymphoblastoid cell lines [LCLs], and umbilical cord).</td>
-                                                                <td>e.g.<code>Blood</code>, <code>Brain</code>, <code>Saliva</code>, <code>LCLs</code>, <code>NSCs</code>, <code>OMSCs</code>, <code>Umbilical cord</code>.</td>
+                                                                <td><strong>Sample Type / Tissue</strong></td>
+                                                                <td><code>tissue</code> / <code>sample_type</code></td>
+                                                                <td>String (Semicolon-delimited)</td>
+                                                                <td>Biological tissue, fluid, or cell type used for miRNA analysis (standardized as "Sample Type" in dataset v15.09.2026; mapped to <code>tissue</code> and <code>sample_type</code> in JSON).</td>
+                                                                <td><code>Blood</code>, <code>Brain</code>, <code>Saliva</code>, <code>LCLs</code>, <code>NSCs</code>, <code>OMSCs</code>, <code>Umbilical cord</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Overall evidence</strong></td>
+                                                                <td><code>overall_evidence</code></td>
+                                                                <td>String</td>
                                                                 <td>Classification of expression evidence based on the direction and consistency of miRNA dysregulation across independent ASD studies included in <em>miR4ASD</em>.</td>
-                                                                <td>
-                                                                    <ul class="mb-0 ps-3">
-                                                                        <li class="mb-1"><strong>Consistent upregulation:</strong> Reported in &ge;2 independent studies, with all studies showing increased expression of the miRNA.</li>
-                                                                        <li class="mb-1"><strong>Consistent downregulation:</strong> Reported in &ge;2 independent studies, with all studies showing decreased expression of the miRNA.</li>
-                                                                        <li class="mb-1"><strong>Conflicting evidence:</strong> Reported in &ge;2 independent studies, with opposing directions of differential expression (both increased and decreased expression of the miRNA).</li>
-                                                                        <li><strong>Single-study evidence:</strong> Only one study reported altered miRNA expression in individuals with ASD, with no independent replication among the studies included in the database.</li>
-                                                                    </ul>
-                                                                </td>
+                                                                <td><ul><li class="mb-1"><strong>Consistent upregulation:</strong> Reported in &ge;2 independent studies, with all studies showing increased expression of the miRNA.</li><li class="mb-1"><strong>Consistent downregulation:</strong> Reported in &ge;2 independent studies, with all studies showing decreased expression of the miRNA.</li><li class="mb-1"><strong>Conflicting evidence:</strong> Reported in &ge;2 independent studies, with opposing directions of differential expression (both increased and decreased expression of the miRNA).</li><li><strong>Single-study evidence:</strong> Only one study reported altered miRNA expression in individuals with ASD, with no independent replication among the studies included in the database.</li></ul></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Evidence from other studies</strong></td>
+                                                                <td><code>evidence_from_other_studies</code></td>
+                                                                <td>String</td>
                                                                 <td>Additional evidence linking the miRNA to ASD from bioinformatics or genetic studies.</td>
-                                                                <td>
-                                                                    <ul class="mb-0 ps-3">
-                                                                        <li class="mb-1"><strong>Bioinformatics:</strong> Evidence from bioinformatics studies.</li>
-                                                                        <li class="mb-1"><strong>Genetics: SNP:</strong> Evidence from genetic association studies evaluating SNPs associated with ASD.</li>
-                                                                        <li class="mb-1"><strong>Genetics: SNV:</strong> Evidence from sequencing studies (WES or WGS) reporting SNVs involving miRNA genes.</li>
-                                                                        <li><strong>Genetics: CNV</strong> Evidence from genetic studies reporting CNVs involving miRNA genes.</li>
-                                                                    </ul>
-                                                                <td>
+                                                                <td><ul><li class="mb-1"><strong>Bioinformatics:</strong> Evidence from bioinformatics studies.</li><li class="mb-1"><strong>Genetics: SNP:</strong> Evidence from genetic association studies evaluating SNPs associated with ASD.</li><li class="mb-1"><strong>Genetics: SNV:</strong> Evidence from sequencing studies (WES or WGS) reporting SNVs involving miRNA genes.</li><li><strong>Genetics: CNV:</strong> Evidence from genetic studies reporting CNVs involving miRNA genes.</li></ul></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong># up</strong></td>
+                                                                <td><code>upregulation_studies</code></td>
+                                                                <td>Integer</td>
                                                                 <td>Number of independent peer-reviewed studies reporting upregulation of the miRNA in individuals with ASD compared with controls.</td>
-                                                                <td>Positive integer (&ge;1)</td>
+                                                                <td>Non-negative integers (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3+</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong># down</strong></td>
+                                                                <td><code>downregulation_studies</code></td>
+                                                                <td>Integer</td>
                                                                 <td>Number of independent peer-reviewed studies reporting downregulation of the miRNA in individuals with ASD compared with controls.</td>
-                                                                <td>Positive integer (&ge;1)</td>
+                                                                <td>Non-negative integers (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3+</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Total studies</strong></td>
-                                                                <td>Sum of all independent expression studies evaluating this miRNA in ASD.</td>
-                                                                <td>Positive integer (&ge;1)</td>
+                                                                <td><code>total_studies</code></td>
+                                                                <td>Integer</td>
+                                                                <td>Total number of independent ASD expression studies evaluating the miRNA.</td>
+                                                                <td>Positive integer (&ge;1).</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>StudyDetails</strong></td>
+                                                                <td><code>StudyDetails</code></td>
+                                                                <td>Array of Objects</td>
+                                                                <td>Nested array of study-level metadata records (revealed by clicking the row expander).</td>
+                                                                <td>See Section 3 (Nested Study Details Metadata).</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -1226,8 +1235,7 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Accordion Item 2: Genetic Studies -->
+                                    <!-- Accordion Item: 2. Genetic & Other Studies -->
                                     <div class="accordion-item border rounded mb-3 overflow-hidden">
                                         <h3 class="accordion-header" id="headingGen">
                                             <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGen" aria-expanded="false" aria-controls="collapseGen" style="background-color: #F8FAFC; color: var(--primary-color);">
@@ -1240,69 +1248,72 @@
                                                     This section provides information on human miRNAs implicated in Autism Spectrum Disorder (ASD), based on evidence from genetic and bioinformatics studies.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0"
-                                                        style="font-size: 0.9rem;">
+                                                    <table class="table table-sm table-bordered align-middle mb-0">
                                                         <thead class="table-light">
                                                             <tr>
-                                                                <th style="width: 25%;">Column name</th>
-                                                                <th style="width: 35%;">Definition & Purpose</th>
-                                                                <th style="width: 40%;">Allowed Values & Formats</th>
+                                                                <th>Column Header</th>
+                                                                <th>JSON Key</th>
+                                                                <th>Data Type</th>
+                                                                <th>Description</th>
+                                                                <th>Allowed / Categorical Values</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             <tr>
                                                                 <td><strong>Precursor miRNA (hairpin)</strong></td>
-                                                                <td>Name of the stem-loop precursor miRNA (hairpin), according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.</td>
-                                                                <td>e.g. <code>hsa-mir-34a</code>, <code>hsa-mir-106b</code>, <code>hsa-mir-211</code></td>
+                                                                <td><code>precursor_mirna</code></td>
+                                                                <td>String (HTML Link)</td>
+                                                                <td>Official precursor stem-loop RNA name (links to miRBase).</td>
+                                                                <td>Standardized to miRBase v22.1.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Mature miRNA</strong></td>
-                                                                <td>Name of the functional, single-stranded mature miRNA derived from a precursor miRNA, according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.</td>
-                                                                <td>e.g. <code>hsa-miR-34a-5p</code>, <code>miR-106b-5p</code>, <code>hsa-miR-211-5p</code></td>
+                                                                <td><code>mature_mirna</code></td>
+                                                                <td>String (HTML Link)</td>
+                                                                <td>Mature functional miRNA identifier (links to miRBase).</td>
+                                                                <td>Standardized to miRBase v22.1.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Study Type</strong></td>
+                                                                <td><code>study_type</code></td>
+                                                                <td>String</td>
                                                                 <td>Classification of studies according to the type of evidence supporting the association between the miRNA and ASD.</td>
-                                                                <td>
-                                                                    <ul class="mb-0 ps-3">
-                                                                        <li class="mb-1"><strong>Genetics:</strong> Studies in which genetic variants involving miRNA genes were analyzed in individuals with ASD.</li>
-                                                                        <li><strong>Bioinformatics:</strong> Studies in which computational approaches were used to identify, prioritize, or classify ASD-associated miRNAs based on expression data, without reporting conventional differential expression analyses.</li>
-                                                                    </ul>                                                                    
-                                                                </td>
+                                                                <td><ul><li class="mb-1"><strong>Genetics:</strong> Studies in which genetic variants involving miRNA genes were analyzed in individuals with ASD.</li><li><strong>Bioinformatics:</strong> Studies in which computational approaches were used to identify, prioritize, or classify ASD-associated miRNAs based on expression data, without reporting conventional differential expression analyses.</li></ul></td>
                                                             </tr>
-                                                            <tr>                                                            
+                                                            <tr>
                                                                 <td><strong>Variant Type</strong></td>
+                                                                <td><code>variant_type</code></td>
+                                                                <td>String</td>
                                                                 <td>Type of genetic variation reported within miRNA genes in individuals with ASD.</td>
-                                                                <td>
-                                                                    <ul class="mb-0 ps-3">
-                                                                        <li class="mb-1"><strong>CNV:</strong> Copy Number Variant involving the miRNA gene, including genomic deletions and duplications.</li>
-                                                                        <li class="mb-1"><strong>SNV:</strong> Single Nucleotide Variant identified through sequencing-based studies (e.g. Whole Exome Sequencing, Whole Genome Sequencing).</li>
-                                                                        <li><strong>SNP:</strong> Single Nucleotide Polymorphism identified in genetic association studies.</li>
-                                                                    </ul>
-                                                                </td>
+                                                                <td><ul><li class="mb-1"><strong>CNV:</strong> Copy Number Variant involving the miRNA gene, including genomic deletions and duplications.</li><li class="mb-1"><strong>SNV:</strong> Single Nucleotide Variant identified through sequencing-based studies (e.g. Whole Exome Sequencing, Whole Genome Sequencing).</li><li><strong>SNP:</strong> Single Nucleotide Polymorphism identified in genetic association studies.</li></ul></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Evidence from expression studies</strong></td>
+                                                                <td><code>evidence_from_expression_studies</code></td>
+                                                                <td>String</td>
                                                                 <td>Classification of expression evidence based on the direction and consistency of miRNA dysregulation across independent ASD studies included in <em>miR4ASD</em>.</td>
-                                                                <td>
-                                                                    <ul class="mb-0 ps-3">
-                                                                        <li class="mb-1"><strong>Consistent upregulation:</strong> Reported in &ge;2 independent studies, with all studies showing increased expression of the miRNA.</li>
-                                                                        <li class="mb-1"><strong>Consistent downregulation:</strong> Reported in &ge;2 independent studies, with all studies showing decreased expression of the miRNA.</li>
-                                                                        <li class="mb-1"><strong>Conflicting evidence:</strong> Reported in &ge;2 independent studies, with opposing directions of differential expression (both increased and decreased expression of the miRNA).</li>
-                                                                        <li class="mb-1"><strong>Single-study evidence:</strong> Only one study reported altered miRNA expression in individuals with ASD, with no independent replication among the studies included in the database.</li>
-                                                                        <li><strong>None:</strong> No expression evidence is reported in the studies included in the database.</li>
-                                                                    </ul>
-                                                                </td>
+                                                                <td><ul><li class="mb-1"><strong>Consistent upregulation:</strong> Reported in &ge;2 independent studies, with all studies showing increased expression of the miRNA.</li><li class="mb-1"><strong>Consistent downregulation:</strong> Reported in &ge;2 independent studies, with all studies showing decreased expression of the miRNA.</li><li class="mb-1"><strong>Conflicting evidence:</strong> Reported in &ge;2 independent studies, with opposing directions of differential expression (both increased and decreased expression of the miRNA).</li><li class="mb-1"><strong>Single-study evidence:</strong> Only one study reported altered miRNA expression in individuals with ASD, with no independent replication among the studies included in the database.</li><li><strong>None:</strong> No expression evidence is reported in the studies included in the database.</li></ul></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Total expression studies</strong></td>
+                                                                <td><code>total_expression_studies</code></td>
+                                                                <td>Integer</td>
                                                                 <td>Number of independent ASD expression studies included in the database reporting differential expression of the miRNA.</td>
-                                                                <td>Positive integer (&ge;1)</td>
+                                                                <td>Non-negative integer (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Description of expression evidence</strong></td>
+                                                                <td><code>description_of_expression_evidence</code></td>
+                                                                <td>String</td>
                                                                 <td>Detailed description of the expression evidence, including the direction of differential expression, number of independent studies, sample types analyzed, and mature miRNA-specific findings (e.g., -5p and -3p).</td>
                                                                 <td>Free text describing the available expression evidence, including mature miRNA-specific findings when applicable; no predefined categorical values.</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>StudyDetails</strong></td>
+                                                                <td><code>StudyDetails</code></td>
+                                                                <td>Array of Objects</td>
+                                                                <td>Nested array of study-level metadata records.</td>
+                                                                <td>See Section 3 (Nested Study Details Metadata).</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -1310,8 +1321,7 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Accordion Item 3: Nested Study Details -->
+                                    <!-- Accordion Item: 3. Study Metadata -->
                                     <div class="accordion-item border rounded mb-3 overflow-hidden">
                                         <h3 class="accordion-header" id="headingDet">
                                             <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDet" aria-expanded="false" aria-controls="collapseDet" style="background-color: #F8FAFC; color: var(--primary-color);">
@@ -1324,60 +1334,86 @@
                                                     This section provides detailed information from the original studies included in <em>miR4ASD</em>.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0"
-                                                        style="font-size: 0.9rem;">
+                                                    <table class="table table-sm table-bordered align-middle mb-0">
                                                         <thead class="table-light">
                                                             <tr>
-                                                                <th style="width: 25%;">Column name</th>
-                                                                <th style="width: 35%;">Definition & Purpose</th>
-                                                                <th style="width: 40%;">Allowed Values & Formats</th>
+                                                                <th>Field Name</th>
+                                                                <th>JSON Key</th>
+                                                                <th>Data Type</th>
+                                                                <th>Description</th>
+                                                                <th>Examples</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             <tr>
                                                                 <td><strong>Study</strong></td>
-                                                                <td>Short citation identifier linking to primary publication.</td>
+                                                                <td><code>Study</code></td>
+                                                                <td>String</td>
+                                                                <td>Short reference citation identifier (Author and Year).</td>
                                                                 <td><code>Seno (2011)</code>, <code>Vasu (2014)</code>, <code>Mundalil (2014)</code></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Description / Title</strong></td>
-                                                                <td>Full peer-reviewed publication title and methodological summary.</td>
-                                                                <td>e.g. <em>Serum microRNA expression in children with autism spectrum disorder</em></td>
+                                                                <td><strong>Description</strong></td>
+                                                                <td><code>Description</code></td>
+                                                                <td>String</td>
+                                                                <td>Full title of the published article or experimental methodology.</td>
+                                                                <td><code>Gene Expression Profiling of microRNAs in Autism Spectrum Disorder...</code></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Sample Type</strong> <span class="text-muted" style="font-size: 0.8rem;">(Tissue Type)</span></td>
-                                                                <td>Primary biological tissue or specimen analyzed in expression studies (standardized to "Sample Type" in dataset v15.09.2026).</td>
-                                                                <td><code>Brain</code>, <code>Blood</code>, <code>Saliva</code>, <code>Serum</code>, <code>LCLs</code></td>
+                                                                <td><strong>DOI</strong></td>
+                                                                <td><code>DOI</code></td>
+                                                                <td>String (URL)</td>
+                                                                <td>Digital Object Identifier URL for direct publication access.</td>
+                                                                <td><code>https://doi.org/10.1016/j.gene.2011.06.017</code></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Sample Subtype</strong> <span class="text-muted" style="font-size: 0.8rem;">(Tissue Subtype)</span></td>
-                                                                <td>Specific anatomical brain subregion or refined cellular fraction.</td>
-                                                                <td><code>Cerebellum</code>, <code>Frontal cortex</code>, <code>PBMCs</code>, <code>Vermis</code></td>
+                                                                <td><strong>Sample Type (Tissue Type)</strong></td>
+                                                                <td><code>Sample type</code> / <code>Tissue type</code></td>
+                                                                <td>String</td>
+                                                                <td>Primary biological specimen or tissue analyzed (standardized as "Sample type" in v15.09.2026; mapped to both keys in JSON).</td>
+                                                                <td><code>Brain</code>, <code>Blood</code>, <code>Saliva</code>, <code>LCLs</code></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Sample Subtype (Tissue Subtype)</strong></td>
+                                                                <td><code>Sample subtype</code> / <code>Tissue - subtype</code></td>
+                                                                <td>String</td>
+                                                                <td>Specific anatomical brain subregion or refined cellular fraction (standardized as "Sample subtype" in v15.09.2026; mapped to both keys in JSON).</td>
+                                                                <td><code>Cerebellum</code>, <code>Frontal Cortex</code>, <code>Peripheral Mononuclear Cells</code>, <code>Whole Blood</code>, <code>Plasma</code></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Methodology</strong></td>
-                                                                <td>Experimental platform or molecular technique used for profiling or quantification.</td>
-                                                                <td><code>RT-qPCR</code>, <code>Small RNA-seq</code>, <code>miRNA microarray</code>, <code>WES</code>, <code>WGS</code>, <code>SNP array</code>, <code>SNP array and WES</code>, <code>aCGH</code></td>
+                                                                <td><code>Methodology</code></td>
+                                                                <td>String</td>
+                                                                <td>Experimental platform or molecular assay used for profiling or quantification. Includes multi-assay platforms.</td>
+                                                                <td><code>RT-qPCR</code>, <code>Small RNA-seq</code>, <code>miRNA microarray</code>, <code>WES</code>, <code>WGS</code>, <code>SNP array</code>, <code>SNP array and WES</code>, <code>miRNA microarray and RT-qPCR</code>, <code>aCGH</code></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Diagnostic Tools</strong></td>
-                                                                <td>Clinical diagnostic criteria or behavioral instruments used to characterize the ASD cohort.</td>
-                                                                <td><code>DSM-5</code>, <code>ADOS</code>, <code>ADI-R</code>, <code>CARS</code>, <code>DSM-IV-TR</code>, <code>GARS</code>, <code>ABC</code></td>
+                                                                <td><strong>Diagnostic tools</strong></td>
+                                                                <td><code>Diagnostic tools</code></td>
+                                                                <td>String</td>
+                                                                <td>Diagnostic criteria or clinical behavioral instruments used for cohort diagnosis.</td>
+                                                                <td><code>DSM-5</code>, <code>ADOS</code>, <code>ADI-R</code>, <code>CARS</code>, <code>DSM-IV-TR</code>, <code>GARS</code>, <code>ABC</code>, <code>SRS</code></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>ASD Samples</strong></td>
-                                                                <td>Exact count of participants in the autism spectrum disorder cohort. When a study evaluated multiple independent cohorts (e.g. discovery vs. replication stages or different tissues), cohorts are separated by semicolons (<code>;</code>) and rendered as distinct badges/pills in the UI.</td>
-                                                                <td><code>ASD N = 12</code><br><code>Microarray ASD N = 5; RT-qPCR ASD N = 15</code></td>
+                                                                <td><code>ASD samples</code></td>
+                                                                <td>Integer / String</td>
+                                                                <td>Number of ASD subjects in the experimental cohort. In multi-cohort studies (e.g. discovery vs. replication cohorts, or distinct tissues), values are separated by semicolons (<code>;</code>) and rendered as distinct badges/pills in the UI.</td>
+                                                                <td><code>ASD N = 12</code>, <code>Microarray ASD N = 5; RT-qPCR ASD N = 15</code>, <code>Training set ASD N = 188; Test set ASD N = 50</code>, <code>GWAS ASD N = 7387; meta-analysis replication set 1 ASD N = 7783; meta-analysis replication set 2 ASD N = 1369</code></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Control Samples</strong></td>
-                                                                <td>Exact count of neurotypical participants in the control comparison cohort. Multiple cohorts separated by semicolons (<code>;</code>) are rendered as distinct badges/pills in the UI.</td>
-                                                                <td><code>Control N = 12</code><br><code>Microarray control N = 5; RT-qPCR control N = 15</code></td>
+                                                                <td><code>Control samples</code></td>
+                                                                <td>Integer / String</td>
+                                                                <td>Number of neurotypical control subjects in the comparison cohort. In multi-cohort studies, values are separated by semicolons (<code>;</code>) and rendered as distinct badges/pills in the UI.</td>
+                                                                <td><code>Control N = 12</code>, <code>Microarray control N = 5; RT-qPCR control N = 15</code>, <code>Training set control N = 113; Test set control N = 21</code></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Country / Pop.</strong></td>
-                                                                <td>Geographical and ancestral origin of the analyzed cohort.</td>
-                                                                <td><code>USA</code>, <code>Brazil</code>, <code>China</code>, <code>Italy</code>, <code>Japan</code>, etc.</td>
+                                                                <td><strong>Country</strong></td>
+                                                                <td><code>Country</code></td>
+                                                                <td>String</td>
+                                                                <td>Country of origin of the study cohort.</td>
+                                                                <td><code>USA</code>, <code>Brazil</code>, <code>China</code>, <code>Italy</code>, <code>Japan</code></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -1385,8 +1421,7 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Accordion Item 4: Validated Target Genes -->
+                                    <!-- Accordion Item: 4. Target Genes -->
                                     <div class="accordion-item border rounded mb-3 overflow-hidden">
                                         <h3 class="accordion-header" id="headingTar">
                                             <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTar" aria-expanded="false" aria-controls="collapseTar" style="background-color: #F8FAFC; color: var(--primary-color);">
@@ -1399,84 +1434,87 @@
                                                     This section contains information on experimentally validated target genes of ASD-associated miRNAs, retrieved from <strong>miRTarBase</strong> version 10.0. It provides miRNA-target gene interactions and their supporting experimental evidence, enabling users to explore potential regulatory relationships between ASD-associated miRNAs and their target genes.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0"
-                                                        style="font-size: 0.9rem;">
+                                                    <table class="table table-sm table-bordered align-middle mb-0">
                                                         <thead class="table-light">
                                                             <tr>
-                                                                <th style="width: 25%;">Column name</th>
-                                                                <th style="width: 35%;">Definition & Purpose</th>
-                                                                <th style="width: 40%;">Allowed Values & Formats</th>
+                                                                <th>Column Header</th>
+                                                                <th>JSON Key</th>
+                                                                <th>Data Type</th>
+                                                                <th>Description</th>
+                                                                <th>Allowed / Categorical Values</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             <tr>
                                                                 <td><strong>Precursor miRNA</strong></td>
-                                                                <td>Corresponding genomic stem-loop hairpins encoding the targeting mature miRNA.</td>
-                                                                <td>Semicolon-separated miRBase precursor IDs.</td>
+                                                                <td><code>precursor_mirna</code></td>
+                                                                <td>String (Semicolon-delimited)</td>
+                                                                <td>Genomic precursor hairpin(s) generating this mature miRNA (links to miRBase).</td>
+                                                                <td>Semicolon-separated list of hairpins (e.g. <code>hsa-let-7a-1; hsa-let-7a-2</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Mature miRNA</strong></td>
-                                                                <td>Mature microRNA guiding target mRNA recognition (links to miRBase).</td>
+                                                                <td><code>mature_mirna</code></td>
+                                                                <td>String (HTML Link)</td>
+                                                                <td>Mature microRNA targeting the gene (links to miRBase).</td>
                                                                 <td>Standardized to miRBase v22.1.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Target Gene</strong></td>
-                                                                <td>Official HGNC Gene Symbol of the validated mRNA target (links to GeneCards).</td>
-                                                                <td>e.g. <code>PTEN</code>, <code>SHANK3</code>, <code>MECP2</code>, <code>CHD8</code>, <code>AGO1</code>, <code>AGO4</code></td>
+                                                                <td><code>gene_symbol</code></td>
+                                                                <td>String (HTML Link)</td>
+                                                                <td>Official HGNC gene symbol (links to GeneCards).</td>
+                                                                <td>Standardized gene symbol (e.g. <code>PTEN</code>, <code>SHANK3</code>, <code>MECP2</code>, <code>AGO1</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Gene Description</strong></td>
+                                                                <td><code>gene_name</code></td>
+                                                                <td>String</td>
                                                                 <td>Full descriptive name of the target protein-coding gene.</td>
-                                                                <td>e.g. <em>phosphatase and tensin homolog</em>, <em>SH3 and multiple ankyrin repeat domains 3</em></td>
+                                                                <td>Descriptive text (e.g. <code>phosphatase and tensin homolog</code>, <code>SH3 and multiple ankyrin repeat domains 3</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>ASD Susceptibility (SFARI)</strong></td>
-                                                                <td>Curated autism risk score from the SFARI Gene database (Simons Foundation).</td>
-                                                                <td>
-                                                                    <ul class="mb-0 ps-3">
-                                                                        <li><span class="badge bg-danger-subtle text-danger border rounded-pill"><span class="sfari-tag sfari-tag-cat1 me-1">1</span>SFARI Cat 1 (High Confidence):</span> Rigorously validated risk genes with &ge;3 <em>de novo</em> likely gene-disrupting mutations in ASD.</li>
-                                                                        <li><span class="badge border rounded-pill" style="background-color: #fef3c7; color: #92400e;"><span class="sfari-tag sfari-tag-cat2 me-1">2</span>SFARI Cat 2 (Strong Candidate):</span> Genes with 2 <em>de novo</em> LGD mutations or genome-wide significance.</li>
-                                                                        <li><span class="badge bg-info-subtle text-info border rounded-pill"><span class="sfari-tag sfari-tag-cat3 me-1">3</span>SFARI Cat 3 (Suggestive):</span> Genes with suggestive single-study evidence.</li>
-                                                                        <li><span class="badge border rounded-pill" style="background-color: #f3e9ff; color: #6b21a5;"><span class="sfari-tag sfari-tag-syn me-1">S</span>SFARI Syndromic:</span> Genes associated with established ASD-penetrant genetic syndromes.</li>
-                                                                        <li><span class="badge border rounded-pill" style="background-color: #f8fafc; color: #334155; border-color: #cbd5e1;"><span class="sfari-tag-group me-1"><span class="sfari-tag sfari-tag-cat2">2</span><span class="sfari-tag sfari-tag-syn">S</span></span>Dual Status:</span> Genes classified with both a numeric risk tier and syndromic predisposition (e.g., <code>PTEN</code>).</li>
-                                                                        <li><span class="badge bg-light text-secondary border rounded-pill">Other:</span> Validated target genes not currently cataloged in SFARI.</li>
-                                                                    </ul>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Database Source</strong></td>
-                                                                <td>Curated database source for experimentally validated target interactions. In this version, all interactions are derived exclusively from miRTarBase 10.0 (DIANA-TarBase is no longer used).</td>
-                                                                <td><span class="badge bg-success-subtle text-success border px-2 py-1 rounded-pill"><i class="fa-solid fa-database me-1"></i>miRTarBase 10.0</span></td>
+                                                                <td><code>sfari_score</code></td>
+                                                                <td>String</td>
+                                                                <td>Curated autism risk tier from the SFARI Gene database.</td>
+                                                                <td><ul><li><code>Category 1</code>: <strong>High Confidence</strong> risk genes (supported by rigorous statistical significance, typically ≥3 de novo likely gene-disrupting mutations in ASD cases).</li><li><code>Category 2</code>: <strong>Strong Candidate</strong> genes (supported by 2 de novo LGD mutations or genome-wide significance).</li><li><code>Category 3</code>: <strong>Suggestive Evidence</strong> genes (supported by suggestive single-study findings).</li><li><code>Syndromic</code>: Genes associated with established genetic syndromes exhibiting high ASD penetrance (e.g. <em>Rett syndrome, Fragile X, Tuberous Sclerosis</em>).</li><li><code>Non-SFARI</code>: Target genes not currently cataloged as primary ASD risk candidates in SFARI.</li></ul></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Support Type</strong></td>
+                                                                <td><code>support_type</code></td>
+                                                                <td>String</td>
                                                                 <td>Experimental support classification of the miRNA-target interaction from miRTarBase 10.0.</td>
-                                                                <td>
-                                                                    <ul class="mb-0 ps-3">
-                                                                        <li><span class="badge bg-success-subtle text-success border rounded-pill">Functional MTI:</span> Supported by at least one functional microRNA-target interaction (Luciferase Reporter, Western Blot, qPCR, Northern Blot, ELISA, etc.).</li>
-                                                                        <li><span class="badge bg-secondary-subtle text-secondary border rounded-pill">Weak Support:</span> Supported only by weak-evidence functional interactions.</li>
-                                                                    </ul>
-                                                                </td>
+                                                                <td><ul><li><code>Functional MTI</code>: Backed by at least one functional microRNA-target interaction (Luciferase Reporter, Western Blot, qPCR, Northern Blot, ELISA, etc.).</li><li><code>Weak Support</code>: Backed only by weak-evidence functional interactions.</li></ul></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>PubMed Reference</strong></td>
-                                                                <td>PubMed Identifiers (PMIDs) linking directly to the primary research articles.</td>
-                                                                <td>Clickable PMID badges (e.g. <code>24312487</code>, <code>20144220</code>).</td>
+                                                                <td><strong>Database Source</strong></td>
+                                                                <td><code>database_source</code></td>
+                                                                <td>String</td>
+                                                                <td>Curated database origin establishing experimental validation.</td>
+                                                                <td><code>miRTarBase 10.0</code> (Sole validated target interaction source in this version; DIANA-TarBase is no longer used).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Experiments</strong></td>
-                                                                <td>Exact laboratory techniques used to confirm the miRNA-target interaction.</td>
-                                                                <td>Semicolon-separated methods (e.g. <code>Luciferase reporter assay</code>, <code>Western blot</code>, <code>HITS-CLIP</code>, <code>RT-qPCR</code>).</td>
+                                                                <td><code>experimental_methods</code></td>
+                                                                <td>String (Semicolon-delimited)</td>
+                                                                <td>Exact laboratory techniques used to validate the miRNA-target interaction.</td>
+                                                                <td>Semicolon-delimited list (e.g. <code>Luciferase reporter assay; Western blot; HITS-CLIP</code>).</td>
                                                             </tr>
-
+                                                            <tr>
+                                                                <td><strong>PubMed Reference</strong></td>
+                                                                <td><code>pmids</code></td>
+                                                                <td>String (Semicolon-delimited)</td>
+                                                                <td>PubMed Identifiers (PMIDs) of primary research publications (links to PubMed).</td>
+                                                                <td>Semicolon-separated numerical PMIDs (e.g. <code>24312487; 20144220</code>).</td>
+                                                            </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- 5. Functional Enrichment Accordion Item -->
+                                    <!-- Accordion Item: 5. Functional Enrichment Analysis -->
                                     <div class="accordion-item border rounded mb-3 overflow-hidden">
                                         <h3 class="accordion-header" id="headingEnrich">
                                             <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEnrich" aria-expanded="false" aria-controls="collapseEnrich" style="background-color: #F8FAFC; color: var(--primary-color);">
@@ -1489,63 +1527,72 @@
                                                     This section allows users to perform functional enrichment analyses by selecting ASD-associated miRNAs and/or their target genes. Gene Ontology (GO) and pathway enrichment analyses are executed through the <strong>g:Profiler</strong> REST API, and the results are displayed on the <em>miR4ASD</em> website, highlighting enriched biological processes and pathways associated with the selected target genes.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0"
-                                                        style="font-size: 0.9rem;">
+                                                    <table class="table table-sm table-bordered align-middle mb-0">
                                                         <thead class="table-light">
                                                             <tr>
-                                                                <th style="width: 25%;">Column name</th>
-                                                                <th style="width: 35%;">Definition & Purpose</th>
-                                                                <th style="width: 40%;">Allowed Values & Formats</th>
+                                                                <th>Field / Metric</th>
+                                                                <th>Source / Engine</th>
+                                                                <th>Data Type</th>
+                                                                <th>Description</th>
+                                                                <th>Interpretation / Values</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             <tr>
                                                                 <td><strong>Source</strong></td>
-                                                                <td>Curated biological pathway or gene ontology database queried.</td>
-                                                                <td>
-                                                                    <span class="badge badge-source badge-gobp me-1">GO:BP</span> Biological Process<br>
-                                                                    <span class="badge badge-source badge-gomf me-1">GO:MF</span> Molecular Function<br>
-                                                                    <span class="badge badge-source badge-gocc me-1">GO:CC</span> Cellular Component<br>
-                                                                    <span class="badge badge-source badge-kegg me-1">KEGG</span> Biological Pathways<br>
-                                                                    <span class="badge badge-source badge-reac me-1">REAC</span> Reactome Pathways<br>
-                                                                    <span class="badge badge-source badge-hp me-1">HP</span> Human Phenotype Ontology<br>
-                                                                    <span class="badge badge-source badge-wp me-1">WP</span> WikiPathways
-                                                                </td>
+                                                                <td>g:Profiler</td>
+                                                                <td>String (Badge)</td>
+                                                                <td>Ontology or biological pathway database origin of the enriched term.</td>
+                                                                <td><ul><li><code>GO:BP</code>: Gene Ontology Biological Process</li><li><code>GO:MF</code>: Gene Ontology Molecular Function</li><li><code>GO:CC</code>: Gene Ontology Cellular Component</li><li><code>KEGG</code>: KEGG Pathway Database</li><li><code>REAC</code>: Reactome Pathway Database</li><li><code>HP</code>: Human Phenotype Ontology</li><li><code>WP</code>: WikiPathways</li></ul></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Term ID</strong></td>
-                                                                <td>Official ontology or pathway database identifier hyperlinking to the external source repository.</td>
-                                                                <td>e.g. <code>GO:0007268</code>, <code>KEGG:04724</code>, <code>REAC:R-HSA-112316</code>, <code>HP:0000729</code></td>
+                                                                <td>g:Profiler</td>
+                                                                <td>String (Link)</td>
+                                                                <td>Native identifier of the enriched functional term or pathway (links to official source).</td>
+                                                                <td>Standard ontology ID (e.g. <code>GO:0007268</code>, <code>KEGG:04724</code>, <code>REAC:R-HSA-112316</code>, <code>HP:0000729</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Term Name</strong></td>
-                                                                <td>Human-readable biological process, functional cascade, or clinical phenotype description.</td>
-                                                                <td>e.g. <em>chemical synaptic transmission</em>, <em>Glutamatergic synapse</em>, <em>Autistic behavior</em></td>
+                                                                <td>g:Profiler</td>
+                                                                <td>String</td>
+                                                                <td>Human-readable name/description of the biological process, pathway, or phenotype.</td>
+                                                                <td>Descriptive pathway name (e.g. <em>chemical synaptic transmission</em>, <em>glutamatergic synapse</em>, <em>Autistic behavior</em>).</td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Adjusted P-Value</strong></td>
-                                                                <td>Corrected statistical significance value for hypergeometric overrepresentation.</td>
-                                                                <td>Corrected via <code>g:SCS</code> (default), <code>Benjamini-Hochberg FDR</code>, or <code>Bonferroni</code> ($p_{\text{adj}} < 0.05$).</td>
+                                                                <td><strong>Adjusted P-Value ($p_{\text{adj}}$)</strong></td>
+                                                                <td>g:Profiler</td>
+                                                                <td>Float (Scientific)</td>
+                                                                <td>Corrected hypergeometric overrepresentation significance value.</td>
+                                                                <td>Default significance threshold $p_{\text{adj}} < 0.05$. Corrected via <code>g:SCS</code> (recommended for GO DAGs), Benjamini-Hochberg FDR, or Bonferroni.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Overlap (k/N)</strong></td>
-                                                                <td>Ratio of user submitted target genes in term ($k$) relative to total submitted query size ($N$).</td>
-                                                                <td>e.g. <code>25 / 120</code> target genes intersecting the enriched term.</td>
+                                                                <td>g:Profiler</td>
+                                                                <td>String / Ratio</td>
+                                                                <td>Ratio of submitted target genes present in the term ($k$) relative to total input query size ($N$).</td>
+                                                                <td>E.g. <code>25 / 120</code> target genes present in the specified pathway.</td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Term Size</strong></td>
-                                                                <td>Total number of annotated human protein-coding genes belonging to this functional term.</td>
-                                                                <td>Positive integer (e.g. <code>210</code>, <code>450</code>, <code>1,280</code>).</td>
+                                                                <td><strong>Term Size ($|T|$)</strong></td>
+                                                                <td>g:Profiler</td>
+                                                                <td>Integer</td>
+                                                                <td>Total number of annotated human protein-coding genes belonging to the ontology term.</td>
+                                                                <td>Domain-wide gene count (e.g. <code>540</code> annotated genes).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Intersecting Target Genes</strong></td>
-                                                                <td>List of user query target genes found in the term with clickable GeneCards links and SFARI autism risk confidence tiers.</td>
-                                                                <td>Clickable GeneCards links with symbol tokens (<span class="sfari-tag sfari-tag-cat1">1</span> Cat 1, <span class="sfari-tag sfari-tag-cat2">2</span> Cat 2, <span class="sfari-tag sfari-tag-cat3">3</span> Cat 3, <span class="sfari-tag sfari-tag-syn">S</span> Syndromic, <span class="sfari-tag-group"><span class="sfari-tag sfari-tag-cat2">2</span><span class="sfari-tag sfari-tag-syn">S</span></span> Dual Status).</td>
+                                                                <td>miR4ASD + g:Profiler</td>
+                                                                <td>Array of Badges</td>
+                                                                <td>List of user's query target genes that overlap with the term, annotated with SFARI risk badges.</td>
+                                                                <td>Direct links to GeneCards with color-coded SFARI ASD-risk tags (Category 1, 2, 3, Syndromic).</td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Significance Score</strong> <span class="badge bg-light text-secondary border ms-1" style="font-size: 0.7rem;">Bar Chart Metric</span></td>
-                                                                <td>Ranking metric used in Top 15 enrichment visualization charts: $-\log_{10}(p_{\text{adj}})$.</td>
-                                                                <td>Higher values denote stronger statistical enrichment and lower false discovery rates.</td>
+                                                                <td><strong>Significance Score</strong></td>
+                                                                <td>miR4ASD Chart</td>
+                                                                <td>Float</td>
+                                                                <td>Scaled ranking metric computed as $-\log_{10}(p_{\text{adj}})$.</td>
+                                                                <td>Higher scores denote greater statistical overrepresentation.</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -3143,6 +3190,71 @@
                 });
         }
         loadStatistics();
+
+        // Dynamically load data dictionary specifications from data_dictionary.json (SST: docs/data_dictionary.md)
+        function renderDataDictionary(sections) {
+            if (!Array.isArray(sections) || sections.length === 0) return;
+            const accordion = document.getElementById('dictionaryAccordion');
+            if (!accordion) return;
+
+            const openIds = new Set();
+            accordion.querySelectorAll('.accordion-collapse.show').forEach(function (el) {
+                openIds.add(el.id);
+            });
+
+            let html = '';
+            sections.forEach(function (sec) {
+                const isOpen = openIds.has(sec.id);
+                const headersHtml = (sec.headers || []).map(function (h) {
+                    return '<th>' + h + '</th>';
+                }).join('');
+                const rowsHtml = (sec.rows || []).map(function (row) {
+                    const cellsHtml = row.map(function (cell) {
+                        return '<td>' + cell + '</td>';
+                    }).join('');
+                    return '<tr>' + cellsHtml + '</tr>';
+                }).join('');
+
+                html += '<div class="accordion-item border rounded mb-3 overflow-hidden">' +
+                    '<h3 class="accordion-header" id="' + sec.heading_id + '">' +
+                    '<button class="accordion-button fw-bold ' + (isOpen ? '' : 'collapsed') + '" type="button" data-bs-toggle="collapse" data-bs-target="#' + sec.id + '" aria-expanded="' + (isOpen ? 'true' : 'false') + '" aria-controls="' + sec.id + '" style="background-color: #F8FAFC; color: var(--primary-color);">' +
+                    '<i class="' + sec.icon + '"></i>' + sec.title +
+                    '</button>' +
+                    '</h3>' +
+                    '<div id="' + sec.id + '" class="accordion-collapse collapse ' + (isOpen ? 'show' : '') + '" aria-labelledby="' + sec.heading_id + '" data-bs-parent="#dictionaryAccordion">' +
+                    '<div class="accordion-body p-3">' +
+                    '<p class="mb-3">' + sec.description + '</p>' +
+                    '<div class="table-responsive">' +
+                    '<table class="table table-sm table-bordered align-middle mb-0">' +
+                    '<thead class="table-light"><tr>' + headersHtml + '</tr></thead>' +
+                    '<tbody>' + rowsHtml + '</tbody>' +
+                    '</table>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+            });
+
+            accordion.innerHTML = html;
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise();
+            }
+        }
+
+        function loadDataDictionary() {
+            fetch('data_dictionary.json?v=' + DB_VERSION)
+                .then(function (response) {
+                    if (!response.ok) throw new Error('HTTP ' + response.status);
+                    return response.json();
+                })
+                .then(function (sections) {
+                    renderDataDictionary(sections);
+                })
+                .catch(function (error) {
+                    console.warn('Could not load data_dictionary.json dynamically, using pre-rendered fallback:', error);
+                });
+        }
+        loadDataDictionary();
 
         // Re-typeset MathJax formulas on accordion and tab expansion (bound
         // unconditionally at ready; the stats fetch no longer gates this).

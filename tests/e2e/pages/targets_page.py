@@ -98,7 +98,6 @@ class TargetsPage(BasePage):
             self.page.locator(f"{self.FILTER_METHOD} input:checked").uncheck()
         self.page.wait_for_timeout(400)
 
-
     def reset_target_filters(self) -> None:
         """Click the per-tab 'Clear All' (targets scope) filter reset button."""
         sel = '#targets .btn-clear-all-chips[data-reset-scope="targets"]'

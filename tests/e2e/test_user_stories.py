@@ -379,8 +379,8 @@ def test_user_story_7_data_dictionary_and_visualizations(
     expected_spec_headers: List[List[str]] = [
         ["# up", "# down"],
         ["Study Type", "Variant Type", "Evidence from expression studies"],
-        ["ASD Susceptibility (SFARI)", "PubMed Reference"],
         ["Tissue Type", "Tissue Subtype", "ASD Samples", "Control Samples"],
+        ["ASD Susceptibility (SFARI)", "PubMed Reference"],
         ["Term ID", "Term Name", "Adjusted P-Value", "Overlap (k/N)", "Term Size"],
     ]
 

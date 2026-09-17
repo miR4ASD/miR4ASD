@@ -2,6 +2,7 @@ import csv
 import glob
 import json
 import os
+import re
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 import pandas as pd
@@ -707,6 +708,175 @@ def process_help_tables(
     return methods_records, diag_records
 
 
+def md_cell_to_html(cell: str) -> str:
+    """
+    Convert basic markdown formatting in table cells or paragraphs to HTML.
+
+    Parameters
+    ----------
+    cell : str
+        Input string with Markdown syntax.
+
+    Returns
+    -------
+    str
+        Processed string with HTML tags.
+    """
+    cell = re.sub(r"`([^`]+)`", r"<code>\1</code>", cell)
+    cell = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", cell)
+    cell = re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", r"<em>\1</em>", cell)
+    return cell.strip()
+
+
+def split_md_row(line: str) -> List[str]:
+    """
+    Split a markdown table row by unescaped pipe characters.
+
+    Parameters
+    ----------
+    line : str
+        A single line representing a markdown table row.
+
+    Returns
+    -------
+    List[str]
+        Cleaned cell contents with escaped pipes restored.
+    """
+    s = line.strip()
+    if s.startswith("|"):
+        s = s[1:]
+    if s.endswith("|"):
+        s = s[:-1]
+    raw_cells = [c.strip() for c in re.split(r"(?<!\\)\|", s)]
+    return [c.replace(r"\|", "|") for c in raw_cells]
+
+
+def process_data_dictionary(
+    md_path: str = "docs/data_dictionary.md",
+    output_dir: str = ".",
+) -> List[Dict[str, Any]]:
+    """
+    Parse docs/data_dictionary.md (Single Source of Truth) and generate data_dictionary.json.
+
+    Parameters
+    ----------
+    md_path : str
+        Path to the data dictionary markdown file.
+    output_dir : str
+        Directory to save data_dictionary.json.
+
+    Returns
+    -------
+    List[Dict[str, Any]]
+        List of parsed section dictionary objects.
+    """
+    if not os.path.exists(md_path):
+        if os.path.exists("data_dictionary.md"):
+            md_path = "data_dictionary.md"
+        else:
+            print(f"Warning: Data dictionary file '{md_path}' not found.")
+            return []
+
+    with open(md_path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    section_configs = [
+        {
+            "prefix": "1. Expression Studies",
+            "id": "collapseExpr",
+            "heading_id": "headingExpr",
+            "title": "1. Expression Studies",
+            "icon": "fa-solid fa-chart-column text-success me-2",
+        },
+        {
+            "prefix": "2. Genetic & Other Studies",
+            "id": "collapseGen",
+            "heading_id": "headingGen",
+            "title": "2. Genetic & Other Studies",
+            "icon": "fa-solid fa-dna text-info me-2",
+        },
+        {
+            "prefix": "3. Nested Study Details Metadata",
+            "id": "collapseDet",
+            "heading_id": "headingDet",
+            "title": "3. Study Metadata",
+            "icon": "fa-solid fa-list-check text-warning me-2",
+        },
+        {
+            "prefix": "4. Validated Target Genes",
+            "id": "collapseTar",
+            "heading_id": "headingTar",
+            "title": "4. Target Genes",
+            "icon": "fa-solid fa-bullseye text-primary me-2",
+        },
+        {
+            "prefix": "5. Functional Enrichment Analysis",
+            "id": "collapseEnrich",
+            "heading_id": "headingEnrich",
+            "title": "5. Functional Enrichment Analysis",
+            "icon": "fa-solid fa-dna text-primary me-2",
+        },
+    ]
+
+    sections_raw = re.split(r"\n##\s+", content)
+    parsed_sections: List[Dict[str, Any]] = []
+
+    for sec_cfg in section_configs:
+        matching_raw = None
+        for raw in sections_raw:
+            if raw.startswith(sec_cfg["prefix"]):
+                matching_raw = raw
+                break
+        if not matching_raw:
+            print(f"Warning: Section '{sec_cfg['prefix']}' not found in {md_path}.")
+            continue
+
+        lines = matching_raw.strip().split("\n")
+        desc_lines: List[str] = []
+        table_lines: List[str] = []
+        in_table = False
+
+        for line in lines[1:]:
+            s = line.strip()
+            if s.startswith("|"):
+                in_table = True
+                table_lines.append(s)
+            elif not in_table and s and not s.startswith("---"):
+                desc_lines.append(s)
+
+        description = md_cell_to_html(" ".join(desc_lines))
+
+        headers: List[str] = []
+        rows: List[List[str]] = []
+        if len(table_lines) >= 3:
+            raw_headers = split_md_row(table_lines[0])
+            headers = [md_cell_to_html(h) for h in raw_headers]
+            for row_line in table_lines[2:]:
+                raw_cells = split_md_row(row_line)
+                if not any(raw_cells):
+                    continue
+                cells = [md_cell_to_html(c) for c in raw_cells]
+                rows.append(cells)
+
+        parsed_sections.append(
+            {
+                "id": sec_cfg["id"],
+                "heading_id": sec_cfg["heading_id"],
+                "title": sec_cfg["title"],
+                "icon": sec_cfg["icon"],
+                "description": description,
+                "headers": headers,
+                "rows": rows,
+            }
+        )
+
+    out_path = os.path.join(output_dir, "data_dictionary.json")
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(parsed_sections, f, indent=2, ensure_ascii=False)
+
+    return parsed_sections
+
+
 def main(
     excel_path: str = "raw_data/Tabelas_miR4ASD(site)_15.09.2026.xlsx",
     gff_path: str = "hsa.gff3",
@@ -983,6 +1153,9 @@ def main(
     # Process and save help tables
     help_methods, help_diagnostics = process_help_tables(output_dir=output_dir)
 
+    # Process and save data dictionary from docs/data_dictionary.md (SST)
+    data_dict_sections = process_data_dictionary(output_dir=output_dir)
+
     print("Data processing complete. JSON files created.")
     print(f"Expression Studies count: {len(df_expression)}")
     print(f"Other Studies count: {len(df_other)}")
@@ -992,6 +1165,8 @@ def main(
         print(f"Help Methods count: {len(help_methods)}")
     if help_diagnostics:
         print(f"Help Diagnostic Tools count: {len(help_diagnostics)}")
+    if data_dict_sections:
+        print(f"Data Dictionary sections count: {len(data_dict_sections)}")
 
 
 if __name__ == "__main__":

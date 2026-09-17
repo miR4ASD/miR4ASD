@@ -30,51 +30,51 @@ The miR4ASD data dictionary is governed by a multi-tier hierarchy of authoritati
 
 ## 1. Expression Studies Table (`expression_studies.json`)
 
-Primary catalog of human microRNAs evaluated in case-control gene expression profiling studies of Autism Spectrum Disorder (ASD).
+This section provides information on human miRNAs identified in case-control expression studies of Autism Spectrum Disorder (ASD), including their expression patterns, sample types, and supporting evidence.
 
 | Column Header | JSON Key | Data Type | Description | Allowed / Categorical Values |
 | :--- | :--- | :--- | :--- | :--- |
 | **Precursor miRNA (hairpin)** | `precursor_mirna` | String (HTML Link) | Official miRBase stem-loop precursor RNA name (links to miRBase). | Standardized to miRBase v22.1 (e.g. `hsa-let-7a-1`, `hsa-mir-146a`). |
 | **Mature miRNA** | `mature_mirna` | String (HTML Link) | Fully processed, functional single-stranded mature miRNA identifier. | Standardized to miRBase v22.1 (e.g. `hsa-let-7a-5p`, `hsa-miR-146a-5p`). |
 | **Expression change (ASD vs. controls)** | `expression_change` | String | Reported direction of expression alteration in ASD patients compared to neurotypical controls. | <ul><li>`Upregulated`: Statistically significant increased expression in ASD cohort.</li><li>`Downregulated`: Statistically significant decreased expression in ASD cohort.</li></ul> |
-| **Sample Type** | `tissue` / `sample_type` | String (Semicolon-delimited) | Biological specimen or anatomical tissue source analyzed (standardized as "Sample Type" in dataset v15.09.2026; mapped to `tissue` and `sample_type` in JSON). | `Blood`, `Brain`, `LCLs` (Lymphoblastoid Cell Lines), `Saliva`, `Serum`, `Plasma`, `Post-mortem brain (Cerebellum, Cortex, Temporal cortex, Frontal cortex, Superior temporal gyrus, Vermis)`, `Dental pulp stem cells`, `Umbilical cord blood`, `Olfactory mucosal cells`, `Whole blood`. |
-| **Overall evidence** | `overall_evidence` | String | Synthesis of consistency across independent published studies evaluating this miRNA. | <ul><li>`Consistent upregulation`: Two or more independent studies, all reporting upregulation.</li><li>`Consistent downregulation`: Two or more independent studies, all reporting downregulation.</li><li>`Conflicting evidence`: Multiple studies with divergent/opposing findings (both up- and downregulation reported).</li><li>`Single-study evidence`: Association identified in exactly one published study to date.</li></ul> |
-| **Evidence from other studies** | `evidence_from_other_studies` | String | Cross-study validation evidence indicating whether this miRNA also has support from genetic or bioinformatics investigations. | `no` (None), `Genetics: CNV`, `Bioinformatics`, etc. |
-| **Number of studies (Upregulated)** | `upregulation_studies` | Integer | Count of independent peer-reviewed studies reporting increased expression in ASD. | Non-negative integer (e.g. `0`, `1`, `2`, `3+`). |
-| **Number of studies (Downregulated)** | `downregulation_studies` | Integer | Count of independent peer-reviewed studies reporting decreased expression in ASD. | Non-negative integer (e.g. `0`, `1`, `2`, `3+`). |
-| **Total studies** | `total_studies` | Integer | Total count of independent expression studies investigating this miRNA in ASD. | Positive integer (equals `upregulation_studies + downregulation_studies`). |
-| **StudyDetails** | `StudyDetails` | Array of Objects | Nested array of study-level metadata records (revealed by clicking the row expander). | See Section 4 (Nested Study Details Metadata). |
+| **Sample Type / Tissue** | `tissue` / `sample_type` | String (Semicolon-delimited) | Biological tissue, fluid, or cell type used for miRNA analysis (standardized as "Sample Type" in dataset v15.09.2026; mapped to `tissue` and `sample_type` in JSON). | `Blood`, `Brain`, `Saliva`, `LCLs`, `NSCs`, `OMSCs`, `Umbilical cord`. |
+| **Overall evidence** | `overall_evidence` | String | Classification of expression evidence based on the direction and consistency of miRNA dysregulation across independent ASD studies included in *miR4ASD*. | <ul><li class="mb-1"><strong>Consistent upregulation:</strong> Reported in &ge;2 independent studies, with all studies showing increased expression of the miRNA.</li><li class="mb-1"><strong>Consistent downregulation:</strong> Reported in &ge;2 independent studies, with all studies showing decreased expression of the miRNA.</li><li class="mb-1"><strong>Conflicting evidence:</strong> Reported in &ge;2 independent studies, with opposing directions of differential expression (both increased and decreased expression of the miRNA).</li><li><strong>Single-study evidence:</strong> Only one study reported altered miRNA expression in individuals with ASD, with no independent replication among the studies included in the database.</li></ul> |
+| **Evidence from other studies** | `evidence_from_other_studies` | String | Additional evidence linking the miRNA to ASD from bioinformatics or genetic studies. | <ul><li class="mb-1"><strong>Bioinformatics:</strong> Evidence from bioinformatics studies.</li><li class="mb-1"><strong>Genetics: SNP:</strong> Evidence from genetic association studies evaluating SNPs associated with ASD.</li><li class="mb-1"><strong>Genetics: SNV:</strong> Evidence from sequencing studies (WES or WGS) reporting SNVs involving miRNA genes.</li><li><strong>Genetics: CNV:</strong> Evidence from genetic studies reporting CNVs involving miRNA genes.</li></ul> |
+| **# up** | `upregulation_studies` | Integer | Number of independent peer-reviewed studies reporting upregulation of the miRNA in individuals with ASD compared with controls. | Non-negative integers (e.g. `0`, `1`, `2`, `3+`). |
+| **# down** | `downregulation_studies` | Integer | Number of independent peer-reviewed studies reporting downregulation of the miRNA in individuals with ASD compared with controls. | Non-negative integers (e.g. `0`, `1`, `2`, `3+`). |
+| **Total studies** | `total_studies` | Integer | Total number of independent ASD expression studies evaluating the miRNA. | Positive integer (&ge;1). |
+| **StudyDetails** | `StudyDetails` | Array of Objects | Nested array of study-level metadata records (revealed by clicking the row expander). | See Section 3 (Nested Study Details Metadata). |
 
 ---
 
 ## 2. Genetic & Other Studies Table (`other_studies.json`)
 
-Catalog of microRNAs associated with genomic structural variants, single nucleotide variations, or targeted sequencing in ASD cohorts.
+This section provides information on human miRNAs implicated in Autism Spectrum Disorder (ASD), based on evidence from genetic and bioinformatics studies.
 
 | Column Header | JSON Key | Data Type | Description | Allowed / Categorical Values |
 | :--- | :--- | :--- | :--- | :--- |
 | **Precursor miRNA (hairpin)** | `precursor_mirna` | String (HTML Link) | Official precursor stem-loop RNA name (links to miRBase). | Standardized to miRBase v22.1. |
 | **Mature miRNA** | `mature_mirna` | String (HTML Link) | Mature functional miRNA identifier (links to miRBase). | Standardized to miRBase v22.1. |
-| **Study Type** | `study_type` | String | Category of research investigation reported for this miRNA. | `Genetics`, `Bioinformatics` (or both). |
-| **Variant Type** | `variant_type` | String | Categorical genomic variant classification. In dataset v15.09.2026, comprises 55 CNVs, 12 SNVs, 5 SNPs, and 2 multi-variant records (`CNV; SNV`). Note: 5 entries previously cataloged as `SNP` were revised to `SNV` in v15.09.2026. | <ul><li>`CNV`: Copy Number Variation (microdeletions, microduplications altering miRNA loci).</li><li>`SNV`: Single Nucleotide Variant identified via whole-exome or whole-genome sequencing.</li><li>`SNP`: Single Nucleotide Polymorphism identified in association or candidate-gene studies.</li></ul> |
-| **Evidence from expression studies** | `evidence_from_expression_studies` | String | Cross-reference indicator showing whether the miRNA also demonstrates differential expression in ASD expression cohorts. | <ul><li>`Consistent upregulation`: Supported by multiple upregulated expression studies.</li><li>`Consistent downregulation`: Supported by multiple downregulated expression studies.</li><li>`Conflicting evidence`: Supported by contradictory expression studies.</li><li>`Single-study evidence`: Supported by exactly 1 expression study.</li><li>`no`: No reported expression evidence.</li></ul> |
-| **Total expression studies** | `total_expression_studies` | Integer | Count of independent expression studies evaluating differential expression for this miRNA in ASD. | Non-negative integer (e.g. `0`, `1`, `2`, `7`). |
-| **Description of expression evidence** | `description_of_expression_evidence` | String | Detailed summary describing the expression findings, tissue contexts, or deregulation patterns across expression studies for this miRNA. | Free text detailing direction of change, tissues (Blood, Brain, LCLs, Saliva), and study counts. |
-| **StudyDetails** | `StudyDetails` | Array of Objects | Nested array of study-level metadata records. | See Section 4 (Nested Study Details Metadata). |
+| **Study Type** | `study_type` | String | Classification of studies according to the type of evidence supporting the association between the miRNA and ASD. | <ul><li class="mb-1"><strong>Genetics:</strong> Studies in which genetic variants involving miRNA genes were analyzed in individuals with ASD.</li><li><strong>Bioinformatics:</strong> Studies in which computational approaches were used to identify, prioritize, or classify ASD-associated miRNAs based on expression data, without reporting conventional differential expression analyses.</li></ul> |
+| **Variant Type** | `variant_type` | String | Type of genetic variation reported within miRNA genes in individuals with ASD. | <ul><li class="mb-1"><strong>CNV:</strong> Copy Number Variant involving the miRNA gene, including genomic deletions and duplications.</li><li class="mb-1"><strong>SNV:</strong> Single Nucleotide Variant identified through sequencing-based studies (e.g. Whole Exome Sequencing, Whole Genome Sequencing).</li><li><strong>SNP:</strong> Single Nucleotide Polymorphism identified in genetic association studies.</li></ul> |
+| **Evidence from expression studies** | `evidence_from_expression_studies` | String | Classification of expression evidence based on the direction and consistency of miRNA dysregulation across independent ASD studies included in *miR4ASD*. | <ul><li class="mb-1"><strong>Consistent upregulation:</strong> Reported in &ge;2 independent studies, with all studies showing increased expression of the miRNA.</li><li class="mb-1"><strong>Consistent downregulation:</strong> Reported in &ge;2 independent studies, with all studies showing decreased expression of the miRNA.</li><li class="mb-1"><strong>Conflicting evidence:</strong> Reported in &ge;2 independent studies, with opposing directions of differential expression (both increased and decreased expression of the miRNA).</li><li class="mb-1"><strong>Single-study evidence:</strong> Only one study reported altered miRNA expression in individuals with ASD, with no independent replication among the studies included in the database.</li><li><strong>None:</strong> No expression evidence is reported in the studies included in the database.</li></ul> |
+| **Total expression studies** | `total_expression_studies` | Integer | Number of independent ASD expression studies included in the database reporting differential expression of the miRNA. | Non-negative integer (e.g. `0`, `1`, `2`, `3`). |
+| **Description of expression evidence** | `description_of_expression_evidence` | String | Detailed description of the expression evidence, including the direction of differential expression, number of independent studies, sample types analyzed, and mature miRNA-specific findings (e.g., -5p and -3p). | Free text describing the available expression evidence, including mature miRNA-specific findings when applicable; no predefined categorical values. |
+| **StudyDetails** | `StudyDetails` | Array of Objects | Nested array of study-level metadata records. | See Section 3 (Nested Study Details Metadata). |
 
 ---
 
 ## 3. Nested Study Details Metadata (`study_details.json`)
 
-Metadata describing the primary research publications linked to rows in the Expression and Genetic tables.
+This section provides detailed information from the original studies included in *miR4ASD*.
 
 | Field Name | JSON Key | Data Type | Description | Examples |
 | :--- | :--- | :--- | :--- | :--- |
 | **Study** | `Study` | String | Short reference citation identifier (Author and Year). | `Seno (2011)`, `Vasu (2014)`, `Mundalil (2014)` |
 | **Description** | `Description` | String | Full title of the published article or experimental methodology. | `Gene Expression Profiling of microRNAs in Autism Spectrum Disorder...` |
 | **DOI** | `DOI` | String (URL) | Digital Object Identifier URL for direct publication access. | `https://doi.org/10.1016/j.gene.2011.06.017` |
-| **Sample type** | `Sample type` / `Tissue type` | String | Primary biological specimen or tissue analyzed (standardized as "Sample type" in v15.09.2026; mapped to both keys in JSON). | `Brain`, `Blood`, `Saliva`, `LCLs` |
-| **Sample subtype** | `Sample subtype` / `Tissue - subtype` | String | Specific anatomical brain subregion or refined cellular fraction (standardized as "Sample subtype" in v15.09.2026; mapped to both keys in JSON). | `Cerebellum`, `Frontal Cortex`, `Peripheral Mononuclear Cells`, `Whole Blood`, `Plasma` |
+| **Sample Type (Tissue Type)** | `Sample type` / `Tissue type` | String | Primary biological specimen or tissue analyzed (standardized as "Sample type" in v15.09.2026; mapped to both keys in JSON). | `Brain`, `Blood`, `Saliva`, `LCLs` |
+| **Sample Subtype (Tissue Subtype)** | `Sample subtype` / `Tissue - subtype` | String | Specific anatomical brain subregion or refined cellular fraction (standardized as "Sample subtype" in v15.09.2026; mapped to both keys in JSON). | `Cerebellum`, `Frontal Cortex`, `Peripheral Mononuclear Cells`, `Whole Blood`, `Plasma` |
 | **Methodology** | `Methodology` | String | Experimental platform or molecular assay used for profiling or quantification. Includes multi-assay platforms. | `RT-qPCR`, `Small RNA-seq`, `miRNA microarray`, `WES`, `WGS`, `SNP array`, `SNP array and WES`, `miRNA microarray and RT-qPCR`, `aCGH` |
 | **Diagnostic tools** | `Diagnostic tools` | String | Diagnostic criteria or clinical behavioral instruments used for cohort diagnosis. | `DSM-5`, `ADOS`, `ADI-R`, `CARS`, `DSM-IV-TR`, `GARS`, `ABC`, `SRS` |
 | **ASD Samples** | `ASD samples` | Integer / String | Number of ASD subjects in the experimental cohort. In multi-cohort studies (e.g. discovery vs. replication cohorts, or distinct tissues), values are separated by semicolons (`;`) and rendered as distinct badges/pills in the UI. | `ASD N = 12`, `Microarray ASD N = 5; RT-qPCR ASD N = 15`, `Training set ASD N = 188; Test set ASD N = 50`, `GWAS ASD N = 7387; meta-analysis replication set 1 ASD N = 7783; meta-analysis replication set 2 ASD N = 1369` |
@@ -85,7 +85,7 @@ Metadata describing the primary research publications linked to rows in the Expr
 
 ## 4. Validated Target Genes Table (`target_genes.json`)
 
-Experimentally supported human mRNA targets of ASD-associated microRNAs, sourced exclusively from **miRTarBase 10.0**, cross-referenced with **SFARI Gene** ASD-risk susceptibility scores. *(Note: DIANA-TarBase is no longer used in this version).*
+This section contains information on experimentally validated target genes of ASD-associated miRNAs, retrieved from **miRTarBase** version 10.0. It provides miRNA-target gene interactions and their supporting experimental evidence, enabling users to explore potential regulatory relationships between ASD-associated miRNAs and their target genes.
 
 | Column Header | JSON Key | Data Type | Description | Allowed / Categorical Values |
 | :--- | :--- | :--- | :--- | :--- |
@@ -103,7 +103,7 @@ Experimentally supported human mRNA targets of ASD-associated microRNAs, sourced
 
 ## 5. Functional Enrichment Analysis & g:Profiler Fields
 
-Specification of fields, statistical metrics, and parameters used in the **Functional Enrichment Analysis** dashboard powered by the **g:Profiler** REST API.
+This section allows users to perform functional enrichment analyses by selecting ASD-associated miRNAs and/or their target genes. Gene Ontology (GO) and pathway enrichment analyses are executed through the **g:Profiler** REST API, and the results are displayed on the *miR4ASD* website, highlighting enriched biological processes and pathways associated with the selected target genes.
 
 | Field / Metric | Source / Engine | Data Type | Description | Interpretation / Values |
 | :--- | :--- | :--- | :--- | :--- |
@@ -111,8 +111,8 @@ Specification of fields, statistical metrics, and parameters used in the **Funct
 | **Term ID** | g:Profiler | String (Link) | Native identifier of the enriched functional term or pathway (links to official source). | Standard ontology ID (e.g. `GO:0007268`, `KEGG:04724`, `REAC:R-HSA-112316`, `HP:0000729`). |
 | **Term Name** | g:Profiler | String | Human-readable name/description of the biological process, pathway, or phenotype. | Descriptive pathway name (e.g. *chemical synaptic transmission*, *glutamatergic synapse*, *Autistic behavior*). |
 | **Adjusted P-Value ($p_{\text{adj}}$)** | g:Profiler | Float (Scientific) | Corrected hypergeometric overrepresentation significance value. | Default significance threshold $p_{\text{adj}} < 0.05$. Corrected via `g:SCS` (recommended for GO DAGs), Benjamini-Hochberg FDR, or Bonferroni. |
-| **Overlap Ratio ($k / N$)** | g:Profiler | String / Ratio | Ratio of submitted target genes present in the term ($k$) relative to total input query size ($N$). | E.g. `25 / 120` target genes present in the specified pathway. |
-| **Term Size ($|T|$)** | g:Profiler | Integer | Total number of annotated human protein-coding genes belonging to the ontology term. | Domain-wide gene count (e.g. `540` annotated genes). |
+| **Overlap (k/N)** | g:Profiler | String / Ratio | Ratio of submitted target genes present in the term ($k$) relative to total input query size ($N$). | E.g. `25 / 120` target genes present in the specified pathway. |
+| **Term Size ($\|T\|$)** | g:Profiler | Integer | Total number of annotated human protein-coding genes belonging to the ontology term. | Domain-wide gene count (e.g. `540` annotated genes). |
 | **Intersecting Target Genes** | miR4ASD + g:Profiler | Array of Badges | List of user's query target genes that overlap with the term, annotated with SFARI risk badges. | Direct links to GeneCards with color-coded SFARI ASD-risk tags (Category 1, 2, 3, Syndromic). |
 | **Significance Score** | miR4ASD Chart | Float | Scaled ranking metric computed as $-\log_{10}(p_{\text{adj}})$. | Higher scores denote greater statistical overrepresentation. |
 
