@@ -3434,7 +3434,21 @@
                 },
                 { "data": "expression_change" },
                 { "data": "tissue" },
-                { "data": "overall_evidence" },
+                {
+                    "data": "overall_evidence",
+                    "render": function(data, type, row) {
+                        if (type === 'filter' || type === 'sort') return data || 'no';
+                        if (!data || data === 'no') return '<span class="badge bg-light text-muted border" style="font-size: 0.75rem;">None</span>';
+                        return String(data).split('; ').map(e => {
+                            let cls = 'bg-secondary-subtle text-secondary border';
+                            if (e.includes('Consistent upregulation')) cls = 'bg-success-subtle text-success border';
+                            else if (e.includes('Consistent downregulation')) cls = 'bg-danger-subtle text-danger border';
+                            else if (e.includes('Conflicting')) cls = 'bg-warning-subtle text-warning-emphasis border';
+                            else if (e.includes('Single-study')) cls = 'bg-info-subtle text-info-emphasis border';
+                            return `<span class="badge ${cls} me-1 text-wrap" style="font-size: 0.75rem;">${escapeHtml(e)}</span>`;
+                        }).join('');
+                    }
+                },
                 {
                     "data": "evidence_from_other_studies",
                     "render": function(data, type, row) {
