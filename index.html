@@ -1151,85 +1151,75 @@
                                                     <table class="table table-sm table-bordered align-middle mb-0" style="font-size: 0.9rem;">
                                                         <thead class="table-light">
                                                             <tr>
-                                                                <th>Column Header</th>
-                                                                <th>JSON Key</th>
-                                                                <th>Data Type</th>
-                                                                <th>Description</th>
-                                                                <th>Allowed / Categorical Values</th>
-                                                            </tr>
+                                                                <th style="width: 25%;">Column name</th>
+                                                                <th style="width: 35%;">Definition & Purpose</th>
+                                                                <th style="width: 40%;">Allowed Values & Formats</th>
+                                                           </tr>
                                                         </thead>
                                                         <tbody>
                                                             <tr>
                                                                 <td><strong>Precursor miRNA (hairpin)</strong></td>
-                                                                <td><code>precursor_mirna</code></td>
-                                                                <td>String (HTML Link)</td>
-                                                                <td>Official miRBase stem-loop precursor RNA name (links to miRBase).</td>
-                                                                <td>Standardized to miRBase v22.1 (e.g. <code>hsa-let-7a-1</code>, <code>hsa-mir-146a</code>).</td>
+                                                                <td>Name of the stem-loop precursor miRNA (hairpin), according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.</td>
+                                                                <td>e.g. <code>hsa-let-7a-1</code>, <code>hsa-mir-146a</code>, <code>hsa-mir-155</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Mature miRNA</strong></td>
-                                                                <td><code>mature_mirna</code></td>
-                                                                <td>String (HTML Link)</td>
-                                                                <td>Fully processed, functional single-stranded mature miRNA identifier.</td>
-                                                                <td>Standardized to miRBase v22.1 (e.g. <code>hsa-let-7a-5p</code>, <code>hsa-miR-146a-5p</code>).</td>
+                                                                <td>Name of the functional, single-stranded mature miRNA derived from a precursor miRNA, according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.</td>
+                                                                <td>e.g. <code>hsa-let-7a-5p</code>, <code>hsa-miR-146a-5p</code>, <code>hsa-miR-155-5p</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Expression change (ASD vs. controls)</strong></td>
-                                                                <td><code>expression_change</code></td>
-                                                                <td>String</td>
-                                                                <td>Reported direction of expression alteration in ASD patients compared to neurotypical controls.</td>
-                                                                <td><ul><li><code>Upregulated</code>: Statistically significant increased expression in ASD cohort.</li><li><code>Downregulated</code>: Statistically significant decreased expression in ASD cohort.</li></ul></td>
+                                                                <td>Direction of differential expression statistically reported in the ASD cohort versus neurotypical controls.</td>
+                                                                <td>
+                                                                    <span class="badge bg-success-subtle text-success border me-1"><i class="fa-solid fa-arrow-up me-1"></i>Upregulated</span> (Increased expression in ASD)<br>
+                                                                    <span class="badge bg-danger-subtle text-danger border mt-1"><i class="fa-solid fa-arrow-down me-1"></i>Downregulated</span> (Decreased expression in ASD)
+                                                                </td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Sample Type / Tissue</strong></td>
-                                                                <td><code>tissue</code> / <code>sample_type</code></td>
-                                                                <td>String (Semicolon-delimited)</td>
-                                                                <td>Biological tissue, fluid, or cell type used for miRNA analysis (e.g., saliva, blood, post-mortem brain tissue [brain], neural stem cells [NSCs], olfactory mucosal stem cells [OMSCs], lymphoblastoid cell lines [LCLs], and umbilical cord; standardized as "Sample Type" in dataset v15.09.2026; mapped to <code>tissue</code> and <code>sample_type</code> in JSON).</td>
-                                                                <td>e.g. <code>Blood</code>, <code>Brain</code>, <code>Saliva</code>, <code>LCLs</code>, <code>NSCs</code>, <code>OMSCs</code>, <code>Umbilical cord</code>.</td>
+                                                                <td><strong>Sample Type</strong></td>
+                                                                <td>Biological tissue, fluid, or cell type used for miRNA analysis (e.g., saliva, blood, post-mortem brain tissue [brain], neural stem cells [NSCs], olfactory mucosal stem cells [OMSCs], lymphoblastoid cell lines [LCLs], and umbilical cord).</td>
+                                                                <td>e.g.<code>Blood</code>, <code>Brain</code>, <code>Saliva</code>, <code>LCLs</code>, <code>NSCs</code>, <code>OMSCs</code>, <code>Umbilical cord</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Overall evidence</strong></td>
-                                                                <td><code>overall_evidence</code></td>
-                                                                <td>String</td>
                                                                 <td>Classification of expression evidence based on the direction and consistency of miRNA dysregulation across independent ASD studies included in <em>miR4ASD</em>.</td>
-                                                                <td><ul><li class="mb-1"><strong>Consistent upregulation:</strong> Reported in &ge;2 independent studies, with all studies showing increased expression of the miRNA.</li><li class="mb-1"><strong>Consistent downregulation:</strong> Reported in &ge;2 independent studies, with all studies showing decreased expression of the miRNA.</li><li class="mb-1"><strong>Conflicting evidence:</strong> Reported in &ge;2 independent studies, with opposing directions of differential expression (both increased and decreased expression of the miRNA).</li><li><strong>Single-study evidence:</strong> Only one study reported altered miRNA expression in individuals with ASD, with no independent replication among the studies included in the database.</li></ul></td>
+                                                                <td>
+                                                                    <ul class="mb-0 ps-3">
+                                                                        <li class="mb-1"><strong>Consistent upregulation:</strong> Reported in &ge;2 independent studies, with all studies showing increased expression of the miRNA.</li>
+                                                                        <li class="mb-1"><strong>Consistent downregulation:</strong> Reported in &ge;2 independent studies, with all studies showing decreased expression of the miRNA.</li>
+                                                                        <li class="mb-1"><strong>Conflicting evidence:</strong> Reported in &ge;2 independent studies, with opposing directions of differential expression (both increased and decreased expression of the miRNA).</li>
+                                                                        <li><strong>Single-study evidence:</strong> Only one study reported altered miRNA expression in individuals with ASD, with no independent replication among the studies included in the database.</li>
+                                                                    </ul>
+                                                                </td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Evidence from other studies</strong></td>
-                                                                <td><code>evidence_from_other_studies</code></td>
-                                                                <td>String</td>
                                                                 <td>Additional evidence linking the miRNA to ASD from bioinformatics or genetic studies.</td>
-                                                                <td><ul><li class="mb-1"><strong>Bioinformatics:</strong> Evidence from bioinformatics studies.</li><li class="mb-1"><strong>Genetics: SNP:</strong> Evidence from genetic association studies evaluating SNPs associated with ASD.</li><li class="mb-1"><strong>Genetics: SNV:</strong> Evidence from sequencing studies (WES or WGS) reporting SNVs involving miRNA genes.</li><li><strong>Genetics: CNV:</strong> Evidence from genetic studies reporting CNVs involving miRNA genes.</li></ul></td>
+                                                                <td>
+                                                                    <ul class="mb-0 ps-3">
+                                                                        <li class="mb-1"><strong>Bioinformatics:</strong> Evidence from bioinformatics studies.</li>
+                                                                        <li class="mb-1"><strong>Genetics: SNP:</strong> Evidence from genetic association studies evaluating SNPs associated with ASD.</li>
+                                                                        <li class="mb-1"><strong>Genetics: SNV:</strong> Evidence from sequencing studies (WES or WGS) reporting SNVs involving miRNA genes.</li>
+                                                                        <li><strong>Genetics: CNV</strong> Evidence from genetic studies reporting CNVs involving miRNA genes.</li>
+                                                                    </ul>
+                                                                <td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong># up</strong></td>
-                                                                <td><code>upregulation_studies</code></td>
-                                                                <td>Integer</td>
                                                                 <td>Number of independent peer-reviewed studies reporting upregulation of the miRNA in individuals with ASD compared with controls.</td>
-                                                                <td>Positive integer (&ge;1).</td>
+                                                                <td>Positive integer (&ge;1)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong># down</strong></td>
-                                                                <td><code>downregulation_studies</code></td>
-                                                                <td>Integer</td>
                                                                 <td>Number of independent peer-reviewed studies reporting downregulation of the miRNA in individuals with ASD compared with controls.</td>
-                                                                <td>Positive integer (&ge;1).</td>
+                                                                <td>Positive integer (&ge;1)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Total studies</strong></td>
-                                                                <td><code>total_studies</code></td>
-                                                                <td>Integer</td>
-                                                                <td>Total number of independent ASD expression studies evaluating the miRNA.</td>
-                                                                <td>Positive integer (&ge;1).</td>
+                                                                <td>Sum of all independent expression studies evaluating this miRNA in ASD.</td>
+                                                                <td>Positive integer (&ge;1)</td>
                                                             </tr>
-                                                            <tr>
-                                                                <td><strong>StudyDetails</strong></td>
-                                                                <td><code>StudyDetails</code></td>
-                                                                <td>Array of Objects</td>
-                                                                <td>Nested array of study-level metadata records (revealed by clicking the row expander).</td>
-                                                                <td>See Section 3 (Nested Study Details Metadata).</td>
-                                                            </tr>
-                                                        </tbody>
+                                                        </tbody>                                                        
                                                     </table>
                                                 </div>
                                             </div>
