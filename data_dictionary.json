@@ -38,8 +38,8 @@
         "<strong>Sample Type / Tissue</strong>",
         "<code>tissue</code> / <code>sample_type</code>",
         "String (Semicolon-delimited)",
-        "Biological tissue, fluid, or cell type used for miRNA analysis (standardized as \"Sample Type\" in dataset v15.09.2026; mapped to <code>tissue</code> and <code>sample_type</code> in JSON).",
-        "<code>Blood</code>, <code>Brain</code>, <code>Saliva</code>, <code>LCLs</code>, <code>NSCs</code>, <code>OMSCs</code>, <code>Umbilical cord</code>."
+        "Biological tissue, fluid, or cell type used for miRNA analysis (e.g., saliva, blood, post-mortem brain tissue [brain], neural stem cells [NSCs], olfactory mucosal stem cells [OMSCs], lymphoblastoid cell lines [LCLs], and umbilical cord; standardized as \"Sample Type\" in dataset v15.09.2026; mapped to <code>tissue</code> and <code>sample_type</code> in JSON).",
+        "e.g. <code>Blood</code>, <code>Brain</code>, <code>Saliva</code>, <code>LCLs</code>, <code>NSCs</code>, <code>OMSCs</code>, <code>Umbilical cord</code>."
       ],
       [
         "<strong>Overall evidence</strong>",
@@ -60,14 +60,14 @@
         "<code>upregulation_studies</code>",
         "Integer",
         "Number of independent peer-reviewed studies reporting upregulation of the miRNA in individuals with ASD compared with controls.",
-        "Non-negative integers (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3+</code>)."
+        "Positive integer (&ge;1)."
       ],
       [
         "<strong># down</strong>",
         "<code>downregulation_studies</code>",
         "Integer",
         "Number of independent peer-reviewed studies reporting downregulation of the miRNA in individuals with ASD compared with controls.",
-        "Non-negative integers (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3+</code>)."
+        "Positive integer (&ge;1)."
       ],
       [
         "<strong>Total studies</strong>",
@@ -103,15 +103,15 @@
         "<strong>Precursor miRNA (hairpin)</strong>",
         "<code>precursor_mirna</code>",
         "String (HTML Link)",
-        "Official precursor stem-loop RNA name (links to miRBase).",
-        "Standardized to miRBase v22.1."
+        "Name of the stem-loop precursor miRNA (hairpin), according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.",
+        "e.g. <code>hsa-mir-34a</code>, <code>hsa-mir-106b</code>, <code>hsa-mir-211</code>."
       ],
       [
         "<strong>Mature miRNA</strong>",
         "<code>mature_mirna</code>",
         "String (HTML Link)",
-        "Mature functional miRNA identifier (links to miRBase).",
-        "Standardized to miRBase v22.1."
+        "Name of the functional, single-stranded mature miRNA derived from a precursor miRNA, according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.",
+        "e.g. <code>hsa-miR-34a-5p</code>, <code>miR-106b-5p</code>, <code>hsa-miR-211-5p</code>."
       ],
       [
         "<strong>Study Type</strong>",
@@ -139,7 +139,7 @@
         "<code>total_expression_studies</code>",
         "Integer",
         "Number of independent ASD expression studies included in the database reporting differential expression of the miRNA.",
-        "Non-negative integer (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3</code>)."
+        "Positive integer (&ge;1)."
       ],
       [
         "<strong>Description of expression evidence</strong>",

@@ -1148,7 +1148,7 @@
                                                     This section provides information on human miRNAs identified in case-control expression studies of Autism Spectrum Disorder (ASD), including their expression patterns, sample types, and supporting evidence.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0">
+                                                    <table class="table table-sm table-bordered align-middle mb-0" style="font-size: 0.9rem;">
                                                         <thead class="table-light">
                                                             <tr>
                                                                 <th>Column Header</th>
@@ -1184,8 +1184,8 @@
                                                                 <td><strong>Sample Type / Tissue</strong></td>
                                                                 <td><code>tissue</code> / <code>sample_type</code></td>
                                                                 <td>String (Semicolon-delimited)</td>
-                                                                <td>Biological tissue, fluid, or cell type used for miRNA analysis (standardized as "Sample Type" in dataset v15.09.2026; mapped to <code>tissue</code> and <code>sample_type</code> in JSON).</td>
-                                                                <td><code>Blood</code>, <code>Brain</code>, <code>Saliva</code>, <code>LCLs</code>, <code>NSCs</code>, <code>OMSCs</code>, <code>Umbilical cord</code>.</td>
+                                                                <td>Biological tissue, fluid, or cell type used for miRNA analysis (e.g., saliva, blood, post-mortem brain tissue [brain], neural stem cells [NSCs], olfactory mucosal stem cells [OMSCs], lymphoblastoid cell lines [LCLs], and umbilical cord; standardized as "Sample Type" in dataset v15.09.2026; mapped to <code>tissue</code> and <code>sample_type</code> in JSON).</td>
+                                                                <td>e.g. <code>Blood</code>, <code>Brain</code>, <code>Saliva</code>, <code>LCLs</code>, <code>NSCs</code>, <code>OMSCs</code>, <code>Umbilical cord</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Overall evidence</strong></td>
@@ -1206,14 +1206,14 @@
                                                                 <td><code>upregulation_studies</code></td>
                                                                 <td>Integer</td>
                                                                 <td>Number of independent peer-reviewed studies reporting upregulation of the miRNA in individuals with ASD compared with controls.</td>
-                                                                <td>Non-negative integers (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3+</code>).</td>
+                                                                <td>Positive integer (&ge;1).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong># down</strong></td>
                                                                 <td><code>downregulation_studies</code></td>
                                                                 <td>Integer</td>
                                                                 <td>Number of independent peer-reviewed studies reporting downregulation of the miRNA in individuals with ASD compared with controls.</td>
-                                                                <td>Non-negative integers (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3+</code>).</td>
+                                                                <td>Positive integer (&ge;1).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Total studies</strong></td>
@@ -1248,7 +1248,7 @@
                                                     This section provides information on human miRNAs implicated in Autism Spectrum Disorder (ASD), based on evidence from genetic and bioinformatics studies.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0">
+                                                    <table class="table table-sm table-bordered align-middle mb-0" style="font-size: 0.9rem;">
                                                         <thead class="table-light">
                                                             <tr>
                                                                 <th>Column Header</th>
@@ -1263,15 +1263,15 @@
                                                                 <td><strong>Precursor miRNA (hairpin)</strong></td>
                                                                 <td><code>precursor_mirna</code></td>
                                                                 <td>String (HTML Link)</td>
-                                                                <td>Official precursor stem-loop RNA name (links to miRBase).</td>
-                                                                <td>Standardized to miRBase v22.1.</td>
+                                                                <td>Name of the stem-loop precursor miRNA (hairpin), according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.</td>
+                                                                <td>e.g. <code>hsa-mir-34a</code>, <code>hsa-mir-106b</code>, <code>hsa-mir-211</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Mature miRNA</strong></td>
                                                                 <td><code>mature_mirna</code></td>
                                                                 <td>String (HTML Link)</td>
-                                                                <td>Mature functional miRNA identifier (links to miRBase).</td>
-                                                                <td>Standardized to miRBase v22.1.</td>
+                                                                <td>Name of the functional, single-stranded mature miRNA derived from a precursor miRNA, according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.</td>
+                                                                <td>e.g. <code>hsa-miR-34a-5p</code>, <code>miR-106b-5p</code>, <code>hsa-miR-211-5p</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Study Type</strong></td>
@@ -1299,7 +1299,7 @@
                                                                 <td><code>total_expression_studies</code></td>
                                                                 <td>Integer</td>
                                                                 <td>Number of independent ASD expression studies included in the database reporting differential expression of the miRNA.</td>
-                                                                <td>Non-negative integer (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3</code>).</td>
+                                                                <td>Positive integer (&ge;1).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Description of expression evidence</strong></td>
@@ -1334,7 +1334,7 @@
                                                     This section provides detailed information from the original studies included in <em>miR4ASD</em>.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0">
+                                                    <table class="table table-sm table-bordered align-middle mb-0" style="font-size: 0.9rem;">
                                                         <thead class="table-light">
                                                             <tr>
                                                                 <th>Field Name</th>
@@ -1434,7 +1434,7 @@
                                                     This section contains information on experimentally validated target genes of ASD-associated miRNAs, retrieved from <strong>miRTarBase</strong> version 10.0. It provides miRNA-target gene interactions and their supporting experimental evidence, enabling users to explore potential regulatory relationships between ASD-associated miRNAs and their target genes.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0">
+                                                    <table class="table table-sm table-bordered align-middle mb-0" style="font-size: 0.9rem;">
                                                         <thead class="table-light">
                                                             <tr>
                                                                 <th>Column Header</th>
@@ -1527,7 +1527,7 @@
                                                     This section allows users to perform functional enrichment analyses by selecting ASD-associated miRNAs and/or their target genes. Gene Ontology (GO) and pathway enrichment analyses are executed through the <strong>g:Profiler</strong> REST API, and the results are displayed on the <em>miR4ASD</em> website, highlighting enriched biological processes and pathways associated with the selected target genes.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0">
+                                                    <table class="table table-sm table-bordered align-middle mb-0" style="font-size: 0.9rem;">
                                                         <thead class="table-light">
                                                             <tr>
                                                                 <th>Field / Metric</th>
@@ -3225,7 +3225,7 @@
                     '<div class="accordion-body p-3">' +
                     '<p class="mb-3">' + sec.description + '</p>' +
                     '<div class="table-responsive">' +
-                    '<table class="table table-sm table-bordered align-middle mb-0">' +
+                    '<table class="table table-sm table-bordered align-middle mb-0" style="font-size: 0.9rem;">' +
                     '<thead class="table-light"><tr>' + headersHtml + '</tr></thead>' +
                     '<tbody>' + rowsHtml + '</tbody>' +
                     '</table>' +
