@@ -3254,7 +3254,7 @@
                     console.warn('Could not load data_dictionary.json dynamically, using pre-rendered fallback:', error);
                 });
         }
-        loadDataDictionary();
+        // loadDataDictionary(); // update with data_dictionary.json file and master does not want this. index.html should stay static as it is, no upload of JSON file
 
         // Re-typeset MathJax formulas on accordion and tab expansion (bound
         // unconditionally at ready; the stats fetch no longer gates this).
