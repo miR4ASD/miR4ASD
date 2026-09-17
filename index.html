@@ -1185,26 +1185,33 @@
                                                                 <td>Evidence classification reflecting the direction and consistency of miRNA differential expression across the independent ASD expression studies included in the database.</td>
                                                                 <td>
                                                                     <ul class="mb-0 ps-3" style="font-size: 0.85rem;">
-                                                                        <li><strong>Consistent upregulation:</strong> &ge;2 independent studies all reporting increased expression.</li>
-                                                                        <li><strong>Consistent downregulation:</strong> &ge;2 independent studies all reporting decreased expression.</li>
-                                                                        <li><strong>Conflicting evidence:</strong> &ge;2 independent studies with opposing results (both up- and downregulated reported).</li>
-                                                                        <li><strong>Single-study evidence:</strong> Supported by exactly 1 published study to date.</li>
+                                                                        <li><strong>Consistent upregulation:</strong> Reported in &ge;2 independent studies, with all studies showing increased expression of the miRNA.</li>
+                                                                        <li><strong>Consistent downregulation:</strong> Reported in &ge;2 independent studies, with all studies showing decreased expression of the miRNA.</li>
+                                                                        <li><strong>Conflicting evidence:</strong> Reported in &ge;2 independent studies, with opposing directions of differential expression (both increased and decreased expression of the miRNA).</li>
+                                                                        <li><strong>Single-study evidence:</strong> Only one study reported altered miRNA expression in individuals with ASD, with no independent replication among the studies included in the database.</li>
                                                                     </ul>
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Evidence from other studies</strong></td>
                                                                 <td>Additional evidence linking the miRNA to ASD from bioinformatics or genetic studies.</td>
-                                                                <td><code>no</code> (None), <code>Genetics: CNV</code>, <code>Bioinformatics</code>, etc.</td>
+                                                                <td>
+                                                                    <ul class="mb-0 ps-3" style="font-size: 0.85rem;">
+                                                                        <li><strong>Bioinformatics:</strong> Evidence from bioinformatics studies.</li>
+                                                                        <li><strong>Genetics: SNP:</strong> Evidence from genetic association studies evaluating SNPs associated with ASD.</li>
+                                                                        <li><strong>Genetics: SNV:</strong> Evidence from sequencing studies (WES or WGS) reporting SNVs involving miRNA genes.</li>
+                                                                        <li><strong>Genetics: CNV</strong> Evidence from genetic studies reporting CNVs involving miRNA genes.</li>
+                                                                    </ul>
+                                                                <td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong># up</strong></td>
-                                                                <td>Count of independent peer-reviewed publications reporting statistically significant upregulation in ASD cohorts.</td>
+                                                                <td>Number of independent peer-reviewed studies reporting upregulation of the miRNA in individuals with ASD compared with controls.</td>
                                                                 <td>Non-negative integers (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3+</code>)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong># down</strong></td>
-                                                                <td>Count of independent peer-reviewed publications reporting statistically significant downregulation in ASD cohorts.</td>
+                                                                <td>Number of independent peer-reviewed studies reporting downregulation of the miRNA in individuals with ASD compared with controls.</td>
                                                                 <td>Non-negative integers (e.g. <code>0</code>, <code>1</code>, <code>2</code>, <code>3+</code>)</td>
                                                             </tr>
                                                             <tr>
