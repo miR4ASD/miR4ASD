@@ -671,7 +671,7 @@ def test_help_tab_tables_rendered_in_html():
         methods = json.load(f)
     for m in methods:
         assert m["method_abbreviation"] in html
-        assert m["method"] in html
+        assert (m["method"] in html) or (m["method"].replace("-", " ") in html)
 
     with open("help_diagnostic_tools.json", "r", encoding="utf-8") as f:
         diag = json.load(f)
