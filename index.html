@@ -1115,7 +1115,7 @@
                         <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill py-1 px-3" onclick="document.getElementById('section-dictionary').scrollIntoView({behavior: 'smooth'})" style="font-size: 0.8rem;"><i class="fa-solid fa-book-open me-1 text-primary"></i>Data Dictionary</button>
                         <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill py-1 px-3" onclick="document.getElementById('section-methods').scrollIntoView({behavior: 'smooth'})" style="font-size: 0.8rem;"><i class="fa-solid fa-microscope me-1 text-info"></i>Experimental Methodologies</button>
                         <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill py-1 px-3" onclick="document.getElementById('section-diagnostic-tools').scrollIntoView({behavior: 'smooth'})" style="font-size: 0.8rem;"><i class="fa-solid fa-clipboard-check me-1 text-warning"></i>Diagnostic Tools</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill py-1 px-3" onclick="document.getElementById('section-citation').scrollIntoView({behavior: 'smooth'})" style="font-size: 0.8rem;"><i class="fa-solid fa-quote-left me-1 text-primary"></i>Cite miR4ASD</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill py-1 px-3" onclick="document.getElementById('section-citation').scrollIntoView({behavior: 'smooth'})" style="font-size: 0.8rem;"><i class="fa-solid fa-quote-left me-1 text-primary"></i>Cite <em>miR4ASD</em></button>
                     </div>
 
                     <!-- Data Dictionary & Column Reference Section -->
@@ -1161,51 +1161,55 @@
                                                             <tr>
                                                                 <td><strong>Precursor miRNA (hairpin)</strong></td>
                                                                 <td>Name of the stem-loop precursor miRNA (hairpin), according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.</td>
-                                                                <td>e.g. <code>hsa-let-7a-1</code>, <code>hsa-mir-146a</code>, <code>hsa-mir-155</code>.</td>
+                                                                <td>e.g. <code style="color: #1e3a8a;">hsa-let-7a-1</code>, <code style="color: #1e3a8a;">hsa-mir-146a</code>, <code style="color: #1e3a8a;">hsa-mir-155</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Mature miRNA</strong></td>
                                                                 <td>Name of the functional, single-stranded mature miRNA derived from a precursor miRNA, according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.</td>
-                                                                <td>e.g. <code>hsa-let-7a-5p</code>, <code>hsa-miR-146a-5p</code>, <code>hsa-miR-155-5p</code>.</td>
+                                                                <td>e.g. <code style="color: #155E75; font-size: 0.9em;">hsa-let-7a-5p</code>, <code style="color: #155E75; font-size: 0.9em;">hsa-miR-146a-5p</code>, <code style="color: #155E75; font-size: 0.9em;">hsa-miR-155-5p</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Expression change (ASD vs. controls)</strong></td>
                                                                 <td>Direction of differential expression statistically reported in the ASD cohort versus neurotypical controls.</td>
                                                                 <td style="font-size: 0.9rem;">
-                                                                    <span class="badge bg-success-subtle text-success border me-1" style="font-size: 0.9rem;"><i class="fa-solid fa-arrow-up me-1"></i>Upregulated</span> Increased expression in ASD<br>
-                                                                    <span class="badge bg-danger-subtle text-danger border mt-1 me-1" style="font-size: 0.9rem;"><i class="fa-solid fa-arrow-down me-1"></i>Downregulated</span> Decreased expression in ASD
+                                                                    <span class="badge bg-success-subtle text-success border me-1" style="font-size: 0.85rem;"><i class="fa-solid fa-arrow-up me-1"></i>Upregulated</span> Increased expression in ASD<br>
+                                                                    <span class="badge bg-danger-subtle text-danger border mt-1 me-1" style="font-size: 0.85rem;"><i class="fa-solid fa-arrow-down me-1"></i>Downregulated</span> Decreased expression in ASD
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Sample Type</strong></td>
                                                                 <td>Biological tissue, fluid, or cell type used for miRNA analysis (e.g., saliva, blood, post-mortem brain tissue [brain], neural stem cells [NSCs], olfactory mucosal stem cells [OMSCs], lymphoblastoid cell lines [LCLs], and umbilical cord).</td>
-                                                                <td>e.g. <code>Blood</code>, <code>Brain</code>, <code>Saliva</code>, <code>LCLs</code>, <code>NSCs</code>, <code>OMSCs</code>, <code>Umbilical cord</code>.</td>
+                                                                <td>e.g. <code style="font-size: 0.9em;">Blood</code>, <code style="font-size: 0.9em;">Brain</code>, <code style="font-size: 0.9em;">Saliva</code>, <code style="font-size: 0.9em;">LCLs</code>, <code style="font-size: 0.9em;">NSCs</code>, <code style="font-size: 0.9em;">OMSCs</code>, <code style="font-size: 0.9em;">Umbilical cord</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Overall evidence</strong></td>
                                                                 <td>Classification of expression evidence based on the direction and consistency of miRNA dysregulation across independent ASD studies included in <em>miR4ASD</em>.</td>
                                                                 <td>
-                                                                    <ul class="list-unstyled mb-0 ps-0" style="line-height: 1.6;">
+                                                                    <ul class="list-unstyled mb-0 ps-0" style="line-height: 1.35;">
                                                                         <li class="mb-2">
-                                                                            <span class="badge bg-success-subtle text-success border">
+                                                                            <span class="badge bg-success-subtle text-success border" 
+                                                                                style="font-size: 0.85em;">
                                                                                 Consistent upregulation
                                                                             </span>
                                                                             Reported in &ge;2 independent studies, with all studies showing increased expression of the miRNA.
                                                                         </li>
                                                                         <li class="mb-2">
-                                                                            <span class="badge bg-danger-subtle text-danger border">
+                                                                            <span class="badge bg-danger-subtle text-danger border"
+                                                                                style="font-size: 0.85em;">
                                                                                 Consistent downregulation
                                                                             </span>
                                                                             Reported in &ge;2 independent studies, with all studies showing decreased expression of the miRNA.
                                                                         </li>
                                                                         <li class="mb-2">
-                                                                            <span class="badge bg-warning-subtle text-warning-emphasis border">
+                                                                            <span class="badge bg-warning-subtle text-warning-emphasis border"
+                                                                                style="font-size: 0.85em;">
                                                                                 Conflicting evidence
                                                                             </span>
                                                                             Reported in &ge;2 independent studies, with opposing directions of differential expression (both increased and decreased expression of the miRNA).
                                                                         </li>
                                                                         <li>
-                                                                            <span class="badge bg-info-subtle text-info-emphasis border">
+                                                                            <span class="badge bg-info-subtle text-info-emphasis border"
+                                                                                style="font-size: 0.85em;">
                                                                                 Single-study evidence
                                                                             </span>
                                                                             Only one study reported altered miRNA expression in individuals with ASD, with no independent replication among the studies included in the database.
