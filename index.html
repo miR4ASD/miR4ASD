@@ -1170,9 +1170,9 @@
                                                             <tr>
                                                                 <td><strong>Expression change (ASD vs. controls)</strong></td>
                                                                 <td>Direction of differential expression statistically reported in the ASD cohort versus neurotypical controls.</td>
-                                                                <td>
-                                                                    <span class="badge bg-success-subtle text-success border me-1"><i class="fa-solid fa-arrow-up me-1"></i>Upregulated</span> Increased expression in ASD<br>
-                                                                    <span class="badge bg-danger-subtle text-danger border mt-1"><i class="fa-solid fa-arrow-down me-1"></i>Downregulated</span> Decreased expression in ASD
+                                                                <td style="font-size: 0.9rem;">
+                                                                    <span class="badge bg-success-subtle text-success border me-1" style="font-size: 0.9rem;"><i class="fa-solid fa-arrow-up me-1"></i>Upregulated</span> Increased expression in ASD<br>
+                                                                    <span class="badge bg-danger-subtle text-danger border mt-1 me-1" style="font-size: 0.9rem;"><i class="fa-solid fa-arrow-down me-1"></i>Downregulated</span> Decreased expression in ASD
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -1366,89 +1366,62 @@
                                         <div id="collapseDet" class="accordion-collapse collapse" aria-labelledby="headingDet" data-bs-parent="#dictionaryAccordion">
                                             <div class="accordion-body p-3">
                                                 <p class="mb-3">
-                                                    This section provides detailed information from the original studies included in <em>miR4ASD</em>.
+                                                    This section provides detailed information from the original studies included in <em>miR4ASD</em>. The information is accessible by clicking the "<code>+</code>" button associated with each miRNA entry in the Expression Studies and Genetic and Other Studies tabs.
                                                 </p>
                                                 <div class="table-responsive">
                                                     <table class="table table-sm table-bordered align-middle mb-0" style="font-size: 0.9rem;">
                                                         <thead class="table-light">
                                                             <tr>
-                                                                <th>Field Name</th>
-                                                                <th>JSON Key</th>
-                                                                <th>Data Type</th>
-                                                                <th>Description</th>
-                                                                <th>Examples</th>
+                                                                <th style="width: 25%;">Column name</th>
+                                                                <th style="width: 35%;">Definition & Purpose</th>
+                                                                <th style="width: 40%;">Allowed Values & Formats</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             <tr>
                                                                 <td><strong>Study</strong></td>
-                                                                <td><code>Study</code></td>
-                                                                <td>String</td>
-                                                                <td>Short reference citation identifier (Author and Year).</td>
-                                                                <td><code>Seno (2011)</code>, <code>Vasu (2014)</code>, <code>Mundalil (2014)</code></td>
+                                                                <td>Reference to the original publication, displayed using the first author’s surname and publication year and linked to the corresponding publication.</td>
+                                                                <td>Author (year) format, with a hyperlink to the original publication. e.g. <code>Mor (2015)</code>, <code>Wu (2016)</code>, <code>Toma (2015)</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Description</strong></td>
-                                                                <td><code>Description</code></td>
-                                                                <td>String</td>
-                                                                <td>Full title of the published article or experimental methodology.</td>
-                                                                <td><code>Gene Expression Profiling of microRNAs in Autism Spectrum Disorder...</code></td>
+                                                                <td>Brief description of the study, including the main experimental approach, biological sample analyzed, and miRNA-related analysis performed.</td>
+                                                                <td>Free-text study description; no predefined categorical values.</td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>DOI</strong></td>
-                                                                <td><code>DOI</code></td>
-                                                                <td>String (URL)</td>
-                                                                <td>Digital Object Identifier URL for direct publication access.</td>
-                                                                <td><code>https://doi.org/10.1016/j.gene.2011.06.017</code></td>
+                                                                <td><strong>Sample Type</strong> <span class="text-muted" style="font-size: 0.8rem;">(Tissue Type)</span></td>
+                                                                <td>Broad classification of the biological sample used for miRNA analysis.</td>
+                                                                <td>e.g., <code>Brain</code>, <code>Blood</code>, <code>Saliva</code>, <code>Umbilical cord</code>, <code>Other</code>.</td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Sample Type (Tissue Type)</strong></td>
-                                                                <td><code>Sample type</code> / <code>Tissue type</code></td>
-                                                                <td>String</td>
-                                                                <td>Primary biological specimen or tissue analyzed (standardized as "Sample type" in v15.09.2026; mapped to both keys in JSON).</td>
-                                                                <td><code>Brain</code>, <code>Blood</code>, <code>Saliva</code>, <code>LCLs</code></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Sample Subtype (Tissue Subtype)</strong></td>
-                                                                <td><code>Sample subtype</code> / <code>Tissue - subtype</code></td>
-                                                                <td>String</td>
-                                                                <td>Specific anatomical brain subregion or refined cellular fraction (standardized as "Sample subtype" in v15.09.2026; mapped to both keys in JSON).</td>
-                                                                <td><code>Cerebellum</code>, <code>Frontal Cortex</code>, <code>Peripheral Mononuclear Cells</code>, <code>Whole Blood</code>, <code>Plasma</code></td>
+                                                                <td><strong>Sample Subtype</strong> <span class="text-muted" style="font-size: 0.8rem;">(Tissue Subtype)</span></td>
+                                                                <td>Specific biological material, cell type, or anatomical region analyzed within the corresponding sample type.</td>
+                                                                <td>Free text specifying the biological material, cell type, or anatomical region analyzed (e.g., plasma, serum, whole blood, LCLs, NSCs, or specific post-mortem brain regions).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Methodology</strong></td>
-                                                                <td><code>Methodology</code></td>
-                                                                <td>String</td>
-                                                                <td>Experimental platform or molecular assay used for profiling or quantification. Includes multi-assay platforms.</td>
-                                                                <td><code>RT-qPCR</code>, <code>Small RNA-seq</code>, <code>miRNA microarray</code>, <code>WES</code>, <code>WGS</code>, <code>SNP array</code>, <code>SNP array and WES</code>, <code>miRNA microarray and RT-qPCR</code>, <code>aCGH</code></td>
+                                                                <td>Experimental or analytical method used to generate or analyze the data reported in the study.</td>
+                                                                <td>e.g., <code>RT-qPCR</code>, <code>Small RNA-seq</code>, <code>RNA-seq</code>, <code>miRNA microarray</code>, <code>WES</code>, <code>WGS</code>, <code>SNP array</code>, <code>aCGH</code></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><strong>Diagnostic tools</strong></td>
-                                                                <td><code>Diagnostic tools</code></td>
-                                                                <td>String</td>
-                                                                <td>Diagnostic criteria or clinical behavioral instruments used for cohort diagnosis.</td>
-                                                                <td><code>DSM-5</code>, <code>ADOS</code>, <code>ADI-R</code>, <code>CARS</code>, <code>DSM-IV-TR</code>, <code>GARS</code>, <code>ABC</code>, <code>SRS</code></td>
+                                                                <td><strong>Diagnostic Tools</strong></td>
+                                                                <td>Clinical diagnostic criteria or behavioral instruments used to characterize the ASD cohort.</td>
+                                                                <td><code>DSM-5</code>, <code>ADOS</code>, <code>ADI-R</code>, <code>CARS</code>, <code>DSM-IV-TR</code>, <code>GARS</code>, <code>ABC</code></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>ASD Samples</strong></td>
-                                                                <td><code>ASD samples</code></td>
-                                                                <td>Integer / String</td>
-                                                                <td>Number of ASD subjects in the experimental cohort. In multi-cohort studies (e.g. discovery vs. replication cohorts, or distinct tissues), values are separated by semicolons (<code>;</code>) and rendered as distinct badges/pills in the UI.</td>
-                                                                <td><code>ASD N = 12</code>, <code>Microarray ASD N = 5; RT-qPCR ASD N = 15</code>, <code>Training set ASD N = 188; Test set ASD N = 50</code>, <code>GWAS ASD N = 7387; meta-analysis replication set 1 ASD N = 7783; meta-analysis replication set 2 ASD N = 1369</code></td>
+                                                                <td>Number of ASD samples analyzed in each study, with separate sample groups or analysis stages reported when applicable.</td>
+                                                                <td>Number of ASD samples (<em>N</em>), reported as a single value or separately for distinct study groups, cohorts, analysis stages, or methodologies (e.g., ASN <em>N</em> = 31).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Control Samples</strong></td>
-                                                                <td><code>Control samples</code></td>
-                                                                <td>Integer / String</td>
-                                                                <td>Number of neurotypical control subjects in the comparison cohort. In multi-cohort studies, values are separated by semicolons (<code>;</code>) and rendered as distinct badges/pills in the UI.</td>
-                                                                <td><code>Control N = 12</code>, <code>Microarray control N = 5; RT-qPCR control N = 15</code>, <code>Training set control N = 113; Test set control N = 21</code></td>
+                                                                <td>Number of control samples analyzed in each study, with separate sample groups or analysis stages reported when applicable.</td>
+                                                                <td>Number of control samples (<em>N</em>), reported as a single value or separately for distinct study groups, cohorts, analysis stages, or methodologies (e.g., Control <em>N</em> = 30).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Country</strong></td>
-                                                                <td><code>Country</code></td>
-                                                                <td>String</td>
-                                                                <td>Country of origin of the study cohort.</td>
-                                                                <td><code>USA</code>, <code>Brazil</code>, <code>China</code>, <code>Italy</code>, <code>Japan</code></td>
+                                                                <td>Country where the study was conducted and/or population reported for the participants included in the study.</td>
+                                                                <td>e.g., <code>USA</code>, <code>Brazil</code>, <code>China</code>, <code>Italy</code>, <code>Japan</code>.</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
