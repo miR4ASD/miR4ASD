@@ -51,6 +51,12 @@
             --shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
+        /* Data Dictionary: code formatting */
+        .dictionary-table code {
+            color: #AF1C72;
+            font-size: 0.9rem;
+        }
+
         /*
          * Bootstrap primary → deep navy (#0b2d48, the selected-tab color).
          * Replaces Bootstrap's default blue (#0d6efd / rgb(13,110,253)) app-wide:
@@ -1149,7 +1155,7 @@
                                                     This section provides information on human miRNAs identified in case-control expression studies of Autism Spectrum Disorder (ASD), including their expression patterns, sample types, and supporting evidence.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0" style="font-size: 0.9rem;">
+                                                    <table class="table table-sm table-bordered align-middle mb-0 dictionary-table" style="font-size: 0.9rem;">
                                                         <thead class="table-light">
                                                             <tr>
                                                                 <th style="width: 25%;">Column name</th>
@@ -1161,32 +1167,32 @@
                                                             <tr>
                                                                 <td><strong>Precursor miRNA (hairpin)</strong></td>
                                                                 <td>Name of the stem-loop precursor miRNA (hairpin), according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.</td>
-                                                                <td>e.g. <code style="color: #AF1C72;">hsa-let-7a-1</code>, <code style="color: #AF1C72;">hsa-mir-146a</code>, <code style="color: #1e3a8a;">hsa-mir-155</code>.</td>
+                                                                <td>e.g. <code>hsa-let-7a-1</code>, <code>hsa-mir-146a</code>, <code>hsa-mir-155</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Mature miRNA</strong></td>
                                                                 <td>Name of the functional, single-stranded mature miRNA derived from a precursor miRNA, according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.</td>
-                                                                <td>e.g. <code style="color: #A21CAF; font-size: 0.9rem;">hsa-let-7a-5p</code>, <code style="color: #A21CAF; font-size: 0.9rem;">hsa-miR-146a-5p</code>, <code style="color: #A21CAF; font-size: 0.9rem;">hsa-miR-155-5p</code>.</td>
+                                                                <td>e.g. <code>hsa-let-7a-5p</code>, <code>hsa-miR-146a-5p</code>, <code>hsa-miR-155-5p</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Expression change (ASD vs. controls)</strong></td>
                                                                 <td>Direction of differential expression statistically reported in the ASD cohort versus neurotypical controls.</td>
                                                                 <td style="font-size: 0.9rem;">
-                                                                    <span class="badge bg-success-subtle text-success border me-1" style="font-size: 0.85em;"><i class="fa-solid fa-arrow-up me-1"></i>Upregulated</span> Increased expression in ASD<br>
-                                                                    <span class="badge bg-danger-subtle text-danger border mt-1 me-1" style="font-size: 0.85em;"><i class="fa-solid fa-arrow-down me-1"></i>Downregulated</span> Decreased expression in ASD
+                                                                    <span class="badge bg-success-subtle text-success border" style="font-size: 0.85em;"><i class="fa-solid fa-arrow-up me-1"></i>Upregulated</span> Increased expression in ASD<br>
+                                                                    <span class="badge bg-danger-subtle text-danger border mt-1" style="font-size: 0.85em;"><i class="fa-solid fa-arrow-down me-1"></i>Downregulated</span> Decreased expression in ASD
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Sample Type</strong></td>
                                                                 <td>Biological tissue, fluid, or cell type used for miRNA analysis (e.g., saliva, blood, post-mortem brain tissue [brain], neural stem cells [NSCs], olfactory mucosal stem cells [OMSCs], lymphoblastoid cell lines [LCLs], and umbilical cord).</td>
-                                                                <td>e.g. <code style="font-size: 0.9em;">Blood</code>, <code style="font-size: 0.9em;">Brain</code>, <code style="font-size: 0.9em;">Saliva</code>, <code style="font-size: 0.9em;">LCLs</code>, <code style="font-size: 0.9em;">NSCs</code>, <code style="font-size: 0.9em;">OMSCs</code>, <code style="font-size: 0.9em;">Umbilical cord</code>.</td>
+                                                                <td>e.g. <code>Blood</code>, <code>Brain</code>, <code>Saliva</code>, <code>LCLs</code>, <code>NSCs</code>, <code>OMSCs</code>, <code>Umbilical cord</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Overall evidence</strong></td>
                                                                 <td>Classification of expression evidence based on the direction and consistency of miRNA dysregulation across independent ASD studies included in <em>miR4ASD</em>.</td>
                                                                 <td>
                                                                     <ul class="list-unstyled mb-0 ps-0" style="line-height: 1.35;">
-                                                                        <li class="mt-1 mb-1">
+                                                                        <li class="mt-2 mb-1">
                                                                             <span class="badge bg-success-subtle text-success border" 
                                                                                 style="font-size: 0.85em;">
                                                                                 Consistent upregulation
@@ -1221,30 +1227,30 @@
                                                                 <td><strong>Evidence from other studies</strong></td>
                                                                 <td>Additional evidence linking the miRNA to ASD from bioinformatics or genetic studies.</td>
                                                                 <td>
-                                                                    <ul class="list-unstyled mb-0 ps-0" style="line-height: 1.6;">
-                                                                        <li class="mt-1 mb-1">
-                                                                            <span class="badge bg-success-subtle text-success border me-1"
+                                                                    <ul class="list-unstyled mb-0 ps-0" style="line-height: 1.35;">
+                                                                        <li class="mt-2 mb-1">
+                                                                            <span class="badge bg-success-subtle text-success border"
                                                                                 style="font-size: 0.85em;">
                                                                                 Bioinformatics
                                                                             </span>
                                                                             Evidence from bioinformatics studies.
                                                                         </li>
                                                                         <li class="mb-1">
-                                                                            <span class="badge bg-info-subtle text-info-emphasis border me-1"
+                                                                            <span class="badge bg-info-subtle text-info-emphasis border"
                                                                                 style="font-size: 0.85em;">
                                                                                 Genetics: SNP
                                                                             </span>
                                                                             Evidence from genetic association studies evaluating SNPs associated with ASD.
                                                                         </li>
                                                                         <li class="mb-1">
-                                                                            <span class="badge bg-danger-subtle text-danger border me-1"
+                                                                            <span class="badge bg-danger-subtle text-danger border"
                                                                                 style="font-size: 0.85em;">
                                                                             Genetics: SNV
                                                                             </span>
                                                                             Evidence from sequencing studies (WES or WGS) reporting SNVs involving miRNA genes.
                                                                         </li>
                                                                         <li class="mb-1">
-                                                                            <span class="badge bg-warning-subtle text-warning-emphasis border me-1"
+                                                                            <span class="badge bg-warning-subtle text-warning-emphasis border"
                                                                                 style="font-size: 0.85em;">
                                                                             Genetics: CNV
                                                                             </span>
