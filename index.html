@@ -1220,12 +1220,37 @@
                                                                 <td><strong>Evidence from other studies</strong></td>
                                                                 <td>Additional evidence linking the miRNA to ASD from bioinformatics or genetic studies.</td>
                                                                 <td>
-                                                                    <ul class="list-unstyled mb-0 ps-0">
-                                                                        <li class="mb-1"><strong>Bioinformatics:</strong> Evidence from bioinformatics studies.</li>
-                                                                        <li class="mb-1"><strong>Genetics: SNP:</strong> Evidence from genetic association studies evaluating SNPs associated with ASD.</li>
-                                                                        <li class="mb-1"><strong>Genetics: SNV:</strong> Evidence from sequencing studies (WES or WGS) reporting SNVs involving miRNA genes.</li>
-                                                                        <li><strong>Genetics: CNV</strong> Evidence from genetic studies reporting CNVs involving miRNA genes.</li>
-                                                                    </ul>
+                                                                    <ul class="list-unstyled mb-0 ps-0"
+                                                                        style="font-size: 0.9rem; line-height: 1.6;">
+                                                                        <li class="mb-2">
+                                                                            <span class="badge bg-success-subtle text-success border me-1"
+                                                                                style="font-size: 0.9rem;">
+                                                                                Bioinformatics
+                                                                            </span>
+                                                                            Evidence from bioinformatics studies.
+                                                                        </li>
+                                                                        <li class="mb-2">
+                                                                            <span class="badge bg-info-subtle text-info-emphasis border me-1"
+                                                                                style="font-size: 0.9rem;">
+                                                                                Genetics: SNP
+                                                                            </span>
+                                                                            Evidence from genetic association studies evaluating SNPs associated with ASD.
+                                                                        </li>
+                                                                        <li class="mb-2">
+                                                                            <span class="badge bg-danger-subtle text-danger border me-1"
+                                                                                style="font-size: 0.9rem;">
+                                                                            Genetics: SNV
+                                                                            </span>
+                                                                            Evidence from sequencing studies (WES or WGS) reporting SNVs involving miRNA genes.
+                                                                        </li>
+                                                                        <li>
+                                                                            <span class="badge bg-warning-subtle text-warning-emphasis border me-1"
+                                                                                style="font-size: 0.9rem;">
+                                                                            Genetics: CNV
+                                                                            </span>
+                                                                            Evidence from genetic studies reporting CNVs involving miRNA genes.
+                                                                        </li>
+                                                                    </ul>                                                                    
                                                                 <td>
                                                             </tr>
                                                             <tr>
@@ -1265,69 +1290,65 @@
                                                     <table class="table table-sm table-bordered align-middle mb-0" style="font-size: 0.9rem;">
                                                         <thead class="table-light">
                                                             <tr>
-                                                                <th>Column Header</th>
-                                                                <th>JSON Key</th>
-                                                                <th>Data Type</th>
-                                                                <th>Description</th>
-                                                                <th>Allowed / Categorical Values</th>
+                                                                <th style="width: 25%;">Column name</th>
+                                                                <th style="width: 35%;">Definition & Purpose</th>
+                                                                <th style="width: 40%;">Allowed Values & Formats</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             <tr>
                                                                 <td><strong>Precursor miRNA (hairpin)</strong></td>
-                                                                <td><code>precursor_mirna</code></td>
-                                                                <td>String (HTML Link)</td>
                                                                 <td>Name of the stem-loop precursor miRNA (hairpin), according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.</td>
                                                                 <td>e.g. <code>hsa-mir-34a</code>, <code>hsa-mir-106b</code>, <code>hsa-mir-211</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Mature miRNA</strong></td>
-                                                                <td><code>mature_mirna</code></td>
-                                                                <td>String (HTML Link)</td>
                                                                 <td>Name of the functional, single-stranded mature miRNA derived from a precursor miRNA, according to miRBase nomenclature (v22.1). It includes a hyperlink to the corresponding miRBase entry.</td>
                                                                 <td>e.g. <code>hsa-miR-34a-5p</code>, <code>miR-106b-5p</code>, <code>hsa-miR-211-5p</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Study Type</strong></td>
-                                                                <td><code>study_type</code></td>
-                                                                <td>String</td>
                                                                 <td>Classification of studies according to the type of evidence supporting the association between the miRNA and ASD.</td>
-                                                                <td><ul><li class="mb-1"><strong>Genetics:</strong> Studies in which genetic variants involving miRNA genes were analyzed in individuals with ASD.</li><li><strong>Bioinformatics:</strong> Studies in which computational approaches were used to identify, prioritize, or classify ASD-associated miRNAs based on expression data, without reporting conventional differential expression analyses.</li></ul></td>
+                                                                <td>
+                                                                    <ul class="list-unstyled mb-0 ps-0">
+                                                                        <li class="mb-1"><strong>Genetics:</strong> Studies in which genetic variants involving miRNA genes were analyzed in individuals with ASD.</li>
+                                                                        <li><strong>Bioinformatics:</strong> Studies in which computational approaches were used to identify, prioritize, or classify ASD-associated miRNAs based on expression data, without reporting conventional differential expression analyses.</li>
+                                                                    </ul>                                                                    
+                                                                </td>
                                                             </tr>
-                                                            <tr>
+                                                            <tr> 
                                                                 <td><strong>Variant Type</strong></td>
-                                                                <td><code>variant_type</code></td>
-                                                                <td>String</td>
                                                                 <td>Type of genetic variation reported within miRNA genes in individuals with ASD.</td>
-                                                                <td><ul><li class="mb-1"><strong>CNV:</strong> Copy Number Variant involving the miRNA gene, including genomic deletions and duplications.</li><li class="mb-1"><strong>SNV:</strong> Single Nucleotide Variant identified through sequencing-based studies (e.g. Whole Exome Sequencing, Whole Genome Sequencing).</li><li><strong>SNP:</strong> Single Nucleotide Polymorphism identified in genetic association studies.</li></ul></td>
+                                                                <td>
+                                                                    <ul class="list-unstyled mb-0 ps-0">
+                                                                        <li class="mb-1"><strong>CNV:</strong> Copy Number Variant involving the miRNA gene, including genomic deletions and duplications.</li>
+                                                                        <li class="mb-1"><strong>SNV:</strong> Single Nucleotide Variant identified through sequencing-based studies (e.g. Whole Exome Sequencing, Whole Genome Sequencing).</li>
+                                                                        <li><strong>SNP:</strong> Single Nucleotide Polymorphism identified in genetic association studies.</li>
+                                                                    </ul>
+                                                                </td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Evidence from expression studies</strong></td>
-                                                                <td><code>evidence_from_expression_studies</code></td>
-                                                                <td>String</td>
                                                                 <td>Classification of expression evidence based on the direction and consistency of miRNA dysregulation across independent ASD studies included in <em>miR4ASD</em>.</td>
-                                                                <td><ul><li class="mb-1"><strong>Consistent upregulation:</strong> Reported in &ge;2 independent studies, with all studies showing increased expression of the miRNA.</li><li class="mb-1"><strong>Consistent downregulation:</strong> Reported in &ge;2 independent studies, with all studies showing decreased expression of the miRNA.</li><li class="mb-1"><strong>Conflicting evidence:</strong> Reported in &ge;2 independent studies, with opposing directions of differential expression (both increased and decreased expression of the miRNA).</li><li class="mb-1"><strong>Single-study evidence:</strong> Only one study reported altered miRNA expression in individuals with ASD, with no independent replication among the studies included in the database.</li><li><strong>None:</strong> No expression evidence is reported in the studies included in the database.</li></ul></td>
+                                                                <td>
+                                                                    <ul class="list-unstyled mb-0 ps-0">
+                                                                        <li class="mb-1"><strong>Consistent upregulation:</strong> Reported in &ge;2 independent studies, with all studies showing increased expression of the miRNA.</li>
+                                                                        <li class="mb-1"><strong>Consistent downregulation:</strong> Reported in &ge;2 independent studies, with all studies showing decreased expression of the miRNA.</li>
+                                                                        <li class="mb-1"><strong>Conflicting evidence:</strong> Reported in &ge;2 independent studies, with opposing directions of differential expression (both increased and decreased expression of the miRNA).</li>
+                                                                        <li class="mb-1"><strong>Single-study evidence:</strong> Only one study reported altered miRNA expression in individuals with ASD, with no independent replication among the studies included in the database.</li>
+                                                                        <li><strong>None:</strong> No expression evidence is reported in the studies included in the database.</li>
+                                                                    </ul>
+                                                                </td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Total expression studies</strong></td>
-                                                                <td><code>total_expression_studies</code></td>
-                                                                <td>Integer</td>
                                                                 <td>Number of independent ASD expression studies included in the database reporting differential expression of the miRNA.</td>
-                                                                <td>Positive integer (&ge;1).</td>
+                                                                <td>Positive integer (&ge;1)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Description of expression evidence</strong></td>
-                                                                <td><code>description_of_expression_evidence</code></td>
-                                                                <td>String</td>
                                                                 <td>Detailed description of the expression evidence, including the direction of differential expression, number of independent studies, sample types analyzed, and mature miRNA-specific findings (e.g., -5p and -3p).</td>
                                                                 <td>Free text describing the available expression evidence, including mature miRNA-specific findings when applicable; no predefined categorical values.</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>StudyDetails</strong></td>
-                                                                <td><code>StudyDetails</code></td>
-                                                                <td>Array of Objects</td>
-                                                                <td>Nested array of study-level metadata records.</td>
-                                                                <td>See Section 3 (Nested Study Details Metadata).</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
