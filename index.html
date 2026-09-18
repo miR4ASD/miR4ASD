@@ -1184,7 +1184,7 @@
                                                                 <td><strong>Overall evidence</strong></td>
                                                                 <td>Classification of expression evidence based on the direction and consistency of miRNA dysregulation across independent ASD studies included in <em>miR4ASD</em>.</td>
                                                                 <td>
-                                                                    <ul class="mb-0 ps-3" style="font-size: 0.9rem; line-height: 1.6;">
+                                                                    <ul class="list-unstyled mb-0 ps-0" style="font-size: 0.9rem; line-height: 1.6;">
                                                                         <li class="mb-2">
                                                                             <span class="badge bg-success-subtle text-success border"
                                                                                 style="font-size: 0.9rem;">
@@ -1220,7 +1220,7 @@
                                                                 <td><strong>Evidence from other studies</strong></td>
                                                                 <td>Additional evidence linking the miRNA to ASD from bioinformatics or genetic studies.</td>
                                                                 <td>
-                                                                    <ul class="mb-0 ps-3">
+                                                                    <ul class="list-unstyled mb-0 ps-0">
                                                                         <li class="mb-1"><strong>Bioinformatics:</strong> Evidence from bioinformatics studies.</li>
                                                                         <li class="mb-1"><strong>Genetics: SNP:</strong> Evidence from genetic association studies evaluating SNPs associated with ASD.</li>
                                                                         <li class="mb-1"><strong>Genetics: SNV:</strong> Evidence from sequencing studies (WES or WGS) reporting SNVs involving miRNA genes.</li>
@@ -3446,7 +3446,29 @@
                         return `<span class="fw-semibold text-dark font-monospace">${data}</span>`;
                     }
                 },
-                { "data": "expression_change" },
+                {
+                    "data": "expression_change",
+                    "render": function(data, type, row) {
+                        const val = data || '';
+                        if (type === 'filter' || type === 'sort') return val;
+                        if (!val || val === '—') {
+                            return '<span class="text-muted">—</span>';
+                        }
+                        if (val === 'Upregulated') {
+                            return `<span class="badge bg-success-subtle text-success border me-1"
+                                            style="font-size: 0.75rem;">
+                                        <i class="fa-solid fa-arrow-up me-1"></i>Upregulated
+                                    </span>`;
+                        }
+                        if (val === 'Downregulated') {
+                            return `<span class="badge bg-danger-subtle text-danger border me-1"
+                                            style="font-size: 0.75rem;">
+                                        <i class="fa-solid fa-arrow-down me-1"></i>Downregulated
+                                    </span>`;
+                        }
+                        return escapeHtml(val);
+                    }
+                },
                 { "data": "tissue" },
                 {
                     "data": "overall_evidence",
@@ -3469,13 +3491,22 @@
                         const val = data || 'no';
                         if (type === 'filter' || type === 'sort') return val;
                         if (!data || data === 'no' || data === '—') return '<span class="badge bg-light text-muted border" style="font-size: 0.75rem;">None</span>';
-                        let cls = 'bg-primary-subtle text-primary border';
-                        if (data.includes('Bioinformatics') && !data.includes('Genetics')) {
+                        return String(data).split(';').map(item => {
+                            const evidence = item.trim();
+                            let cls = 'bg-primary-subtle text-primary border';
+                            if (evidence === 'Bioinformatics') {
+                            cls = 'bg-success-subtle text-success border';
+                            } else if (evidence === 'Genetics: SNP') {
                             cls = 'bg-info-subtle text-info-emphasis border';
-                        } else if (data.includes('CNV')) {
+                            } else if (evidence === 'Genetics: SNV') {
+                            cls = 'bg-danger-subtle text-danger border';
+                            } else if (evidence === 'Genetics: CNV') {
                             cls = 'bg-warning-subtle text-warning-emphasis border';
-                        }
-                        return `<span class="badge ${cls} text-wrap" style="font-size: 0.75rem; max-width: 170px; line-height: 1.2;">${escapeHtml(data)}</span>`;
+                            }
+                            return `<span class="badge ${cls} text-wrap me-1 mb-1"
+                                    style="font-size: 0.75rem; max-width: 170px; line-height: 1.2;">${escapeHtml(evidence)}</span>`;                     
+                        
+                    }).join('');
                     }
                 },
                 { "data": "upregulation_studies" },
