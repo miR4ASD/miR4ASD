@@ -879,7 +879,7 @@
                                                 </span>
                                                 <span class="fw-bold text-dark small">Expression Studies</span>
                                             </div>
-                                            <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Explore dysregulated miRNAs across brain and peripheral ASD cohorts.</p>
+                                            <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Explore differentially expressed miRNAs in ASD.</p>
                                             <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Browse Expression <i class="fa-solid fa-arrow-right ms-1"></i></span>
                                         </div>
                                     </div>
@@ -891,8 +891,8 @@
                                                 </span>
                                                 <span class="fw-bold text-dark small">Genetic Alterations</span>
                                             </div>
-                                            <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Inspect CNVs, SNVs, and SNPs altering miRNA genomic loci in ASD.</p>
-                                            <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Browse Genetics <i class="fa-solid fa-arrow-right ms-1"></i></span>
+                                            <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Explore miRNAs implicated in ASD based on genetic and bioinformatics evidence.</p>
+                                            <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Browse Genetics & others <i class="fa-solid fa-arrow-right ms-1"></i></span>
                                         </div>
                                     </div>
                                     <div class="col-6 col-lg-3">
@@ -903,7 +903,7 @@
                                                 </span>
                                                 <span class="fw-bold text-dark small">Validated Targets</span>
                                             </div>
-                                            <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Query experimental targets from miRTarBase 10.0 with SFARI scores.</p>
+                                            <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Query miRNA-target gene interactions from miRTarBase.</p>
                                             <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Query Targets <i class="fa-solid fa-arrow-right ms-1"></i></span>
                                         </div>
                                     </div>
@@ -915,7 +915,7 @@
                                                 </span>
                                                 <span class="fw-bold text-dark small">Functional Enrichment</span>
                                             </div>
-                                            <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Perform Gene Ontology & KEGG pathway analysis on target gene sets.</p>
+                                            <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Perform Gene Ontology & Pathway analyses of miRNA target genes.</p>
                                             <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Run Enrichment <i class="fa-solid fa-arrow-right ms-1"></i></span>
                                         </div>
                                     </div>
@@ -932,10 +932,11 @@
                                     <i class="fa-solid fa-circle-info me-2 text-primary"></i>Database Overview
                                 </h2>
                                 <p style="line-height: 1.6; text-align: justify; color: #4A5568;">
-                                    <strong>miR4ASD</strong> is an open-access, literature-based database that compiles human microRNAs (miRNAs) that were experimentally associated with Autism Spectrum Disorder (ASD). It includes manually curated data from peer-reviewed case-control studies, covering gene expression and genetic variant analysis. All miRNA names from different studies are standardized to miRBase version 22.1.
+                                    <em>miR4ASD</em> is an open-access, literature-based database that compiles human microRNAs (miRNAs) that were experimentally associated with Autism Spectrum Disorder (ASD). It includes manually curated data from peer-reviewed case-control studies, covering gene expression and genetic variant analysis. All miRNA names from different studies are standardized to miRBase version 22.1. 
+                                    In addition, <em>miR4ASD</em> also includes information on experimentally validated miRNA-target gene interactions obtained from <strong>miRTarBase</strong>, information on ASD candidate genes from the <strong>SFARI gene</strong> database and an interactive functional enrichment tool that was implemented using the <strong>g:Profiler</strong> REST API.
                                 </p>
                                 
-                                <h3 class="mt-4 mb-3" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color); font-size: 1.15rem;">Key Features of miR4ASD:</h3>
+                                <h3 class="mt-4 mb-3" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-color); font-size: 1.15rem;">Key Features of <em>miR4ASD</em>:</h3>
                                 <div class="d-flex flex-column gap-3">
                                     <div class="d-flex align-items-start">
                                         <span class="badge p-2 rounded-circle me-3" style="background-color: #EBF8FF; color: #2B6CB0; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px;">
@@ -948,20 +949,11 @@
                                     </div>
                                     <div class="d-flex align-items-start">
                                         <span class="badge p-2 rounded-circle me-3" style="background-color: #EBF8FF; color: #2B6CB0; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px;">
-                                            <i class="fa-solid fa-bullseye"></i>
-                                        </span>
-                                        <div>
-                                            <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">Validated Target Genes</h4>
-                                            <span style="font-size: 0.9rem; color: #4A5568;">Incorporates miRTarBase 10.0 experimentally validated targets, cross-referenced with SFARI Gene ASD scores.</span>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-start">
-                                        <span class="badge p-2 rounded-circle me-3" style="background-color: #EBF8FF; color: #2B6CB0; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px;">
                                             <i class="fa-solid fa-brain"></i>
                                         </span>
                                         <div>
                                             <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">Tissue-Specific Patterns</h4>
-                                            <span style="font-size: 0.9rem; color: #4A5568;">Highlights tissue-specific expression patterns across brain and peripheral samples.</span>
+                                            <span style="font-size: 0.9rem; color: #4A5568;">Highlights tissue-specific miRNA expression patterns across different biological sample types.</span>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-start">
@@ -970,16 +962,40 @@
                                         </span>
                                         <div>
                                             <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">Genetic Variants</h4>
-                                            <span style="font-size: 0.9rem; color: #4A5568;">Includes miRNAs with reported genetic variants — an underexplored area in ASD research.</span>
+                                            <span style="font-size: 0.9rem; color: #4A5568;">Integrates evidence of genetic variants in miRNA genes, an underexplored area in ASD research.</span>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-start">
                                         <span class="badge p-2 rounded-circle me-3" style="background-color: #EBF8FF; color: #2B6CB0; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px;">
-                                            <i class="fa-solid fa-microscope"></i>
+                                            <i class="fa-solid fa-bullseye"></i>
                                         </span>
                                         <div>
-                                            <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">Research Enabler</h4>
-                                            <span style="font-size: 0.9rem; color: #4A5568;">Supports biomarker discovery, functional studies, and genetic research in ASD.</span>
+                                            <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">Validated Target Genes</h4>
+                                            <span style="font-size: 0.9rem; color: #4A5568;">Incorporates information on experimentally validated miRNA targets from <strong>miRTarBase</strong> (version 10.0).</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-start">
+                                        <span class="badge p-2 rounded-circle me-3"
+                                            style="background-color: #EBF8FF; color: #2B6CB0; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px;">
+                                            <i class="fa-solid fa-share-nodes"></i>
+                                        </span>
+                                        <div>
+                                            <h4 class="mb-1"
+                                                style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">
+                                                Functional Enrichment
+                                            </h4>
+                                            <span style="font-size: 0.9rem; color: #4A5568;">
+                                                Enables interactive Gene Ontology and Pathway enrichment analysis of miRNA target genes using <strong>g:Profiler</strong>.
+                                            </span>
+                                        </div>
+                                    </div>                                    
+                                    <div class="d-flex align-items-start">
+                                        <span class="badge p-2 rounded-circle me-3" style="background-color: #EBF8FF; color: #2B6CB0; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px;">
+                                            <i class="fa-chart-simple"></i>
+                                        </span>
+                                        <div>
+                                            <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">ASD Risk Evidence</h4>
+                                            <span style="font-size: 0.9rem; color: #4A5568;">Includes <strong>SFARI Gene</strong> evidence categories, indicating the strength of evidence linking miRNA target genes to ASD risk.</span>
                                         </div>
                                     </div>
                                 </div>
