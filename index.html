@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="miR4ASD: an interactive database of microRNAs associated with Autism Spectrum Disorder — expression and genetic study catalogs, validated target genes with SFARI risk tiers, and g:Profiler functional enrichment analysis.">
-    <title><em>miR4ASD</em>: A Database of microRNAs associated in Autism Spectrum Disorder</title>
+    <title>miR4ASD: A Database of microRNAs associated in Autism Spectrum Disorder</title>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-EW31T0H5KX"></script>
     <script>
@@ -879,7 +879,7 @@
                                                 </span>
                                                 <span class="fw-bold text-dark small">Expression Studies</span>
                                             </div>
-                                            <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Explore differentially expressed miRNAs in ASD.</p>
+                                            <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Explore miRNAs reported as differentially expressed in ASD case-control studies.</p>
                                             <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Browse Expression <i class="fa-solid fa-arrow-right ms-1"></i></span>
                                         </div>
                                     </div>
@@ -932,7 +932,7 @@
                                     <i class="fa-solid fa-circle-info me-2 text-primary"></i>Database Overview
                                 </h2>
                                 <p style="line-height: 1.6; text-align: justify; color: #4A5568;">
-                                    <em>miR4ASD</em> is an open-access, literature-based database that compiles human microRNAs (miRNAs) that were experimentally associated with Autism Spectrum Disorder (ASD). It includes manually curated data from peer-reviewed case-control studies, covering gene expression and genetic variant analysis. All miRNA names from different studies are standardized to miRBase version 22.1. 
+                                    <em>miR4ASD</em> is an open-access, literature-based database that compiles human microRNAs (miRNAs) that were experimentally associated with Autism Spectrum Disorder (ASD). It includes manually curated data from peer-reviewed case-control studies, covering gene expression and genetic variant analysis. All miRNA names from different studies are standardized to miRBase (version 22.1). 
                                     In addition, <em>miR4ASD</em> also includes information on experimentally validated miRNA-target gene interactions obtained from <strong>miRTarBase</strong>, information on ASD candidate genes from the <strong>SFARI gene</strong> database and an interactive functional enrichment tool that was implemented using the <strong>g:Profiler</strong> REST API.
                                 </p>
                                 
@@ -991,7 +991,7 @@
                                     </div>                                    
                                     <div class="d-flex align-items-start">
                                         <span class="badge p-2 rounded-circle me-3" style="background-color: #EBF8FF; color: #2B6CB0; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px;">
-                                            <i class="fa-chart-simple"></i>
+                                            <i class="fa-solid fa-chart-simple"></i>
                                         </span>
                                         <div>
                                             <h4 class="mb-1" style="font-weight: 700; color: #2D3748; font-size: 0.95rem;">ASD Risk Evidence</h4>
@@ -1152,7 +1152,7 @@
                                         <i class="fa-solid fa-layer-group me-1"></i>5 Table Specifications
                                     </span>
                                 </div>
-                                <p class="text-secondary mb-4" style="line-height: 1.6;">
+                                <p class="mb-4" style="line-height: 1.6;">
                                     Comprehensive guide explaining what each table header represents, the standardized data sources, and the precise definitions for all categorical values across <em>miR4ASD</em>.
                                 </p>
 
@@ -1310,7 +1310,7 @@
                                                     This section provides information on human miRNAs implicated in Autism Spectrum Disorder (ASD), based on evidence from genetic and bioinformatics studies.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0" style="font-size: 0.9rem;">
+                                                    <table class="table table-sm table-bordered align-middle mb-0 dictionary-table" style="font-size: 0.9rem;">
                                                         <thead class="table-light">
                                                             <tr>
                                                                 <th style="width: 25%;">Column name</th>
@@ -1393,7 +1393,7 @@
                                                     This section provides detailed information from the original studies included in <em>miR4ASD</em>. The information is accessible by clicking the "<code>+</code>" button associated with each miRNA entry in the <em>Expression Studies</em> and <em>Genetic and Other Studies</em> tabs.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0" style="font-size: 0.9rem;">
+                                                    <table class="table table-sm table-bordered align-middle mb-0 dictionary-table" style="font-size: 0.9rem;">
                                                         <thead class="table-light">
                                                             <tr>
                                                                 <th style="width: 25%;">Column name</th>
@@ -1467,7 +1467,7 @@
                                                     This section contains information on experimentally validated target genes of ASD-associated miRNAs, retrieved from <strong>miRTarBase</strong> version 10.0. It provides miRNA-target gene interactions and their supporting experimental evidence, enabling users to explore potential regulatory relationships. Additionally, it includes <strong>SFARI Gene</strong> evidence classifications, indicating the strength of evidence supporting the involvement of these target genes in ASD risk.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0"
+                                                    <table class="table table-sm table-bordered align-middle mb-0 dictionary-table"
                                                         style="font-size: 0.9rem;">
                                                         <thead class="table-light">
                                                             <tr>
@@ -1555,7 +1555,7 @@
                                                     This section allows users to perform functional enrichment analyses by selecting ASD-associated miRNAs and/or their target genes. Gene Ontology (GO) and pathway enrichment analyses are executed through the <strong>g:Profiler</strong> REST API, and the results are displayed on the <em>miR4ASD</em> website, highlighting enriched biological processes and pathways associated with the selected target genes.
                                                 </p>
                                                 <div class="table-responsive">
-                                                    <table class="table table-sm table-bordered align-middle mb-0"
+                                                    <table class="table table-sm table-bordered align-middle mb-0 dictionary-table"
                                                         style="font-size: 0.9rem;">
                                                         <thead class="table-light">
                                                             <tr>
