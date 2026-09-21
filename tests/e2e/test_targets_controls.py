@@ -94,3 +94,25 @@ def test_targets_sfari_symbol_badges(app_page: Page, base_url: str):
     cat1_cell = app_page.locator("#targets-table tbody tr .sfari-tag-cat1").first
     assert cat1_cell.is_visible()
     assert cat1_cell.inner_text() == "1"
+
+
+def test_targets_filter_non_sfari_checkbox(app_page: Page, base_url: str):
+    """Verify selecting 'None (Non-SFARI)' checkbox filters to Non-SFARI genes with None badge."""
+    targets_page = TargetsPage(app_page, base_url)
+    targets_page.navigate_to_targets()
+
+    # Filter by Non-SFARI checkbox
+    targets_page.select_sfari_category("Non-SFARI")
+    rows = targets_page.get_row_count()
+    assert rows > 0
+
+    # Every visible row in SFARI column should display 'None'
+    badges = app_page.locator("#targets-table tbody tr td:nth-child(6) .badge").all_inner_texts()
+    assert len(badges) > 0
+    assert all(b.strip() == "None" for b in badges)
+
+    # Verify DataTables search input has the enhanced placeholder
+    search_input = app_page.locator("#targets-table_wrapper .dt-search input, #targets-table_wrapper input[type='search']")
+    placeholder = search_input.get_attribute("placeholder") or ""
+    assert "Search" in placeholder
+

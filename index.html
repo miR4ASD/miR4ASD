@@ -3244,7 +3244,7 @@
                     '<div class="accordion-body p-3">' +
                     '<p class="mb-3">' + sec.description + '</p>' +
                     '<div class="table-responsive">' +
-                    '<table class="table table-sm table-bordered align-middle mb-0" style="font-size: 0.9rem;">' +
+                    '<table class="table table-sm table-bordered align-middle mb-0 dictionary-table" style="font-size: 0.9rem;">' +
                     '<thead class="table-light"><tr>' + headersHtml + '</tr></thead>' +
                     '<tbody>' + rowsHtml + '</tbody>' +
                     '</table>' +
@@ -3330,7 +3330,8 @@
                 ],
                 "initComplete": function () {
                     // Enhanced search input placeholder
-                    const searchInput = $(tableId + '_filter input');
+                    const container = this.api ? $(this.api().table().container()) : $(tableId + '_wrapper');
+                    const searchInput = container.find('.dt-search input, .dataTables_filter input, input[type="search"]');
                     searchInput.attr('placeholder', 'Search miRNA, Gene, Tissue, DOI...');
 
                     // Initialize Bootstrap tooltips on headers and buttons
@@ -3496,22 +3497,24 @@
                         const val = data || 'no';
                         if (type === 'filter' || type === 'sort') return val;
                         if (!data || data === 'no' || data === '—') return '<span class="badge bg-light text-muted border" style="font-size: 0.75rem;">None</span>';
-                        return String(data).split(';').map(item => {
-                            const evidence = item.trim();
-                            let cls = 'bg-primary-subtle text-primary border';
-                            if (evidence === 'Bioinformatics') {
-                            cls = 'bg-success-subtle text-success border';
-                            } else if (evidence === 'Genetics: SNP') {
-                            cls = 'bg-info-subtle text-info-emphasis border';
-                            } else if (evidence === 'Genetics: SNV') {
-                            cls = 'bg-danger-subtle text-danger border';
-                            } else if (evidence === 'Genetics: CNV') {
-                            cls = 'bg-warning-subtle text-warning-emphasis border';
+                        const parts = Array.from(new Set(String(data).split(/(?:;|\band\b)/).map(s => s.trim()).filter(Boolean)));
+                        return parts.map(item => {
+                            let label = item;
+                            if (['SNP', 'SNV', 'CNV'].includes(item)) {
+                                label = 'Genetics: ' + item;
                             }
-                            return `<span class="badge ${cls} text-wrap me-1 mb-1"
-                                    style="font-size: 0.75rem; max-width: 170px; line-height: 1.2;">${escapeHtml(evidence)}</span>`;                     
-                        
-                    }).join('');
+                            let cls = 'bg-primary-subtle text-primary border';
+                            if (label === 'Bioinformatics') {
+                                cls = 'bg-success-subtle text-success border';
+                            } else if (label === 'Genetics: SNP') {
+                                cls = 'bg-info-subtle text-info-emphasis border';
+                            } else if (label === 'Genetics: SNV') {
+                                cls = 'bg-danger-subtle text-danger border';
+                            } else if (label === 'Genetics: CNV') {
+                                cls = 'bg-warning-subtle text-warning-emphasis border';
+                            }
+                            return `<span class="badge ${cls} text-wrap me-1 mb-1" style="font-size: 0.75rem; max-width: 170px; line-height: 1.2;">${escapeHtml(label)}</span>`;
+                        }).join('');
                     }
                 },
                 { "data": "upregulation_studies" },
@@ -3592,7 +3595,8 @@
                     "render": function(data, type, row) {
                         if (type === 'filter' || type === 'sort') return data || 'no';
                         if (!data || data === 'no') return '<span class="badge bg-light text-muted border" style="font-size: 0.75rem;">None</span>';
-                        return String(data).split('; ').map(e => {
+                        const uniqueEvidence = Array.from(new Set(String(data).split(';').map(e => e.trim()).filter(Boolean)));
+                        return uniqueEvidence.map(e => {
                             let cls = 'bg-secondary-subtle text-secondary border';
                             if (e.includes('Consistent upregulation')) cls = 'bg-success-subtle text-success border';
                             else if (e.includes('Consistent downregulation')) cls = 'bg-danger-subtle text-danger border';
@@ -3695,7 +3699,11 @@
                     {
                         "data": "sfari_score",
                         "render": function(data, type, row) {
-                            if (type === 'filter' || type === 'sort') {
+                            if (type === 'filter') {
+                                if (data === 'Non-SFARI') return 'None Non-SFARI';
+                                return data || '';
+                            }
+                            if (type === 'sort') {
                                 return data || '';
                             }
                             return renderSfariTableBadge(data);
