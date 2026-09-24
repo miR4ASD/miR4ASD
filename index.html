@@ -1334,7 +1334,7 @@
                                                                 <td>Classification of studies according to the type of evidence supporting the association between the miRNA and ASD.</td>
                                                                 <td>
                                                                     <ul class="list-unstyled mb-0 ps-0">
-                                                                        <li class="mb-1"><strong>Genetics:</strong> Studies reporting genetic variants involving miRNA genes in individuals with ASD.</li>
+                                                                        <li class="mb-1"><strong>Genetics:</strong> Studies reporting genetic variants affecting miRNA genes in individuals with ASD.</li>
                                                                         <li><strong>Bioinformatics:</strong> Studies reporting ASD-associated miRNAs identified through computational approaches based on expression data.</li>
                                                                     </ul>                                                                    
                                                                 </td>
@@ -1344,9 +1344,9 @@
                                                                 <td>Type of genetic variation reported within miRNA genes in individuals with ASD.</td>
                                                                 <td>
                                                                     <ul class="list-unstyled mb-0 ps-0">
-                                                                        <li class="mb-1"><strong>CNV:</strong> Copy Number Variants involving the miRNA gene, including genomic deletions and duplications.</li>
-                                                                        <li class="mb-1"><strong>SNV:</strong> Single Nucleotide Variant identified through sequencing-based studies (e.g., Whole Exome Sequencing, Whole Genome Sequencing).</li>
-                                                                        <li><strong>SNP:</strong> Single Nucleotide Polymorphism identified in genetic association studies.</li>
+                                                                        <li class="mb-1"><strong>CNV:</strong> Evidence from genetic studies reporting Copy Number Variants (CNVs) affecting miRNA genes.</li>
+                                                                        <li class="mb-1"><strong>SNV:</strong> Evidence from sequencing studies reporting Single Nucleotide Variants (SNVs) in miRNA genes.</li>
+                                                                        <li><strong>SNP:</strong> Evidence from genetic association studies evaluating Single Nucleotide Polymorphisms (SNPs) associated with ASD.</li>
                                                                     </ul>
                                                                 </td>
                                                             </tr>
@@ -1354,12 +1354,41 @@
                                                                 <td><strong>Evidence from expression studies</strong></td>
                                                                 <td>Classification of expression evidence based on the direction and consistency of miRNA dysregulation across independent ASD studies included in <em>miR4ASD</em>.</td>
                                                                 <td>
-                                                                    <ul class="list-unstyled mb-0 ps-0">
-                                                                        <li class="mb-1"><strong>Consistent upregulation:</strong> Reported in &ge;2 independent studies, with all studies showing increased expression of the miRNA.</li>
-                                                                        <li class="mb-1"><strong>Consistent downregulation:</strong> Reported in &ge;2 independent studies, with all studies showing decreased expression of the miRNA.</li>
-                                                                        <li class="mb-1"><strong>Conflicting evidence:</strong> Reported in &ge;2 independent studies, with opposing directions of differential expression (both increased and decreased expression of the miRNA).</li>
-                                                                        <li class="mb-1"><strong>Single-study evidence:</strong> Only one study reported altered miRNA expression in individuals with ASD, with no independent replication among the studies included in the database.</li>
-                                                                        <li><strong>None:</strong> No expression evidence is reported in the studies included in the database.</li>
+                                                                    <ul class="list-unstyled mb-0 ps-0" style="line-height: 1.35;">
+                                                                        <li class="mt-2 mb-1" style="padding-left: 8px; text-indent: -8px;">
+                                                                            <span class="badge bg-success-subtle text-success border" 
+                                                                                style="font-size: 0.85em; text-indent: 0;">
+                                                                                Consistent upregulation
+                                                                            </span>
+                                                                            Reported in &ge; 2 independent studies, with all studies showing increased expression of the miRNA.
+                                                                        </li>
+                                                                        <li class="mb-1" style="padding-left: 8px; text-indent: -8px;">
+                                                                            <span class="badge bg-danger-subtle text-danger border"
+                                                                                style="font-size: 0.85em; text-indent: 0;">
+                                                                                Consistent downregulation
+                                                                            </span>
+                                                                            Reported in &ge; 2 independent studies, with all studies showing decreased expression of the miRNA.
+                                                                        </li>
+                                                                        <li class="mb-1" style="padding-left: 8px; text-indent: -8px;">
+                                                                            <span class="badge bg-warning-subtle text-warning-emphasis border"
+                                                                                style="font-size: 0.85em; text-indent: 0;">
+                                                                                Conflicting evidence
+                                                                            </span>
+                                                                            Reported in &ge; 2 independent studies, with opposing directions of differential expression (both increased and decreased expression of the miRNA).
+                                                                        </li>
+                                                                        <li class="mb-1" style="padding-left: 8px; text-indent: -8px;">
+                                                                            <span class="badge bg-info-subtle text-info-emphasis border"
+                                                                                style="font-size: 0.85em; text-indent: 0;">
+                                                                                Single-study evidence
+                                                                            </span>
+                                                                            Only one study reported altered miRNA expression in individuals with ASD, with no independent replication among the studies included in the database.
+                                                                        </li>
+                                                                        <li class="mb-1" style="padding-left: 8px; text-indent: -8px;">
+                                                                            <span class="badge bg-light text-secondary border rounded-pill" style="font-size: 0.85em; text-indent: 0;">
+                                                                                None
+                                                                            </span>
+                                                                            No expression evidence is reported in the studies included in the database.
+                                                                        </li>
                                                                     </ul>
                                                                 </td>
                                                             </tr>
@@ -1405,7 +1434,7 @@
                                                             <tr>
                                                                 <td><strong>Study</strong></td>
                                                                 <td>Reference to the original publication, displayed using the first author’s surname and publication year and linked to the corresponding publication.</td>
-                                                                <td>Author (year) format, with a hyperlink to the original publication. e.g., <code>Mor (2015)</code>, <code>Wu (2016)</code>, <code>Toma (2015)</code>).</td>
+                                                                <td>Author (year) format, with a hyperlink to the original publication (e.g.,  <code>Mor (2015)</code>,  <code>Wu (2016)</code>,  <code>Toma (2015)</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Description</strong></td>
@@ -1435,12 +1464,12 @@
                                                             <tr>
                                                                 <td><strong>ASD Samples</strong></td>
                                                                 <td>Number of ASD samples analyzed in each study, with separate sample groups or analysis stages reported when applicable.</td>
-                                                                <td>Number of ASD samples (<em>N</em>), reported as a single value or separately for distinct study groups, cohorts, analysis stages, or methodologies (e.g., ASD <em>N</em> = 31).</td>
+                                                                <td>Number of ASD samples (<em>N</em> ), reported as a single value or separately for distinct study groups, cohorts, analysis stages, or methodologies (e.g., <code>ASD N = 31</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Control Samples</strong></td>
                                                                 <td>Number of control samples analyzed in each study, with separate sample groups or analysis stages reported when applicable.</td>
-                                                                <td>Number of control samples (<em>N</em>), reported as a single value or separately for distinct study groups, cohorts, analysis stages, or methodologies (e.g., Control <em>N</em> = 30).</td>
+                                                                <td>Number of control samples (<em>N</em> ), reported as a single value or separately for distinct study groups, cohorts, analysis stages, or methodologies (e.g., <code>Control N = 30</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Country</strong></td>
@@ -1489,41 +1518,52 @@
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Target Gene</strong></td>
-                                                                <td>Official HGNC Gene Symbol of the validated mRNA target (links to GeneCards).</td>
-                                                                <td>e.g. <code>PTEN</code>, <code>SHANK3</code>, <code>MECP2</code>, <code>CHD8</code>, <code>AGO1</code>, <code>AGO4</code></td>
+                                                                <td>Official HGNC gene symbol of an experimentally validated target of the corresponding miRNA. It includes a hyperlink to the corresponding GeneCards entry.</td>
+                                                                <td>e.g., <code>PTEN</code>, <code>SHANK3</code>, <code>MECP2</code>, <code>CHD8</code>, <code>AGO1</code>, <code>AGO4</code></td>.
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>ASD Susceptibility (SFARI)</strong></td>
                                                                 <td>Evidence category assigned to the target gene by SFARI Gene (Simons Foundation Autism Research Initiative), a database that curates genes implicated in ASD risk and classifies them according to the strength of evidence supporting their association with ASD.</td>
                                                                 <td>
-                                                                    <ul class="list-unstyled mb-0 ps-0">
-                                                                        <li><span class="badge bg-danger-subtle text-danger border rounded-pill"><span class="sfari-tag sfari-tag-cat1 me-1">1</span>SFARI Category 1</span> High Confidence: Genes with strong genetic evidence supporting their association with ASD, typically including at least three <em>de novo</em> likely gene-disrupting mutations.</li>
-                                                                        <li><span class="badge border rounded-pill" style="background-color: #fef3c7; color: #92400e;"><span class="sfari-tag sfari-tag-cat2 me-1">2</span>SFARI Category 2</span> Strong Candidate: Genes supported by substantial genetic evidence, such as two <em>de novo</em> likely gene-disrupting mutations or compelling genome-wide association evidence.</li>
-                                                                        <li><span class="badge bg-info-subtle text-info border rounded-pill"><span class="sfari-tag sfari-tag-cat3 me-1">3</span>SFARI Category 3</span> Suggestive Evidence: Genes with preliminary evidence of association with ASD, such as a single <em>de novo</em> likely gene-disrupting mutation or an unreplicated association.</li>
-                                                                        <li><span class="badge border rounded-pill" style="background-color: #f3e9ff; color: #6b21a5;"><span class="sfari-tag sfari-tag-syn me-1">S</span>SFARI Syndromic</span> Genes associated with increased ASD risk and additional clinical features characteristic of a genetic syndrome.</li>
-                                                                        <li><span class="badge bg-light text-secondary border rounded-pill">None</span> Genes not listed in the SFARI Gene database.</li>
+                                                                    <ul class="list-unstyled mb-0 ps-0" style="line-height: 1.35;">
+                                                                        <li class="mt-2 mb-1" style="padding-left: 8px; text-indent: -8px;">
+                                                                            <span class="badge bg-danger-subtle text-danger border rounded-pill" style="font-size: 0.85em; text-indent: 0;">
+                                                                                <span class="sfari-tag sfari-tag-cat1 me-1">1</span>SFARI Category 1</span> High Confidence: Genes with strong genetic evidence supporting their association with ASD, typically including at least three <em>de novo</em> likely gene-disrupting mutations.</li>
+                                                                        <li class="mb-1" style="padding-left: 8px; text-indent: -8px;">
+                                                                            <span class="badge border rounded-pill" style="background-color: #fef3c7; color: #92400e; font-size: 0.85em; text-indent: 0;">
+                                                                                <span class="sfari-tag sfari-tag-cat2 me-1">2</span>SFARI Category 2</span> Strong Candidate: Genes supported by substantial genetic evidence, such as two <em>de novo</em> likely gene-disrupting mutations or compelling genome-wide association evidence.</li>
+                                                                        <li class="mb-1" style="padding-left: 8px; text-indent: -8px;">
+                                                                            <span class="badge bg-info-subtle text-info border rounded-pill" style="font-size: 0.85em; text-indent: 0;">
+                                                                                <span class="sfari-tag sfari-tag-cat3 me-1">3</span>SFARI Category 3</span> Suggestive Evidence: Genes with preliminary evidence of association with ASD, such as a single <em>de novo</em> likely gene-disrupting mutation or an unreplicated association.</li>
+                                                                        <li class="mb-1" style="padding-left: 8px; text-indent: -8px;">
+                                                                            <span class="badge border rounded-pill" style="background-color: #f3e9ff; color: #6b21a5; font-size: 0.85em; text-indent: 0;">
+                                                                                <span class="sfari-tag sfari-tag-syn me-1">S</span>SFARI Syndromic</span> Genes associated with increased ASD risk and additional clinical features characteristic of a genetic syndrome.</li>
+                                                                        <li class="mb-1" style="padding-left: 8px; text-indent: -8px;">
+                                                                            <span class="badge bg-light text-secondary border rounded-pill" style="font-size: 0.85em; text-indent: 0;">None</span> Genes not listed in the SFARI Gene database.</li>
                                                                     </ul>
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Support Type</strong></td>
-                                                                <td>Experimental support classification of the miRNA-target interaction from miRTarBase 10.0.</td>
+                                                                <td>Classification of miRNA-target interactions (MTIs) based on the experimental evidence reported in miRTarBase v10.0.</td>
                                                                 <td>
-                                                                    <ul class="list-unstyled mb-0 ps-3">
-                                                                        <li><span class="badge bg-success-subtle text-success border rounded-pill">Functional MTI</span> Supported by at least one functional microRNA-target interaction (Luciferase Reporter, Western Blot, qPCR, Northern Blot, ELISA, etc.).</li>
-                                                                        <li><span class="badge bg-secondary-subtle text-secondary border rounded-pill">Weak Support</span> Supported only by weak-evidence functional interactions.</li>
+                                                                    <ul class="list-unstyled mb-0 ps-0" style="line-height: 1.35;">
+                                                                        <li class="mt-2 mb-1" style="padding-left: 8px; text-indent: -8px;">
+                                                                            <span class="badge bg-success-subtle text-success border rounded-pill" style="font-size: 0.85em; text-indent: 0;">Functional MTI</span> miRNA-target interaction is supported by strong experimental evidence (<code>Reporter assay</code>, <code>qPCR</code> or <code>Western blot</code>).</li>
+                                                                        <li class="mb-1" style="padding-left: 8px; text-indent: -8px;">
+                                                                            <span class="badge bg-secondary-subtle text-secondary border rounded-pill" style="font-size: 0.85em; text-indent: 0;">Weak Support</span> miRNA-target interaction is supported by other type of experiments (e.g., <code>pSILAC</code>, <code>microarray</code>).</li>
                                                                     </ul>
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>PubMed Reference</strong></td>
-                                                                <td>PubMed Identifiers (PMIDs) linking directly to the primary research articles.</td>
-                                                                <td>Clickable PMID badges (e.g. <code>24312487</code>, <code>20144220</code>).</td>
+                                                                <td>PubMed reference for the original publication reporting the miRNA-target interaction, with a hyperlink to the corresponding PubMed record.</td>
+                                                                <td>PubMed identifier (PMID, e.g.,<code>24312487</code>, <code>20144220</code>, <code>23974008</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Experiments</strong></td>
-                                                                <td>Exact laboratory techniques used to confirm the miRNA-target interaction.</td>
-                                                                <td>Semicolon-separated methods (e.g. <code>Luciferase reporter assay</code>, <code>Western blot</code>, <code>HITS-CLIP</code>, <code>RT-qPCR</code>).</td>
+                                                                <td>Experimental methods used to validate the miRNA-target interaction, as reported in miRTarBase v10.0.</td>
+                                                                <td>e.g., <code>Luciferase reporter assay</code>, <code>Western blot</code>, <code>RT-qPCR</code>, <code>Microarray</code>, <code>HITS-CLIP</code>, <code>PAR-CLIP</code>, <code>ChIP-seq</code>, <code>pSILAC</code>, <code>Immunohistochemistry</code>, <code>Flow cytometry</code>).</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
