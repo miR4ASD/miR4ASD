@@ -880,7 +880,7 @@
                                                 <span class="fw-bold text-dark small">Expression Studies</span>
                                             </div>
                                             <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Explore miRNAs reported as differentially expressed in ASD case-control studies.</p>
-                                            <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Browse Expression <i class="fa-solid fa-arrow-right ms-1"></i></span>
+                                            <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Browse Expression Studies<i class="fa-solid fa-arrow-right ms-1"></i></span>
                                         </div>
                                     </div>
                                     <div class="col-6 col-lg-3">
@@ -892,7 +892,7 @@
                                                 <span class="fw-bold text-dark small">Genetic Alterations</span>
                                             </div>
                                             <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Explore miRNAs implicated in ASD based on genetic and bioinformatics evidence.</p>
-                                            <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Browse Genetics & others <i class="fa-solid fa-arrow-right ms-1"></i></span>
+                                            <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Browse Genetic & Other Studies <i class="fa-solid fa-arrow-right ms-1"></i></span>
                                         </div>
                                     </div>
                                     <div class="col-6 col-lg-3">
@@ -904,7 +904,7 @@
                                                 <span class="fw-bold text-dark small">Validated Targets</span>
                                             </div>
                                             <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Query miRNA-target gene interactions from miRTarBase.</p>
-                                            <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Query Targets <i class="fa-solid fa-arrow-right ms-1"></i></span>
+                                            <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Query Target Genes <i class="fa-solid fa-arrow-right ms-1"></i></span>
                                         </div>
                                     </div>
                                     <div class="col-6 col-lg-3">
@@ -916,7 +916,7 @@
                                                 <span class="fw-bold text-dark small">Functional Enrichment</span>
                                             </div>
                                             <p class="text-muted mb-2" style="font-size: 0.8rem; line-height: 1.35;">Perform Gene Ontology & Pathway analyses of miRNA target genes.</p>
-                                            <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Run Enrichment <i class="fa-solid fa-arrow-right ms-1"></i></span>
+                                            <span class="text-primary fw-semibold mt-auto" style="font-size: 0.8rem;">Run Enrichment analysis<i class="fa-solid fa-arrow-right ms-1"></i></span>
                                         </div>
                                     </div>
                                 </div>
@@ -1194,9 +1194,8 @@
                                                                 <td><strong>Expression change (ASD vs. controls)</strong></td>
                                                                 <td>Direction of differential expression statistically reported in the ASD cohort versus neurotypical controls.</td>
                                                                 <td style="font-size: 0.9rem;">
-                                                                    <span class="badge bg-success-subtle text-success border" style="font-size: 0.85em;"><i class="fa-solid fa-arrow-up me-1"></i>Upregulated</span> Increased expression in ASD<br>
-                                                                    <span class="badge bg-danger-subtle text-danger border mt-1" style="font-size: 0.85em;"><i class="fa-solid fa-arrow-down me-1"></i>Downregulated</span> Decreased expression in ASD
-                                                                </td>
+                                                                    <span class="badge bg-success-subtle text-success border" style="font-size: 0.85em;"><i class="fa-solid fa-arrow-up me-1"></i>Upregulated</span> Increased expression in ASD.<br>
+                                                                    <span class="badge bg-danger-subtle text-danger border mt-1" style="font-size: 0.85em;"><i class="fa-solid fa-arrow-down me-1"></i>Downregulated</span> Decreased expression in ASD.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Sample Type</strong></td>
@@ -1343,10 +1342,19 @@
                                                                 <td><strong>Variant Type</strong></td>
                                                                 <td>Type of genetic variation reported within miRNA genes in individuals with ASD.</td>
                                                                 <td>
-                                                                    <ul class="list-unstyled mb-0 ps-0">
-                                                                        <li class="mb-1"><strong>CNV:</strong> Evidence from genetic studies reporting Copy Number Variants (CNVs) affecting miRNA genes.</li>
-                                                                        <li class="mb-1"><strong>SNV:</strong> Evidence from sequencing studies reporting Single Nucleotide Variants (SNVs) in miRNA genes.</li>
-                                                                        <li><strong>SNP:</strong> Evidence from genetic association studies evaluating Single Nucleotide Polymorphisms (SNPs) associated with ASD.</li>
+                                                                    <ul class="list-unstyled mb-0 ps-0" style="line-height: 1.35;">
+                                                                        <li class="mt-2 mb-1" style="padding-left: 8px; text-indent: -8px;">
+                                                                            <span class="badge bg-warning-subtle text-warning-emphasis border" style="font-size: 0.85em; text-indent: 0;">CNV</span>
+                                                                            Evidence from genetic studies reporting Copy Number Variants (CNVs) affecting miRNA genes.
+                                                                        </li>
+                                                                        <li class="mb-1" style="padding-left: 8px; text-indent: -8px;">
+                                                                            <span class="badge bg-danger-subtle text-danger border" style="font-size: 0.85em; text-indent: 0;">SNV</span>
+                                                                            Evidence from sequencing studies reporting Single Nucleotide Variants (SNVs) in miRNA genes.
+                                                                        </li>
+                                                                        <li class="mb-1" style="padding-left: 8px; text-indent: -8px;">
+                                                                            <span class="badge bg-info-subtle text-info-emphasis border" style="font-size: 0.85em; text-indent: 0;">SNP</span>
+                                                                            Evidence from genetic association studies evaluating Single Nucleotide Polymorphisms (SNPs) associated with ASD.
+                                                                        </li>
                                                                     </ul>
                                                                 </td>
                                                             </tr>
@@ -1434,7 +1442,7 @@
                                                             <tr>
                                                                 <td><strong>Study</strong></td>
                                                                 <td>Reference to the original publication, displayed using the first author’s surname and publication year and linked to the corresponding publication.</td>
-                                                                <td>Author (year) format, with a hyperlink to the original publication (e.g.,  <code>Mor (2015)</code>,  <code>Wu (2016)</code>,  <code>Toma (2015)</code>).</td>
+                                                                <td>Author (year) format, with a hyperlink to the original publication (e.g.,<code> Mor (2015)</code>,<code> Wu (2016)</code>,<code> Toma (2015)</code>).</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>Description</strong></td>
@@ -1519,7 +1527,7 @@
                                                             <tr>
                                                                 <td><strong>Target Gene</strong></td>
                                                                 <td>Official HGNC gene symbol of an experimentally validated target of the corresponding miRNA. It includes a hyperlink to the corresponding GeneCards entry.</td>
-                                                                <td>e.g., <code>PTEN</code>, <code>SHANK3</code>, <code>MECP2</code>, <code>CHD8</code>, <code>AGO1</code>, <code>AGO4</code></td>.
+                                                                <td>e.g., <code>PTEN</code>, <code>SHANK3</code>, <code>MECP2</code>, <code>CHD8</code>, <code>AGO1</code>, <code>AGO4</code>.</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>ASD Susceptibility (SFARI)</strong></td>
@@ -1557,7 +1565,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>PubMed Reference</strong></td>
-                                                                <td>PubMed reference for the original publication reporting the miRNA-target interaction, with a hyperlink to the corresponding PubMed record.</td>
+                                                                <td>Reference for the original publication reporting the miRNA-target interaction, with a hyperlink to the corresponding PubMed record.</td>
                                                                 <td>PubMed identifier (PMID, e.g.,<code>24312487</code>, <code>20144220</code>, <code>23974008</code>).</td>
                                                             </tr>
                                                             <tr>
@@ -1927,7 +1935,7 @@
                     <div class="alert alert-light border py-2 px-3 mb-2 d-flex align-items-center justify-content-between flex-wrap gap-2 text-secondary" style="font-size: 0.82rem; border-color: #E2E8F0 !important; border-radius: 8px;">
                         <div class="d-flex align-items-center">
                             <i class="fa-solid fa-circle-info text-primary me-2 fs-6"></i>
-                            <span>Select candidate miRNAs using the checkboxes below to analyze their validated target genes and functional pathways.</span>
+                            <span>Select candidate miRNAs using the checkboxes below to analyze their target genes and perform functional enrichment analysis.</span>
                         </div>
                         <div class="small text-muted"><i class="fa-solid fa-arrows-rotate me-1 text-success"></i>Selections sync globally across all tabs</div>
                     </div>
@@ -2056,7 +2064,7 @@
                     <div class="alert alert-light border py-2 px-3 mb-2 d-flex align-items-center justify-content-between flex-wrap gap-2 text-secondary" style="font-size: 0.82rem; border-color: #E2E8F0 !important; border-radius: 8px;">
                         <div class="d-flex align-items-center">
                             <i class="fa-solid fa-circle-info text-primary me-2 fs-6"></i>
-                            <span>Select candidate miRNAs identified from ASD genetic variants, CNVs, and targeted studies.</span>
+                            <span>Select candidate miRNAs using the checkboxes below to analyze their target genes and perform functional enrichment analysis.</span>
                         </div>
                         <div class="small text-muted"><i class="fa-solid fa-arrows-rotate me-1 text-success"></i>Selections sync globally across all tabs</div>
                     </div>
@@ -2175,7 +2183,7 @@
                     <div class="alert alert-light border py-2 px-3 mb-2 d-flex align-items-center justify-content-between flex-wrap gap-2 text-secondary" style="font-size: 0.82rem; border-color: #E2E8F0 !important; border-radius: 8px;">
                         <div class="d-flex align-items-center">
                             <i class="fa-solid fa-bullseye text-warning me-2 fs-6"></i>
-                            <span>Explore experimentally validated target genes and their SFARI ASD susceptibility tiers. Expand <i class="fa-solid fa-plus-circle text-primary mx-1"></i> for full gene descriptions.</span>
+                            <span>Explore experimentally validated miRNA-target interactions, the experimental methods supporting these interactions, and SFARI Gene evidence for target gene involvement in ASD. Expand <i class="fa-solid fa-plus-circle text-primary mx-1"></i> for full gene descriptions.</span>
                         </div>
                         <span id="active-db-label" class="badge bg-success-subtle text-success border px-2 py-1" style="font-size: 0.82rem;">
                             <i class="fa-solid fa-database me-1"></i>miRTarBase 10.0
@@ -2209,7 +2217,7 @@
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-2 border-top" style="font-size: 0.78rem;">
                             <div class="text-muted">
                                 <i class="fa-solid fa-circle-info text-primary me-1"></i>
-                                Experimentally validated target interactions cross-referenced with <strong>SFARI Gene</strong> ASD risk tiers.
+                                Select miRNA-target interactions using the checkboxes below to perform functional enrichment analysis on the corresponding target genes.
                             </div>
                             <div class="d-flex align-items-center gap-1 flex-wrap">
                                 <span class="text-muted small me-1">SFARI Tiers:</span>
