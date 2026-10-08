@@ -8,7 +8,8 @@
 
 This resource is designed for researchers working in neurogenetics, transcriptomics, and biomarker discovery. Its goal is to enable rapid identification of previously reported miRNAs and support the selection of strong candidates for future ASD-focused studies.
 
-If you use this database, please cite: Marques, A. R.; Martiniano, H.; Vilela, J.; Vicente, A. M. *miR4ASD*: A Database of Human microRNAs Associated with Autism Spectrum Disorder. Preprints 2026, 2026070543. https://doi.org/10.20944/preprints202607.0543.v1
+If you use this database, **please cite**: 
+Marques, A. R.; Martiniano, H.; Vilela, J.; Vicente, A. M. *miR4ASD*: A Database of Human microRNAs Associated with Autism Spectrum Disorder. *Preprints* 2026, 2026070543. https://doi.org/10.20944/preprints202607.0543.v1
 
 🌐 **Live Application:** [https://miR4ASD.github.io/miR4ASD](https://miR4ASD.github.io/miR4ASD)  
 📁 **Repository:** [https://github.com/miR4ASD/miR4ASD](https://github.com/miR4ASD/miR4ASD)
@@ -181,4 +182,3 @@ make format
 ## License & Citation
 
 * **Data & Application License:** [Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/).
-* **Citation:** If you use miR4ASD in your research, please cite the database repository and the associated publication.
