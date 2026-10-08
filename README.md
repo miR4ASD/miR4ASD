@@ -4,7 +4,11 @@
 [![Package Manager: uv](https://img.shields.io/badge/Package%20Manager-uv-blueviolet.svg)](https://docs.astral.sh/uv/)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 
-**miR4ASD** is an open-access, literature-curated database and web interface that catalogs human microRNAs (miRNAs) experimentally associated with Autism Spectrum Disorder (ASD). It compiles findings from case-control expression studies, genetic variant analyses (CNVs, SNVs, SNPs), and standardized miRBase annotations.
+*miR4ASD* is an open-access, literature-based database that compiles human microRNAs (miRNAs) that were experimentally associated with Autism Spectrum Disorder (ASD). It includes manually curated data from peer-reviewed case-control studies, covering gene expression and genetic variant analysis. All miRNA names from different studies are standardized to miRBase version 22.1 (https://www.mirbase.org/). The database also integrates complementary information from external resources, including miRNA-target interactions, evidence supporting the involvement of target genes in ASD risk, and functional enrichment analysis of target genes.
+
+This resource is designed for researchers working in neurogenetics, transcriptomics, and biomarker discovery. Its goal is to enable rapid identification of previously reported miRNAs and support the selection of strong candidates for future ASD-focused studies.
+
+If you use this database, please cite: Marques, A. R.; Martiniano, H.; Vilela, J.; Vicente, A. M. *miR4ASD*: A Database of Human microRNAs Associated with Autism Spectrum Disorder. Preprints 2026, 2026070543. https://doi.org/10.20944/preprints202607.0543.v1
 
 🌐 **Live Application:** [https://miR4ASD.github.io/miR4ASD](https://miR4ASD.github.io/miR4ASD)  
 📁 **Repository:** [https://github.com/miR4ASD/miR4ASD](https://github.com/miR4ASD/miR4ASD)
